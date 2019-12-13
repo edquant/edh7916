@@ -18,4 +18,4 @@ systems.
 - [Download links](https://www.rstudio.com/products/rstudio/download/#download)  
 
 ### git (get correct version for your operating system) 
-- [git](https://git-scm.com/downloads)
+- [Download links](https://git-scm.com/downloads)

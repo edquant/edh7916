@@ -1,9 +1,9 @@
 title: "EDH 7916: Contemporary Research in Higher Education"
 course: edh7916
-baseurl: "/{{ site.course }}"
+baseurl: "/edh7916"
 description: PhD course in quantitative research workflow
-repo: https://github.com/btskinner/{{ site.course }}
-zip: https://github.com/btskinner/{{ site.course }}/zipball/{{ site.course }}
+repo: https://github.com/btskinner/edh7916
+zip: https://github.com/btskinner/edh7916/zipball/edh7916
 
 scripts: scripts
 data: data
@@ -26,7 +26,7 @@ contact:
   email: btskinner@coe.ufl.edu
   twitter: https://twitter.com/btskinner
 
-epw:
+ufl:
   url: https://education.ufl.edu/higher-education/
   logo: http://identity.ufl.edu/download/colleges/college_of_education/College-of-Education-UF.png
 
@@ -39,7 +39,7 @@ google_analytics: UA-63981025-1
 mathjax: true
 
 # files / directories to exclude when building
-exclude: ["*.Rmd", _working]
+exclude: ["*.Rmd", _working, README.md, kbuild.sh, Gemfile, Gemfile.lock]
 
 # collection of modules
 collections:
