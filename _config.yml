@@ -1,6 +1,6 @@
 title: "EDH 7916: Contemporary Research in Higher Education"
 course: edh7916
-baseurl: ""
+baseurl: "/{{ site.course }}"
 description: PhD course in quantitative research workflow
 repo: https://github.com/btskinner/{{ site.course }}
 zip: https://github.com/btskinner/{{ site.course }}/zipball/{{ site.course }}
