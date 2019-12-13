@@ -1,0 +1,41 @@
+---
+layout: default
+---
+
+<h1>{{ page.title }}</h1>
+
+{% if page.links %}
+<p>
+  {% if page.links.script %}
+  <a href="{{ site.baseurl }}/{{ site.scripts }}/{{ page.links.script }}"
+     class="iconlink" download title="Get script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  {% endif %}
+  {% if page.links.extra %}
+  {% for extra in page.links.extra %}
+  <a href="{{ site.baseurl }}/{{ site.scripts }}/{{ extra }}"
+     class="iconlink" download title="Get extra script">
+    <i class="fas fa-code"></i>
+  </a>
+  &nbsp;&nbsp;
+  {% endfor %}
+  {% endif %}
+  {% if page.links.markdown %}
+  <a href="{{ site.baseurl }}/{{ site.scripts }}/{{ page.links.markdown }}"
+     class="iconlink" download title="Get markdown script">
+    <i class="far fa-file-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  {% endif %}
+  {% if page.links.data %}
+  <a href="{{ site.baseurl }}/{{ site.data }}/{{ page.links.data }}"
+     class="iconlink" download title="Get data">
+    <i class="fas fa-database fa-2x"></i>
+  </a>
+  {% endif %}
+</p>
+{% endif %}
+
+{{ content }}

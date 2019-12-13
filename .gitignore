@@ -1,0 +1,8 @@
+# .gitignore
+
+.DS_Store
+.Rhistory
+.sass-cache
+_site
+_site_dev
+_download
