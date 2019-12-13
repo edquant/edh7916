@@ -155,7 +155,7 @@ fi
 
 printf "\n[ Building... ]\n\n"
 
-bundle exec jekyll build $build_q --config ./_config${b}.yml --destination ./_site${b} 
+bundle exec jekyll build $build_q --config ./_config${b}.yml --destination ./_site${b} --verbose
 printf "  Built site ==>\n"
 printf "     config file:   _config$b\n"
 printf "     location:      _site$b\n"

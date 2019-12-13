@@ -7,7 +7,8 @@ output:
   md_document:
     variant: gfm
     preserve_yaml: true
-always_allow_html: yes
 ---
+
+Test
 
 *in progress*
