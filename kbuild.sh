@@ -130,8 +130,8 @@ if [ $a == 0 ]; then
     ## purl
     Rscript -e "knitr::purl('$f', documentation = 0, quiet = $knit_q)" > /dev/null
     printf "     $s/$k.R\n"
-    ## move R file to scripts directory
-    mv ${k}.R $s/${k}.R
+    ## more than one line after removing \n? mv to scripts directory : rm
+    [[ $(tr -d '\n' < ${k}.R | wc -l) -ge 2 ]] && mv ${k}.R $s/${k}.R || rm ${k}.R
 else
     for file in ${i}/*.Rmd
     do
@@ -144,8 +144,8 @@ else
 	## purl
 	Rscript -e "knitr::purl('$file', documentation = 0, quiet = $knit_q)" > /dev/null
 	printf "     $s/$f.R\n"
-	## move R file to scripts directory
-	mv ${f}.R $s/${f}.R
+	## more than one line after removing \n? mv to scripts directory : rm
+	[[ $(tr -d '\n' < ${f}.R | wc -l) -ge 2 ]] && mv ${f}.R $s/${f}.R || rm ${f}.R
     done
 fi
 

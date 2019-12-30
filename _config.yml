@@ -37,6 +37,7 @@ syntax: default
 mapstyle: light-v9
 google_analytics: UA-63981025-1
 mathjax: true
+future: true
 
 # files / directories to exclude when building
 exclude: ["*.Rmd", _working, README.md, kbuild.sh, Gemfile, Gemfile.lock]

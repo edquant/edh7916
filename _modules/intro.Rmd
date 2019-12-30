@@ -9,7 +9,4 @@ output:
     preserve_yaml: true
 ---
 
-Test
-
 _in progress_
-
