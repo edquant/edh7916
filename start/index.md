@@ -10,12 +10,12 @@ X/MacOS). If no options are available, the download will work on all
 systems.
 
 ## Required
-### R (get latest version)  
+### R (download latest version)  
 - [Windows](https://cran.r-project.org/bin/windows/base/)  
 - [OS X](https://cran.r-project.org/bin/macosx/)  
 
-### RStudio (get latest version)
+### RStudio (download latest version)
 - [Download links](https://www.rstudio.com/products/rstudio/download/#download)  
 
-### git (get correct version for your operating system) 
+### git (download correct version for your operating system) 
 - [Download links](https://git-scm.com/downloads)

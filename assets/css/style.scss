@@ -7,32 +7,85 @@
 /* Linking hovering
 -------------------------------------------------- */
 
-a.iconlink:link, ul.header li a:link {
+a:hover, a:focus {
+    color: #0021A5;
+    font-weight: normal;
+    text-decoration: underline;
+    text-decoration-color: #FA4616;
+}
+
+a.iconlink:link {
     color: black;
 }
 
-a.iconlink:visited, ul.header li a:visited {
+a.iconlink:visited{
     color: black;
 }
 
-a.iconlink:hover, ul.header li a:hover {
-    color: #069;
+a:link {
+    font-weight: normal;
 }
 
-a.iconlink:active, ul.header li a:active {
-    color: #069;
+a:visited {
+    font-weight: normal;
+}
+
+a.iconlink:hover, a:hover {
+    color: #0021A5;
+    font-weight: normal;
+}
+
+a.iconlink:active, a:active {
+    color: #0021A5;
+    font-weight: normal;
 }
 
 /* Misc
 -------------------------------------------------- */
 
 body {
-  font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight:300;
+    font: 16px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+.wrapper {
+    width: 80%;
+}
+
+header {
+    width: 20%;
+}
+
+header p {
+    font-size: 1.25em;
+}
+
+header h2 a {
+    font-size: 1.25em;
+    line-height: 1.2;
+}
+
+section {
+    width: 70%;
+    font-size: 1.5em;
+    font-weight: 300;
 }
 
 footer {
-    font-size: 12px;
+    width: 15%;
+    font-size: 1.1em;
+}
+
+small {
+    font-size: .8em;
 }
 
 .thin {
@@ -41,7 +94,7 @@ footer {
 
 #mapwrap {
     width: 100%;
-    height: 25rem;
+    height: 50rem;
 }
 
 #map {
@@ -56,7 +109,7 @@ footer {
 }
 
 .modules li {
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
 code {
@@ -64,7 +117,7 @@ code {
 }
 
 code, pre {
-    font-size: 10px;
+    font-size: .8em;
 }
 
 iframe {
@@ -94,3 +147,78 @@ header li {
   border-right: none;
 }
 
+/* Smaller screens
+-------------------------------------------------- */
+@media print, screen and (max-width: 960px) {
+    div.wrapper {
+        width: auto;
+        margin: 0;
+    }
+
+    header, section, footer {
+        float: none;
+        position: static;
+        width: auto;
+    }
+
+    header {
+        padding-right: 320px; 
+    }
+
+    section {
+        border: 1px solid #e5e5e5;
+        border-width: 1px 0;
+        padding: 20px 0;
+        margin: 0 0 20px;
+    }
+
+    header a small {
+        display: inline;
+    }
+
+    header ul {
+        position: absolute;
+        right: 50px;
+        top: 52px;
+    }
+}
+
+@media print, screen and (max-width: 720px) {
+    body {
+        word-wrap: break-word;
+    }
+
+    header {
+        padding: 0;
+    }
+
+    header ul, header p.view {
+        position: static;
+    }
+
+    pre, code {
+        word-wrap: normal;
+    }
+}
+
+@media print, screen and (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
+
+    header ul {
+        width: 99%;
+    }
+
+    header li, header ul li + li + li {
+        width: 33%;
+    }
+}
+
+@media print {
+    body {
+        padding: 0.4in;
+        font-size: 12pt;
+        color: #444;
+    }
+}
