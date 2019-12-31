@@ -231,19 +231,22 @@ a.iconlink:active, a:active { color: #0021A5; font-weight: normal; }
 
 /* Misc
 -------------------------------------------------- */
-body { font: 16px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 300; }
+body { font: 16px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 400; }
+
+.wrapper { width: 80%; }
 
 h1 { font-size: 2em; }
 
 h2 { font-size: 1.5em; }
-
-.wrapper { width: 80%; }
+h2 li { font-size: 1em; }
 
 header { width: 20%; }
-
 header p { font-size: 1.25em; }
-
-header h2 a { font-size: 1.25em; line-height: 1.2; }
+header h2 a { color: #267CB9; font-size: 1.25em; line-height: 1.2; }
+header h2 ul { background: none; border: none; padding-left: 1em; margin-bottom: 0; }
+header h2 li { border-right: none; list-style-type: disc; }
+header h2 li a { font-size: 1em; }
+header h2 li a:hover, header h2 li a:focus { color: #0021A5; font-weight: normal; text-decoration: underline; text-decoration-color: #FA4616; }
 
 section { width: 70%; font-size: 1.5em; font-weight: 300; }
 
@@ -258,22 +261,17 @@ small { font-size: .8em; }
 #map { position: relative; width: 100%; height: 100%; }
 
 .modules { list-style: none; padding: 0; }
-
-.modules li { font-size: 2rem; }
+.modules li { font-size: 2em; }
 
 code { background-color: #f8f8f8; }
 
-code, pre { font-size: .8em; }
-
-iframe { margin: 0; padding: 0; border: none; width: 100%; height: 430px; display: block; }
+code, pre { font-size: .9em; }
 
 img[alt=badge] { width: 200px; }
 
-/* Header list items
--------------------------------------------------- */
-header ul { background: none; border: none; }
+.centerpic { display: block; margin-left: auto; margin-right: auto; width: 50%; }
 
-header li { width: 4em; border-right: none; }
+img.centerpic { border-radius: 10px; }
 
 /* Smaller screens
 -------------------------------------------------- */
