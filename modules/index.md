@@ -9,9 +9,10 @@ class="fas fa-database"></i></span>) used to create each module will be
 linked at the top of the page. 
 
 <ul class="modules">
-{% for module in site.modules %}
+{% assign modules = site.modules | sort:"order"  %}
+{% for m in modules %}
 	<li>
-		<a href="{{ module.url | prepend: site.baseurl }}.html">{{ module.title }}</a>
+		<a href="{{ m.url | prepend: site.baseurl }}.html">{{ m.title }}</a>
 	</li>
 {% endfor %}
 </ul>

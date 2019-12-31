@@ -71,6 +71,7 @@ header {
     }
 
     h2 {
+
 	a {
 	    color: #267CB9;
 	    font-size: 1.25em;
@@ -78,18 +79,21 @@ header {
 	}
 
 	ul {
+	    width: 80%;
 	    background: none;
 	    border: none;
-	    padding-left: 1em;
+	    padding-left: 2em;
 	    margin-bottom: 0;
 	}
 	
 	li {
 	    border-right: none;
 	    list-style-type: disc;
+	    width: 100%;
 
 	    a {
 		font-size: 1em;
+		text-align: left;
 		
 		&:hover, &:focus {
 		    color: #0021A5;
@@ -134,8 +138,8 @@ small {
 }
 
 .modules {
-    list-style: none;
-    padding: 0;
+    list-style: disc;
+    padding-left: 2em;
     li {
 	font-size: 2em;
     }

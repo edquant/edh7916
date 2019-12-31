@@ -1,0 +1,13 @@
+---
+layout: module
+title: "Data Wrangling I: Enter the {tidyverse}"
+date: 2020-01-01 00:00:01
+order: 3
+category: module
+output:
+  md_document:
+    variant: gfm
+    preserve_yaml: true
+---
+
+*in progress*
