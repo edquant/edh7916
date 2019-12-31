@@ -266,7 +266,7 @@ code, pre { font-size: .9em; }
 
 img[alt=badge] { width: 200px; }
 
-.centerpic { display: block; margin-left: auto; margin-right: auto; width: 50%; }
+.centerpic { display: block; margin-left: auto; margin-right: auto; }
 
 img.centerpic { border-radius: 10px; }
 
