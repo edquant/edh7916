@@ -6,7 +6,7 @@ var map = new mapboxgl.Map({
     container: 'map', 
     style: 'mapbox://styles/mapbox/{{ site.mapstyle }}?optimize=true',
     center: [-82.3379, 29.6472],
-    zoom: 16,
+    zoom: 15,
     pitch: 45
 });
 
