@@ -23,17 +23,17 @@
 	  <a href="{{ site.baseurl }}/start/">Getting started</a></br>
 	  <a href="{{ site.baseurl }}/modules/">Modules</a></br>
 	  <!-- should only show module list if in /modules/ path -->
-	  {% if page.dir == "/modules/" or page.category == "module"%}
-	  {% assign modules = site.modules | sort:"order"  %}
-	  {% for m in modules %}
-	  <ul>
-	    <li>
-	      <a href="{{ site.baseurl }}{{ m.url }}.html">{{ m.title }}</a>
-            </li>
-	  </ul>
-	  {% endfor %}
-	  </br>
-	  {% endif %}
+	  <!-- {% if page.dir == "/modules/" or page.category == "module"%} -->
+	  <!-- {% assign modules = site.modules | sort:"order"  %} -->
+	  <!-- {% for m in modules %} -->
+	  <!-- <ul> -->
+	  <!--   <li> -->
+	  <!--     <a href="{{ site.baseurl }}{{ m.url }}.html">{{ m.title }}</a> -->
+          <!--   </li> -->
+	  <!-- </ul> -->
+	  <!-- {% endfor %} -->
+	  <!-- </br> -->
+	  <!-- {% endif %} -->
 	  <a href="{{ site.baseurl }}/about/">About</a></br>
 	</h2>
       </header>
