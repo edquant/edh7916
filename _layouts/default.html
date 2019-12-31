@@ -8,20 +8,47 @@
       <header>
         <h1>{{ site.title }}<a href="{{ site.repo }}" class="iconlink">
 	      <i class="fab fa-github fa-sm"></i></a></h1>
-	<h2 class="thin">{{ site.info.month }}</h2>
+	<h2 class="thin">{{ site.info.term }}</h2>
 	</br>
 	<p>{{ site.description }}</p>
 	</br>
+	<!-- side / top bar menu -->
 	<h2 class="thin">
 	  <a href="{{ site.baseurl }}/">Overview</a></br>
-	  <a href="{{ site.baseurl }}/start/">Getting started</a></br>
+	  <a href="{{ site.baseurl }}/syllabus/">Course
+	    information</a></br>
+	  <a href="{{ site.baseurl }}/location/">Meeting location</a></br>
 	  <a href="{{ site.baseurl }}/schedule/">Schedule</a></br>
+	  <a href="{{ site.baseurl }}/assignments/">Assignments</a></br>
+	  <a href="{{ site.baseurl }}/start/">Getting started</a></br>
 	  <a href="{{ site.baseurl }}/modules/">Modules</a></br>
-	  <a href="{{ site.baseurl }}/data/">Data</a></br>
+	  <!-- should only show module list if in /modules/ path -->
+	  {% if page.dir == "/modules/" or page.category == "module"%}
+	  {% assign modules = site.modules | sort:"order"  %}
+	  {% for m in modules %}
+	  <ul>
+	    <li>
+              <a href="{{ site.baseurl }}{{ m.url }}.html">{{ m.title }}</a>
+            </li>
+	  </ul>
+	  {% endfor %}
+	  {% endif %}
+	  <a href="{{ site.baseurl }}/about/">About</a></br>
 	</h2>
       </header>
 
       <section>
+	<h1>{{ page.title }}</h1>
+	{% if page.links %}
+	<p>
+	  {% if page.links.pdf %}
+	  <a href="{{ site.baseurl }}/{{ site.pdf }}/{{ page.links.pdf }}"
+	     class="iconlink" download title="Download PDF">
+	    <i class="far fa-file-pdf fa-2x"></i>
+	  </a>
+	  {% endif %}
+	</p>
+	{% endif %}
 
       {{ content }}
 
@@ -30,8 +57,8 @@
         {% include footer.html %}
       </footer>
     </div>
-    <!-- <script src="{{ site.baseurl }}/assets/js/scale.fix.js"></script> -->
 
+    <!-- load Javascript if page requires it -->
     {% if page.mapbox_js %}
     {% for version in page.mapbox_js %}
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/{{ version }}/mapbox-gl.js'></script>

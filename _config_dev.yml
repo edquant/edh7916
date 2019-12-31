@@ -9,6 +9,7 @@ zip: https://github.com/btskinner/edh7916/zipball/edh7916
 
 scripts: scripts
 data: data
+pdf: assets/pdf
 
 info:
   term: Spring 2020 

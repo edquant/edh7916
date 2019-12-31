@@ -1,18 +1,12 @@
 ---
 layout: default
+title: Modules
 ---
-
-# Modules
 
 Workshop modules are listed in order of the course. The R script
 (<span><i class="fas fa-code"></i></span>) and data (<span><i
 class="fas fa-database"></i></span>) used to create each module will be
-linked at the top of the page. Alternately, all scripts and data may
-be 
-
-* Downloaded as a <a href="{{ site.zip }}" download="{{ site.course }}">zip file</a>
-* Cloned in bulk from the workshop's [GitHub
-repository]({{ site.repo }}).
+linked at the top of the page. 
 
 <ul class="modules">
 {% for module in site.modules %}
@@ -22,9 +16,10 @@ repository]({{ site.repo }}).
 {% endfor %}
 </ul>
 
-## Directory structure
+## A note on directory structure
 
 All modules assume the following directory structure:
+
 ```
 edh7916/
 |
