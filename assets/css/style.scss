@@ -44,30 +44,26 @@ a.iconlink:active, a:active {
 -------------------------------------------------- */
 
 body {
-    font: 16px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font: 14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 400;
 }
 
-.wrapper {
-    width: 80%;
-}
-
 h1 {
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 h2 {
-    font-size: 1.5em;
+    font-size: 1.25em;
     li {
 	font-size: 1em;
     }
 }
 
 header {
-    width: 20%;
+    // width: 20%;
 
     p {
-	font-size: 1.25em;
+	font-size: 1em;
     }
 
     h2 {
@@ -79,7 +75,7 @@ header {
 	}
 
 	ul {
-	    width: 80%;
+
 	    background: none;
 	    border: none;
 	    padding-left: 2em;
@@ -89,10 +85,8 @@ header {
 	li {
 	    border-right: none;
 	    list-style-type: disc;
-	    width: 100%;
 
 	    a {
-		font-size: 1em;
 		text-align: left;
 		
 		&:hover, &:focus {
@@ -108,14 +102,11 @@ header {
 }
 
 section {
-    width: 70%;
-    font-size: 1.5em;
     font-weight: 300;
 }
 
 footer {
-    width: 15%;
-    font-size: 1.1em;
+    bottom: 5px;
 }
 
 small {
@@ -138,10 +129,9 @@ small {
 }
 
 .modules {
-    list-style: disc;
     padding-left: 2em;
     li {
-	font-size: 2em;
+	font-size: 1.5em;
     }
 }
 
