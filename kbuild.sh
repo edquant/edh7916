@@ -20,13 +20,15 @@ usage()
     [-i]        Directory of *.Rmd files
     [-s]        Directory where purled scripts files should go
     [-b]        Suffix to go on _config*.yml and _site* directory
+    [-c]        Output directory for course assignments, data, and scripts
     [-v]        Render / build verbosely (optional flag)
     		
  EXAMPLES:
  
- ./knit_build.sh -a
- ./knit_build.sh -k intro
- ./knit_build.sh -a -i _posts -b _dev
+ ./kbuild.sh -a
+ ./kbuild.sh -k intro
+ ./kbuild.sh -a -i _posts -b _dev
+ ./kbuild.sh -a -c 
 
  DEFAULT VALUES:
 
@@ -34,6 +36,7 @@ usage()
  i = _modules
  s = scripts
  b = <empty string>
+ c = _student
  v = 0 (knit/build quietly)
 
 EOF
@@ -45,12 +48,14 @@ i="_modules"
 o=$i				# leaving output == input right now
 s="scripts"
 b=""
+c=0                             # assuming _student for central repo
 v=0
 
 knit_q="TRUE"
 build_q="--quiet"
+student_repo="_student"
 
-while getopts "hk:ai:s:b:v" opt;
+while getopts "hk:ai:s:b:cv" opt;
 do
     case $opt in
 	h)
@@ -72,6 +77,9 @@ do
 	b)
 	    b=$OPTARG
 	    ;;
+	c)
+	    c=1
+	    ;;
 	v)
 	    v=1
 	    ;;
@@ -86,7 +94,7 @@ done
 if [ -z "$k" ] && [ $a -eq 0 ]; then
     echo "Must chose *.Rmd file to knit if -a flag not used"
     exit 1
-fi 
+fi
 
 # change quiet options if verbose flag is chosen
 if [[ $v == 1 ]]; then
@@ -113,6 +121,9 @@ printf "  Knitting                    = %s\n" "$p"
 printf "  *.Rmd input directory       = %s\n" "$i"
 printf "  *.R script output directory = %s\n" "$s"
 printf "  Directory of built site     = _site%s\n" "$b"
+if [ $c == 1 ]; then
+    printf "  Student files directory     = %s\n" "$c"
+fi
 
 # ==============================================================================
 # KNIT
@@ -161,7 +172,25 @@ printf "     config file:   _config$b\n"
 printf "     location:      _site$b\n"
 
 # ==============================================================================
-# BUILD
+# MOVE FILES TO STUDENT REPO
+# ==============================================================================
+
+if [ $c == 1 ]; then
+
+    printf "\n[ Copying files for student repos... ]\n\n"
+    # make directory if it doesn't exist
+    mkdir -p $student_repo
+    # move files
+    printf "  - Assignments\n"
+    cp -r assignments $student_repo
+    printf "  - Data\n"
+    cp -r data $student_repo
+    printf "  - Scripts\n"
+    cp -r scripts $student_repo
+fi
+
+# ==============================================================================
+# FINISH
 # ==============================================================================
 
 printf "\n[ Finished! ]\n\n"

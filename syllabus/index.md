@@ -8,7 +8,7 @@ links:
 |:--|--:|  
 |Instructor|Benjamin Skinner, PhD|  
 |Office|2-230F (Norman Hall Annex)|  
-|Email|btskinner <at> coe.ufl.edu|  
+|Email|btskinner \<at\> coe.ufl.edu|  
 |Phone|352.273.4296|  
 |Class Meeting Time|Tuesday (5:10p - 8:10p)|  
 |Class Location|1-239 (Normal Hall)|  
