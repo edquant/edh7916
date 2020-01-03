@@ -19,8 +19,9 @@ usage()
     [-a]        Knit all files (optional flag)
     [-i]        Directory of *.Rmd files
     [-s]        Directory where purled scripts files should go
+    [-p]        Directory where pdf versions of modules should go
     [-b]        Suffix to go on _config*.yml and _site* directory
-    [-c]        Output directory for course assignments, data, and scripts
+    [-c]        Output directory for course assignments, data, lessons and scripts
     [-v]        Render / build verbosely (optional flag)
     		
  EXAMPLES:
@@ -35,8 +36,9 @@ usage()
  a = 0 (do not knit all) 
  i = _modules
  s = scripts
+ p = lessons
  b = <empty string>
- c = _student
+ c = ../<dir name>_student
  v = 0 (knit/build quietly)
 
 EOF
@@ -47,15 +49,16 @@ a=0
 i="_modules"
 o=$i				# leaving output == input right now
 s="scripts"
+p="lessons"
 b=""
 c=0                             # assuming _student for central repo
 v=0
 
 knit_q="TRUE"
 build_q="--quiet"
-student_repo="_student"
+student_repo="../${PWD##*/}_student"
 
-while getopts "hk:ai:s:b:cv" opt;
+while getopts "hk:ai:s:p:b:cv" opt;
 do
     case $opt in
 	h)
@@ -73,6 +76,9 @@ do
 	    ;;
 	s)
 	    s=$OPTARG
+	    ;;
+	p)
+	    p=$OPTARG
 	    ;;
 	b)
 	    b=$OPTARG
@@ -112,17 +118,17 @@ printf -- "----------------------------------\n"
 printf "\n[ Options ]\n\n"
 
 if [ $a == 1 ]; then
-    p="all *.Rmd files"
+    pp="all *.Rmd files"
 else
-    p="${k}.Rmd"
+    pp="${k}.Rmd"
 fi
        
-printf "  Knitting                    = %s\n" "$p"
-printf "  *.Rmd input directory       = %s\n" "$i"
+printf "  Knitting                    = %s\n" "$pp"
+printf "  *.Rmd input directory       = %s\n" "$pp"
 printf "  *.R script output directory = %s\n" "$s"
 printf "  Directory of built site     = _site%s\n" "$b"
 if [ $c == 1 ]; then
-    printf "  Student files directory     = %s\n" "$c"
+    printf "  Student files directory     = %s\n" "$student_repo"
 fi
 
 # ==============================================================================
@@ -135,27 +141,35 @@ printf "\n[ Knitting and purling... ]\n\n"
 if [ $a == 0 ]; then
     printf "  $k.Rmd ==> \n"
     f="$i/$k.Rmd"
-    ## knit
+    # skip if starts with underscore
+    if [[ $f = _* ]]; then printf "     - skipping...\n"; continue; fi
+    # knit
     Rscript -e "rmarkdown::render('$f', output_dir='$o', quiet = $knit_q)"
     printf "     $o/$k.md\n"
-    ## purl
+    # md to pdf
+    [[ -f $o/$k.md ]] && pandoc -V geometry:margin=1in -o $p/$k.pdf $o/$k.md 
+    # purl
     Rscript -e "knitr::purl('$f', documentation = 0, quiet = $knit_q)" > /dev/null
     printf "     $s/$k.R\n"
-    ## more than one line after removing \n? mv to scripts directory : rm
+    # more than one line after removing \n? mv to scripts directory : rm
     [[ $(tr -d '\n' < ${k}.R | wc -l) -ge 2 ]] && mv ${k}.R $s/${k}.R || rm ${k}.R
 else
     for file in ${i}/*.Rmd
     do
-	## get file name without ending
+	# get file name without ending
 	f=$(basename "${file%.*}")
 	printf "  $f.Rmd ==> \n"
-	## knit
+	# skip if starts with underscore
+	if [[ $f = _* ]]; then printf "     - skipping...\n"; continue; fi
+	# knit
 	Rscript -e "rmarkdown::render('$file', output_dir='$o', quiet = $knit_q)"
 	printf "     $o/$f.md\n"
-	## purl
+	# md to pdf
+	[[ -f $o/$f.md ]] && pandoc -V geometry:margin=1in -o $p/$f.pdf $o/$f.md 
+	# purl
 	Rscript -e "knitr::purl('$file', documentation = 0, quiet = $knit_q)" > /dev/null
 	printf "     $s/$f.R\n"
-	## more than one line after removing \n? mv to scripts directory : rm
+	# more than one line after removing \n? mv to scripts directory : rm
 	[[ $(tr -d '\n' < ${f}.R | wc -l) -ge 2 ]] && mv ${f}.R $s/${f}.R || rm ${f}.R
     done
 fi
@@ -176,15 +190,18 @@ printf "     location:      _site$b\n"
 # ==============================================================================
 
 if [ $c == 1 ]; then
-
     printf "\n[ Copying files for student repos... ]\n\n"
     # make directory if it doesn't exist
-    mkdir -p $student_repo
+    mkdir -p $student_repo/data
     # move files
+    printf "  - .gitignore\n"
+    cp .student_gitignore $student_repo/.gitignore
     printf "  - Assignments\n"
-    cp -r assignments $student_repo
+    cp data/README.md $student_repo/data/README.md
     printf "  - Data\n"
-    cp -r data $student_repo
+    cp -r assignments $student_repo
+    printf "  - Lessons\n"
+    cp -r lessons $student_repo
     printf "  - Scripts\n"
     cp -r scripts $student_repo
 fi
