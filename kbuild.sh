@@ -221,10 +221,13 @@ if [ $c == 1 ]; then
     # make directory if it doesn't exist
     mkdir -p $student_repo/data
     # move files
+    printf "  - README.md\n"
+    cp _student_README.md $student_repo/README.md
     printf "  - .gitignore\n"
     cp .student_gitignore $student_repo/.gitignore
     printf "  - Assignments\n"
     cp -r assignments $student_repo
+    rm $student_repo/assignments/index.md
     printf "  - Data\n"
     cp data/README.md $student_repo/data/README.md
     printf "  - Lessons\n"
