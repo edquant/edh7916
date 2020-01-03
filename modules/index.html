@@ -44,18 +44,6 @@ the higher education administration program at the University of Florida
           <!--   </li> -->
 	  <!-- </ul> -->
 	  <!--  -->
-	  <!-- <ul> -->
-	  <!--   <li> -->
-	  <!--     <a href="/edh7916/modules/organizing.html">Organizing</a> -->
-          <!--   </li> -->
-	  <!-- </ul> -->
-	  <!--  -->
-	  <!-- <ul> -->
-	  <!--   <li> -->
-	  <!--     <a href="/edh7916/modules/dw_one.html">Data Wrangling I: Enter the {tidyverse}</a> -->
-          <!--   </li> -->
-	  <!-- </ul> -->
-	  <!--  -->
 	  <!-- </br> -->
 	  <!--  -->
 	  <a href="/edh7916/about/">About</a></br>
@@ -70,33 +58,16 @@ the higher education administration program at the University of Florida
 (<span><i class="fas fa-code"></i></span>) and data (<span><i class="fas fa-database"></i></span>) used to create each module will be
 linked at the top of the page.</p>
 
-<ol class="modules">
-
-
-	<li>
-		<a href="/edh7916/modules/intro.html">Introduction</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/modules/organizing.html">Organizing</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/modules/dw_one.html">Data Wrangling I: Enter the {tidyverse}</a>
-	</li>
-
-</ol>
-
 <h2 id="a-note-on-directory-structure">A note on directory structure</h2>
 
-<p>All modules assume the following directory structure:</p>
+<p>All modules assume the directory structure below.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>edh7916/
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>student_&lt;your_last_name&gt;/
 |
 |__ data/
 |   |
-|   |-- module1.data
-|   |-- module2.data
+|   |-- module1.rds
+|   |-- module2.rds
 |   |...
 |
 |__ scripts/
@@ -106,7 +77,26 @@ linked at the top of the page.</p>
 |   |...
 </code></pre></div></div>
 
-<p>For all scripts, the working directory should be <code class="language-plaintext highlighter-rouge">path/to/scripts</code>.</p>
+<p>When running scripts in RStudio, the working directory should be
+<code class="language-plaintext highlighter-rouge">path/to/student_&lt;your_last_name&gt;/scripts</code>. You can check in RStudio
+by typing <code class="language-plaintext highlighter-rouge">getwd()</code> in the console. For example, let’s say you’ve
+cloned your personal repo into your home directory within a folder
+called <code class="language-plaintext highlighter-rouge">edh7916</code>. Then you should see (if on a Mac):</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">getwd</span><span class="p">()</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"/Users/bts/edh7916/student_skinner/scripts"</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="lessons">Lessons</h2>
+
+<ol class="modules">
+
+
+	<li>
+		<a href="/edh7916/modules/intro.html">Introduction</a>
+	</li>
+
+</ol>
 
 
       </section>
