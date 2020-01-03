@@ -53,3 +53,6 @@ collections:
   modules:
     output: true
     permalink: /:collection/:path
+  assignments:
+    output: true
+    permalink: /:collection/:path

@@ -22,9 +22,9 @@ In this course, students will learn:
 
 1. To use a number of tools that are useful for conducting applied
    quantitative research, including:  
-  - R w/ RStudio
-  - git w/ GitHub 
-  - R Markdown
+  - R w/ RStudio  
+  - git w/ GitHub  
+  - R Markdown  
 2. To properly organize a project for maximum clarity and
    reproducibility  
 3. Best practices for cleaning/tidying/wrangling raw data into

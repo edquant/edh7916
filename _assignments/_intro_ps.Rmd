@@ -1,0 +1,57 @@
+---
+layout: module
+title: Introduction Problem Set
+subtitle: "EDH7916 | Spring 2020"
+author: Benjamin Skinner
+order: 1
+category: assignment
+output:
+  md_document:
+    variant: gfm
+    preserve_yaml: true
+---
+
+_**NOTE** This assignment needs to be completed by the Sunday evening
+before the second class. This will give us time to meet before the
+second class session if you are having trouble getting started._
+
+1. If you don't complete all the setup during class time, do the following:
+    1. Download and install all required software.
+    2. Register for GitHub and submit an request for an education
+    discount.
+    3. Clone your repo (`student_<your_last_name>`) to your machine
+    --- I recommend saving inside another directory where you store
+    class files, _e.g._,
+    `~/courses/edh7916/student_<your_last_name>`.
+1. Initialize a script called `intro_ps_<your_last_name>.r` in your
+   `/scripts` directory.
+1. Within your script, do the items below. Please separate each item
+   and use a commented line above each answer to mark which question
+   you're answering (_e.g._ `# (1)`):
+     1. Store a number in an object.
+	 1. Store a number in another object.
+	 1. Store the sum of these two numbers in a third object.
+	 1. Use `==` to show that subtracting the second object from the
+        third object is equal to the first object.
+	 1. Install the `devtools` package, which can be useful for
+        installing other R packages from non-CRAN (_e.g._,
+        non-official) sources. RStudio may ask you to choose a
+        mirror. If so, just pick one that's close by. Note that can
+        only really do this once, so it's okay if you get a message
+        after the first time that says it's already installed.
+	 1. Generate and store in an object 100 normally distributed
+        random numbers. Check the distribution using the `summary()`
+        and `hist()` commands.
+	 1. Do this two more times, but with $n=1000$ and $n=10000$. How
+        do these distributions compare to the first? Give a one or two
+        sentence answer in the form of a comment (remember that
+        commented lines need to start with an `#` in R).
+	 1. Add a commented note telling me what you hope to get out of
+        this course.
+1. Making sure you've saved your file, take the following steps to
+   add, commit, and push your work:
+   1. `git add` your changes to your repo.
+   2. `git commit` your changes with a short but informative message.
+   3. `git push` your commit to GitHub.
+   4. Log into the GitHub website, navigate to your repo, and
+      confirm that you can see your changes.
