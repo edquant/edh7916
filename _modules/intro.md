@@ -1,7 +1,8 @@
 ---
 layout: module
 title: Introduction
-date: 2020-01-01 00:00:01
+subtitle: "EDH7916 | Spring 2020"
+author: Benjamin Skinner
 order: 1
 category: module
 output:

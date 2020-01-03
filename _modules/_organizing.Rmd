@@ -1,8 +1,9 @@
 ---
 layout: module
-title: "Data Wrangling I: Enter the {tidyverse}"
-date: 2020-01-01 00:00:01
-order: 3
+title: Organizing
+subtitle: "EDH7916 | Spring 2020"
+author: Benjamin Skinner
+order: 2
 category: module
 output:
   md_document:
@@ -10,4 +11,4 @@ output:
     preserve_yaml: true
 ---
 
-*in progress*
+_in progress_
