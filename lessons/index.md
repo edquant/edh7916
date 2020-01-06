@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Modules
+title: Lessons
 ---
 
 Workshop modules are listed in order of the course. The R script
@@ -17,14 +17,14 @@ student_<your_last_name>/
 |
 |__ data/
 |   |
-|   |-- module1.rds
-|   |-- module2.rds
+|   |-- lesson1.rds
+|   |-- lesson2.rds
 |   |...
 |
 |__ scripts/
 |   |
-|   |-- module1.R
-|   |-- module2.R
+|   |-- lesson1.R
+|   |-- lesson2.R
 |   |...
 ```
 
@@ -41,11 +41,24 @@ called `edh7916`. Then you should see (if on a Mac):
 
 ## Lessons
 
-<ol class="modules">
-{% assign modules = site.modules | sort:"order"  %}
-{% for m in modules %}
+<ol class="lessons">
+{% assign lessons = site.lessons | where: 'category', 'lesson' %}
+{% assign lessons = lessons | sort:"order"  %}
+{% for l in lessons %}
 	<li>
-		<a href="{{ m.url | prepend: site.baseurl }}.html">{{ m.title }}</a>
+		<a href="{{ l.url | prepend: site.baseurl }}.html">{{ l.title }}</a>
 	</li>
 {% endfor %}
 </ol>
+
+## Supplemental
+
+<ul class="lessons">
+{% assign supplemental = site.lessons | where: 'category', 'supplemental' %}
+{% assign supplemental = supplemental | sort:"order"  %}
+{% for s in supplemental %}
+	<li>
+		<a href="{{ s.url | prepend: site.baseurl }}.html">{{ s.title }}</a>
+	</li>
+{% endfor %}
+</ul>

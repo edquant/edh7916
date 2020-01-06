@@ -15,31 +15,20 @@
 	  <a href="{{ site.baseurl }}/">Overview</a></br>
 	  <a href="{{ site.baseurl }}/syllabus/">Course
 	    information</a></br>
-	  <a href="{{ site.baseurl }}/location/">Meeting location</a></br>
-	  <a href="{{ site.baseurl }}/schedule/">Schedule</a></br>
-	  <a href="{{ site.baseurl }}/assignments/">Assignments</a></br>
+	  <a href="{{ site.baseurl }}/location/">Meeting
+	    location</a></br>
 	  <a href="{{ site.baseurl }}/start/">Getting started</a></br>
-	  <a href="{{ site.baseurl }}/modules/">Modules</a></br>
-	  <!-- should only show module list if in /modules/ path -->
-	  <!-- {% if page.dir == "/modules/" or page.category == "module"%} -->
-	  <!-- {% assign modules = site.modules | sort:"order"  %} -->
-	  <!-- {% for m in modules %} -->
-	  <!-- <ul> -->
-	  <!--   <li> -->
-	  <!--     <a href="{{ site.baseurl }}{{ m.url }}.html">{{ m.title }}</a> -->
-          <!--   </li> -->
-	  <!-- </ul> -->
-	  <!-- {% endfor %} -->
-	  <!-- </br> -->
-	  <!-- {% endif %} -->
+	  <a href="{{ site.baseurl }}/schedule/">Schedule</a></br>
+	  <a href="{{ site.baseurl }}/lessons/">Lessons</a></br>
+	  <a href="{{ site.baseurl }}/assignments/">Assignments</a></br>
 	  <a href="{{ site.baseurl }}/about/">About</a></br>
 	</h2>
       </header>
 
       <section>
 	<h1>{{ page.title }}</h1>
-	{% if page.links %}
-	<p>
+	{% if page.links and page.layout != "lesson" %}
+	<p> 
 	  {% if page.links.pdf %}
 	  <a href="{{ site.baseurl }}/{{ site.pdf }}/{{ page.links.pdf }}"
 	     class="iconlink" download title="Download PDF">

@@ -4,6 +4,13 @@ layout: default
 
 {% if page.links %}
 <p>
+  {% if page.links.pdf %}
+  <a href="{{ site.baseurl }}/{{ site.pdf }}/{{ page.links.pdf }}"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  {% endif %}
+  &nbsp;&nbsp;
   {% if page.links.script %}
   <a href="{{ site.baseurl }}/{{ site.scripts }}/{{ page.links.script }}"
      class="iconlink" download title="Get script">
