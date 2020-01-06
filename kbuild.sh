@@ -17,10 +17,10 @@ usage()
  ARGUMENTS:
     [-k]        File to knit (w/o ending)
     [-a]        Knit all files (optional flag)
-    [-i]        Directory of module *.Rmd files
+    [-i]        Directory of lesson *.Rmd files
     [-p]        Directory of assignment *.Rmd files
     [-s]        Directory where purled scripts files should go
-    [-l]        Directory where pdf versions of modules (lessons) should go
+    [-l]        Directory where pdf versions of lessons should go
     [-w]        Directory where pdf versions of assignments (work) should go
     [-b]        Suffix to go on _config*.yml and _site* directory
     [-c]        Output directory for course assignments, data, lessons, and scripts
@@ -36,7 +36,7 @@ usage()
  DEFAULT VALUES:
 
  a = 0 (do not knit all) 
- i = _modules
+ i = _lessons
  p = _assignments
  s = scripts
  l = lessons
@@ -50,7 +50,7 @@ EOF
 
 # defaults
 a=0
-i="_modules"
+i="_lessons"
 p="_assignments"
 om=$i				# leaving output == input right now
 op=$p
@@ -64,6 +64,10 @@ v=0
 knit_q="TRUE"
 build_q="--quiet"
 student_repo="../${PWD##*/}_student"
+pdfs="assets/pdf"
+
+# pandoc
+pandoc_opts="-V geometry:margin=1in --highlight-style tango"
 
 while getopts "hk:ai:p:s:l:b:cv" opt;
 do
@@ -134,7 +138,7 @@ else
 fi
        
 printf "  Knitting                          = %s\n" "$pp"
-printf "  Modules *.Rmd input directory     = %s\n" "$pp"
+printf "  Lessons *.Rmd input directory     = %s\n" "$pp"
 printf "  Assignments *.Rmd input directory = %s\n" "$pp"
 printf "  *.R script output directory       = %s\n" "$s"
 printf "  Directory of built site           = _site%s\n" "$b"
@@ -146,7 +150,7 @@ fi
 # KNIT
 # ==============================================================================
 
-printf "\n[ Knitting and purling modules... ]\n\n"
+printf "\n[ Knitting and purling lessons... ]\n\n"
 
 # loop through all Rmd files
 if [ $a == 0 ]; then
@@ -158,7 +162,11 @@ if [ $a == 0 ]; then
     Rscript -e "rmarkdown::render('$f', output_dir='$om', quiet = $knit_q)"
     printf "     $o/$k.md\n"
     # md to pdf
-    [[ -f $om/$k.md ]] && pandoc -V geometry:margin=1in -o $l/$k.pdf $om/$k.md 
+    if [[ -f $om/$k.md ]]; then
+	# pandoc ${pandoc_opts} -o $l/$k.pdf $om/$k.md
+	sed "s/\/assets/.\/assets/g" $om/$k.md | pandoc ${pandoc_opts} -o $l/$k.pdf -
+	cp $l/$k.pdf $pdfs
+    fi
     # purl
     Rscript -e "knitr::purl('$f', documentation = 0, quiet = $knit_q)" > /dev/null
     printf "     $s/$k.R\n"
@@ -176,12 +184,16 @@ else
 	Rscript -e "rmarkdown::render('$file', output_dir='$om', quiet = $knit_q)"
 	printf "     $om/$f.md\n"
 	# md to pdf
-	[[ -f $om/$f.md ]] && pandoc -V geometry:margin=1in -o $l/$f.pdf $om/$f.md 
+	if [[ -f $om/$f.md ]]; then
+	    # pandoc ${pandoc_opts} -o $l/$f.pdf $om/$f.md
+	    sed "s/\/assets/.\/assets/g" $om/$f.md | pandoc ${pandoc_opts} -o $l/$f.pdf -
+	    cp $l/$f.pdf $pdfs
+	fi
 	# purl
 	Rscript -e "knitr::purl('$file', documentation = 0, quiet = $knit_q)" > /dev/null
 	printf "     $s/$f.R\n"
 	# more than one line after removing \n? mv to scripts directory : rm
-	[[ $(tr -d '\n' < ${f}.R | wc -l) -ge 2 ]] && mv ${f}.R $s/${f}.R || rm ${f}.R
+	[[ $(tr -d '\n' < ${f}.R | wc -c) -ge 1 ]] && mv ${f}.R $s/${f}.R || rm ${f}.R
     done
 fi
 
@@ -198,7 +210,7 @@ do
     Rscript -e "rmarkdown::render('$file', output_dir='$op', quiet = $knit_q)"
     printf "     $op/$f.md\n"
     # md to pdf
-    [[ -f $op/$f.md ]] && pandoc -V geometry:margin=1in -o $w/$f.pdf $op/$f.md 
+    [[ -f $op/$f.md ]] && pandoc ${pandoc_opts} -o $w/$f.pdf $op/$f.md 
 done
 
 # ==============================================================================
@@ -231,7 +243,8 @@ if [ $c == 1 ]; then
     printf "  - Data\n"
     cp data/README.md $student_repo/data/README.md
     printf "  - Lessons\n"
-    cp -r lessons $student_repo
+    cp lessons/README.md $student_repo/lessons/README.md
+    cp lessons/*.pdf $student_repo/lessons
     printf "  - Scripts\n"
     cp -r scripts $student_repo
 fi
