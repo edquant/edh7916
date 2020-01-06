@@ -210,7 +210,10 @@ do
     Rscript -e "rmarkdown::render('$file', output_dir='$op', quiet = $knit_q)"
     printf "     $op/$f.md\n"
     # md to pdf
-    [[ -f $op/$f.md ]] && pandoc ${pandoc_opts} -o $w/$f.pdf $op/$f.md 
+    if [[ -f $op/$f.md ]]; then
+	pandoc ${pandoc_opts} -o $w/${f}_ps.pdf $op/$f.md
+	cp $w/${f}_ps.pdf $pdfs
+    fi
 done
 
 # ==============================================================================
