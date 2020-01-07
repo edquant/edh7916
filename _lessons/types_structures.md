@@ -157,7 +157,7 @@ x
 Building on these data types, R relies on four primary data structures:
 
   - `vector`
-  - `matrix`\[1\]
+  - `matrix`
   - `list`
   - `dataframe`
 
@@ -517,6 +517,6 @@ df[["col_a"]]
 > data frame. Finally, change one value in the data frame (HINT: think
 > about how you changed vector and matrix values before).
 
-## Notes
+<br><br>
 
-1.  R also supports arrays, which can take on more than two dimensions.
+*Init: 1 January 2020; Updated: 07 January 2020*
