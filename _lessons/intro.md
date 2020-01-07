@@ -51,7 +51,7 @@ other languages and remote site, *etc*. There are other options for
 working with R, but RStudio is a great all-around program that we will
 use in this course.
 
-![](/assets/img/rstudio_script.png)
+![](/edh7916/assets/img/rstudio_script.png)
 
 RStudio has 3-4 main frames:
 

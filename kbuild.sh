@@ -164,7 +164,7 @@ if [ $a == 0 ]; then
     # md to pdf
     if [[ -f $om/$k.md ]]; then
 	# pandoc ${pandoc_opts} -o $l/$k.pdf $om/$k.md
-	sed "s/\/assets/.\/assets/g" $om/$k.md | pandoc ${pandoc_opts} -o $l/$k.pdf -
+	sed "s/\/edh7916\/assets/.\/assets/g" $om/$k.md | pandoc ${pandoc_opts} -o $l/$k.pdf -
 	cp $l/$k.pdf $pdfs
     fi
     # purl
@@ -186,7 +186,7 @@ else
 	# md to pdf
 	if [[ -f $om/$f.md ]]; then
 	    # pandoc ${pandoc_opts} -o $l/$f.pdf $om/$f.md
-	    sed "s/\/assets/.\/assets/g" $om/$f.md | pandoc ${pandoc_opts} -o $l/$f.pdf -
+	    sed "s/\/edh7916\/assets/.\/assets/g" $om/$f.md | pandoc ${pandoc_opts} -o $l/$f.pdf -
 	    cp $l/$f.pdf $pdfs
 	fi
 	# purl
