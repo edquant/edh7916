@@ -25,7 +25,7 @@ the course (percentage of final grade in parentheses):
   
 ## Weekly assignments
 
-<ol class="modules">
+<ol class="lessons">
 {% assign assignments = site.assignments | sort:"order"  %}
 {% for a in assignments %}
 	<li>

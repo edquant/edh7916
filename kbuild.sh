@@ -211,8 +211,8 @@ do
     printf "     $op/$f.md\n"
     # md to pdf
     if [[ -f $op/$f.md ]]; then
-	pandoc ${pandoc_opts} -o $w/${f}_ps.pdf $op/$f.md
-	cp $w/${f}_ps.pdf $pdfs
+	pandoc ${pandoc_opts} -o $w/${f}_hw.pdf $op/$f.md
+	cp $w/${f}_hw.pdf $pdfs
     fi
 done
 
@@ -234,7 +234,7 @@ printf "     location:      _site$b\n"
 if [ $c == 1 ]; then
     printf "\n[ Copying files for student repos... ]\n\n"
     # make directory if it doesn't exist
-    mkdir -p $student_repo/data
+    mkdir -p $student_repo/data $student_repo/lessons $student_repo/working
     # move files
     printf "  - README.md\n"
     cp _student_README.md $student_repo/README.md
@@ -250,6 +250,8 @@ if [ $c == 1 ]; then
     cp lessons/*.pdf $student_repo/lessons
     printf "  - Scripts\n"
     cp -r scripts $student_repo
+    printf "  - Working\n"
+    cp _working/README.md $student_repo/working/README.md
 fi
 
 # ==============================================================================

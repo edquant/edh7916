@@ -41,15 +41,15 @@ x
 
 
 
-
 ## ---------------------------------------------------------
 ## Help
 ## ---------------------------------------------------------
 
-## ## get help file for function
-## ?sum
-## 
 
-## ## search for function in CRAN
-## ??sum
-## 
+## get help file for function
+?median
+
+
+## search for function in CRAN
+??median
+

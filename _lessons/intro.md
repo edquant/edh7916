@@ -14,7 +14,7 @@ output:
     preserve_yaml: true
 ---
 
-# Introduction to R
+# A Language of Data Analysis: Introduction to R
 
 R is a port of the [S
 language](https://en.wikipedia.org/wiki/S_\(programming_language\)),
@@ -26,15 +26,16 @@ systems.
 R is best thought of as an integrated [language and
 environment](https://www.r-project.org/about.html) that was designed
 with statistical computing and data analysis in mind. To that end, its
-structure represents a compromise between a code base optimized for
-mathematical procedures and one with high-level functionality that can
-be used interactively (unlike compiled code). In other words, it’s a
-great tool for quantitative data analysis.
+structure is a balance between powerful mathematical computation and
+high-level functionality that can be used interactively (unlike compiled
+code). In other words, it’s a great tool for quantitative data analysis
+since it both allows you to investigate your data easily and, when the
+time comes, write robust programs.
 
-Once upon a time, R was probably best known for its graphing
-capabilities, but it has [continued to grow in popularity among data
+Originally, R was probably best known for its graphing capabilities. As
+it has matured, it has [grown in popularity among data
 scientists](http://blog.revolutionanalytics.com/2018/01/tiobe-2017.html),
-who are increasingly [extending R’s functionality through
+who have increasingly [extended its functionality through
 user-contributed
 packages](http://blog.revolutionanalytics.com/2017/01/cran-10000.html).
 We will use a number of packages during this course.
@@ -45,8 +46,10 @@ To work with the R language, it helps to have an application. While R
 ships with one (you may see it on your computer as R.app), it’s pretty
 plain. [RStudio](https://www.rstudio.com), on the other hand, is a
 powerful IDE that does most everything R-related very well and with
-little fuss. There are other options, but RStudio is a great all-around
-program that we will use in this course.
+little fuss: run commands, write scripts, view output, interact with
+other languages and remote site, *etc*. There are other options for
+working with R, but RStudio is a great all-around program that we will
+use in this course.
 
 ![](/assets/img/rstudio_script.png)
 
@@ -70,8 +73,11 @@ console itself.
 
 ## Assignment
 
-R thinks of things as objects. Objects are like boxes in which we can
-put things: data, functions, and even other objects.
+R is a type of [object-oriented
+programming](https://en.wikipedia.org/wiki/Object-oriented_programming)
+environment. This means that R thinks of things in its world as objects,
+which are like virtual boxes in which we can put things: data,
+functions, and even other objects.
 
 Before discussing data types and structures, the first lesson in R is
 how to assign values to objects. In R ([for quirky
@@ -86,8 +92,8 @@ x <- 1
 
 **NOTE**: You can also use a single equals sign, `=`, to assign a value
 to an object: `x = 1`. Keep in mind, however, that since `=` sometimes
-has other meanings in R (it’s how functions set argument options), it’s
-generally clearer to use `<-`.
+has other meanings in R and can be confused with `==`, which is
+different, it’s generally clearer to use `<-`.
 
 ### But’s where’s the output?
 
@@ -120,8 +126,8 @@ Basically, you’ve just told R “Here’s a `1`” and R said “The content o
 (`[1]`) is telling you the index (place within the object) of the first
 item. Since we only have one item, it’s just `[1]`.
 
-When you store something in an object, you can simply type the object’s
-name into the console to see what’s in it.
+When you store something in an object, you can type the object’s name
+into the console to see what’s in it.
 
 ``` r
 ## what's in x?
@@ -150,7 +156,7 @@ printed to the output is to to wrap the entire line in `()`.
 You may have noticed already, but comments in R are set off using the
 hash or pound character at the beginning of the line: `#`. The comment
 character tells R to ignore the line, that is, do not try to interpret
-it as code you want run.
+it as code you the user want run.
 
 > #### Quick exercise
 > 
@@ -184,11 +190,11 @@ structures](./types_structures.html).
 
 User-submitted packages are a huge part of what makes R great. You may
 hear me use the phrases “base R” during class. What I mean by this is
-the R that comes out of the box (sometimes also called “vanilla R”).
-While it’s powerful in and of itself — you can do everything you need
-with base R — most of your scripts will make use of one of more
-contributed packages. These can make your data analytic life *much*
-nicer. We’ll lean heavily on the
+the R that comes as you download it with no packages loaded (sometimes
+also called “vanilla R”). While it’s powerful in and of itself — you can
+do everything you need with base R — most of your scripts will make use
+of one of more contributed packages. These will make your data analytic
+life *much* nicer. We’ll lean heavily on the
 [{tidyverse}](https://www.tidyverse.org) suite of packages this
 semester.
 
@@ -257,21 +263,113 @@ will bring up that function’s help file:
 
 ``` r
 ## get help file for function
-?sum
+?median
 ```
+
+    Median Value
+    
+    Description:
+    
+         Compute the sample median.
+    
+    Usage:
+    
+         median(x, na.rm = FALSE, ...)
+         
+    Arguments:
+    
+           x: an object for which a method has been defined, or a numeric
+              vector containing the values whose median is to be computed.
+    
+       na.rm: a logical value indicating whether 'NA' values should be
+              stripped before the computation proceeds.
+    
+         ...: potentially further arguments for methods; not used in the
+              default method.
+    
+    Details:
+    
+         This is a generic function for which methods can be written.
+         However, the default method makes use of 'is.na', 'sort' and
+         'mean' from package 'base' all of which are generic, and so the
+         default method will work for most classes (e.g., '"Date"') for
+         which a median is a reasonable concept.
+    
+    Value:
+    
+         The default method returns a length-one object of the same type as
+         'x', except when 'x' is logical or integer of even length, when
+         the result will be double.
+    
+         If there are no values or if 'na.rm = FALSE' and there are 'NA'
+         values the result is 'NA' of the same type as 'x' (or more
+         generally the result of 'x[FALSE][NA]').
+    
+    References:
+    
+         Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) _The New S
+         Language_.  Wadsworth & Brooks/Cole.
+    
+    See Also:
+    
+         'quantile' for general quantiles.
+    
+    Examples:
+    
+         median(1:4)                # = 2.5 [even number]
+         median(c(1:3, 100, 1000))  # = 3 [odd, robust]
 
 Two question marks will search for the command name in CRAN packages:
 
 ``` r
 ## search for function in CRAN
-??sum
+??median
 ```
+
+| Package     | Topic              | Title                                                             |
+| :---------- | :----------------- | :---------------------------------------------------------------- |
+| bit64       | qtile              | (Q)uan(Tile)s                                                     |
+| caTools     | runmad             | Median Absolute Deviation of Moving Windows                       |
+| caTools     | runquantile        | Quantile of Moving Window                                         |
+| ellipsis    | safe\_median       | Safe version of median                                            |
+| ggplot2     | hmisc              | A selection of summary functions from Hmisc                       |
+| httr        | guess\_media       | Guess the media type of a path from its extension.                |
+| httr        | parse\_media       | Parse a media type.                                               |
+| igraph      | time\_bins.sir     | SIR model on graphs                                               |
+| magick      | color              | Image Color                                                       |
+| matrixStats | rowMedians         | Calculates the median for each row (column) in a matrix           |
+| matrixStats | rowWeightedMedians | Calculates the weighted medians for each row (column) in a matrix |
+| matrixStats | weightedMad        | Weighted Median Absolute Deviation (MAD)                          |
+| matrixStats | weightedMedian     | Weighted Median Value                                             |
+| posterior   | ess\_quantile      | Effective sample sizes for quantiles                              |
+| posterior   | mcse\_quantile     | Monte Carlo standard error for quantiles                          |
+| purrr       | accumulate         | Accumulate intermediate results of a vector reduction             |
+| recipes     | step\_medianimpute | Impute Numeric Data Using the Median                              |
+| spatstat    | mean.im            | Mean and Median of Pixel Values in an Image                       |
+| spatstat    | mean.linim         | Mean, Median, Quantiles of Pixel Values on a Linear Network       |
+| spatstat    | weighted.median    | Weighted Median, Quantiles or Variance                            |
+| zoo         | rollmean           | Rolling Means/Maximums/Medians/Sums                               |
+| zoo         | zoo                | Z’s Ordered Observations                                          |
+| stats       | mad                | Median Absolute Deviation                                         |
+| stats       | median             | Median Value                                                      |
+| stats       | medpolish          | Median Polish (Robust Twoway Decomposition) of a Matrix           |
+| stats       | runmed             | Running Medians - Robust Scatter Plot Smoothing                   |
+| stats       | smooth             | Tukey’s (Running Median) Smoothing                                |
+| stats       | smoothEnds         | End Points Smoothing (for Running Medians)                        |
+| survival    | Math.Surv          | Methods for Surv objects                                          |
+
+At first, using help files may feel like trying to use a dictionary to
+see how to spell a word — if you knew how to spell it, you wouldn’t need
+the dictionary\! Similarly, if you knew what you needed, you wouldn’t
+need the help file. But over time, they will become more useful,
+particularly when you want to figure out an obscure option that will
+give you *exactly* what you need.
 
 ### Google it\!
 
 Google is a coder’s best friend. If you are having a problem, odds are a
-1,000+ other people have too and at least one of them has been brave (or
-foolhardy\!) enough to ask about it in a forum like
+1,000+ other people have too and at least one of them has been brave
+enough to ask about it in a forum like
 [StackOverflow](https://stackoverflow.com),
 [CrossValidated](https://stackoverflow.com), or [R-help mailing
 list](https://stat.ethz.ch/mailman/listinfo/r-help).
@@ -301,7 +399,7 @@ problems are alike. But over time, they do rhyme. The time you put in
 now learning to figure things out on your own will be well paid in the
 future.
 
-# Introduction to Git / GitHub
+# A system of Version Control: Introduction to Git / GitHub
 
 From the git website <http://git-scm.com/>
 
@@ -385,7 +483,7 @@ another GUI is fine.
     push them remotely. Use `.gitignore` to make sure that git doesn’t
     track or push them.
 
-So every class and work session should go like this:
+Every class and work session should go like this:
 
 1.  `pull` from GitHub remote
 2.  *do work*
@@ -439,7 +537,7 @@ with each small change to your data.
 > 1.  Initialize a private repo on GitHub.
 > 2.  Clone that repo to your computer.
 > 3.  Add a text file called `hello.txt` to your cloned repo (on your
->     machine) that says “Hello, World\!”.
+>     machine) that says “Hello (again), World\!”.
 > 4.  Commit and push your new file up to GitHub. Check that it’s there.
 > 5.  Make a change to your `hello.txt` file locally, commit and push
 >     the change to the repo. Check the change on GitHub.
@@ -448,4 +546,4 @@ with each small change to your data.
 
 <br><br>
 
-*Init: 1 January 2020; Updated: 06 January 2020*
+*Init: 1 January 2020; Updated: 07 January 2020*
