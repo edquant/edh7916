@@ -4,6 +4,14 @@ title: Releases
 date: 2020-01-08 00:00:00
 ---
 
+# v1.1.1
+
+## Changes
+
+### Lessons
+- _Introduction_
+  - Changed first _Not so quick exercise_ to reflect what we did in
+    class
 
 # v1.1
 

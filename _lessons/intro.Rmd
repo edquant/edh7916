@@ -162,15 +162,10 @@ generally don't commit large binary data files to Git: your repo just
 becomes larger and larger with each small change to your data.
 
 > #### Not-so-quick exercise
-> 1. Initialize a private repo on GitHub.
-> 2. Clone that repo to your computer.
-> 3. Add a text file called `hello.txt` to your cloned repo (on your
-> machine) that says "Hello (again), World!".
-> 4. Commit and push your new file up to GitHub. Check that it's there.
-> 5. Make a change to your `hello.txt` file locally, commit and push the change
-> to the repo. Check the change on GitHub.
-> 6. Make a change to your `hello.txt` file using GitHub's editor and
-> save it remotely. Use the GitHub GUI to sync your change locally.
+> In this first exercise, we'll practice using RStudio to pull down
+> your student repository from GitHub. We'll also practice making a
+> few quick file changes, staging, commiting, and pushing them back to
+> the remote.
 
 # A Language of Data Analysis: Introduction to R
 ```{r, include = FALSE, purl = TRUE}
