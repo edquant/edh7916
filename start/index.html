@@ -41,9 +41,9 @@ the higher education administration program at the University of Florida
 
       <section>
 	<h1>Getting started</h1>
-	<!--  -->
+	
 
-      <p>You’ll need to download and install a few programs on your computer
+	<p>You’ll need to download and install a few programs on your computer
 for this course. You’ll also need to register for a GitHub
 account. All software and registrations are free.</p>
 
@@ -89,6 +89,8 @@ installation processes.</p>
   </tbody>
 </table>
 
+<p>See the issues section below for common setup problems.</p>
+
 <h2 id="github-registration">GitHub registration</h2>
 
 <p>If you don’t already have one, you’ll also need to sign up for a <a href="https://github.com/join">free
@@ -122,7 +124,40 @@ use as well. Here are a couple you might try:</p>
   <li><a href="https://www.sourcetreeapp.com">Sourcetree</a></li>
 </ul>
 
+<h2 id="issues">Issues</h2>
+<h3 id="windows">Windows</h3>
 
+<p>Some students get errors when first using git with RStudio relating to
+<code class="language-plaintext highlighter-rouge">user.email</code> and <code class="language-plaintext highlighter-rouge">user.name</code>. If you get this error, do the following
+in RStudio.</p>
+
+<ol>
+  <li>In the <strong>Terminal</strong> (not the <strong>Console</strong> but the tab next to it —
+the prompt should have a <code class="language-plaintext highlighter-rouge">$</code> and not <code class="language-plaintext highlighter-rouge">&gt;</code>), type
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git config <span class="nt">--list</span> <span class="nt">--show-origin</span>
+</code></pre></div>    </div>
+    <p>If you see nothing related to your GitHub user ID or email or the
+information is incorrect, continue to the next step.</p>
+  </li>
+  <li>One at a time, type
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git config <span class="nt">--global</span> user.name <span class="s2">"JohnDoe"</span>
+<span class="nv">$ </span>git config <span class="nt">--global</span> user.email <span class="s2">"johndoe@example.com"</span>
+</code></pre></div>    </div>
+    <p>replacing your GitHub ID and email within the quotes</p>
+  </li>
+  <li>Type
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git config <span class="nt">--list</span> <span class="nt">--show-origin</span>
+</code></pre></div>    </div>
+    <p>again to confirm that information is now stored (it should print to
+the Terminal output.</p>
+  </li>
+  <li>Use Git to confirm it has worked.</li>
+</ol>
+
+
+	<!-- <p> -->
+	<!--   Updated: 07 January 2020 -->
+	<!-- </p> -->
       </section>
       <footer>
         <p>
@@ -137,7 +172,13 @@ use as well. Here are a couple you might try:</p>
   <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
     <i class="fab fa-twitter fa-lg"></i></a>
 </p>
-<p><small>Hosted on GitHub Pages | Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
 
       </footer>
     </div>

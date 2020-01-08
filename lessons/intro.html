@@ -41,9 +41,9 @@ the higher education administration program at the University of Florida
 
       <section>
 	<h1>Introduction</h1>
-	<!--  -->
+	
 
-      
+	
 <p>
   
   <a href="/edh7916/assets/pdf/intro.pdf"
@@ -64,6 +64,165 @@ the higher education administration program at the University of Florida
   
 </p>
 
+
+<h1 id="a-system-of-version-control-introduction-to-git--github">A system of Version Control: Introduction to Git / GitHub</h1>
+
+<p>From the git website <a href="http://git-scm.com/">http://git-scm.com/</a></p>
+
+<blockquote>
+  <p>Git is a free and open source distributed version control system
+designed to handle everything from small to very large projects with
+speed and efficiency.</p>
+</blockquote>
+
+<h2 id="why-use-git">Why use git?</h2>
+
+<p>With so many other (read: easier!) ways to share and collaborate on
+documents, why use git? Isn’t it a bit overkill to learn an entirely new
+syntax? Why not just email files or use something like DropBox? Because
+it is very easy to end up with something like this:</p>
+
+<p><a href="http://www.phdcomics.com/comics/archive.php?comicid=1531"><img src="https://pbs.twimg.com/media/B9HgQmDIEAALfb4.jpg" alt="" /></a></p>
+
+<p><em>Credit: Jorge Chan</em></p>
+
+<h3 id="as-complexity-increases-so-does-the-need-for-git">As complexity increases, so does the need for git</h3>
+
+<p>\[ Project = f(size, scope, collaborators) \]</p>
+
+<p>As any part of that function grows, so too does the need for a work flow
+that:</p>
+
+<ul>
+  <li>Allows for many moving parts</li>
+  <li>Allows for peaceful collaboration (no overwrites)</li>
+  <li>Allows for timely collaboration (synchronous)</li>
+  <li>Allows for distant collaboration (centralized file location)</li>
+  <li>Allows for version control (so you can go back if necessary)</li>
+</ul>
+
+<p>Git was designed to do all these things, so it works better than other
+systems.</p>
+
+<h3 id="whats-the-difference-between-git-and-github">What’s the difference between git and GitHub?</h3>
+
+<p>Yep, you guessed it. Git is the system/language that supports version
+control. GitHub is an online service that will host your remote
+repositories, for free if public or a small fee if private. (Students
+get an education discount and some free repos. Check out
+<a href="https://education.github.com/">https://education.github.com/</a>.)</p>
+
+<p>RStudio is nice because it provides an nice point-and-click interface
+for git. (<a href="https://www.sourcetreeapp.com">Sourcetree</a> and <a href="https://desktop.github.com">GitHub
+Desktop</a> are also really nice GUIs.) If you
+want to run git at the command line, go for it! But using RStudio or
+another GUI is fine.</p>
+
+<h3 id="how-does-gitgithub-work">How does git/GitHub work?</h3>
+
+<p><a href="https://commons.wikimedia.org/wiki/File:Git_data_flow.png"><img src="http://upload.wikimedia.org/wikipedia/commons/2/29/Git_data_flow.png" alt="" /></a>
+<em>Credit: Lbhtw (Own work)</em></p>
+
+<h3 id="some-notes-on-work-flow-good-habits">Some notes on work flow (good habits)</h3>
+
+<ol>
+  <li>Always <code class="language-plaintext highlighter-rouge">pull</code> from your local repo with your remote repo before
+starting any work. This makes sure you have the latest files.
+RStudio has a <code class="language-plaintext highlighter-rouge">pull</code> button in the <strong>Git</strong> tab.</li>
+  <li>Don’t wait to <code class="language-plaintext highlighter-rouge">push</code> your commits. Just like you save your papers
+every few lines or paragraphs, you should push to your remote repo.
+This way, you’re less likely to lose work in the event of a computer
+crash. Also, should you want to return to a prior version, small
+changes make it easier to find what you want.</li>
+  <li>Add useful <code class="language-plaintext highlighter-rouge">commit</code> messages. RStudio will make you add something.
+Don’t say “stuff.” A version history of 95 “stuff”s is pretty
+non-helpful. Also, I would keep it clean. Even in a private
+repository, work as if someone will see what you write someday.</li>
+  <li>Don’t freak out! If you accidentally push and overwrite or delete
+something on the remote, you can get it back. That’s the point of
+version control! Sometimes weird things like merges happen (two
+files with the same name are shoved together). They can be a pain to
+fix, but they can be fixed.</li>
+  <li>Avoid tracking overly large files and pushing them to your remote
+repository. GitHub has a file size limit of 100 MB per file and 1 GB
+per repo. The history of large files compounds quickly, so think
+carefully before adding them. Usually this means that small datasets
+are okay; big ones are better backed up somewhere else and left on
+your machine.</li>
+  <li>Remember: even in a private repository, your files are potentially
+viewable. If any of your datasets or files are restricted, do no
+push them remotely. Use <code class="language-plaintext highlighter-rouge">.gitignore</code> to make sure that git doesn’t
+track or push them.</li>
+</ol>
+
+<p>Every class and work session should go like this:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">pull</code> from GitHub remote</li>
+  <li><em>do work</em></li>
+  <li><code class="language-plaintext highlighter-rouge">add</code> or <code class="language-plaintext highlighter-rouge">stage</code> (if new file)</li>
+  <li><code class="language-plaintext highlighter-rouge">commit</code> with message</li>
+  <li><code class="language-plaintext highlighter-rouge">push</code> back to GitHub remote</li>
+</ol>
+
+<p>If you’d like you can also use terminal commands to accomplish the same
+things. Many people (including me) like to use the terminal commands
+directly.</p>
+
+<ul>
+  <li>Pull: <code class="language-plaintext highlighter-rouge">git pull</code></li>
+  <li>Stage: <code class="language-plaintext highlighter-rouge">git add &lt;filenames&gt;</code></li>
+  <li>Committ: <code class="language-plaintext highlighter-rouge">git commit -m "&lt;your message here&gt;"</code></li>
+  <li>Push: <code class="language-plaintext highlighter-rouge">git push</code></li>
+</ul>
+
+<p>That said, you should use whatever works best for you.</p>
+
+<p>By far the most useful guide to working with R and git/GitHub is <a href="https://happygitwithr.com/">Jenny
+Bryan’s guide</a>.</p>
+
+<h3 id="some-more-notes-on-using-git-plain-text">Some more notes on using Git: plain text</h3>
+
+<p>Git works best with <a href="https://en.wikipedia.org/wiki/Plain_text">plain text
+files</a>. This is because it
+notes the differences across two plain text files rather than just
+copying and re-copying the same file over and over again as it changes.
+When you’ve only changed one word, git’s method of version control is
+much more efficient than making a whole new copy.</p>
+
+<p>It’s also useful when you need to merge two files. If file B is just
+file A with new section, file B can be easily merged into file A by
+inserting the new section — just like you would add a paragraph in a
+paper you’re writing. R scripts are plain text. Some data files, like
+*.csv, are plain text. This is why git works really well with data
+analysis workflows.</p>
+
+<p>On the other hand, git does not work as well with <a href="https://en.wikipedia.org/wiki/Binary_file">binary
+files</a>. These files are
+stored in a format closer to what your computer understands, which comes
+with benefits. Data files, like Stata’s <em>.dta and R’s *.Rdata, as well
+as MS Office files — *.docx, *.xlsx, *.pptx, *etc</em> — are binary files.
+Git will keep track of your MS Word document, but due to its underlying
+structure, you won’t be able to merge and every small change will just
+make a whole new copy of the file. This is why we generally don’t commit
+large binary data files to Git: your repo just becomes larger and larger
+with each small change to your data.</p>
+
+<blockquote>
+  <h4 id="not-so-quick-exercise">Not-so-quick exercise</h4>
+
+  <ol>
+    <li>Initialize a private repo on GitHub.</li>
+    <li>Clone that repo to your computer.</li>
+    <li>Add a text file called <code class="language-plaintext highlighter-rouge">hello.txt</code> to your cloned repo (on your
+machine) that says “Hello (again), World!”.</li>
+    <li>Commit and push your new file up to GitHub. Check that it’s there.</li>
+    <li>Make a change to your <code class="language-plaintext highlighter-rouge">hello.txt</code> file locally, commit and push
+the change to the repo. Check the change on GitHub.</li>
+    <li>Make a change to your <code class="language-plaintext highlighter-rouge">hello.txt</code> file using GitHub’s editor and
+save it remotely. Use the GitHub GUI to sync your change locally.</li>
+  </ol>
+</blockquote>
 
 <h1 id="a-language-of-data-analysis-introduction-to-r">A Language of Data Analysis: Introduction to R</h1>
 
@@ -120,10 +279,9 @@ console itself.</p>
 <blockquote>
   <h4 id="quick-exercise">Quick exercise</h4>
 
-  <p>If you haven’t already, open up RStudio and poke around. First, try
-entering an equation in the console (like <code class="language-plaintext highlighter-rouge">1 + 1</code>). Next, open the
-script associated with this module and run the first line. Welcome to
-R!</p>
+  <p>If you haven’t already, try entering an equation in the console (like
+<code class="language-plaintext highlighter-rouge">1 + 1</code>). Next, open the script associated with this module and run
+the first line. Welcome to R!</p>
 </blockquote>
 
 <h2 id="assignment">Assignment</h2>
@@ -206,6 +364,13 @@ printed to the output is to to wrap the entire line in <code class="language-pla
   <p>Using the arrow, assign the output of <code class="language-plaintext highlighter-rouge">1 + 1</code> to <code class="language-plaintext highlighter-rouge">x</code>. Next subtract 1
 from <code class="language-plaintext highlighter-rouge">x</code> and reassign the result to <code class="language-plaintext highlighter-rouge">x</code>. Show the value in <code class="language-plaintext highlighter-rouge">x</code>.</p>
 </blockquote>
+
+<p><strong>A NOTE ON “GOOD-ISH”</strong> Keep in mind how much data your object has /
+might have when printing it to the console. For a small amount, printing
+is just fine. But if you have, for example, a matrix with 1,000 columns
+and 1 million rows, printing might not be a useful exercise. There are
+other ways, such as the function <code class="language-plaintext highlighter-rouge">head()</code> that might be more useful in
+these situations.</p>
 
 <h2 id="comments">Comments</h2>
 
@@ -587,171 +752,11 @@ problems are alike. But over time, they do rhyme. The time you put in
 now learning to figure things out on your own will be well paid in the
 future.</p>
 
-<h1 id="a-system-of-version-control-introduction-to-git--github">A system of Version Control: Introduction to Git / GitHub</h1>
-
-<p>From the git website <a href="http://git-scm.com/">http://git-scm.com/</a></p>
-
-<blockquote>
-  <p>Git is a free and open source distributed version control system
-designed to handle everything from small to very large projects with
-speed and efficiency.</p>
-</blockquote>
-
-<h2 id="why-use-git">Why use git?</h2>
-
-<p>With so many other (read: easier!) ways to share and collaborate on
-documents, why use git? Isn’t it a bit overkill to learn an entirely new
-syntax? Why not just email files or use something like DropBox? Because
-it is very easy to end up with something like this:</p>
-
-<p><a href="http://www.phdcomics.com/comics/archive.php?comicid=1531"><img src="https://pbs.twimg.com/media/B9HgQmDIEAALfb4.jpg" alt="" /></a></p>
-
-<p><em>Credit: Jorge Chan</em></p>
-
-<h3 id="as-complexity-increases-so-does-the-need-for-git">As complexity increases, so does the need for git</h3>
-
-<p>\[ Project = f(size, scope, collaborators) \]</p>
-
-<p>As any part of that function grows, so too does the need for a work flow
-that:</p>
-
-<ul>
-  <li>Allows for many moving parts</li>
-  <li>Allows for peaceful collaboration (no overwrites)</li>
-  <li>Allows for timely collaboration (synchronous)</li>
-  <li>Allows for distant collaboration (centralized file location)</li>
-  <li>Allows for version control (so you can go back if necessary)</li>
-</ul>
-
-<p>Git was designed to do all these things, so it works better than other
-systems.</p>
-
-<h3 id="whats-the-difference-between-git-and-github">What’s the difference between git and GitHub?</h3>
-
-<p>Yep, you guessed it. Git is the system/language that supports version
-control. GitHub is an online service that will host your remote
-repositories, for free if public or a small fee if private. (Students
-get an education discount and some free repos. Check out
-<a href="https://education.github.com/">https://education.github.com/</a>.)</p>
-
-<p>RStudio is nice because it provides an nice point-and-click interface
-for git. (<a href="https://www.sourcetreeapp.com">Sourcetree</a> and <a href="https://desktop.github.com">GitHub
-Desktop</a> are also really nice GUIs.) If you
-want to run git at the command line, go for it! But using RStudio or
-another GUI is fine.</p>
-
-<h3 id="how-does-gitgithub-work">How does git/GitHub work?</h3>
-
-<p><a href="https://commons.wikimedia.org/wiki/File:Git_data_flow.png"><img src="http://upload.wikimedia.org/wikipedia/commons/2/29/Git_data_flow.png" alt="" /></a>
-<em>Credit: Lbhtw (Own work)</em></p>
-
-<h3 id="some-notes-on-work-flow-good-habits">Some notes on work flow (good habits)</h3>
-
-<ol>
-  <li>Always <code class="language-plaintext highlighter-rouge">pull</code> from your local repo with your remote repo before
-starting any work. This makes sure you have the latest files.
-RStudio has a <code class="language-plaintext highlighter-rouge">pull</code> button in the <strong>Git</strong> tab.</li>
-  <li>Don’t wait to <code class="language-plaintext highlighter-rouge">push</code> your commits. Just like you save your papers
-every few lines or paragraphs, you should push to your remote repo.
-This way, you’re less likely to lose work in the event of a computer
-crash. Also, should you want to return to a prior version, small
-changes make it easier to find what you want.</li>
-  <li>Add useful <code class="language-plaintext highlighter-rouge">commit</code> messages. RStudio will make you add something.
-Don’t say “stuff.” A version history of 95 “stuff”s is pretty
-non-helpful. Also, I would keep it clean. Even in a private
-repository, work as if someone will see what you write someday.</li>
-  <li>Don’t freak out! If you accidentally push and overwrite or delete
-something on the remote, you can get it back. That’s the point of
-version control! Sometimes weird things like merges happen (two
-files with the same name are shoved together). They can be a pain to
-fix, but they can be fixed.</li>
-  <li>Avoid tracking overly large files and pushing them to your remote
-repository. GitHub has a file size limit of 100 MB per file and 1 GB
-per repo. The history of large files compounds quickly, so think
-carefully before adding them. Usually this means that small datasets
-are okay; big ones are better backed up somewhere else and left on
-your machine.</li>
-  <li>Remember: even in a private repository, your files are potentially
-viewable. If any of your datasets or files are restricted, do no
-push them remotely. Use <code class="language-plaintext highlighter-rouge">.gitignore</code> to make sure that git doesn’t
-track or push them.</li>
-</ol>
-
-<p>Every class and work session should go like this:</p>
-
-<ol>
-  <li><code class="language-plaintext highlighter-rouge">pull</code> from GitHub remote</li>
-  <li><em>do work</em></li>
-  <li><code class="language-plaintext highlighter-rouge">add</code> or <code class="language-plaintext highlighter-rouge">stage</code> (if new file)</li>
-  <li><code class="language-plaintext highlighter-rouge">commit</code> with message</li>
-  <li><code class="language-plaintext highlighter-rouge">push</code> back to GitHub remote</li>
-</ol>
-
-<p>If you’d like you can also use terminal commands to accomplish the same
-things. Many people (including me) like to use the terminal commands
-directly.</p>
-
-<ul>
-  <li>Pull: <code class="language-plaintext highlighter-rouge">git pull</code></li>
-  <li>Stage: <code class="language-plaintext highlighter-rouge">git add &lt;filenames&gt;</code></li>
-  <li>Committ: <code class="language-plaintext highlighter-rouge">git commit -m "&lt;your message here&gt;"</code></li>
-  <li>Push: <code class="language-plaintext highlighter-rouge">git push</code></li>
-</ul>
-
-<p>That said, you should use whatever works best for you.</p>
-
-<p>By far the most useful guide to working with R and git/GitHub is <a href="https://happygitwithr.com/">Jenny
-Bryan’s guide</a>.</p>
-
-<h3 id="some-more-notes-on-using-git-plain-text">Some more notes on using Git: plain text</h3>
-
-<p>Git works best with <a href="https://en.wikipedia.org/wiki/Plain_text">plain text
-files</a>. This is because it
-notes the differences across two plain text files rather than just
-copying and re-copying the same file over and over again as it changes.
-When you’ve only changed one word, git’s method of version control is
-much more efficient than making a whole new copy.</p>
-
-<p>It’s also useful when you need to merge two files. If file B is just
-file A with new section, file B can be easily merged into file A by
-inserting the new section — just like you would add a paragraph in a
-paper you’re writing. R scripts are plain text. Some data files, like
-*.csv, are plain text. This is why git works really well with data
-analysis workflows.</p>
-
-<p>On the other hand, git does not work as well with <a href="https://en.wikipedia.org/wiki/Binary_file">binary
-files</a>. These files are
-stored in a format closer to what your computer understands, which comes
-with benefits. Data files, like Stata’s <em>.dta and R’s *.Rdata, as well
-as MS Office files — *.docx, *.xlsx, *.pptx, *etc</em> — are binary files.
-Git will keep track of your MS Word document, but due to its underlying
-structure, you won’t be able to merge and every small change will just
-make a whole new copy of the file. This is why we generally don’t commit
-large binary data files to Git: your repo just becomes larger and larger
-with each small change to your data.</p>
-
-<blockquote>
-  <h4 id="not-so-quick-exercise">Not-so-quick exercise</h4>
-
-  <ol>
-    <li>Initialize a private repo on GitHub.</li>
-    <li>Clone that repo to your computer.</li>
-    <li>Add a text file called <code class="language-plaintext highlighter-rouge">hello.txt</code> to your cloned repo (on your
-machine) that says “Hello (again), World!”.</li>
-    <li>Commit and push your new file up to GitHub. Check that it’s there.</li>
-    <li>Make a change to your <code class="language-plaintext highlighter-rouge">hello.txt</code> file locally, commit and push
-the change to the repo. Check the change on GitHub.</li>
-    <li>Make a change to your <code class="language-plaintext highlighter-rouge">hello.txt</code> file using GitHub’s editor and
-save it remotely. Use the GitHub GUI to sync your change locally.</li>
-  </ol>
-</blockquote>
-
-<p><br /><br /></p>
-
-<p><em>Init: 1 January 2020; Updated: 07 January 2020</em></p>
 
 
-
+	<!-- <p> -->
+	<!--   Updated: 07 January 2020 -->
+	<!-- </p> -->
       </section>
       <footer>
         <p>
@@ -766,7 +771,13 @@ save it remotely. Use the GitHub GUI to sync your change locally.</li>
   <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
     <i class="fab fa-twitter fa-lg"></i></a>
 </p>
-<p><small>Hosted on GitHub Pages | Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
 
       </footer>
     </div>

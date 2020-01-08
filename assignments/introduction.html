@@ -40,19 +40,10 @@ the higher education administration program at the University of Florida
       </header>
 
       <section>
-	<h1>Introduction Problem Set</h1>
-	<!--  -->
-	<!-- <p>  -->
-	<!--    -->
-	<!--   <a href="/edh7916/assets/pdf/introduction_hw.pdf" -->
-	<!--      class="iconlink" download title="Download PDF"> -->
-	<!--     <i class="far fa-file-pdf fa-2x"></i> -->
-	<!--   </a> -->
-	<!--    -->
-	<!-- </p> -->
-	<!--  -->
+	<h1>Assignment 1</h1>
+	
 
-      
+	
 <p>
   
   <a href="/edh7916/assets/pdf/introduction_hw.pdf"
@@ -69,42 +60,122 @@ the higher education administration program at the University of Florida
 
 
 <p><em><strong>NOTE</strong> This assignment needs to be completed by the start of the
-second class.</em></p>
+second class. That means everything pushed to you remote GitHub repo
+before class starts.</em></p>
+
+<p>In this first assignment, I’m asking you to do three things:</p>
 
 <ol>
-  <li>If you don’t complete all the setup during class time, do the
-following:
+  <li>Make sure you’ve got your computer set up for class with all
+required software loaded and working.</li>
+  <li>Learn a little about Markdown, a plain text syntax that can make
+nicely formated documents.</li>
+  <li>Practice using the git / GitHub version control system.</li>
+</ol>
+
+<h2 id="steps">Steps</h2>
+
+<ol>
+  <li>
+    <p>If you weren’t able complete all the setup during class time, be
+sure that you have done so and everything is in working order. Set
+up a time to meet with me this week if you are having issues.</p>
+  </li>
+  <li>
+    <p>As I mentioned in class, Markdown is a useful plain text markup
+language (meaning you format your document by including special
+syntax directly in your text rather than, say, clicking a button
+like with MSWord). We will use it throughout the semester.</p>
+
+    <p>To get some background information, read the Getting Started page
+(<a href="https://www.markdownguide.org/getting-started">www.markdownguide.org/getting-started</a>)
+for general information about Markdown. Also look through the guide
+at
+<a href="https://www.markdownguide.org/basic-syntax/">www.markdownguide.org/basic-syntax/</a>
+for the basic Markdown syntax.</p>
+  </li>
+  <li>
+    <p>Initialize a file called <code class="language-plaintext highlighter-rouge">introduction_hw_&lt;your_last_name&gt;.md</code> in
+your <code class="language-plaintext highlighter-rouge">/working</code> directory. (<strong>NB</strong> Notice the file ending of <code class="language-plaintext highlighter-rouge">*.md</code>
+— this is a Markdown-style plain text file.).</p>
+
+    <p>You can do this directly in RStudio by:</p>
+
     <ol>
-      <li>Download and install all required software.</li>
-      <li>Register for GitHub and submit an request for an education
-discount.</li>
-      <li>Send me your GitHub ID.</li>
-      <li>Clone your repo (<code class="language-plaintext highlighter-rouge">student_&lt;your_last_name&gt;</code>) to your machine — I
-recommend saving inside another directory where you store class
-files, <em>e.g.</em>, <code class="language-plaintext highlighter-rouge">~/courses/edh7916/student_&lt;your_last_name&gt;</code>.</li>
+      <li>Clicking the <em>New file</em> icon in the upper left corner and
+selecting <strong>Text file</strong>.</li>
+      <li>Click the <em>Save</em> icon, change the name as required, change the
+save location to the <code class="language-plaintext highlighter-rouge">/working</code> folder, and save. Don’t forget
+to add the <code class="language-plaintext highlighter-rouge">.md</code> to the end. You will know you’ve done it
+correctly if the tab with your file name changes to include an
+icon that looks like a sheet of paper with an “MD” superimposed
+on it.</li>
     </ol>
   </li>
-  <li>Initialize a script called <code class="language-plaintext highlighter-rouge">introduction_hw_&lt;your_last_name&gt;.r</code> in
-your <code class="language-plaintext highlighter-rouge">/scripts</code> directory.</li>
-  <li>Read through the supplemental material on <a href="https://edquant.github.io/edh7916/lessons/types_structures.html"><strong>Data types and
-structures</strong></a>
-and answer the “Quick exercises” in your script.</li>
-  <li>At the bottom, add a commented note on what you hope to accomplish
-in this course and any concerns you may have.</li>
-  <li>Making sure you’ve saved your file, take the following steps to add,
-commit, and push your work:
+  <li>
+    <p>Within your file, please include the following:</p>
+
+    <ul>
+      <li>
+        <p>A top-level (h1) header with the assignment name</p>
+      </li>
+      <li>
+        <p>The following sentence in which one word is <strong>bolded</strong>, one is
+<em>italicized</em>, and one is <strong><em>bold italicized</em></strong>:</p>
+
+        <blockquote>
+          <p>In God we trust. All others must bring data.</p>
+        </blockquote>
+      </li>
+      <li>
+        <p>An unordered list of 3-5 book titles (italicized) with author</p>
+      </li>
+      <li>
+        <p>An ordered list of the order of operations for using git /
+GitHub before each class and work session</p>
+      </li>
+      <li>
+        <p>A block quote of a favorite short quote (including attribution)</p>
+      </li>
+      <li>
+        <p>A code block with the code <code class="language-plaintext highlighter-rouge">x &lt;- 1</code> inside</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Check that your file builds correctly using RStudio’s <em>Preview</em>
+button. You’ll see that a <code class="language-plaintext highlighter-rouge">*.pdf</code> or an <code class="language-plaintext highlighter-rouge">*.html</code> verson of the file
+will be saved in your folder, depending on whether you selected to
+<em>Preview HTML</em> or <em>Preview PDF</em> if you clicked the downarrow instead
+of the button directly (default if you click the button should be
+<code class="language-plaintext highlighter-rouge">*.html</code>). You should stage, commit, and push these files in
+addition to the working <code class="language-plaintext highlighter-rouge">*.md</code> file.</p>
+  </li>
+  <li>
+    <p>As you’re working, take the following steps to add/stage, commit,
+and push your work to your repo using the <strong>Git</strong> tab in the upper
+right frame:</p>
+
     <ol>
-      <li><code class="language-plaintext highlighter-rouge">git add</code> your changes to your repo.</li>
-      <li><code class="language-plaintext highlighter-rouge">git commit</code> your changes with a short but informative message.</li>
-      <li><code class="language-plaintext highlighter-rouge">git push</code> your commit to GitHub.</li>
+      <li><strong>Stage</strong> your changes to your file by clicking the button next
+to the file.</li>
+      <li><strong>Commit</strong> your changes with a short but informative message.</li>
+      <li><strong>Push</strong> your commit to GitHub.</li>
       <li>Log into the GitHub website, navigate to your repo, and confirm
 that you can see your changes.</li>
     </ol>
   </li>
 </ol>
 
+<p>Remember, you can do these steps as many times as you want. I would
+encourage you to commit smaller changes and push to your remote GitHub
+repo often rather than wait until the last minute.</p>
 
 
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
       </section>
       <footer>
         <p>
@@ -119,7 +190,13 @@ that you can see your changes.</li>
   <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
     <i class="fab fa-twitter fa-lg"></i></a>
 </p>
-<p><small>Hosted on GitHub Pages | Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
 
       </footer>
     </div>
