@@ -1,6 +1,7 @@
 ---
 layout: lesson
 title: "Data types and structures"
+date: 2020-01-08 00:00:00
 subtitle: "EDH7916 | Spring 2020"
 author: Benjamin Skinner
 order: 1
@@ -516,7 +517,3 @@ df[["col_a"]]
 > Create two or three equal length vectors. Next, combine to create a
 > data frame. Finally, change one value in the data frame (HINT: think
 > about how you changed vector and matrix values before).
-
-<br><br>
-
-*Init: 1 January 2020; Updated: 07 January 2020*

@@ -1,9 +1,11 @@
 ---
 layout: default
 title: Course information
+category: page
 links:
   pdf: edh7916_syllabus.pdf
 ---
+
 |||  
 |:--|--:|  
 |Instructor|Benjamin Skinner, PhD|  

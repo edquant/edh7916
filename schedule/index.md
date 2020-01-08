@@ -21,7 +21,7 @@ all relevant software and packages.
 |2/25|8|Functional programming II: `purrr::map()`|  
 |3/10|9|Exploratory data analysis: Data visualization with {ggplot2}|  
 |3/17|10|Fitting regression models|  
-|3/24|11|Outputting and saving productiong-ready tables and figures|  
+|3/24|11|Outputting and saving production-ready tables and figures|  
 |3/31|12|Creating dynamic research reports using RMarkdown + {knitr}
 |4/7|13|TBD (_see below_)|  
 |4/14|14|TBD (_see below_)|  

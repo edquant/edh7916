@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Getting started
+date: 2020-01-08 00:00:00
 ---
 
 You'll need to download and install a few programs on your computer
@@ -24,6 +25,8 @@ installation processes.
 |RStudio|[Link](https://www.rstudio.com/products/rstudio/download/#download)|[Link](https://www.rstudio.com/products/rstudio/download/#download)|[Link](https://www.rstudio.com/products/rstudio/download/#download)|  
 |Git|[Link](https://git-scm.com/downloads)|[Link](https://git-scm.com/downloads)|[Link](https://git-scm.com/downloads)|  
 
+See the issues section below for common setup problems.
+
 ## GitHub registration
 
 If you don't already have one, you'll also need to sign up for a [free
@@ -32,7 +35,6 @@ should sign up using your University of Florida email address and
 request an [education
 discount](https://education.github.com/benefits). Both processes are
 easy, and the second gives you access to free private repositories.
-
 
 ## Optional
 
@@ -56,3 +58,31 @@ use as well. Here are a couple you might try:
 
 - [GitHub Desktop](https://desktop.github.com)  
 - [Sourcetree](https://www.sourcetreeapp.com)  
+
+## Issues
+### Windows
+
+Some students get errors when first using git with RStudio relating to
+`user.email` and `user.name`. If you get this error, do the following
+in RStudio.
+
+1. In the **Terminal** (not the **Console** but the tab next to it ---
+   the prompt should have a `$` and not `>`), type
+   ```bash
+   $ git config --list --show-origin
+   ```
+   If you see nothing related to your GitHub user ID or email or the
+   information is incorrect, continue to the next step.
+2. One at a time, type
+   ```bash
+   $ git config --global user.name "JohnDoe"
+   $ git config --global user.email "johndoe@example.com"
+   ```
+   replacing your GitHub ID and email within the quotes
+3. Type
+   ```bash
+   $ git config --list --show-origin
+   ```
+   again to confirm that information is now stored (it should print to
+   the Terminal output.
+4. Use Git to confirm it has worked.
