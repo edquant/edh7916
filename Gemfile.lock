@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/jekyll/github-metadata.git
+  revision: 7e042d42404152aae4bbab2543204311d637c72e
+  specs:
+    jekyll-github-metadata (2.12.1)
+      jekyll (>= 3.4, < 5.0)
+      octokit (~> 4.0, != 4.4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -117,9 +125,6 @@ GEM
       jekyll (>= 3.7, < 5.0)
     jekyll-gist (1.5.0)
       octokit (~> 4.2)
-    jekyll-github-metadata (2.12.1)
-      jekyll (~> 3.4)
-      octokit (~> 4.0, != 4.4.0)
     jekyll-mentions (1.5.1)
       html-pipeline (~> 2.3)
       jekyll (>= 3.7, < 5.0)
@@ -243,6 +248,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  jekyll-github-metadata!
 
 BUNDLED WITH
    1.17.2

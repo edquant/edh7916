@@ -4,47 +4,23 @@ title: Releases
 date: 2020-01-08 00:00:00
 ---
 
-# v1.1.1
+As the course website is updated, either to add lessons and
+assignments, correct bugs, or make general changes, I tag each version
+with a release number. This allows users to see all changes over time
+and go back to earlier versions of the class if necessary.
 
-## Changes
+Releases pull directly from
+[GitHub](https://github.com/edquant/edh7916/releases). Release
+numbers, `v<1>.<2>.<3>` follow the general format of:
 
-### Lessons
-- _Introduction_
-  - Changed first _Not so quick exercise_ to reflect what we did in
-    class
+- `<1>`: Course
+- `<2>`: Lesson / Assignment update
+- `<3>`: Bug fixes and small website updates
 
-# v1.1
+{% for release in site.github.releases %}
 
-## Changes
+# [{{ release.name }}]({{ release.html_url }})
 
-### Assignments
-- Modified first assignment to reflect what we covered in the first
-  class
+{{ release.body }}
 
-### Lessons
-- _Introduction_
-  - modified to move git / GitHub information before R / RStudio
-  information
-  - small edits for clarity
-
-### Overview
-- fixed error so syllabus PDF is now at top of page
-
-### Schedule
-- typo fix
-
-### Start
-- added **Issues** section with information about setuping git on
-  Windows
-
-### Other
-- added **Releases** page to footer
-- changed links in footer
-- removed date of change from section footer since it wasn't updating
-  as planned and therefore wasn't useful (it updated everywhere with
-  each site build rather than as a page actually changed)
-
-# v1.0
-## Initial release
-
-Site as built for first class on 7 January 2020
+{% endfor %}

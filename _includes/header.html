@@ -2,13 +2,17 @@
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <meta name="viewport" content="width=device-width">
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css">
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/syntax_{{ site.syntax }}.css">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/syntax_{{
+			     site.syntax }}.css">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
 <script defer src="{{ site.baseurl }}/assets/js/all.min.js"></script>
 <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 {% if page.mapbox_css %}
 {% for version in page.mapbox_css %}
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/{{ version }}/mapbox-gl.css' rel='stylesheet' />

@@ -475,10 +475,12 @@ Two question marks will search for the command name in CRAN packages:
 | Package     | Topic              | Title                                                             |
 | :---------- | :----------------- | :---------------------------------------------------------------- |
 | bit64       | qtile              | (Q)uan(Tile)s                                                     |
-| caTools     | runmad             | Median Absolute Deviation of Moving Windows                       |
-| caTools     | runquantile        | Quantile of Moving Window                                         |
 | ellipsis    | safe\_median       | Safe version of median                                            |
 | ggplot2     | hmisc              | A selection of summary functions from Hmisc                       |
+| ggpubr      | add\_summary       | Add Summary Statistics onto a ggplot.                             |
+| hexbin      | getHMedian         | Get coordiantes of the median cell after the erode operation      |
+| hexbin      | hdiffplot          | Plot of Domain and Median Differences of Two “hexbin” Objects     |
+| Hmisc       | smean.cl.normal    | Compute Summary Statistics on a Vector                            |
 | httr        | guess\_media       | Guess the media type of a path from its extension.                |
 | httr        | parse\_media       | Parse a media type.                                               |
 | igraph      | time\_bins.sir     | SIR model on graphs                                               |
@@ -488,6 +490,7 @@ Two question marks will search for the command name in CRAN packages:
 | matrixStats | weightedMad        | Weighted Median Absolute Deviation (MAD)                          |
 | matrixStats | weightedMedian     | Weighted Median Value                                             |
 | posterior   | ess\_quantile      | Effective sample sizes for quantiles                              |
+| posterior   | fold\_draws        | Fold draws around their median                                    |
 | posterior   | mcse\_quantile     | Monte Carlo standard error for quantiles                          |
 | purrr       | accumulate         | Accumulate intermediate results of a vector reduction             |
 | recipes     | step\_medianimpute | Impute Numeric Data Using the Median                              |

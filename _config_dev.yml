@@ -13,6 +13,8 @@ lessons: lessons
 pdf: assets/pdf
 img: assets/img
 
+repository: edquant/edh7916
+
 info:
   term: Spring 2020 
   location: University of Florida
