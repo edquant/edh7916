@@ -84,5 +84,5 @@ in RStudio.
    $ git config --list --show-origin
    ```
    again to confirm that information is now stored (it should print to
-   the Terminal output.
+   the Terminal output).
 4. Use Git to confirm it has worked.
