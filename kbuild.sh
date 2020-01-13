@@ -15,32 +15,32 @@ usage()
  $0 <arguments>
  
  ARGUMENTS:
-    [-k]        File to knit (w/o ending)
-    [-a]        Knit all files (optional flag)
+    [-l]        Lesson to knit (w/o ending)
+    [-a]        Assignment to knit (w/o ending)
     [-i]        Directory of lesson *.Rmd files
-    [-p]        Directory of assignment *.Rmd files
+    [-j]        Directory of assignment *.Rmd files
+    [-o]        Directory where pdf versions of lessons should go
+    [-p]        Directory where pdf versions of assignments should go
     [-s]        Directory where purled scripts files should go
-    [-l]        Directory where pdf versions of lessons should go
-    [-w]        Directory where pdf versions of assignments (work) should go
     [-b]        Suffix to go on _config*.yml and _site* directory
     [-c]        Output directory for course assignments, data, lessons, and scripts
     [-v]        Render / build verbosely (optional flag)
     		
  EXAMPLES:
  
- ./kbuild.sh -a
- ./kbuild.sh -k intro
- ./kbuild.sh -a -i _posts -b _dev
- ./kbuild.sh -a -c 
+ ./kbuild.sh -l all
+ ./kbuild.sh -l all -a all
+ ./kbuild.sh -l intro -a intro
+ ./kbuild.sh -l all -i _posts -b _dev
+ ./kbuild.sh -l all -c 
 
  DEFAULT VALUES:
 
- a = 0 (do not knit all) 
  i = _lessons
- p = _assignments
+ j = _assignments
+ o = lessons
+ p = assignments
  s = scripts
- l = lessons
- w = assignments
  b = <empty string>
  c = ../<dir name>_student
  v = 0 (knit/build quietly)
@@ -49,14 +49,13 @@ EOF
 }
 
 # defaults
-a=0
 i="_lessons"
-p="_assignments"
-om=$i				# leaving output == input right now
-op=$p
+j="_assignments"
+oi=$i				# leaving output == input right now
+oj=$j
+o="lessons"
+p="assignments"
 s="scripts"
-l="lessons"
-w="assignments"
 b=""
 c=0                             # assuming _student for central repo
 v=0
@@ -69,30 +68,33 @@ pdfs="assets/pdf"
 # pandoc
 pandoc_opts="-V geometry:margin=1in --highlight-style tango"
 
-while getopts "hk:ai:p:s:l:b:cv" opt;
+while getopts "hl:a:i:j:o:p:s:b:cv" opt;
 do
     case $opt in
 	h)
 	    usage
 	    exit 1
 	    ;;
-	a)
-	    a=1
+	l)
+	    l=$OPTARG 
 	    ;;
-	k)
-	    k=$OPTARG 
+	a)
+	    a=$OPTARG
 	    ;;
 	i)
 	    i=$OPTARG
+	    ;;
+	j)
+	    j=$OPTARG
+	    ;;
+	o)
+	    o=$OPTARG
 	    ;;
 	p)
 	    p=$OPTARG
 	    ;;
 	s)
 	    s=$OPTARG
-	    ;;
-	l)
-	    l=$OPTARG
 	    ;;
 	b)
 	    b=$OPTARG
@@ -111,10 +113,14 @@ do
 done
 
 # exit if did not choose either file or all files
-if [ -z "$k" ] && [ $a -eq 0 ]; then
-    echo "Must chose *.Rmd file to knit if -a flag not used"
+if [[ -z "$l" ]] && [[ -z "$a" ]]; then
+    echo "Must chose lesson or assignment *.Rmd file to knit"
     exit 1
 fi
+
+# flags for knitting
+! [[ -z "$l" ]] && knit_lessons=1 || knit_lessons=0
+! [[ -z "$a" ]] && knit_assignments=1 || knit_assignments=0
 
 # change quiet options if verbose flag is chosen
 if [[ $v == 1 ]]; then
@@ -131,18 +137,34 @@ printf -- "----------------------------------\n"
 
 printf "\n[ Options ]\n\n"
 
-if [ $a == 1 ]; then
-    pp="all *.Rmd files"
+if [[ $l == "all" ]]; then
+    which_lessons="all *.Rmd files"
 else
-    pp="${k}.Rmd"
+    which_lessons="${l}.Rmd"
 fi
-       
-printf "  Knitting                          = %s\n" "$pp"
-printf "  Lessons *.Rmd input directory     = %s\n" "$pp"
-printf "  Assignments *.Rmd input directory = %s\n" "$pp"
-printf "  *.R script output directory       = %s\n" "$s"
-printf "  Directory of built site           = _site%s\n" "$b"
-if [ $c == 1 ]; then
+
+if [[ $a == "all" ]]; then
+    which_assignments="all *.Rmd files"
+else
+    which_assignments="${a}.Rmd"
+fi
+
+if [[ $knit_lessons == 1 ]]; then
+    printf "  Knitting: lessons                  = %s\n" "$which_lessons"
+    printf "  Lessons *.Rmd input directory      = %s\n" "$i"
+    printf "  Lessons *.Rmd output directory     = %s\n" "$o"
+fi
+
+if [[ $knit_assignments == 1 ]]; then
+    printf "  Knitting: assignments              = %s\n" "$which_assignments"
+    printf "  Assignments *.Rmd input directory  = %s\n" "$j"
+    printf "  Assignments *.Rmd output directory = %s\n" "$p"
+fi
+
+printf "  *.R script output directory        = %s\n" "$s"
+printf "  Directory of built site            = _site%s\n" "$b"
+
+if [[ $c == 1 ]]; then
     printf "  Student files directory           = %s\n" "$student_repo"
 fi
 
@@ -150,71 +172,97 @@ fi
 # KNIT
 # ==============================================================================
 
-printf "\n[ Knitting and purling lessons... ]\n\n"
+# ------------------
+# lessons
+# ------------------
 
-# loop through all Rmd files
-if [ $a == 0 ]; then
-    printf "  $k.Rmd ==> \n"
-    f="$i/$k.Rmd"
-    # skip if starts with underscore
-    if [[ $f = _* ]]; then printf "     skipping...\n"; continue; fi
-    # knit
-    Rscript -e "rmarkdown::render('$f', output_dir='$om', quiet = $knit_q)"
-    printf "     $o/$k.md\n"
-    # md to pdf
-    if [[ -f $om/$k.md ]]; then
-	# pandoc ${pandoc_opts} -o $l/$k.pdf $om/$k.md
-	sed "s/\/edh7916\/assets/.\/assets/g" $om/$k.md | pandoc ${pandoc_opts} -o $l/$k.pdf -
-	cp $l/$k.pdf $pdfs
+if [[ $knit_lessons == 1 ]]; then
+    printf "\n[ Knitting and purling lessons... ]\n\n"
+    if [[ $l != all ]]; then
+	printf "  $l.Rmd ==> \n"
+	f="$i/$l.Rmd"
+	# skip if starts with underscore
+	if [[ $f = _* ]]; then
+	    printf "     skipping...\n"
+	else
+	    # knit
+	    Rscript -e "rmarkdown::render('$f', output_dir='$oi', quiet = $knit_q)"
+	    printf "     $oi/$l.md\n"
+	    # md to pdf
+	    if [[ -f $oi/$l.md ]]; then
+		sed "s/\/edh7916\/assets/.\/assets/g" $oi/$l.md | pandoc ${pandoc_opts} -o $o/$l.pdf -
+		cp $o/$l.pdf $pdfs
+	    fi
+	    # purl
+	    Rscript -e "knitr::purl('$f', documentation = 0, quiet = $knit_q)" > /dev/null
+	    printf "     $s/$l.R\n"
+	    # more than one line after removing \n? mv to scripts directory : rm
+	    [[ $(tr -d '\n' < ${l}.R | wc -l) -ge 2 ]] && mv ${l}.R $s/${l}.R || rm ${l}.R
+	fi
+    else 
+	for file in ${i}/*.Rmd
+	do
+	    # get file name without ending
+	    f=$(basename "${file%.*}")
+	    printf "  $f.Rmd ==> \n"
+	    # skip if starts with underscore
+	    if [[ $f = _* ]]; then printf "     skipping...\n"; continue; fi
+	    # knit
+	    Rscript -e "rmarkdown::render('$file', output_dir='$oi', quiet = $knit_q)"
+	    printf "     $oi/$f.md\n"
+	    # md to pdf
+	    if [[ -f $oi/$f.md ]]; then
+		# pandoc ${pandoc_opts} -o $l/$f.pdf $om/$f.md
+		sed "s/\/edh7916\/assets/.\/assets/g" $oi/$f.md | pandoc ${pandoc_opts} -o $o/$f.pdf -
+		cp $o/$f.pdf $pdfs
+	    fi
+	    # purl
+	    Rscript -e "knitr::purl('$file', documentation = 0, quiet = $knit_q)" > /dev/null
+	    printf "     $s/$f.R\n"
+	    # more than one line after removing \n? mv to scripts directory : rm
+	    [[ $(tr -d '\n' < ${f}.R | wc -c) -ge 1 ]] && mv ${f}.R $s/${f}.R || rm ${f}.R
+	done
     fi
-    # purl
-    Rscript -e "knitr::purl('$f', documentation = 0, quiet = $knit_q)" > /dev/null
-    printf "     $s/$k.R\n"
-    # more than one line after removing \n? mv to scripts directory : rm
-    [[ $(tr -d '\n' < ${k}.R | wc -l) -ge 2 ]] && mv ${k}.R $s/${k}.R || rm ${k}.R
-else
-    for file in ${i}/*.Rmd
-    do
-	# get file name without ending
-	f=$(basename "${file%.*}")
-	printf "  $f.Rmd ==> \n"
+fi
+
+# ------------------
+# assignments
+# ------------------
+
+if [[ $knit_assignments == 1 ]]; then
+    printf "\n[ Knitting assignments... ]\n\n"
+    if [[ $a != "all" ]]; then
+	printf "  $a.Rmd ==> \n"
+	f="$j/$a.Rmd"
 	# skip if starts with underscore
 	if [[ $f = _* ]]; then printf "     skipping...\n"; continue; fi
 	# knit
-	Rscript -e "rmarkdown::render('$file', output_dir='$om', quiet = $knit_q)"
-	printf "     $om/$f.md\n"
+	Rscript -e "rmarkdown::render('$f', output_dir='$oj', quiet = $knit_q)"
+	printf "     $oj/$f.md\n"
 	# md to pdf
-	if [[ -f $om/$f.md ]]; then
-	    # pandoc ${pandoc_opts} -o $l/$f.pdf $om/$f.md
-	    sed "s/\/edh7916\/assets/.\/assets/g" $om/$f.md | pandoc ${pandoc_opts} -o $l/$f.pdf -
-	    cp $l/$f.pdf $pdfs
+	if [[ -f $oj/$a.md ]]; then
+	    pandoc ${pandoc_opts} -o $p/${a}_hw.pdf $oj/$a.md
+	    cp $p/${a}_hw.pdf $pdfs
 	fi
-	# purl
-	Rscript -e "knitr::purl('$file', documentation = 0, quiet = $knit_q)" > /dev/null
-	printf "     $s/$f.R\n"
-	# more than one line after removing \n? mv to scripts directory : rm
-	[[ $(tr -d '\n' < ${f}.R | wc -c) -ge 1 ]] && mv ${f}.R $s/${f}.R || rm ${f}.R
-    done
-fi
-
-printf "\n[ Knitting assignments... ]\n\n"
-
-for file in ${p}/*.Rmd
-do
-    # get file name without ending
-    f=$(basename "${file%.*}")
-    printf "  $f.Rmd ==> \n"
-    # skip if starts with underscore
-    if [[ $f = _* ]]; then printf "     skipping...\n"; continue; fi
-    # knit
-    Rscript -e "rmarkdown::render('$file', output_dir='$op', quiet = $knit_q)"
-    printf "     $op/$f.md\n"
-    # md to pdf
-    if [[ -f $op/$f.md ]]; then
-	pandoc ${pandoc_opts} -o $w/${f}_hw.pdf $op/$f.md
-	cp $w/${f}_hw.pdf $pdfs
+    else
+	for file in ${p}/*.Rmd
+	do
+	    # get file name without ending
+	    f=$(basename "${file%.*}")
+	    printf "  $f.Rmd ==> \n"
+	    # skip if starts with underscore
+	    if [[ $f = _* ]]; then printf "     skipping...\n"; continue; fi
+	    # knit
+	    Rscript -e "rmarkdown::render('$file', output_dir='$oj', quiet = $knit_q)"
+	    printf "     $oj/$f.md\n"
+	    # md to pdf
+	    if [[ -f $oj/$f.md ]]; then
+		pandoc ${pandoc_opts} -o $p/${f}_hw.pdf $oj/$f.md
+		cp $p/${f}_hw.pdf $pdfs
+	    fi
+	done	
     fi
-done
+fi
 
 # ==============================================================================
 # BUILD
