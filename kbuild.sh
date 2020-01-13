@@ -178,11 +178,11 @@ fi
 
 if [[ $knit_lessons == 1 ]]; then
     printf "\n[ Knitting and purling lessons... ]\n\n"
-    if [[ $l != all ]]; then
+    if [[ $l != "all" ]]; then
 	printf "  $l.Rmd ==> \n"
 	f="$i/$l.Rmd"
 	# skip if starts with underscore
-	if [[ $f = _* ]]; then
+	if [[ $l = _* ]]; then
 	    printf "     skipping...\n"
 	else
 	    # knit
