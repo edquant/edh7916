@@ -19,6 +19,11 @@ before class starts.*
 
 ## Steps
 
+1.  Create a new top-level directory (*i.e.*, the same level as
+    `scripts`, `data`, and `figures`) called `tables`. Add a `README.md`
+    file with an informative title and description. See other folders
+    for examples.
+
 Using `template.R`:
 
 1.  Rename it to `organizing_hw_<your_last_name>.R`.
@@ -35,11 +40,25 @@ Using `template.R`:
 7.  Read in the updated data set, `test_scores_updated.RDS`, we made in
     class.
 8.  Create a new column called `test_scores_new_2` that converts the
-    original test scores to updated values using your new ratio.
-9.  Save the updated data file in your `data` directory with a different
+    original test scores to updated values using your new ratio and the
+    `old_to_new_score()` function.
+9.  You need final rounded grades that don’t go above 100, but you also
+    need to give two students (`stu_id`s 1 and 7) 2 points of extra
+    credit. Create a last column, `test_scores_final`, in which you:
+    1.  Copy the results from `test_scores_new_2`
+    2.  Add 2 points to the score for students 1 and 7 only
+    3.  Round all grades to the nearest units digit (no decimals)  
+        **NOTE** You can do these in one, two, or three discrete steps.
+        If you figure out how to do it in three, see if you can combine
+        the steps into only one or two steps.  
+        **HINT** Use the information on brackets (`[]`) in [Data types
+        and
+        structures](https://edquant.github.io/edh7916/lessons/types_structures.html)
+        to help.
+10. Save the updated data file in your `data` directory with a different
     name. You should now have three files: the original, the updated one
     we made in class, and the one you just made.
-10. Push everything to your GitHub repo (keep in mind that your new data
+11. Push everything to your GitHub repo (keep in mind that your new data
     sets won’t show up on your GitHub repo — that’s okay: I should be
     able to run your script and make them myself).
 

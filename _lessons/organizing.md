@@ -102,8 +102,9 @@ directions:
 
 The first way is really easy for your friend, but it puts extra work on
 you. Either you first must go to their house so that the directions make
-sense, or you have to translate them from your perspective. Annoying and
-useless if you also don’t know how to get to their house.
+sense, or you have to translate them from your perspective. These
+directions are annoying and useless if you also don’t know how to get to
+their house.
 
 The second way is really nice to you, but difficult for your friend.
 These directions also aren’t reusable for other people. If a third
@@ -113,17 +114,16 @@ aren’t as useful.
 
 The third way is the best compromise. If you know how to get to a common
 landmark, you can get there the way that is best for you. Once there,
-you can follow the directions to the park. These directions are also
-shareable: anyone who can get to the common landmark can use the
-directions to get to the park.
+you can follow your friend’s directions to the park. These directions
+are also shareable: anyone who can get to the common landmark can use
+the directions to get to the park.
 
 In the world of your project, the first two sets of directions are
 **absolute** paths while the third is a **relative** path. If your
-project is organized into folders, then as long as another person
-(collaborator, code reviewer, future you on another computer) has the
-full project directory, then as long as they can get to the correct
-starting point — *e.g.* your `scripts` folder — they can run you project
-easily.
+project is organized into folders and another person (collaborator, code
+reviewer, future you on another computer) has the full project
+directory, then as long as they can get to the correct starting point —
+*e.g.* your `scripts` folder — they can run your project easily.
 
 ### Examples
 
@@ -170,9 +170,9 @@ for that matter) should be to do one thing and do it well. Rather than
 have a single giant script with 5,000 lines that does your entire
 project, it makes more sense to break up your scripts into shorter
 modules that you can then bring together. Right now, we have small
-scripts so one is fine. But this idea applies within the script itself:
-organize your scripts into clear sections so that a person can easily
-scan it to see what is happening and where.
+scripts so having just one is fine. But this idea applies within the
+script itself: organize your scripts into clear sections so that a
+person can easily scan it to see what is happening and where.
 
 ## Template
 
@@ -230,7 +230,7 @@ And here’s the template with a very simple project outline:
 ``` r
 ################################################################################
 ##
-## [ PROJ ] EDH 7916: Organization
+## [ PROJ ] EDH 7916: Organizing
 ## [ FILE ] organizing.R
 ## [ AUTH ] Benjamin Skinner (@btskinner)
 ## [ INIT ] 13 January 2020
@@ -260,8 +260,8 @@ old_to_new_score_ratio <- 1.1
 ## functions
 ## ---------------------------
 
-old_to_new_score <- function(test_score) {
-    return(test_score * old_to_new_score_ratio)
+old_to_new_score <- function(test_score, ratio) {
+    return(test_score * ratio)
 }
 
 ## -----------------------------------------------------------------------------
@@ -279,8 +279,8 @@ df <- readRDS(file.path(dat_dir, "test_scores.RDS"))
 ## ---------------------------
 
 ## add a column for new test score
-## format: <data.frame>$<new_scores_column> <- function(<old_scores_column>)
-df$test_scores_new <- old_to_new_score(df$test_score)
+## <dataframe>$<new_scores_column> <- function(<old_scores_column>, <ratio>)
+df$test_scores_new <- old_to_new_score(df$test_score, old_to_new_score_ratio)
 
 ## ---------------------------
 ## output
@@ -301,7 +301,7 @@ the script.
 ``` r
 ################################################################################
 ##
-## [ PROJ ] EDH 7916: Organization
+## [ PROJ ] EDH 7916: Organizing
 ## [ FILE ] organizing.R
 ## [ AUTH ] Benjamin Skinner (@btskinner)
 ## [ INIT ] 13 January 2020
@@ -347,8 +347,8 @@ paths in the script below, we can save the paths in an object. We use
 the `file.path()` command because it is smart. Some computer operating
 systems use forward slashes, `/`, for their file paths; others use
 backslashes, `\`. Rather than try to guess or assume what operating
-system future users will use, we can use `file.path()` to use what it
-knows about the current operating system to do it correctly for us.
+system future users will use, we can use R’s function, `file.path()`, to
+check the current operating system and build the paths correctly for us.
 
 ``` r
 ## ---------------------------
@@ -360,7 +360,7 @@ fig_dir <- file.path("..", "figures")
 ```
 
 > #### Quick exercise
-
+> 
 > Run these lines of code and then print `dat_dir` and `fig_dir` to the
 > console. What do you see?
 
@@ -399,15 +399,16 @@ Other than the functions that come with the packages we load, we might
 write functions ourselves. At this point in the course, I’m not
 concerned that you know how to write a function or how one works. Just
 notice how the function has a good name that tells what it does:
-converts old scores to new scores using the ratio we defined above.
+converts old scores to new scores using a ratio (we’ll use the one we
+defined above).
 
 ``` r
 ## ---------------------------
 ## functions
 ## ---------------------------
 
-old_to_new_score <- function(test_score) {
-    return(test_score * old_to_new_score_ratio)
+old_to_new_score <- function(test_score, ratio) {
+    return(test_score * ratio)
 }
 ```
 
@@ -449,8 +450,8 @@ base R to add a new column using the `$` notation.
 ## ---------------------------
 
 ## add a column for new test score
-## format: <data.frame>$<new_scores_column> <- function(<old_scores_column>)
-df$test_scores_new <- old_to_new_score(df$test_score)
+## <dataframe>$<new_scores_column> <- function(<old_scores_column>, <ratio>)
+df$test_scores_new <- old_to_new_score(df$test_score, old_to_new_score_ratio)
 ```
 
 #### Output: write the results from our analyses
@@ -473,12 +474,13 @@ saveRDS(df, file.path(dat_dir, "test_scores_updated.RDS"))
 When naming folders, files, objects, or macros, keep these naming rules
 in mind:
 
-1.  Name it well (be clear): `data_clean.R`, `old_to_new_score_ratio`
-2.  Name it consistent with other items (have a style):
-      - `data_1.RDS`
-      - `data_2.RDS`
-      - `data_3.RDS`
+1.  Name it well (be clear): *e.g.* `data_clean.R` or
+    `old_to_new_score_ratio`
+2.  Name it consistent with other items (have a style): *e.g.*
+    `data_1.RDS`, `data_2.RDS`,`data_3.RDS`, *etc*
 3.  Name it without spaces\!
+      - **NO**: `data clean.R`
+      - **YES**: `data_clean.R`
 
 More person hours are lost than can be counted dealing with file names
 with spaces. Don’t do it\! Use underscores or hyphens to separate words.

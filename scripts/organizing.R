@@ -1,6 +1,6 @@
 ################################################################################
 ##
-## [ PROJ ] EDH 7916: Organization
+## [ PROJ ] EDH 7916: Organizing
 ## [ FILE ] organizing.R
 ## [ AUTH ] Benjamin Skinner (@btskinner)
 ## [ INIT ] 13 January 2020
@@ -30,8 +30,8 @@ old_to_new_score_ratio <- 1.1
 ## functions
 ## ---------------------------
 
-old_to_new_score <- function(test_score) {
-    return(test_score * old_to_new_score_ratio)
+old_to_new_score <- function(test_score, ratio) {
+    return(test_score * ratio)
 }
 
 ## -----------------------------------------------------------------------------
@@ -49,8 +49,8 @@ df <- readRDS(file.path(dat_dir, "test_scores.RDS"))
 ## ---------------------------
 
 ## add a column for new test score
-## format: <data.frame>$<new_scores_column> <- function(<old_scores_column>)
-df$test_scores_new <- old_to_new_score(df$test_score)
+## <dataframe>$<new_scores_column> <- function(<old_scores_column>, <ratio>)
+df$test_scores_new <- old_to_new_score(df$test_score, old_to_new_score_ratio)
 
 ## ---------------------------
 ## output
