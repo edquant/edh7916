@@ -165,7 +165,7 @@ printf "  *.R script output directory        = %s\n" "$s"
 printf "  Directory of built site            = _site%s\n" "$b"
 
 if [[ $c == 1 ]]; then
-    printf "  Student files directory           = %s\n" "$student_repo"
+    printf "  Student files directory            = %s\n" "$student_repo"
 fi
 
 # ==============================================================================
@@ -235,14 +235,17 @@ if [[ $knit_assignments == 1 ]]; then
 	printf "  $a.Rmd ==> \n"
 	f="$j/$a.Rmd"
 	# skip if starts with underscore
-	if [[ $f = _* ]]; then printf "     skipping...\n"; continue; fi
-	# knit
-	Rscript -e "rmarkdown::render('$f', output_dir='$oj', quiet = $knit_q)"
-	printf "     $oj/$f.md\n"
-	# md to pdf
-	if [[ -f $oj/$a.md ]]; then
-	    pandoc ${pandoc_opts} -o $p/${a}_hw.pdf $oj/$a.md
-	    cp $p/${a}_hw.pdf $pdfs
+	if [[ $a = _* ]]; then
+	    printf "     skipping...\n"
+	else
+	    # knit
+	    Rscript -e "rmarkdown::render('$f', output_dir='$oj', quiet = $knit_q)"
+	    printf "     $oj/$a.md\n"
+	    # md to pdf
+	    if [[ -f $oj/$a.md ]]; then
+		pandoc ${pandoc_opts} -o $p/${a}_hw.pdf $oj/$a.md
+		cp $p/${a}_hw.pdf $pdfs
+	    fi
 	fi
     else
 	for file in ${p}/*.Rmd
@@ -251,14 +254,17 @@ if [[ $knit_assignments == 1 ]]; then
 	    f=$(basename "${file%.*}")
 	    printf "  $f.Rmd ==> \n"
 	    # skip if starts with underscore
-	    if [[ $f = _* ]]; then printf "     skipping...\n"; continue; fi
-	    # knit
-	    Rscript -e "rmarkdown::render('$file', output_dir='$oj', quiet = $knit_q)"
-	    printf "     $oj/$f.md\n"
-	    # md to pdf
-	    if [[ -f $oj/$f.md ]]; then
-		pandoc ${pandoc_opts} -o $p/${f}_hw.pdf $oj/$f.md
-		cp $p/${f}_hw.pdf $pdfs
+	    if [[ $f = _* ]]; then
+		printf "     skipping...\n"
+	    else
+		# knit
+		Rscript -e "rmarkdown::render('$file', output_dir='$oj', quiet = $knit_q)"
+		printf "     $oj/$f.md\n"
+		# md to pdf
+		if [[ -f $oj/$f.md ]]; then
+		    pandoc ${pandoc_opts} -o $p/${f}_hw.pdf $oj/$f.md
+		    cp $p/${f}_hw.pdf $pdfs
+		fi
 	    fi
 	done	
     fi
@@ -292,7 +298,7 @@ if [ $c == 1 ]; then
     cp -r assignments $student_repo
     rm $student_repo/assignments/index.md
     printf "  - Data\n"
-    cp data/README.md $student_repo/data/README.md
+    cp -r data $student_repo
     printf "  - Lessons\n"
     cp lessons/README.md $student_repo/lessons/README.md
     cp lessons/*.pdf $student_repo/lessons
