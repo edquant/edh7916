@@ -112,3 +112,9 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# ------------------
+# Exceptions
+# ------------------
+
+!data/test_scores.RDS
