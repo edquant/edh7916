@@ -248,7 +248,7 @@ if [[ $knit_assignments == 1 ]]; then
 	    fi
 	fi
     else
-	for file in ${p}/*.Rmd
+	for file in ${j}/*.Rmd
 	do
 	    # get file name without ending
 	    f=$(basename "${file%.*}")
