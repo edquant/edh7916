@@ -212,7 +212,6 @@ if [[ $knit_lessons == 1 ]]; then
 	    printf "     $oi/$f.md\n"
 	    # md to pdf
 	    if [[ -f $oi/$f.md ]]; then
-		# pandoc ${pandoc_opts} -o $l/$f.pdf $om/$f.md
 		sed "s/\/edh7916\/assets/.\/assets/g" $oi/$f.md | pandoc ${pandoc_opts} -o $o/$f.pdf -
 		cp $o/$f.pdf $pdfs
 	    fi
@@ -243,7 +242,7 @@ if [[ $knit_assignments == 1 ]]; then
 	    printf "     $oj/$a.md\n"
 	    # md to pdf
 	    if [[ -f $oj/$a.md ]]; then
-		pandoc ${pandoc_opts} -o $p/${a}_hw.pdf $oj/$a.md
+	        pandoc ${pandoc_opts} -o $p/${a}_hw.pdf $oj/$a.md
 		cp $p/${a}_hw.pdf $pdfs
 	    fi
 	fi
