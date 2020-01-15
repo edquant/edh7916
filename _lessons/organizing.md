@@ -73,7 +73,7 @@ What are we missing? Following our analogy above, we have:
 
 We are missing **Prepared food (Outputs)**\!
 
-What kinds of outputs are we likly to have with our project? One type
+What kinds of outputs are we likely to have with our project? One type
 quickly come to mind: figures. Both when we start exploring our data and
 when we want to make a final report to share, we’re likely to make a
 number of plots. Let’s make a folder.
@@ -247,8 +247,8 @@ library(tidyverse)
 ## directory paths
 ## ---------------------------
 
-dat_dir <- file.path("..", "data")
-fig_dir <- file.path("..", "figures")
+dat_dir <- file.path(".", "data")
+fig_dir <- file.path(".", "figures")
 
 ## ---------------------------
 ## settings/macros

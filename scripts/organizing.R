@@ -17,8 +17,8 @@ library(tidyverse)
 ## directory paths
 ## ---------------------------
 
-dat_dir <- file.path("..", "data")
-fig_dir <- file.path("..", "figures")
+dat_dir <- file.path(".", "data")
+fig_dir <- file.path(".", "figures")
 
 ## ---------------------------
 ## settings/macros

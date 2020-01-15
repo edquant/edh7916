@@ -7,9 +7,8 @@
 # ignore all files starting with _
 _*
 
-# ignore all files in /data except README file
-data/
-!data/README.md
+# ignore all files in /data except those at bottom
+data/*
 
 # ignore website index.md files
 index.md
@@ -117,4 +116,5 @@ $RECYCLE.BIN/
 # Exceptions
 # ------------------
 
+!data/README.md
 !data/test_scores.RDS

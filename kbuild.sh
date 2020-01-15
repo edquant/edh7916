@@ -113,10 +113,10 @@ do
 done
 
 # exit if did not choose either file or all files
-if [[ -z "$l" ]] && [[ -z "$a" ]]; then
-    echo "Must chose lesson or assignment *.Rmd file to knit"
-    exit 1
-fi
+# if [[ -z "$l" ]] && [[ -z "$a" ]]; then
+#     echo "Must chose lesson or assignment *.Rmd file to knit"
+#     exit 1
+# fi
 
 # flags for knitting
 ! [[ -z "$l" ]] && knit_lessons=1 || knit_lessons=0
@@ -161,8 +161,10 @@ if [[ $knit_assignments == 1 ]]; then
     printf "  Assignments *.Rmd output directory = %s\n" "$p"
 fi
 
-printf "  *.R script output directory        = %s\n" "$s"
-printf "  Directory of built site            = _site%s\n" "$b"
+if [[ $knit_assignments == 1 || $knit_lessons == 1 ]]; then
+    printf "  *.R script output directory        = %s\n" "$s"
+    printf "  Directory of built site            = _site%s\n" "$b"
+fi
 
 if [[ $c == 1 ]]; then
     printf "  Student files directory            = %s\n" "$student_repo"
@@ -273,12 +275,14 @@ fi
 # BUILD
 # ==============================================================================
 
-printf "\n[ Building... ]\n\n"
-
-bundle exec jekyll build $build_q --config ./_config${b}.yml --destination ./_site${b} --verbose
-printf "  Built site ==>\n"
-printf "     config file:   _config$b\n"
-printf "     location:      _site$b\n"
+if [[ -z "$l" ]] || [[ -z "$a" ]]; then
+    printf "\n[ Building... ]\n\n"
+    
+    bundle exec jekyll build $build_q --config ./_config${b}.yml --destination ./_site${b} --verbose
+    printf "  Built site ==>\n"
+    printf "     config file:   _config$b\n"
+    printf "     location:      _site$b\n"
+fi
 
 # ==============================================================================
 # MOVE FILES TO STUDENT REPO
