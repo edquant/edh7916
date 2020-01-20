@@ -66,7 +66,7 @@ student_repo="../${PWD##*/}_student"
 pdfs="assets/pdf"
 
 # pandoc
-pandoc_opts="-V geometry:margin=1in --highlight-style tango"
+pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex --variable monofont=\"Menlo\""
 
 while getopts "hl:a:i:j:o:p:s:b:cv" opt;
 do
