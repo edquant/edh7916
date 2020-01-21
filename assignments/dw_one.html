@@ -46,49 +46,82 @@ the higher education administration program at the University of Florida
       </header>
 
       <section>
-	<h1>Assignments</h1>
+	<h1>Assignment 3</h1>
 	
 
-	<p>Students are expected to complete the following assignments as part of
-the course (percentage of final grade in parentheses):</p>
-
-<ul>
-  <li><strong>Class participation (25%):</strong> We will use class time to work through
-lesson modules together. Students are expected to follow along with
-the presentation and run code on their own machine. Students are
-also expected to answer questions and work through example problems
-throughout the class session.</li>
-  <li><strong>Problem sets (50%):</strong> Every lesson module will end with a set of
-questions that students must answer. Students can work together to
-solve the problem sets, but everyone must submit their own work and
-do their best to give accurate attribution for borrowed/repurposed
-code. In general, problem set answers will need to be submitted via
-GitHub a week after they are assigned.</li>
-  <li><strong>Reproducible report (25%):</strong> Students must produce a 3-5 page
-report on a higher education topic of interest. The report should be
-a combination of writing, tables, and figures, have minimal
-citations, and be fully reproducible with minimal effort. Students
-must use publicly available data.</li>
-</ul>
-
-<h2 id="weekly-assignments">Weekly assignments</h2>
-
-<ol class="lessons">
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/dw_one_hw.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  
+  
+  
+</p>
 
 
-	<li>
-		<a href="/edh7916/assignments/introduction.html">Assignment 1</a>
-	</li>
+<p><em><strong>NOTE</strong> This assignment needs to be completed by the start of the
+second class. That means everything pushed to your remote GitHub repo
+before class starts.</em></p>
 
-	<li>
-		<a href="/edh7916/assignments/organizing.html">Assignment 2</a>
-	</li>
+<p><em>Remember, I encourage you to save your work, commit smaller changes,
+and push to your remote GitHub repo often rather than wait until the
+last minute.</em></p>
 
-	<li>
-		<a href="/edh7916/assignments/dw_one.html">Assignment 3</a>
-	</li>
+<p>Using the <code class="language-plaintext highlighter-rouge">hsls_small.csv</code> data set, answer the following questions. You
+<strong>do not</strong> need to save the final output as a data file: just having the
+final result print to the console is fine. For each question, I would
+like you to try to pipe all the commands together. You can account for
+missing values by dropping them.</p>
 
+<p>For each question, show your data work and then answer the question in a
+short (1-2 sentence(s)) comment.</p>
+
+<h1 id="questions">Questions</h1>
+
+<ol>
+  <li>
+    <p>What is the average standardized math test score?</p>
+  </li>
+  <li>
+    <p>What is the average standardized math test score by gender?</p>
+  </li>
+  <li>
+    <p>In what year and month were the oldest students in the data set
+born? The youngest?</p>
+  </li>
+  <li>
+    <p>Among those students who are under 185% of the federal poverty line
+in the base year of the survey, what is the median household income
+(give the category and what that category reprents).</p>
+  </li>
+  <li>
+    <p>Of the students who earned a high school credential (diploma or
+GED), what percentage earned a GED or equivalency? How does this
+differ by region?</p>
+  </li>
+  <li>
+    <p>What percentage of students ever attended a postsecondary
+institution by February 2016? Give the cross tabulations for:</p>
+
+    <ul>
+      <li>family incomes less than or equal to $35,000 and greater than
+$35,000</li>
+      <li>region</li>
+    </ul>
+
+    <p>This means you should have percentages for 8 groups: above/below
+$35k within each region.</p>
+
+    <p><strong>HINT</strong> You can <code class="language-plaintext highlighter-rouge">group_by()</code> on more than one group.</p>
+  </li>
 </ol>
+
 
 
 	<!-- <p> -->

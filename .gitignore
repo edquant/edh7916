@@ -6,3 +6,5 @@
 _site
 _site_dev
 _download
+data/*.csv
+!/data/hsls_small.csv
