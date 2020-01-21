@@ -196,10 +196,10 @@ if [[ $knit_lessons == 1 ]]; then
 		cp $o/$l.pdf $pdfs
 	    fi
 	    # purl
-	    Rscript -e "knitr::purl('$f', documentation = 0, quiet = $knit_q)" > /dev/null
+	    Rscript -e "knitr::purl('$f', documentation = 0, quiet = $knit_q)"
 	    printf "     $s/$l.R\n"
 	    # more than one line after removing \n? mv to scripts directory : rm
-	    [[ $(tr -d '\n' < ${l}.R | wc -l) -ge 2 ]] && mv ${l}.R $s/${l}.R || rm ${l}.R
+	    [[ $(tr -d '\n' < ${l}.R | wc -c) -ge 1 ]] && mv ${l}.R $s/${l}.R || rm ${l}.R
 	fi
     else 
 	for file in ${i}/*.Rmd
@@ -218,7 +218,7 @@ if [[ $knit_lessons == 1 ]]; then
 		cp $o/$f.pdf $pdfs
 	    fi
 	    # purl
-	    Rscript -e "knitr::purl('$file', documentation = 0, quiet = $knit_q)" > /dev/null
+	    Rscript -e "knitr::purl('$file', documentation = 0, quiet = $knit_q)" 
 	    printf "     $s/$f.R\n"
 	    # more than one line after removing \n? mv to scripts directory : rm
 	    [[ $(tr -d '\n' < ${f}.R | wc -c) -ge 1 ]] && mv ${f}.R $s/${f}.R || rm ${f}.R
@@ -275,7 +275,7 @@ fi
 # BUILD
 # ==============================================================================
 
-if [[ -z "$l" ]] || [[ -z "$a" ]]; then
+if [[ $knit_lessons == 1 ]] || [[ $knit_assignments == 1 ]]; then
     printf "\n[ Building... ]\n\n"
     
     bundle exec jekyll build $build_q --config ./_config${b}.yml --destination ./_site${b} --verbose
