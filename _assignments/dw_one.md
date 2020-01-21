@@ -13,19 +13,19 @@ output:
     preserve_yaml: true
 ---
 
-***NOTE** This assignment needs to be completed by the start of the
-second class. That means everything pushed to your remote GitHub repo
-before class starts.*
+***NOTE** This assignment needs to be completed by the start of the next
+class. That means everything pushed to your remote GitHub repo before
+class starts.*
 
 *Remember, I encourage you to save your work, commit smaller changes,
 and push to your remote GitHub repo often rather than wait until the
 last minute.*
 
-Using the `hsls_small.csv` data set, answer the following questions. You
-**do not** need to save the final output as a data file: just having the
-final result print to the console is fine. For each question, I would
-like you to try to pipe all the commands together. You can account for
-missing values by dropping them.
+Using the `hsls_small.csv` data set and the online codebook, answer the
+following questions. You **do not** need to save the final output as a
+data file: just having the final result print to the console is fine.
+For each question, I would like you to try to pipe all the commands
+together. You can account for missing values by dropping them.
 
 For each question, show your data work and then answer the question in a
 short (1-2 sentence(s)) comment.

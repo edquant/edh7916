@@ -42,7 +42,9 @@ df_tmp <- select(df, stu_id, x1stuedexpct, x1paredexpct, x1region)
 df_tmp
 
 ## mutate (notice that we use df_tmp now)
-df_tmp <- mutate(df_tmp, high_expct = ifelse(x1stuedexpct > x1paredexpct, x1stuedexpct, x1paredexpct))
+df_tmp <- mutate(df_tmp, high_expct = ifelse(x1stuedexpct > x1paredexpct, # test
+                                             x1stuedexpct,                # if TRUE
+                                             x1paredexpct))               # if FALSE
 
 ## show
 df_tmp
@@ -90,6 +92,10 @@ df_tmp
 ## write with useful name
 write_csv(df_tmp, file.path(dat_dir, "high_expct_mean_region.csv"))
 
+## ---------------------------
+## appendix
+## ---------------------------
+
 ## pipe the original data frame into select
 df_tmp_2 <- df %>%
     select(stu_id, x1stuedexpct, x1paredexpct, x1region)
@@ -108,3 +114,7 @@ df_tmp_2 <- df %>%
 
 ## show
 df_tmp_2
+
+## -----------------------------------------------------------------------------
+## end script
+## -----------------------------------------------------------------------------
