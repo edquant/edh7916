@@ -1,0 +1,147 @@
+---
+layout: lesson
+title: "Data wrangling II: Appending, joining, and reshaping data"
+subtitle: "EDH7916 | Spring 2020"
+author: Benjamin Skinner
+order: 4
+category: lesson
+header-includes:
+  - \usepackage{amsmath}
+links:
+  script: dw_two.R
+  pdf: dw_two.pdf
+output:
+  md_document:
+    variant: gfm
+    preserve_yaml: true
+always_allow_html: true
+--- 
+
+```{r, include = FALSE, purl = FALSE}
+source('knit_setup.R')
+```
+```{r, include = FALSE, purl = TRUE}
+################################################################################
+##
+## <PROJ> EDH7916: Data wrangling II: Appending, joining, and reshaping data
+## <FILE> dw_two.R 
+## <INIT> 31 January 2020
+## <AUTH> Benjamin Skinner (GitHub/Twitter: @btskinner)
+##
+################################################################################
+
+```
+
+```{r}
+## ---------------------------
+## libraries
+## ---------------------------
+
+library(tidyverse)
+```
+```{r}
+## ---------------------------
+## directory paths
+## ---------------------------
+
+## assume we're running this script from the ./scripts subdirectory
+dat_dir <- file.path("..", "data")
+sch_dir <- file.path(dat_dir, "sch_test")
+bys_dir <- file.path(sch_dir, "by_school")
+```
+
+# Appending data
+
+```{r, purl = TRUE, include = FALSE}
+## -----------------------------------------------------------------------------
+## Append data
+## -----------------------------------------------------------------------------
+```
+
+```{r}
+## ---------------------------
+## input
+## ---------------------------
+
+## data are CSV, so we use read_csv()
+df_1 <- read_csv(file.path(bys_dir, "bend_gate_1980.csv"))
+df_2 <- read_csv(file.path(bys_dir, "bend_gate_1981.csv"))
+df_3 <- read_csv(file.path(bys_dir, "bend_gate_1982.csv"))
+```
+
+# Joining data
+
+```{r, purl = TRUE, include = FALSE}
+## -----------------------------------------------------------------------------
+## Join data
+## -----------------------------------------------------------------------------
+```
+
+While one can `merge` using base R, {dplyr} uses the SQL language of
+joins:
+
+- `left_join(x, y)`: keep all x, drop unmatched y
+- `right_join(x, y)`: keep all y, drop unmatched x
+- `inner_join(x, y)`: keep only matching
+- `full_join(x, y)`: keep everything
+
+![](/edh7916/assets/img/joins.png)
+
+Since we want to join a smaller aggregated data frame to the original
+data frame, we'll use a `left_join()`. The join functions will try to
+guess the joining variable (and tell you what it picked) if you don't
+supply one, but we'll specify one to be clear.
+
+# Reshaping data
+
+```{r, purl = TRUE, include = FALSE}
+## -----------------------------------------------------------------------------
+## Reshape data
+## -----------------------------------------------------------------------------
+```
+
+```{r}
+## ---------------------------
+## input
+## ---------------------------
+
+## data are CSV, so we use read_csv()
+df <- read_csv(file.path(sch_dir, "all_schools.csv"))
+```
+
+Reshaping data is a common data wrangling task. Whether going from
+[wide to long format or long to
+wide](https://en.wikipedia.org/wiki/Wide_and_narrow_data), this can be
+a painful process. Though you can reshape data frames using base R
+commands, the best way I know to reshape data in R is by using
+functions in the [tidyr](http://tidyr.tidyverse.org) library.
+
+To start, the data are wide in **test**. While this setup can be
+efficient for storage, it's not always the best for analysis or even
+just browsing. What we want is for the data to be long. Instead of
+each test having its own column, there should be one column for the
+test subject (**test**) and another column that gives the value
+(**score**). It should look like this:
+
+```{r, purl = FALSE, echo = FALSE}
+df
+```
+
+```{r}
+## ---------------------------
+## input
+## ---------------------------
+
+## data are CSV, so we use read_csv()
+df <- read_csv(file.path(sch_dir, "all_schools_wide.csv"))
+```
+
+```{r, purl = FALSE, echo = FALSE}
+df
+```
+
+```{r, include = FALSE, purl = TRUE}
+## -----------------------------------------------------------------------------
+## end script
+## -----------------------------------------------------------------------------
+```
