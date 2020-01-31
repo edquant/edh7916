@@ -14,11 +14,12 @@ all relevant software and packages.
 |1/7|1|Introduction to R and git|  
 |1/14|2|Organizing a script and project directory|  
 |1/21|3|Data wrangling I: Enter the {tidyverse}|  
-|1/28|4|Data wrangling II: A philosophy of data cleaning|  
-|2/4|5|Data wrangling III: Merging and appending data|  
-|2/11|6|Data wrangling IV: Working with strings and dates|  
-|2/18|7|Functional programming I: `for`, `if/else`, `loops`|  
-|2/25|8|Functional programming II: `purrr::map()`|  
+|1/28|4|_Class review and group coding_|  
+|2/4|5|Data wrangling II: Appending, joining, and reshaping data|  
+|2/11|6|Data wrangling III: Working with strings and dates|  
+|2/18|7|Functional programming: `for`, `if/else`, `loops`, `purrr::map()`|  
+|2/25|8|Data wrangling IV: A philosophy of data cleaning|  
+|3/3|-|**NO CLASS** _Spring Break_|
 |3/10|9|Exploratory data analysis: Data visualization with {ggplot2}|  
 |3/17|10|Fitting regression models|  
 |3/24|11|Outputting and saving production-ready tables and figures|  
