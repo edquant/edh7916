@@ -46,77 +46,77 @@ the higher education administration program at the University of Florida
       </header>
 
       <section>
-	<h1>Lessons</h1>
+	<h1>Assignment 4</h1>
 	
 
-	<p>Workshop modules are listed in order of the course. The R script
-(<span><i class="fas fa-code"></i></span>) and data (<span><i class="fas fa-database"></i></span>) used to create each module will be
-linked at the top of the page.</p>
-
-<h2 id="a-note-on-directory-structure">A note on directory structure</h2>
-
-<p>All modules assume the directory structure below.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>student_&lt;your_last_name&gt;/
-|
-|__ data/
-|   |
-|   |-- lesson1.rds
-|   |-- lesson2.rds
-|   |...
-|
-|__ scripts/
-|   |
-|   |-- lesson1.R
-|   |-- lesson2.R
-|   |...
-</code></pre></div></div>
-
-<p>When running scripts in RStudio, the working directory should be
-<code class="language-plaintext highlighter-rouge">path/to/student_&lt;your_last_name&gt;/scripts</code>. You can check in RStudio
-by typing <code class="language-plaintext highlighter-rouge">getwd()</code> in the console. For example, let’s say you’ve
-cloned your personal repo into your home directory within a folder
-called <code class="language-plaintext highlighter-rouge">edh7916</code>. Then you should see (if on a Mac):</p>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">getwd</span><span class="p">()</span><span class="w">
-</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"/Users/bts/edh7916/student_skinner/scripts"</span><span class="w">
-</span></code></pre></div></div>
-
-<h2 id="lessons">Lessons</h2>
-
-<ol class="lessons">
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/dw_two_hw.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  
+  
+  
+</p>
 
 
+<p><em><strong>NOTE</strong> This assignment needs to be completed by the start of the next
+class. That means everything pushed to your remote GitHub repo before
+class starts.</em></p>
 
-	<li>
-		<a href="/edh7916/lessons/intro.html">Introduction</a>
-	</li>
+<p><em>Remember, I encourage you to save your work, commit smaller changes,
+and push to your remote GitHub repo often rather than wait until the
+last minute.</em></p>
 
-	<li>
-		<a href="/edh7916/lessons/organizing.html">Organizing</a>
-	</li>
+<h1 id="task-1">Task 1</h1>
 
-	<li>
-		<a href="/edh7916/lessons/dw_one.html">Data Wrangling I: Enter the {tidyverse}</a>
-	</li>
+<p>Using the <code class="language-plaintext highlighter-rouge">hsls_small.csv</code> data set and the online codebook, answer the
+following questions. You <strong>do not</strong> need to save the final output as a
+data file: just having the final result print to the console is fine.
+For each question, I would like you to try to pipe all the commands
+together. Throughout, you <strong>should</strong> account for missing values by
+dropping them.</p>
 
-	<li>
-		<a href="/edh7916/lessons/dw_two.html">Data wrangling II: Appending, joining, and reshaping data</a>
-	</li>
+<p>For each question, show your data work and then answer the question in a
+short (1-2 sentence(s)) comment.</p>
 
+<h2 id="questions">Questions</h2>
+
+<ol>
+  <li>Compute the average test score by region and join back into the full
+data frame. Next, compute the difference between each student’s test
+score and that of the region. Finally, return the mean of these
+differences by region.</li>
+  <li>Compute the average test score by region and family income level.
+Join back to the full data frame. <strong>HINT</strong> You can join on more than
+one key.</li>
+  <li>Select the following variables from the full data set:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">stu_id</code></li>
+      <li><code class="language-plaintext highlighter-rouge">x1stuedexpct</code></li>
+      <li><code class="language-plaintext highlighter-rouge">x1paredexpct</code></li>
+      <li><code class="language-plaintext highlighter-rouge">x4evratndclg</code><br />
+From this reduced data frame, reshape the data frame so that it
+is long in educational expectations, meaning that each
+observation should have two rows, one for each educational
+expectation type.</li>
+    </ul>
+  </li>
 </ol>
 
-<h2 id="supplemental">Supplemental</h2>
+<h1 id="task-2">Task 2</h1>
 
-<ul class="lessons">
+<p>If you haven’t already, download the raw data you will use for your
+final project. If this requires point-and-click steps, be sure to save
+them in a markdown file in your repo so that you can reproduce them
+later. Please save the data in your <code class="language-plaintext highlighter-rouge">data</code> directory (it should not push
+to your remote repo, but that’s okay).</p>
 
-
-
-	<li>
-		<a href="/edh7916/lessons/types_structures.html">Data types and structures</a>
-	</li>
-
-</ul>
 
 
 	<!-- <p> -->
