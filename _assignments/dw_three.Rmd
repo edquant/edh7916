@@ -21,10 +21,10 @@ _Remember, I encourage you to save your work, commit smaller changes,
 and push to your remote GitHub repo often rather than wait until the
 last minute._
 
-Use the two IPEDS data sets we used in class, `hd2007.csv` and
-`ic2007mission.csv` as well as `ufl_class_times.csv` to answer the
-following questions. You will need to join them. You may also need to
-look up the data dictionaries for each file. Click the "continue"
+Use the the IPEDS data sets we used in class, `hd2007.csv`, joined
+with a new IPEDS data set, `ic2007mission.csv`, to answer the
+questions. You will need to join them. You may also need
+to look up the data dictionaries for each file. Click the "continue"
 button on [this
 page](https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx) to see the
 data and accompanying dictionary files.
@@ -40,10 +40,28 @@ a short (1-2 sentence(s)) comment.
 
 ## Questions
 
-1. How many chief administrator names start with "Dr."? **NB** Many
+**NB** You will need to join the two IPEDS data sets to answer these
+questions using the common `unitid` key. Note that column names in
+`hd2007.csv` are uppercase (`UNITID`) while those in
+`ic2007mission.csv` are lowercase (`unitid`). There are a few ways to
+join when the keys don't exactly match. 
+
+One is to set all column names to the same case. If you want to use
+`left_join()` starting with `hd2007.csv`, you can first use the the
+{dplyr} verb `rename_all(tolower)` in your chain to lower all column
+names.
+
+[See the help file for
+`left_join()`](https://dplyr.tidyverse.org/reference/join.html) for
+other ways to join `by` different variable names.
+
+1. How many chief administrator names start with "Dr."?  
+   **NB** Many
    chief administrators are listed on more than one line due to branch
    campuses. Make sure to take this into account by keeping only
    distinct names.
+1. **BONUS** How many chief administrator names end with the title "PH.D." or
+   some variant?
 1. Among those schools that give their mission statement:
    1. How many repeat their institutional name in their mission
    statement?  
@@ -54,29 +72,13 @@ a short (1-2 sentence(s)) comment.
       private-for-profit) are most likely to use the word _skill_ in
       their mission statement?
 1. Among the schools that closed in 2007 or 2008 and give a date with
-   a day, month and year:
+   at least a month and year:
    1. Which has been closed for the longest time? How many months has
       it been from its close date to the beginning of this current
       month (1 February 2020)?  
    1. How many days were there between the first school to close and
       the last?
-	  
-**BONUS**
-1. Using the `ufl_class_times.csv` data set, answer the following
-   question: _how many minutes of study time should a student have
-   available during a typical 7 day week with the following schedule_?
-   - MWF class: period 2
-   - MW class: period 5 - 6
-   - TR class: period 7 - 8
-   - R class: period 10 - E1
-   
-   Assumptions: 
-   1. The student takes 30 minutes to travel between home and school.  
-   1. The student arrives on campus from just in time for the first
-      class and leaves just after the last class.  
-   1. The student sleeps 7 hours a night.  
-   1. The student works 15 hours a week, with a 10 minute commute.  
-  
+
 
 
 
