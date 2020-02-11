@@ -1,7 +1,6 @@
-
 ---
 layout: lesson
-title: "Data wrangling II: Appending, joining, and reshaping data"
+title: "Data Wrangling II: Appending, joining, and reshaping data"
 subtitle: "EDH7916 | Spring 2020"
 author: Benjamin Skinner
 order: 4

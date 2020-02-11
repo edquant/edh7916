@@ -120,3 +120,6 @@ $RECYCLE.BIN/
 !data/test_scores.RDS
 !data/hsls_small.csv
 !data/sch_test
+!data/hd2007.csv
+!data/ic2007mission.csv
+!data/ufl_class_times.csv

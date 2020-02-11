@@ -1,0 +1,241 @@
+---
+layout: lesson
+title: "Data Wrangling III: Working with strings and dates"
+subtitle: "EDH7916 | Spring 2020"
+author: Benjamin Skinner
+order: 5
+category: lesson
+links:
+  script: dw_three.R
+  pdf: dw_three.pdf
+  data: str_times_data.zip
+output:
+  md_document:
+    variant: gfm
+    preserve_yaml: true
+--- 
+
+```{r, include = FALSE, purl = FALSE}
+source('knit_setup.R')
+```
+```{r, include = FALSE, purl = TRUE}
+################################################################################
+##
+## <PROJ> EDH7916: Data wrangling III: Working with strings and dates
+## <FILE> dw_three.R 
+## <INIT> 10 February 2020
+## <AUTH> Benjamin Skinner (GitHub/Twitter: @btskinner)
+##
+################################################################################
+
+```
+
+```{r}
+## ---------------------------
+## libraries
+## ---------------------------
+
+library(tidyverse)
+```
+**NB**: As we did in the past lesson, we run this script assuming that
+our working directory is set to the `scripts` directory.
+
+```{r}
+## ---------------------------
+## directory paths
+## ---------------------------
+
+## assume we're running this script from the ./scripts subdirectory
+dat_dir <- file.path("..", "data")
+
+```
+
+# Part 1: Working with strings
+
+
+```{r, purl = TRUE, include = FALSE}
+## -----------------------------------------------------------------------------
+## Working with strings
+## -----------------------------------------------------------------------------
+```
+
+```{r}
+## ---------------------------
+## input
+## ---------------------------
+
+## read in data
+df_hd <- read_csv(file.path(dat_dir, "hd2007.csv"))
+df_ic <- read_csv(file.path(dat_dir, "ic2007mission.csv"))
+
+## join
+## NB: the common identifier in each data set is "unitid";
+## however, we need to lower the variable names in df_hd so we can
+## more easily join
+df <- df_hd %>%
+    rename_all(tolower) %>% 
+    left_join(df_ic, by = "unitid")
+```
+
+# Finding: `str_detect()`
+
+```{r}
+## see first few rows of distinct chief titles
+df %>%
+    distinct(chftitle)
+
+```
+
+```{r}
+## return the most common titles
+df %>%
+    ## get counts of each type
+    count(chftitle) %>%
+    ## arrange in descending order so we see most popular at top
+    arrange(desc(n))
+```
+
+```{r}
+## how many use some form of the title president?
+df %>%
+    count(chftitle) %>%
+    filter(str_detect(chftitle, "President")) %>%
+    arrange(desc(n))
+
+```
+
+> #### Quick exercise
+> What happens if we search for "president" with a lowercase "p"?
+
+
+```{r}
+## solution 1: look for either P or p
+df %>%
+    count(chftitle) %>%
+    filter(str_detect(chftitle, "[Pp]resident")) %>%
+    arrange(desc(n))
+
+```
+
+```{r}
+## solution 2: make everything lowercase so that case doesn't matter
+df %>%
+    count(chftitle) %>%
+    filter(str_detect(str_to_lower(chftitle), "president")) %>%
+    arrange(desc(n))
+
+```
+
+> #### Not-so-quick exercise 
+> Another chief title that was high on the list was "Owner." How many
+> institutions have an "Owner" as their chief administrator? Of these,
+> how many are private, for-profit institutions (`control == 3`)? How
+> many have the word "Beauty" in their name?
+
+## Replace using string position: `str_sub()`
+
+```{r}
+## pull out first 5 digits of zip code
+df <- df %>%
+    mutate(zip5 = str_sub(zip, start = 1, end = 5))
+
+## show (use select() to subset so we can set new columns)
+df %>%
+    select(unitid, zip, zip5)
+```
+
+## Replace using regular expressions: `str_replace()`
+
+```{r}
+## drop last four digits of extended zipcode if they exist
+df <- df %>%
+    mutate(zip5_v2 = str_replace(zip, "([0-9]+)(-[0-9]+)?", "\\1"))
+
+## show (use select() to subset so we can set new columns)
+df %>%
+    select(unitid, zip, zip5, zip5_v2)
+```
+
+> #### Quick exercise
+> What if you wanted to the get the last 4 digits (after the hyphen)?
+> What bit of two bits of code above would you change so that you can
+> store the last 4 digits without including the hypen? Make a new
+> variable called `zip_plus4` and store these values.
+
+Let's compare our two versions: do we get the same results?
+
+```{r}
+## check if both versions of new zip column are equal
+identical(df %>% select(zip5), df %>% select(zip5_v2))
+
+```
+
+No! Let's see where they are different:
+
+```{r}
+## filter to rows where zip5 != zip5_v2 (not storing...just looking)
+df %>%
+    filter(zip5 != zip5_v2) %>%
+    select(unitid, zip, zip5, zip5_v2)
+
+```
+> #### Quick exercise
+> What happened? In this scenario, which string subsetting technique
+> worked better?
+
+# Part 2: working with dates and times
+
+```{r, purl = TRUE, include = FALSE}
+## -----------------------------------------------------------------------------
+## Working with dates
+## -----------------------------------------------------------------------------
+```
+
+```{r}
+## subset to schools who closed during this period
+df <- df %>%
+    filter(closedat != -2)
+
+df %>%
+    filter(closedat != -2) %>%
+    select(closedat) %>%
+    mutate(dat = mdy(closedat),
+           close_month = month(dat),
+           close_day = day(dat),
+           close_year = year(dat),
+           close_dow = wday(dat, label = TRUE))
+
+```
+
+```{r}
+## ---------------------------
+## input
+## ---------------------------
+
+## read in data
+df <- read_csv(file.path(dat_dir, "ufl_class_times.csv"))
+
+## clean am / pm
+df <- df %>%
+    mutate(begin = str_replace_all(class_begins, "\\.", ""),
+           end = str_replace_all(class_ends, "\\.", ""),
+           begin = parse_date_time(begin, orders = "IMp"),
+           end = parse_date_time(end, orders = "IMp"),
+           class_length = end - begin)
+
+start_day <- df %>% filter(period == 1) %>% pull(begin)
+end_day <- df %>% filter(period == 11) %>% pull(end)
+
+x <- end_day - start_day - dminutes(50) * 2 - dhours(3)
+format(x, format = "%H")
+
+
+minutes(50)
+
+```
+
+```{r, include = FALSE, purl = TRUE}
+## -----------------------------------------------------------------------------
+## end script
+## -----------------------------------------------------------------------------
+```

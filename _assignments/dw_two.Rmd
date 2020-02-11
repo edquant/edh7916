@@ -59,4 +59,3 @@ them in a markdown file in your repo so that you can reproduce them
 later. Please save the data in your `data` directory (it should not
 push to your remote repo, but that's okay).
 
-
