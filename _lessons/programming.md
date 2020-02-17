@@ -8,18 +8,84 @@ category: lesson
 links:
   script: programming.R
   pdf: programming.pdf
+  data: sch_test.zip
 output:
   md_document:
     variant: gfm
     preserve_yaml: true
 --- 
 
-This lesson is meant to introduce you to some of R’s programming
-features. In the first section, we’ll go through some common control
-flow functions. In the second section, we’ll go over the process for
-building our own R functions.
+This lesson covers two core programming processes: control flow and
+writing functions.
+
+Like other programming languages, R reads scripts from top to bottom,
+implementing each command or function as it comes. But like other
+languages, it also has special functions that you can use to change how
+R moves through the script — to *control the flow* of the analysis
+process. With these special functions, you can selectively implement and
+repeat sections of code.
+
+R also allows you to write your own functions. While most of your data
+analyses will use functions from base R or a library you load, you may
+find it useful to write your own functions from time to time. You might
+use your *user-written functions* to perform specialized tasks or simply
+as wrappers for sections of code that you otherwise might repeat
+multiple times.
+
+This lesson is divided into three sections. In the first section, we’ll
+go through some common control flow processes. In the second section,
+we’ll go over the process for building our own functions. In the last
+section, we’ll work through two examples of how functional programming
+can streamline a data analysis workflow.
+
+But before moving on, we’ll quickly talk about the guiding principle
+behind this lesson.
+
+# **DRY** vs **WET** programming
+
+The watchwords for this lesson are [**DRY** vs
+**WET**](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself):
+
+  - **DRY**: *Don’t repeat yourself*
+  - **WET**: *Write every time*
+
+Let’s say you have a three-step analysis process for 20 files (read,
+lower names, add a column). Under a *WET* programming paradigm in which
+each command gets its own line of code, that’s 60 lines of code. If the
+number of your files grows to 50, that’s now 150 lines of code — for
+just three tasks\! When you write every time, you not only make your
+code longer and harder to parse, you also *increase* the likelihood that
+your code will contain bugs while simultaneously *decreasing* its
+scalability.
+
+If you need to repeat an analytic task (which may be a set of commands),
+then it’s better to have one statement of that process that you repeat,
+perhaps in a loop or in a function. Don’t repeat yourself — say it once
+and have R repeat it for you\!
+
+The goal of DRY programming is not abstraction or slickness for its own
+sake. That runs counter to the clarity and replicability we’ve been
+working toward. Instead, we aspire to DRY code since it is more scalable
+and less buggy than WET code. To be clear, a function or loop can still
+have bugs, but the bugs it introduces are often *the same across
+repetitions* and fixed *at a single point of error*. That is, it’s
+typically easier to *debug* when the bug has a single root cause than
+when it could be anywhere in 150 similar but *slightly* different lines
+of code.
+
+As we work through the lesson examples, keep in the back of your mind:
+
+1.  *What would this code look like if I wrote everything twice (WET)*?
+2.  *How does this DRY process not only reduce the number of lines of
+    code, but also make my intent clearer?*
 
 # Setup
+
+We’ll use a combination of nonce data and the school test score data
+we’ve used in a past lesson. We won’t read in the school test score
+data until the last section, but we’ll continue following our good
+organizational practice by setting the directory paths at the top of our
+script.
 
 ``` r
 ## ---------------------------
@@ -56,20 +122,23 @@ bys_dir <- file.path(sch_dir, "by_school")
 
 # Part 1: Control flow
 
-By control flow, I just mean the functions that help you change how your
-script is read. Scripts in R are read from top to bottom unless specific
-commands tell R to skip some lines or conditionally repeat a set of
-commands.
+As stated above, by *control flow*, I simply mean the functions that
+help you change how your script is read. Repeating commands often
+involves a *loop*, which is what it sounds like: upon reaching a loop, R
+will repeat the code inside the loop (*looping back up the beginning of
+the section*) for a certain number of times or until some condition is
+met. Once completed, R will go back to reading each line in order like
+normal.
 
-Repeating commands often involves a loop. Loops have a bad reputation in
-R, mostly for being slow, but they aren’t *that* slow and they are easy
+If you google around, you may find that loops have a bad reputation in
+R, mostly for being slow. But they aren’t *that* slow and they are easy
 to write and understand.
 
 ## for
 
-The `for()` function allows you to build loops. There are few ways to
-use `for()`, but its construction is the same: `for(variable in
-sequence)`.
+The `for()` function allows you to build the aptly named **for loops**.
+There are few ways to use `for()`, but its construction is the same:
+`for (variable in sequence)`.
 
 Reading it backwards, the `sequence` is just the set of numbers or
 objects that we’re going to work through. The `variable` is a new
@@ -165,9 +234,9 @@ it clearer.
 
 Inside the `for()` parentheses, we have `i in 1:length(chr_sequence)`.
 We know what `i in` means since it’s like what we’ve seen before. What’s
-`1:length(chr_sequence)`? First, it looks like colon construction we’ve
-seen before, `<start>:<end>`, which means give the full sequence of
-values from `<start>` through `<end>`.
+`1:length(chr_sequence)`? First, it looks like the colon construction
+we’ve seen before, `<start>:<end>`, which means give the full sequence
+of values from `<start>` through `<end>`.
 
 Since we made it above, we know that there are ten letters in
 `chr_sequence`. We could just use `1:10`. However, this violates our
@@ -176,10 +245,10 @@ letters from the list later?).
 
 We can get around this issue by using the base-R function, `length()`,
 which will return the number of items in a one-dimensional object. Since
-we know that `length(chr_sequence) == 10`, that means that
+we know that `length(chr_sequence)` is equal to `10`, that means that
 `1:length(chr_sequence)` is the same thing as saying `1:10`. It’s just
-another — more flexible way — to get the end number of our sequence. We
-can show this by just printing `i` again.
+another more flexible way to get the end number of our sequence. We can
+show this by just printing `i` again.
 
 ``` r
 ## for loop by indices (just show indices)
@@ -311,9 +380,10 @@ You have been warned\!
 
 ## if
 
-We’ve already used a version of if, `ifelse()`, quite a bit. We can also
-use `if()` in a `for()` loop to set a condition that changes behavior
-sometimes.
+We’ve already used a version of if, `ifelse()`, quite a bit. We can use
+**if** statements in our script to decide whether a section of code
+should be run or skipped. We can also use `if()` inside a `for()` loop
+to set a condition that changes behavior on some iterations of the loop.
 
 ``` r
 ## only print if number is not 5
@@ -367,6 +437,14 @@ for (i in num_sequence) {
     [1] 9
     [1] 10
 
+As with {dplyr} verbs, the small number of control functions (and there
+are some others) can be combined in an infinite number of ways to help
+you control how your script is read. If you find, however, that your
+script keeps getting more complex, with multiple nested loops and
+`ifelse()` exceptions, it might be time to either rethink your approach
+or to write your own functions that can handle expectations in a clearer
+way.
+
 # Part 2: Writing functions
 
 You can write your own functions in R and should\! They don’t need to be
@@ -379,7 +457,7 @@ want your function to take should be in the parentheses `()` right after
 the word `function`. The name of your function is the name of the object
 you assign it to.
 
-Let’s make one. The function below, `my_function()`, doesn’t take any
+Let’s make one. The function below, `say_hi()`, doesn’t take any
 arguments and prints a simple string when called. After you’ve built it,
 call your function using its name, not forgetting to include the
 parentheses.
@@ -406,7 +484,7 @@ manually.
 ``` r
 ## function to say hi!
 say_hi <- function(name) {
-    ## combine
+    ## combine (notice we add space after comma)
     out_string <- paste0("Hi, ", name, "!")
     ## print output string
     print(out_string)
@@ -492,13 +570,34 @@ print_nums(seq(1, 20, by = 2))
 > How do you think you might set a default argument for `num_vector`?
 > Could you set it equal to something?
 
+One last thing to keep in mind about functions is that they follow Vegas
+rules: *what happens inside the function, stays inside the function*. A
+more technical way of stating this is that the function has its own
+[**scope**](https://en.wikipedia.org/wiki/Scope_\(computer_science\))
+and objects created / processes run within that scope stay within that
+scope. That’s why even though we created an object called `out_string`
+in our `say_hi()` function, we can’t call it directly from the console.
+It only exists while the function is running and goes away once the
+function completes.
+
+Even if we repeat an object name that exists in our **global** (working)
+environment inside our function, the value we give it inside the
+function will override the global value within the function. But once
+the function is finished, the global value will again take precedence.
+Don’t worry to much about scoping ([here’s more information if you are
+interested](https://bookdown.org/rdpeng/rprogdatascience/scoping-rules-of-r.html)),
+but just be aware that it’s generally good practice that if you want an
+object for use inside your function, you should either create it there
+or make it an argument.
+
 # Part 3: Practical examples
 
 ## Example 1: missing data
 
-Moving to a more realistic example, we could make a function that filled
-in missing values, a common task we’ve had. First, we’ll generate some
-fake data with missing values.
+Now that we’ve seen some control flow and programming methods, let’s
+move to a more realistic use case. In this first example, we’ll make a
+function that fills in missing values, a common task we’ve had. First,
+we’ll generate some fake data with missing values.
 
 Note that since we’re using R’s `sample()` function, your data will look
 a little different from mine due to randomness in the sample, but
@@ -528,16 +627,16 @@ df
     # A tibble: 100 x 4
           id   age sibage parage
        <int> <dbl>  <dbl>  <dbl>
-     1     1    14     11     51
-     2     2    12      6     45
-     3     3    13      8     46
-     4     4    17      8     47
-     5     5    16      7    -99
-     6     6    19      9     51
-     7     7    20     12     55
-     8     8    11      9     46
-     9     9    16      7     49
-    10    10    19      5     54
+     1     1    20      5     50
+     2     2    16     10     51
+     3     3    17     11     49
+     4     4    12      6     52
+     5     5    17      8     45
+     6     6    19     11    -99
+     7     7    12     10     47
+     8     8    18      6     50
+     9     9    12      5     49
+    10    10    20      6     52
     # … with 90 more rows
 
 We could fix these manually like we have been in past lessons and
@@ -557,11 +656,11 @@ fix_missing <- function(x, miss_val) {
 }
 ```
 
-Our `fix_missing()` function should work. It takes the same `ifelse()`
-function we’ve used before, but instead of using the name of the object
-(like `df`), uses an argument name `x` that we can set each time. It
-does the same for `miss_val`. Instead of choosing a hard-coded value (a
-[magic
+Our `fix_missing()` function should meet our needs. It takes the same
+`ifelse()` function we’ve used before, but instead of using the name of
+the object (like `df`), uses an argument name `x` that we can set each
+time. It does the same for `miss_val`. Instead of choosing a hard-coded
+value (a [magic
 number](https://en.wikipedia.org/wiki/Magic_number_\(programming\))), we
 can change it each time we call the function. Let’s try it out.
 
@@ -576,20 +675,20 @@ df %>%
        <dbl> <int>
      1   -97    11
      2    11     6
-     3    12     9
-     4    13     9
-     5    14    11
-     6    15     8
-     7    16    10
-     8    17     5
-     9    18     9
-    10    19    13
-    11    20     9
+     3    12     8
+     4    13    10
+     5    14     8
+     6    15    12
+     7    16     6
+     8    17    12
+     9    18     6
+    10    19    11
+    11    20    10
 
 ``` r
 ## missing values in age are coded as -97
 df <- df %>%
-    mutate(parage = fix_missing(age, -97))
+    mutate(age = fix_missing(age, -97))
 
 ## recheck
 df %>%
@@ -599,17 +698,17 @@ df %>%
     # A tibble: 11 x 2
          age     n
        <dbl> <int>
-     1   -97    11
-     2    11     6
-     3    12     9
-     4    13     9
-     5    14    11
-     6    15     8
-     7    16    10
-     8    17     5
-     9    18     9
-    10    19    13
-    11    20     9
+     1    11     6
+     2    12     8
+     3    13    10
+     4    14     8
+     5    15    12
+     6    16     6
+     7    17    12
+     8    18     6
+     9    19    11
+    10    20    10
+    11    NA    11
 
 It worked\! All the values that were -97 before, are now in the `NA`
 table column. Importantly, none of the other values changed.
@@ -727,7 +826,7 @@ df_list <- list()
 
 ## use loop to read in files
 for (i in 1:length(files)) {
-    ## read in file (f) and store in list
+    ## read in file (f) and store in list (note double brackets for list)
     df_list[[i]] <- read_csv(files[i])    
 }
 
@@ -792,7 +891,7 @@ do is put the same directory as the other files and rerun your code. It
 will add them to the `files` vector and your loop will run just as
 before.
 
-### Download only some files
+### Read in only some files
 
 What if we only want files for Spottsville? Overall, the code is exactly
 the same except that we want our list to only contain the
@@ -823,7 +922,8 @@ Luckily, our regular expression pattern can simply be `"spottsville"`.
 Were our files less consistently named, we might have had trouble (name
 those files well\!).
 
-The rest of the code should be as it was before.
+The rest of the code should be as it was before (with the small addition
+of `_sp` in various names to keep distinct from our first attempt).
 
 ``` r
 ## init list

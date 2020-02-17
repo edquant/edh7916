@@ -7,7 +7,6 @@
 ##
 ################################################################################
 
-
 ## ---------------------------
 ## libraries
 ## ---------------------------
@@ -120,7 +119,7 @@ say_hi()
 
 ## function to say hi!
 say_hi <- function(name) {
-    ## combine
+    ## combine (notice we add space after comma)
     out_string <- paste0("Hi, ", name, "!")
     ## print output string
     print(out_string)
@@ -196,7 +195,7 @@ df %>%
 
 ## missing values in age are coded as -97
 df <- df %>%
-    mutate(parage = fix_missing(age, -97))
+    mutate(age = fix_missing(age, -97))
 
 ## recheck
 df %>%
@@ -231,7 +230,7 @@ df_list <- list()
 
 ## use loop to read in files
 for (i in 1:length(files)) {
-    ## read in file (f) and store in list
+    ## read in file (f) and store in list (note double brackets for list)
     df_list[[i]] <- read_csv(files[i])    
 }
 
