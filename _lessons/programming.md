@@ -627,16 +627,16 @@ df
     # A tibble: 100 x 4
           id   age sibage parage
        <int> <dbl>  <dbl>  <dbl>
-     1     1    20      5     50
-     2     2    16     10     51
-     3     3    17     11     49
-     4     4    12      6     52
-     5     5    17      8     45
-     6     6    19     11    -99
-     7     7    12     10     47
-     8     8    18      6     50
-     9     9    12      5     49
-    10    10    20      6     52
+     1     1    12      8     48
+     2     2    18      7    -99
+     3     3    15     11     51
+     4     4    17     10     47
+     5     5    18      9     45
+     6     6    17      6     53
+     7     7    17      7    -98
+     8     8    11     10     46
+     9     9    17     10     48
+    10    10    17    -98    -98
     # … with 90 more rows
 
 We could fix these manually like we have been in past lessons and
@@ -673,17 +673,17 @@ df %>%
     # A tibble: 11 x 2
          age     n
        <dbl> <int>
-     1   -97    11
-     2    11     6
-     3    12     8
-     4    13    10
-     5    14     8
+     1   -97     8
+     2    11     9
+     3    12    11
+     4    13     6
+     5    14     6
      6    15    12
-     7    16     6
-     8    17    12
-     9    18     6
-    10    19    11
-    11    20    10
+     7    16     5
+     8    17    13
+     9    18     9
+    10    19     9
+    11    20    12
 
 ``` r
 ## missing values in age are coded as -97
@@ -698,17 +698,17 @@ df %>%
     # A tibble: 11 x 2
          age     n
        <dbl> <int>
-     1    11     6
-     2    12     8
-     3    13    10
-     4    14     8
+     1    11     9
+     2    12    11
+     3    13     6
+     4    14     6
      5    15    12
-     6    16     6
-     7    17    12
-     8    18     6
-     9    19    11
-    10    20    10
-    11    NA    11
+     6    16     5
+     7    17    13
+     8    18     9
+     9    19     9
+    10    20    12
+    11    NA     8
 
 It worked\! All the values that were -97 before, are now in the `NA`
 table column. Importantly, none of the other values changed.
