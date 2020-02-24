@@ -18,7 +18,7 @@ all relevant software and packages.
 |2/4|5|Data wrangling II: Appending, joining, and reshaping data|  
 |2/11|6|Data wrangling III: Working with strings and dates|  
 |2/18|7|Functional programming: `for`, `if/else`, `loops`, `purrr::map()`|  
-|2/25|8|Data wrangling IV: A philosophy of data cleaning|  
+|2/25|8|Data wrangling IV: A philosophy of data wrangling|  
 |3/3|-|**NO CLASS** _Spring Break_|
 |3/10|9|Exploratory data analysis: Data visualization with {ggplot2}|  
 |3/17|10|Fitting regression models|  
