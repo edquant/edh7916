@@ -6,7 +6,7 @@ author: Benjamin Skinner
 order: 7
 category: assignment
 links:
-  pdf: final_project_initial_analysis.pdf
+  pdf: final_project_initial_analysis_hw.pdf
 output:
   md_document:
     variant: gfm
