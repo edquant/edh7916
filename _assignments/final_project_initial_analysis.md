@@ -31,7 +31,7 @@ questions you’ve set for yourself. Specifically, I want you to submit
 
 ### (1) Markdown file on how to get data
 
-Submit a Markdown (`.md`) file called `final_project_instructions.R`
+Submit a Markdown (`.md`) file called `final_project_instructions.md`
 that explains how to get the data required for your analysis and where
 it needs to be placed in relation to your R script. The instructions
 need to be detailed enough that I can find, download, unzip (if
