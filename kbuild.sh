@@ -68,6 +68,9 @@ pdfs="assets/pdf"
 # pandoc
 pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex --variable monofont=\"Menlo\""
 
+# sed
+sed_opts="s/\/edh7916\/assets/.\/assets/g; s/<img src=\"\(figures\/.*\.png\)\" width=\"100%\" \/>/\!\[\]\(${i}\/\1\)/g"
+
 while getopts "hl:a:i:j:o:p:s:b:cv" opt;
 do
     case $opt in
@@ -192,7 +195,7 @@ if [[ $knit_lessons == 1 ]]; then
 	    printf "     $oi/$l.md\n"
 	    # md to pdf
 	    if [[ -f $oi/$l.md ]]; then
-		sed "s/\/edh7916\/assets/.\/assets/g" $oi/$l.md | pandoc ${pandoc_opts} -o $o/$l.pdf -
+		sed "${sed_opts}" $oi/$l.md | pandoc ${pandoc_opts} -o $o/$l.pdf -
 		cp $o/$l.pdf $pdfs
 	    fi
 	    # purl
@@ -214,7 +217,7 @@ if [[ $knit_lessons == 1 ]]; then
 	    printf "     $oi/$f.md\n"
 	    # md to pdf
 	    if [[ -f $oi/$f.md ]]; then
-		sed "s/\/edh7916\/assets/.\/assets/g" $oi/$f.md | pandoc ${pandoc_opts} -o $o/$f.pdf -
+		sed "${sed_opts}" $oi/$f.md | pandoc ${pandoc_opts} -o $o/$f.pdf -
 		cp $o/$f.pdf $pdfs
 	    fi
 	    # purl
