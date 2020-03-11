@@ -9,6 +9,7 @@ _download
 _student
 data/*.csv
 !/data/hsls_small.csv
+!/data/hsls_small.dta
 !/data/sch_type/*
 !/data/ufl_class_times.csv
 !/data/hd2007.csv

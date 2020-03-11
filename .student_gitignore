@@ -119,6 +119,7 @@ $RECYCLE.BIN/
 !data/README.md
 !data/test_scores.RDS
 !data/hsls_small.csv
+!data/hsls_small.dta
 !data/sch_test
 !data/hd2007.csv
 !data/ic2007mission.csv
