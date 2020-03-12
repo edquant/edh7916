@@ -20,11 +20,11 @@ all relevant software and packages.
 |2/18|7|Functional programming: `for`, `if/else`, `loops`, `purrr::map()`|  
 |2/25|8|Data wrangling IV: A philosophy of data wrangling|  
 |3/3|-|**NO CLASS** _Spring Break_|
-|3/10|9|Exploratory data analysis: Data visualization with {ggplot2}|  
-|3/17|10|Fitting regression models|  
-|3/24|11|Outputting and saving production-ready tables and figures|  
-|3/31|12|Creating dynamic research reports using RMarkdown + {knitr}
-|4/7|13|TBD (_see below_)|  
+|3/10|9|One-on-one meetings|  
+|3/17|10|Exploratory data analysis: Data visualization with {ggplot2}|  
+|3/24|11|Fitting regression models|  
+|3/31|12|Outputting and saving production-ready tables and figures|  
+|4/7|13|Creating dynamic research reports using RMarkdown + {knitr}|  
 |4/14|14|TBD (_see below_)|  
 |4/21|15|Student presentations|  
 
