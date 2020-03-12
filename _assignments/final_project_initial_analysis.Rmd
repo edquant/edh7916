@@ -3,7 +3,7 @@ layout: lesson
 title: "Final project: initial analysis"
 subtitle: "EDH7916 | Spring 2020"
 author: Benjamin Skinner
-order: 7
+order: 8
 category: assignment
 links:
   pdf: final_project_initial_analysis_hw.pdf

@@ -82,6 +82,11 @@ p
 p <- p + geom_histogram()
 p
 
+## init ggplot 
+p <- ggplot(data = df_hs, mapping = aes(x = x1txmtscor)) +
+    geom_histogram()
+p
+
 ## ---------------------------
 ## density
 ## ---------------------------
@@ -109,8 +114,8 @@ p
 ## two way plot
 ## ---------------------------
 
-## get parental education levels, use `val_labels()` to show them
-df_hs %>% select(x1paredu) %>% val_labels
+## see the counts for each group
+df_hs %>% count(x1paredu)
 
 ## need to set up data
 plot_df <- df_hs %>%
@@ -196,12 +201,8 @@ p
 ## show test score data
 df_ts
 
-## subset to Spottsville
-plot_df <- df_ts %>%
-    filter(school == "Spottsville")
-
 ## line graph
-p <- ggplot(data = plot_df,
+p <- ggplot(data = df_ts %>% filter(school == "Spottsville"),
             mapping = aes(x = year, y = math)) +
     geom_line()
 p
@@ -221,21 +222,21 @@ p
 
 ## reshape data long
 df_ts_long <- df_ts %>%
-    pivot_longer(cols = c("math","read","science"),
-                 names_to = "test",
-                 values_to = "score")
+    pivot_longer(cols = c("math","read","science"), # cols to pivot long
+                 names_to = "test",                 # where col names go
+                 values_to = "score")               # where col values go
 
 ## show
 df_ts_long
 
-## facet line graph
+## facet line graph, with colour = test and ~school
 p <- ggplot(data = df_ts_long,
             mapping = aes(x = year, y = score, colour = test)) +
     facet_wrap(~ school) +
     geom_line()
 p
 
-## facet line graph
+## facet line graph, now with colour = school and ~test
 p <- ggplot(data = df_ts_long,
             mapping = aes(x = year, y = score, colour = school)) +
     facet_wrap(~ test) +
@@ -252,7 +253,7 @@ p
 ## rescale test scores
 df_ts_long <- df_ts_long %>%
     group_by(test) %>%
-    mutate(score_std = scale(score)) %>%
+    mutate(score_std = (score - mean(score)) / sd(score)) %>%
     ungroup
 
 ## facet line graph with standardized test scores
@@ -274,6 +275,7 @@ df_ts_long <- df_ts_long %>%
     group_by(test, school) %>%
     arrange(year) %>% 
     mutate(score_year_one = first(score),
+           ## note that we're using score_year_one instead of mean(score)
            score_std_sch = (score - score_year_one) / sd(score)) %>%
     ungroup
 

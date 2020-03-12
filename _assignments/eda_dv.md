@@ -1,0 +1,46 @@
+---
+layout: lesson
+title: "Assignment 7"
+subtitle: "EDH7916 | Spring 2020"
+author: Benjamin Skinner
+order: 9
+category: assignment
+links:
+  pdf: eda_dv_hw.pdf
+output:
+  md_document:
+    variant: gfm
+    preserve_yaml: true
+---
+
+***NOTE** This assignment needs to be completed by the start of the next
+class. That means everything pushed to your remote GitHub repo before
+class starts. If you are unsure whether you have successfully pushed
+your changes, check the online version of your repo at GitHub.com. If
+you can see your changes there, I can see them too.*
+
+*Remember, I encourage you to save your work, commit smaller changes,
+and push to your remote GitHub repo often rather than wait until the
+last minute.*
+
+Using your project data, please make the following figures in a file
+called `final_project_figures.R` (placed in your `final_project`
+folder.:
+
+1.  A histogram showing the distribution of one continuous variable.
+2.  A box plot showing the distribution of one continuous variable
+    across a discrete variable.
+3.  A scatter plot showing the relationship between two continuous
+    variables.
+4.  **Either** (depending on your data / question):
+    1.  A line graph showing changes over time.
+    2.  A histogram that compares differences in the distribution of one
+        continuous variable between groups.
+
+Please give a one to two sentence explanation (in your script comments)
+of each figure.
+
+**BONUS**
+
+1.  Make a faceted figure that shows multiple plots, one for each value
+    in a categorical variable.

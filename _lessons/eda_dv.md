@@ -1,6 +1,6 @@
 ---
 layout: lesson
-title: "Exploratory data analysis: Data visualization with {ggplot2}"
+title: "Exploratory data analysis: Data visualization with ggplot2"
 subtitle: "EDH7916 | Spring 2020"
 author: Benjamin Skinner
 order: 8
@@ -8,7 +8,7 @@ category: lesson
 links:
   script: eda_dv.R
   pdf: eda_dv.pdf
-  data: hsls_small.csv
+  data: hsls_small.dta
 output:
   md_document:
     variant: gfm
@@ -39,23 +39,24 @@ We’re using three libraries today:
   - [{haven}](http://haven.tidyverse.org)
   - [{labelled}](https://CRAN.R-project.org/package=labelled)
 
-The [{ggplot2}](http://ggplot2.tidyverse.org) library is part of the
-{tidyverse}, so we don’t need to load it separately (we can just use
+The [ggplot2](http://ggplot2.tidyverse.org) library is part of the
+tidyverse, so we don’t need to load it separately (we can just use
 `library(tidyverse)` as always).
 
-We’re also going to use [{haven}](http://haven.tidyverse.org), which
+We’re also going to use [haven](http://haven.tidyverse.org), which
 allows us to read in data files from other software. We’ll use it to
-read in a Stata (`*.dta`) version of the HSLS data we’ve used before.
-Though {haven} is part of the {tidyverse} and should have been installed
-when you installed {tidyverse}, we’ll have to explicitly call it
+read in a Stata (`*.dta`) version of the small HSLS data we’ve used
+before. Though {haven} is part of the tidyverse and should have been
+installed when you installed tidyverse, we’ll have to explicitly call it
 
-The [{labelled}](https://CRAN.R-project.org/package=labelled), however,
-is not part of the {tidyverse}, meaning that we will need to install it
-first and then load separately.
+The [labelled](https://CRAN.R-project.org/package=labelled) library,
+however, is not part of the tidyverse, meaning that we will need to
+install it first and then load separately.
 
 > #### QUICK EXERCISE
 > 
-> Using the console, install the new package “labelled”.
+> Using the console, install the new `labelled` package using
+> `install.packages("labelled")`.
 
 ``` r
 ## ---------------------------
@@ -80,6 +81,17 @@ library(tidyverse)
 library(haven)
 library(labelled)
 ```
+
+In addition to the Stata version of small HSLS, we’ll also be using
+`all_schools.csv` in the lesson. After including its subdirectory path
+(`tsc_dir`), we’ll read in both data files. **Note** that since we have
+two data files this lesson, we’ll give them unique names instead of the
+normal `df`:
+
+  - `df_hs` := `hsls_small.dta`
+  - `df_ts` := `all_schools.csv`
+
+<!-- end list -->
 
 ``` r
 ## ---------------------------
@@ -113,17 +125,17 @@ df_ts <- read_csv(file.path(tsc_dir, "all_schools.csv"))
 # Plots using base R
 
 Even though users have developed new graphics libraries, the base R
-graphics system is still very powerful. It’s also very easy to use in a
-pinch. When I want a quick visual of a data distribution that’s just for
-me, I generally use base R.
+graphics system is still very powerful. The base system is also very
+easy to use in a pinch. When I want a quick visual of a data
+distribution that’s just for me, I often use base R.
 
 **Note** that for the next few plots, I’m not much concerned with how
 they look. Specifically, the axis labels won’t be very nice or useful.
 We could spend time learning to make really nice base R plots for
 publication, but I’d rather we spend that time with {ggplot2} graphics.
 
-Also note that we’ll switch to using the base R data frame `$` notation
-to pull out the columns we want.
+**Also note** that we’ll switch to using the base R data frame `$`
+notation to pull out the columns we want.
 
 ## Histogram
 
@@ -172,21 +184,26 @@ plot(density(df_hs$x1txmtscor, na.rm = TRUE))
 
 > #### Quick exercise
 > 
-> Plot the density of SES. Next, try to use the `col` argument in
-> `plot()` to change the color of the line to `'red'`.
+> Plot the density of SES. Next, add the `col` argument in `plot()` to
+> change the color of the line to `"red"`:
+> `plot(density(df_hs$x1txtmscor, na.rm = TRUE), col = "red")`.
 
 ## Box plot
+
+A box plot will let you see the distribution of a continuous variable at
+specific values of another discrete variable. For example, test scores
+ranges at each student expectation level.
 
 Call a box plot using the `boxplot()` function. This one is a little
 trickier because it uses the [R
 formula](https://www.statmethods.net/graphs/boxplot.html) construction
-to set the continuous variable against the group. The formula uses a
-tilde, `~`, and should be constructed like this:
+to set the continuous variable against the discrete variable. The
+formula uses a tilde, `~`, and should be constructed like this:
 
-  - `<var> ~ <group var>`
+  - `<continuous var> ~ <discrete var>`
 
-Notice how we can use the `data` argument instead of adding `df$` in
-front of the variable names.
+Notice how we can use the `data = df_hs` argument instead of adding
+`df_hs$` in front of the variable names. This saves us some typing.
 
 ``` r
 ## box plot of math scores against student expectations
@@ -197,9 +214,9 @@ boxplot(x1txmtscor ~ x1stuedexpct, data = df_hs)
 
 ## Scatter
 
-Finally, plot continuous variables against one another using the base
-`plot()` function. There are two primary ways to make a scatter plot
-using `plot()`:
+Finally, plot two continuous variables against one another using the
+base `plot()` function. There are two primary ways to make a scatter
+plot using `plot()`:
 
   - `plot(x, y)`
   - `plot(y ~ x)`
@@ -217,17 +234,20 @@ plot(df_hs$x1txmtscor, df_hs$x1ses)
 
 > #### Quick exercise
 > 
-> Rerun the above plot, but this time store it in an object. Next, plot
-> math scores against SES using the second formula method and store it
-> in another object. Visually compare the two, but for a more formal
-> test, use `identical(plot_1, plot_2)` on the two plot objects to prove
-> they are the same.
+> Rerun the above plot, but this time store it in an object, `plot_1`.
+> Next, make the same plot, but this time use the second formula
+> construction (`~`) — store it in an object, `plot_2`. Visually compare
+> the two, but for a more formal test, use `identical(plot_1, plot_2)`
+> on the two plot objects to prove they are the same.
 
 # Plots using ggplot2
 
-The first few times I tried to use ggplot2, I didn’t quite get it. But
-once I did (and it doesn’t take too long\!), I really started to like
-it. It’s now my go-to system for making plots.
+ggplot2 is my — and many R users’ — primary system for making plots. It
+is based on the idea of a [grammar of
+graphics](https://www.springer.com/gp/book/9780387245447). Just as we
+can use finite rules of a language grammar to construct an endless
+number of unique sentences, so too can we use a few graphical
+grammatical rules to make an endless number of unique figures.
 
 The [ggplot2 system](http://ggplot2.tidyverse.org/reference/) is too
 involved to cover in all of its details, but that’s kind of the point of
@@ -247,20 +267,6 @@ plots need three things:
   - **\[geom\]**: The geometry of the figure or the kind of figure you
     want to make (*e.g.*, what do you want to **do** with those data and
     mappings? A line graph? A box plot?…)
-
-Depending on the plot you want to make, each of these pieces may be
-called at different points in the command structure, which is usually
-made up of linked functions like other tidyverse libraries. The key
-difference between {ggplot2} and {dplyr}, for example, is that while
-{dplyr} uses the pipe (`%>%`) to connect different functions, {ggplot2}
-uses a plus sign (`+`).
-
-It may help you remember the difference:
-
-  - {dplyr} *moves* output from left to the input in the right and so
-    needs a **pipe**
-  - {ggplot2} *adds* layer upon layer to build up the final figure and
-    so needs a **+**
 
 We’ll start by making a histogram again. To help make these pieces
 clearer, I’ll use the argument names when possible. The first function,
@@ -298,12 +304,35 @@ p
 
 Success\!
 
+Let’s repeat it, but without the middle step:
+
+``` r
+## init ggplot 
+p <- ggplot(data = df_hs, mapping = aes(x = x1txmtscor)) +
+    geom_histogram()
+p
+```
+
+<img src="figures/eda_plot_histogram_2-1.png" width="100%" />
+
+As you can see, the code to make a ggplot2 figure looks a lot like what
+we’ve seen with other tidyverse libraries, *e.g.* dplyr. The key
+difference between ggplot2 and dplyr, however, is that while dplyr uses
+the pipe (`%>%`) to connect different functions, ggplot2 uses a plus
+sign (`+`).
+
+It may help you remember the difference:
+
+  - dplyr *moves* output from left to the input in the right and so
+    needs a **pipe** (`%>%`)
+  - ggplot2 *adds* layer upon layer to build up the final figure and so
+    needs a **plus sign** (`+`)
+
 ## Density
 
-Unlike the base R graphics system, {ggplot2} does have a density
-plotting command, `geom_density()`. Instead of building up the figure
-piecemeal, we’ll go ahead and chain the geom to the first command and
-print.
+Unlike the base R graphics system, ggplot2 does have a density plotting
+command, `geom_density()`. Instead of building up the figure piecemeal,
+we’ll go ahead and chain the geom to the first command and print.
 
 Notice how the function chain is the mostly the same as above, but (1)
 written in a single linked chain and (2) using a different `geom_*()`
@@ -368,6 +397,13 @@ p
 > `geom_*()` functions, call `geom_histogram()` after you call
 > `geom_density()`?
 
+**A key thing to note about arguments** is that when the are outside of
+the `aes()`, they apply uniformly to the whole geom (*e.g.* all the
+histogram bars are white with a black outline, the density is light
+red). When you want some aesthetic of the figure to change as a function
+of the data, you need to put it inside `aes()`. We’ll see this in the
+next plot.
+
 ## Two-way
 
 Plotting the difference in a continuous distribution across groups is a
@@ -375,41 +411,36 @@ common task. Let’s see the difference between student math scores
 between students with parents who have any postsecondary degree and
 those without.
 
-Since we’re using data that was labelled in Stata, we’ll first use
-`val_labels()` to check the `x1paredu` variable.
+Since we’re using data that was labelled in Stata, we’ll see the labels
+when we use `count()`
 
 ``` r
-## get parental education levels, use `val_labels()` to show them
-df_hs %>% select(x1paredu) %>% val_labels
+## see the counts for each group
+df_hs %>% count(x1paredu)
 ```
 
-    $x1paredu
-                                     Missing 
-                                          -9 
-                           Unit non-response 
-                                          -8 
-                     Item legitimate skip/NA 
-                                          -7 
-    No bio/adoptive/step-parent in household 
-                                           0 
-                       Less than high school 
-                                           1 
-                  High school diploma or GED 
-                                           2 
-                          Associate's degree 
-                                           3 
-                           Bachelor's degree 
-                                           4 
-                             Master's degree 
-                                           5 
-     Ph.D/M.D/Law/other high lvl prof degree 
-                                           7 
+    # A tibble: 7 x 2
+                                          x1paredu     n
+                                         <dbl+lbl> <int>
+    1  1 [Less than high school]                    1010
+    2  2 [High school diploma or GED]               5909
+    3  3 [Associate's degree]                       2549
+    4  4 [Bachelor's degree]                        4102
+    5  5 [Master's degree]                          2116
+    6  7 [Ph.D/M.D/Law/other high lvl prof degree]  1096
+    7 NA                                            6721
 
 We can see that all values of `x1paredu` greater than 2 represent
 parents with some college credential. Since we want only two distinct
 groups, we can use the operator `>=` to make a new 0/1 binary variable.
 If a value of `x1paredu` is above 3, then the new indicator `pared_coll`
 will be 1; if not, 0.
+
+**NOTE** that in the Stata version of `hsls_small`, all the missing
+values, which are normally negative numbers, have already been properly
+converted to `NA` values. That’s why we see a count column for `NA` and
+not labels for missingness that we might have expected based on prior
+lessons.
 
 The `ggplot()` function doesn’t need to use our full data. In fact, our
 data needs to be set up a bit differently to make this plot. We’ll make
@@ -465,12 +496,12 @@ p
 
 ## Box plot
 
-By this point, you’re hopefully seeing the pattern in how {ggplot2}
+By this point, you’re hopefully seeing the pattern in how ggplot2
 figures are put together. To make a box plot, we need to add a `y`
-mapping to the `aes()` in addition to the `x` mapping. We don’t have to,
-but we’ve also added the same variable to `fill` as we did to `x`. We do
-this so that in addition to having different box and whisker plots along
-the x-axis, each plot is given its own color.
+mapping to the `aes()` in addition to the `x` mapping. We’ve also added
+the same variable to `fill` as we did to `x`. We do this so that in
+addition to having different box and whisker plots along the x-axis,
+each plot is given its own color.
 
 ``` r
 ## box plot using both factor() and as_factor()
@@ -575,7 +606,7 @@ see the underlying trend. There are a number of ways to do this with the
 ### Linear fit
 
 Setting `method = lm` in `geom_smooth()` will fit a simple straight line
-with 95% confidence interval shaded around it.
+of best fit with 95% confidence interval shaded around it.
 
 ``` r
 ## add fitted line with linear fit
@@ -614,7 +645,9 @@ p
 ### Loess
 
 Finally, we can skip trying to adjust a linear line and just fit a
-[loess](https://en.wikipedia.org/wiki/Local_regression).
+[LOESS](https://en.wikipedia.org/wiki/Local_regression) curve, which is
+a smooth line produced by fitting a large number of local polynomial
+regressions on subsets of the data.
 
 ``` r
 ## add fitted line with loess
@@ -630,9 +663,9 @@ To be clear, these semi-automated lines of best fit should not be used
 to draw final conclusions about the relationships in your data. You will
 want to do **much more** analytic work to make sure any correlations you
 observe aren’t simply spurious and that fitted lines are telling you
-something useful. That said, fitted lines via {ggplot2} can be useful
-when first trying to understand your data or to more clearly show
-observed trends.
+something useful. That said, fitted lines via ggplot2 can be useful when
+first trying to understand your data or to more clearly show observed
+trends.
 
 ## Line graph
 
@@ -640,7 +673,7 @@ When you want to show changes in one variable as a function of another
 variable, *e.g.*, changes in test scores over time, then a line graph is
 typically your best choice. Since our `hsls_small` data is
 cross-sectional, we’ll shift to using our school test score data.
-Remember that test score data show three sets of test scores (math,
+Remember that the test score data show three sets of test scores (math,
 science, and reading) for four schools over a period of six years. This
 data frame is long in year, but wide in test type. It looks like this:
 
@@ -664,37 +697,40 @@ df_ts
     10 East Heights  1983   497   306     795
     # … with 14 more rows
 
-To keep it simple for our first line polot, we’ll filter our plot data
-to keep only scores for one school.
-
-``` r
-## subset to Spottsville
-plot_df <- df_ts %>%
-    filter(school == "Spottsville")
-```
-
-We want to see changes in test scores over time, so we’ll map `year` to
-the `x` axis and, for now, `math` to the `y` axis. To see a line graph,
-we add `geom_line()`.
+To keep it simple for our first line plot, we’ll filter our plot data to
+keep only scores for one school. Notice how we can do that directly with
+pipes inside the `ggplot()` function. We want to see changes in test
+scores over time, so we’ll map `year` to the `x` axis and, for now,
+`math` to the `y` axis. To see a line graph, we add `geom_line()`.
 
 ``` r
 ## line graph
-p <- ggplot(data = plot_df,
+p <- ggplot(data = df_ts %>% filter(school == "Spottsville"),
             mapping = aes(x = year, y = math)) +
     geom_line()
 p
 ```
 
-<img src="figures/unnamed-chunk-25-1.png" width="100%" />
+<img src="figures/unnamed-chunk-24-1.png" width="100%" />
+
+> #### QUICK EXERCISE
+> 
+> Change the school in `filter()` to “East Heights” and then “Bend
+> Gate”.
 
 Easy enough, but let’s say that we want to add a third dimension — to
 show math scores for each school in the same plot area. To do this, we
 can map a third aesthetic to `school`. [Looking at the help file for
 `geom_line()`](https://ggplot2.tidyverse.org/reference/geom_path.html#aesthetics),
 we see that lines (a version of a path) can take `colour`, which means
-we can change line color based on a variable. The code below is almost
-exactly the same as before, with the addition of `colour = school`
-inside `aes()`.
+we can change line color based on a variable.
+
+The code below is almost exactly the same as before less two things:
+
+1.  We don’t filter `df_ts` this time, because we want all schools
+2.  We add `colour = school` inside `aes()`
+
+<!-- end list -->
 
 ``` r
 ## line graph for math scores at every school over time
@@ -704,23 +740,28 @@ p <- ggplot(data = df_ts,
 p
 ```
 
-<img src="figures/unnamed-chunk-26-1.png" width="100%" />
+<img src="figures/unnamed-chunk-25-1.png" width="100%" />
 
 This is nice (though maybe a little messy at the moment) because it
 allows us to compare math scores across time across schools. But we have
 two more test types — reading and science — that we would like to
-include as well. One approach is to use facets.
+include as well. One approach that will let us add yet another dimension
+is to use facets.
 
 ## Facets
 
 With facets, we can put multiple plots together, each showing some
 subset of the data. For example, instead of plotting changes in math
 scores across schools over time on the same plot area (only changing the
-color), we can use `facet_wrap()` to give each school it’s own little
-plot. Compared to the code just above, notice how we’ve removed `colour
-= school` from `aes()` and included `facet_wrap(~ school)`. The tilde
+color), we can use `facet_wrap()` to give each school its own little
+plot. You might hear me or other refer to plots like this a showing
+*small multiples* or as *small multiples* figures.
+
+Compared to the code just above, notice how we’ve removed `colour =
+school` from `aes()` and included `facet_wrap(~ school)`. The tilde
 (`~`) works like the tilde in `plot(y ~ x)` above: it means “plot
-against or by *X*”.
+against or by *X*”. In this case, we are plotting math test scores over
+time *by* each school.
 
 ``` r
 ## facet line graph
@@ -731,14 +772,14 @@ p <- ggplot(data = df_ts,
 p
 ```
 
-<img src="figures/unnamed-chunk-27-1.png" width="100%" />
+<img src="figures/unnamed-chunk-26-1.png" width="100%" />
 
-Is this facetted plot better than the color line plot before it? To my
+Is this faceted plot better than the color line plot before it? To my
 eyes, it’s a little clearer, but not so much so that I couldn’t be
 convinced to use the first one. Whether you use the first or the second
-would largely depend on your specific data and presentational needs.
+would largely depend on your specific data and presentation needs.
 
-Facetting has a clearer advantage, however, when you want to include the
+Faceting has a clearer advantage, however, when you want to include the
 fourth level of comparison: (1) scores across (2) time across (3)
 schools from (4) different tests. To make this comparison, we first need
 to reshape our data, which is only long in `year`, to be long in `test`,
@@ -749,9 +790,9 @@ to it.
 ``` r
 ## reshape data long
 df_ts_long <- df_ts %>%
-    pivot_longer(cols = c("math","read","science"),
-                 names_to = "test",
-                 values_to = "score")
+    pivot_longer(cols = c("math","read","science"), # cols to pivot long
+                 names_to = "test",                 # where col names go
+                 values_to = "score")               # where col values go
 
 ## show
 df_ts_long
@@ -783,7 +824,7 @@ now, since that’s the column for test scores in our reshaped data. All
 else is the same.
 
 ``` r
-## facet line graph
+## facet line graph, with colour = test and ~school
 p <- ggplot(data = df_ts_long,
             mapping = aes(x = year, y = score, colour = test)) +
     facet_wrap(~ school) +
@@ -791,21 +832,22 @@ p <- ggplot(data = df_ts_long,
 p
 ```
 
-<img src="figures/unnamed-chunk-29-1.png" width="100%" />
+<img src="figures/unnamed-chunk-28-1.png" width="100%" />
 
 Well, it worked…we can see each school’s different test score trends
-over time, with each school in its own facet and test scores a different
-color. But the result is a bit underwhelming. Because the different test
-types are such different scales, within-test changes seem rather flat
-over time.
+over time, with each school in its own facet and test scores set to a
+different color. But the result is a bit underwhelming. Because the
+different test types are such different scales (even though they are
+normed within themselves), within-test changes seem rather flat over
+time.
 
 Let’s try something different: in the next figure, we’ll swap the
 variables we give to `colour` and within `facet_wrap()`. This means that
-each test should have it’s own facet and each line will represent a
+each test should have its own facet and each line will represent a
 different school.
 
 ``` r
-## facet line graph
+## facet line graph, now with colour = school and ~test
 p <- ggplot(data = df_ts_long,
             mapping = aes(x = year, y = score, colour = school)) +
     facet_wrap(~ test) +
@@ -813,22 +855,25 @@ p <- ggplot(data = df_ts_long,
 p
 ```
 
-<img src="figures/unnamed-chunk-30-1.png" width="100%" />
+<img src="figures/unnamed-chunk-29-1.png" width="100%" />
 
 Okay. New problem. While it’s maybe a *little* easier to see same-test
 differences across schools over time, the different scales of the tests
-still make the figure less useful. It’s not that the students are *way*
-better at science than reading; it’s just that the tests are scaled
-differently. Someone quickly reading this figure, however, might think
-that that was true.
+still make the figure less useful than we might hope. It’s not that the
+students are *way* better at science than reading; it’s just that the
+tests are scaled differently. Someone quickly reading this figure,
+however, might make that incorrect interpretation.
 
-One thing we can do is change the `y` axis for each facet. The default
-is to keep them the same. By adding `scales = "free_y"` to
-`facet_wrap()`, we’ll let each test have it’s own `y` axis scale.
-Because having different axis scales side-by-side can be confusing,
-we’ll also add `ncol = 1` to `facet_wrap()`. This says our facets have
-to stick to one column, effectively meaning they will stack vertically
-rather than sit side-by-side.
+One thing we can do is change the y-axis for each facet. The default is
+to keep the y-axis scale the same. By adding `scales = "free_y"` to
+`facet_wrap()`, we’ll let each test have its own y-axis scale.
+
+Having different axis scales side-by-side can be confusing, however
+(this is why the default is to keep them the same). To mitigate that
+confusion, we’ll also rearrange the facets so they stack rather than sit
+side by side. To do this, we’ll add `ncol = 1` to `facet_wrap()`. This
+says our facets have to stick to one column, effectively meaning they
+will stack vertically.
 
 ``` r
 ## facet line graph, with one column so they stack
@@ -839,31 +884,29 @@ p <- ggplot(data = df_ts_long,
 p
 ```
 
-<img src="figures/unnamed-chunk-31-1.png" width="100%" />
+<img src="figures/unnamed-chunk-30-1.png" width="100%" />
 
-That looks better\! But we can do even better…
+That looks better\! But we can do even better than that…
 
-Currently, each test score is on its own scale. While our new figure
-let’s use make comparisons across schools over time *within* test,
-it’s more difficult to make a good comparison *between* tests.
+Currently, each test score is on its own normed scale. While our new
+figure allows us to make comparisons across schools over time *within*
+test, it’s more difficult to make a good comparison *between* tests. For
+example, East Heights has a little over 20 point drop in reading scores
+from 1981 to 1982 and about the same drop in science scores from 1982 to
+1983. How should we think about these drops? Are they about the same or
+does one drop mean more than another?
 
-For example, East Heights has a little over 20 point drop in reading
-scores from 1981 to 1982 and about the same drop in science scores from
-1982 to 1983.
-
-How should we think about these drops? Are they about the same or does
-one drop mean more than another? To better answer this question, we
-could standardize each test score so that it’s centered at 0 and a one
-unit change is equal to 1 standard deviation difference in score. We’ll
-use the `scale()` function to `mutate()` a new variable `score_std`.
-Because we `group_by()` `test`, `score_std` will be standardized within
-test.
+To better answer this question, we could re-standardize each test score
+so that it is centered at 0 and a one unit change is equal to 1 standard
+deviation difference in score. We’ll use `mutate()` to create a new
+variable `score_std`. Because we `group_by()` `test`, `score_std` will
+be standardized within test.
 
 ``` r
 ## rescale test scores
 df_ts_long <- df_ts_long %>%
     group_by(test) %>%
-    mutate(score_std = scale(score)) %>%
+    mutate(score_std = (score - mean(score)) / sd(score)) %>%
     ungroup
 ```
 
@@ -880,7 +923,14 @@ p <- ggplot(data = df_ts_long,
 p
 ```
 
-<img src="figures/unnamed-chunk-33-1.png" width="100%" />
+<img src="figures/unnamed-chunk-32-1.png" width="100%" />
+
+Notice the lines look the same relative to one another, but now we have
+a consistent scale to help judge changes. To answer our question from
+before, it seems that the drop in reading scores (1981 to 1982) and
+science scores (1982 to 1983) were each about 1.5 standard deviations.
+We could test more formally, but we have a clearer idea now that all
+tests are on the same scale.
 
 > #### QUICK EXERCISE
 > 
@@ -900,7 +950,7 @@ p <- ggplot(data = df_ts_long,
 p
 ```
 
-<img src="figures/unnamed-chunk-34-1.png" width="100%" />
+<img src="figures/unnamed-chunk-33-1.png" width="100%" />
 
 > #### QUICK EXERCISE
 > 
@@ -909,17 +959,17 @@ p
 
 Our plot is looking better, but it still may not contain the information
 we want. We’ve standardized the test scores over this time window, but
-maybe what we really want to know is how they’ve *changed from the
-beginning of the sample period*. You can imagine a superindendent who
-took over in 1981 would be keen to know how scores have changed during
-their tenure.
+maybe what we really want to know is how they’ve *changed relative to
+the beginning of the sample period*. You can imagine a superintendent
+who took over in 1981 would be keen to know how scores have changed
+during their tenure.
 
 This means that while we still want to standardize the scores, we should
-zero them not a the overall mean, but at the value in the first year. We
-can do that by grouping by `school` and `test`, arranging in year order,
-making a new variable that is the `first()` score (within test, within
-school) and using that rather than the mean test score to make our new
-variable, `score_std_sch`.
+zero them not at the overall mean, but at the value in the first year.
+We can do that by grouping by `school` and `test`, arranging in year
+order, making a new variable that is the `first()` score (within test,
+within school) and using that rather than the mean test score to make
+our new variable, `score_std_sch`.
 
 ``` r
 ## standardize test scores within school to first year
@@ -927,9 +977,12 @@ df_ts_long <- df_ts_long %>%
     group_by(test, school) %>%
     arrange(year) %>% 
     mutate(score_year_one = first(score),
+           ## note that we're using score_year_one instead of mean(score)
            score_std_sch = (score - score_year_one) / sd(score)) %>%
     ungroup
 ```
+
+Now we’ll plot using our new variable `score_std_sch`.
 
 ``` r
 ## facet line graph
@@ -940,11 +993,15 @@ p <- ggplot(data = df_ts_long,
 p
 ```
 
-<img src="figures/unnamed-chunk-36-1.png" width="100%" />
+<img src="figures/unnamed-chunk-35-1.png" width="100%" />
 
 With this final graph, we can see relative changes across schools,
-across times, across tests. Is this the best version of this plot (minus
-making the axis and legend labels look nicer)? Again, it depends on what
-you want to show. Remember that figures don’t speak for themselves: it’s
-up to you to explain to your reader what they mean. That said, a well
-crafted figure will make that job much easier.
+across times, across tests. Notice that line shapes within each facet
+are the same as before, just shifted up or down so that the first value
+for each test in 1981 is 0.
+
+Is this the best version of this figure (minus making the axis and
+legend labels look nicer)? Again, it depends on what you want to show.
+Remember that figures don’t speak for themselves: it’s up to you to
+explain to your reader (include your future self) what they mean. That
+said, a well crafted figure will make that job much easier.
