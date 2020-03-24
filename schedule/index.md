@@ -23,8 +23,8 @@ all relevant software and packages.
 |3/10|9|One-on-one meetings|  
 |3/17|10|Exploratory data analysis: Data visualization with {ggplot2}|  
 |3/24|11|Fitting regression models|  
-|3/31|12|Outputting and saving production-ready tables and figures|  
-|4/7|13|Creating dynamic research reports using RMarkdown + {knitr}|  
+|3/31|12|Creating dynamic research reports using RMarkdown + {knitr}|  
+|4/7|13|Outputting and saving production-ready tables and figures|  
 |4/14|14|TBD (_see below_)|  
 |4/21|15|Student presentations|  
 

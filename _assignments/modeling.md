@@ -1,0 +1,40 @@
+---
+layout: lesson
+title: "Assignment 8"
+subtitle: "EDH7916 | Spring 2020"
+author: Benjamin Skinner
+order: 10
+category: assignment
+links:
+  pdf: modeling_hw.pdf
+output:
+  md_document:
+    variant: gfm
+    preserve_yaml: true
+---
+
+This assignment is broken into two parts.
+
+## Review final project work to date
+
+Take a few minutes to see where you are with your project. Think about
+what you realistically would like to accomplish by the end of the term,
+keeping in mind the disruptions we’ve experienced so far as well as
+those that may be yet to come.
+
+**Please email me with your project’s status and your end of semester
+goal by EOD on Friday, 27 March 2020**.
+
+## BONUS
+
+If you have the time / energy, try to model your data in some way.
+Because everyone’s project is different (and people are at different
+points in their quantitative course sequence), do what is appropriate
+for your situation:
+
+1.  If you plan to fit a t-test or regression model, try to do so now.
+2.  If you are using survey data, try using the survey package to
+    compute properly weighted means and/or t-tests.
+
+Push whatever you try in a file called `final_project_models.R` in your
+`final_project` folder by start of class next week.

@@ -14,3 +14,4 @@ data/*.csv
 !/data/ufl_class_times.csv
 !/data/hd2007.csv
 !/data/ic2007mission.csv
+!/data/els_plans.dta
