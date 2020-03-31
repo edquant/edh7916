@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/edh7916/assets/css/style.css">
+<link rel="stylesheet" href="/edh7916/assets/css/syntax_default.css">
+<link rel="shortcut icon" type="image/png" href="/edh7916/assets/img/favicon.ico">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
+<script defer src="/edh7916/assets/js/all.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<title>edquant | EDH 7916: Contemporary Research in Higher Education</title>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/btskinner/edh7916" class="iconlink">
+	      <i class="fab fa-github fa-sm"></i></a></h1>
+	<h2 class="thin">Spring 2020</h2>
+	<p>A course in quantitative research workflow for students in
+the higher education administration program at the University of Florida
+</p>
+	<!-- side / top bar menu -->
+	<h2 class="thin">
+	  <a href="/edh7916/">Overview</a></br>
+	  <a href="/edh7916/syllabus/">Course
+	    information</a></br>
+	  <a href="/edh7916/location/">Meeting
+	    location</a></br>
+	  <a href="/edh7916/start/">Getting started</a></br>
+	  <a href="/edh7916/schedule/">Schedule</a></br>
+	  <a href="/edh7916/lessons/">Lessons</a></br>
+	  <a href="/edh7916/assignments/">Assignments</a></br>
+	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/about/">About</a></br>	  
+	</h2>
+      </header>
+
+      <section>
+	<h1>Creating dynamic research reports using RMarkdown + {knitr}</h1>
+	
+
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/reproducible_doc.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  <a href="/edh7916/scripts/test_scores.Rmd"
+     class="iconlink" download title="Get script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+  
+  
+  <a href="/edh7916/data/hsls_small.dta"
+     class="iconlink" download title="Get data">
+    <i class="fas fa-database fa-2x"></i>
+  </a>
+  
+</p>
+
+
+<p>In this lesson, we’ll combine many of the pieces we’ve already covered —
+reading in data, cleaning data, making tables and figures — into a
+single RMarkdown document. We’ll purposefully keep it simple at first by
+reusing some code we’ve seen before.</p>
+
+<p>But first things first, you’ll need to download a bit of software for
+our RMarkdown documents to properly compile as PDF documents.
+Specifically, you’ll need <a href="https://www.latex-project.org/get/">LaTeX</a>, a
+typesetting system best known for being able to nicely render
+mathematical notation but that is really useful for making reproducible
+documents. Depending on your operating system, you’ll want one of these
+two systems (I’m assuming that if you use a Linux OS, you probably can
+get LaTeX installed if you haven’t already).</p>
+
+<ul>
+  <li><a href="https://www.tug.org/mactex/mactex-download.html">MacTeX (for
+MacOS)</a></li>
+  <li><a href="https://miktex.org/download">MiKTeX (for Windows)</a></li>
+</ul>
+
+<p>These are large downloads (particularly for MacOS), but the LaTeX system
+is sufficiently useful in reproducible research that it’s worth getting
+on your machine.</p>
+
+<p>If you are unable to get LaTeX to install properly or cannot get the
+document to compile as PDF, you should be able to compile to HTML
+instead.</p>
+
+<p>You will also need the R <code class="language-plaintext highlighter-rouge">knitr</code> and <code class="language-plaintext highlighter-rouge">rmarkdown</code> libraries. If you
+haven’t already installed them, type</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">install.packages</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s2">"knitr"</span><span class="p">,</span><span class="s2">"rmarkdown"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p>into your R console.</p>
+
+<h1 id="what-is-rmarkdown">What is RMarkdown?</h1>
+
+<p><a href="https://rmarkdown.rstudio.com/articles_intro.html">From the RStudio
+website</a>:</p>
+
+<blockquote>
+  <p>R Markdown is a file format for making dynamic documents with R. An R
+Markdown document is written in markdown (an easy-to-write plain text
+format) and contains chunks of embedded R code…</p>
+</blockquote>
+
+<p>In other words, an RMarkdown (hereafter <em>RMD</em>) document has two basic
+components:</p>
+
+<ul>
+  <li>R code (in <strong>code chunks</strong>)</li>
+  <li>Markdown text (most everything else outside of the code chunks)</li>
+</ul>
+
+<p>RMD documents use the file ending, <code class="language-plaintext highlighter-rouge">*.Rmd</code>, which makes sense as they
+combine <code class="language-plaintext highlighter-rouge">R</code> code with <code class="language-plaintext highlighter-rouge">md</code> text. To <em>compile</em> an RMD file, meaning to</p>
+
+<ol>
+  <li>convert the plain Markdown text into formatted text</li>
+  <li>run R code, producing all output along the way</li>
+  <li>combine the Markdown text plus R output into a finished document</li>
+</ol>
+
+<p>you will use the <code class="language-plaintext highlighter-rouge">rmarkdown::render()</code> function, which in turn uses the
+<code class="language-plaintext highlighter-rouge">knitr::knit()</code> function under the hood. <a href="https://stackoverflow.com/a/40563480">It can be a bit confusing how
+all the pieces work together</a>, but
+luckily, you can use RStudio’s point-and-click interface to knit your
+documents.</p>
+
+<h1 id="starting-a-new-document">Starting a new document</h1>
+
+<p>By default, RStudio will fill a new RMarkdown document with some example
+text that looks like this. You can turn this off in Rstudio’s settings,
+but I think it’s helpful to see the skeleton of an RMarkdown document
+(plus, it’s not a big deal to just erase the parts you don’t need).</p>
+
+<!-- ![](../assets/img/new_markdown_doc.gif) -->
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Document</span><span class="nv"> </span><span class="s">Title"</span>
+<span class="na">author</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Benjamin</span><span class="nv"> </span><span class="s">Skinner"</span>
+<span class="na">date</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3/30/2020"</span>
+<span class="na">output</span><span class="pi">:</span> <span class="s">pdf_document</span>
+<span class="nn">---</span>
+
+<span class="p">```</span><span class="nl">{r setup, include=FALSE}
+</span><span class="sb">knitr::opts_chunk$set(echo = TRUE)
+</span><span class="p">```</span>
+
+<span class="gu">## R Markdown</span>
+
+This is an R Markdown document. Markdown is a simple formatting syntax
+for authoring HTML, PDF, and MS Word documents. For more details on
+using R Markdown see <span class="nv">&lt;http://rmarkdown.rstudio.com&gt;</span>.
+
+When you click the <span class="gs">**Knit**</span> button a document will be generated that
+includes both content as well as the output of any embedded R code
+chunks within the document. You can embed an R code chunk like this:
+
+<span class="p">```</span><span class="nl">{r cars}
+</span><span class="sb">summary(cars)
+</span><span class="p">```</span>
+
+<span class="gu">## Including Plots</span>
+
+You can also embed plots, for example:
+
+<span class="p">```</span><span class="nl">{r pressure, echo=FALSE}
+</span><span class="sb">plot(pressure)
+</span><span class="p">```</span>
+
+Note that the <span class="sb">`echo = FALSE`</span> parameter was added to the code chunk to
+prevent printing of the R code that generated the plot.  
+</code></pre></div></div>
+
+<h1 id="our-document">Our Document</h1>
+
+<p>Rather than using the example document given when opening a new file,
+we’ll go through the example document <code class="language-plaintext highlighter-rouge">test_scores.Rmd</code> in your
+scripts folder (and linked above) piece by piece, starting with the YAML
+header.</p>
+
+<h2 id="yaml-header">YAML header</h2>
+
+<p>YAML, which stands for <a href="https://yaml.org">“YAML Ain’t a Markup
+Language”</a>, is a common way to configure dynamic
+documents like RMD documents. The YAML header is this piece of code:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">---</span><span class="w">
+</span><span class="n">title</span><span class="o">:</span><span class="w"> </span><span class="s2">"Test scores from 1980-1985"</span><span class="w">
+</span><span class="n">author</span><span class="o">:</span><span class="w"> </span><span class="n">Benjamin</span><span class="w"> </span><span class="n">Skinner</span><span class="w">
+</span><span class="n">date</span><span class="o">:</span><span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="n">March</span><span class="w"> </span><span class="m">2020</span><span class="w">
+</span><span class="n">output</span><span class="o">:</span><span class="w"> </span><span class="n">pdf_document</span><span class="w">
+</span><span class="o">---</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Notice the opening and closing three hyphens (<code class="language-plaintext highlighter-rouge">---</code>). This is how R
+knows that this section of code is special. The YAML can become complex,
+as you add document options, but for now we keep it simple:</p>
+
+<ul>
+  <li><strong>title</strong>: the document title (printed)</li>
+  <li><strong>author</strong>: the document author (printed)</li>
+  <li><strong>date</strong>: manually set date (printed)
+    <ul>
+      <li>leave <strong>date</strong> out of YAML and the date on which the document is
+compiled will be added automatically</li>
+      <li>set <strong>date</strong> to <code class="language-plaintext highlighter-rouge">""</code> (empty string) for no printed date</li>
+    </ul>
+  </li>
+  <li><strong>output</strong>: document output
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">pdf_output</code>: for PDF (uses LaTeX)</li>
+      <li><code class="language-plaintext highlighter-rouge">html_output</code>: for web page output (open in browser)</li>
+      <li><code class="language-plaintext highlighter-rouge">word_output</code>: for MSWord output (uses MSWord)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>We’re using <code class="language-plaintext highlighter-rouge">pdf_output</code> but you either change this setting or override
+it when compiling the final document.</p>
+
+<p><strong>NB</strong> The colon (<code class="language-plaintext highlighter-rouge">:</code>) is a special character in YAML. Notice that I
+don’t necessarily have to use quotation marks for strings with spaces:
+I do for the title, but not for my name. That said, if your title
+includes a colon, you need to wrap the entire title string in double
+quotation marks (<code class="language-plaintext highlighter-rouge">"</code>) — otherwise the document won’t compile.</p>
+
+<h2 id="code-chunks">Code chunks</h2>
+
+<p>In general, an RMD code chunk looks like a markdown code chunk. The key
+difference between the two is that while a plain markdown code chunk is
+purely about formatting, the RMD code chunk will try to run the code and
+print any output:</p>
+
+<h4 id="markdown-code-chunk">Markdown code chunk</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```r
+x &lt;- rnorm(1000)
+```
+</code></pre></div></div>
+
+<h4 id="rmarkdown-code-chunk">RMarkdown code chunk</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```{r}
+x &lt;- rnorm(1000)
+```
+</code></pre></div></div>
+
+<p>Notice the difference? It’s subtle, but notice that the RMD chunk places
+braces around the <strong>r</strong> after the tick marks: <code class="language-plaintext highlighter-rouge">{r}</code>. In a normal
+markdown document, the braces won’t mean anything. But in an RMD
+document, it’s different between just printing the code and printing the
+output.</p>
+
+<h3 id="code-chunk-options">Code chunk options</h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">```</span><span class="p">{</span><span class="n">r</span><span class="w"> </span><span class="n">setup</span><span class="p">,</span><span class="w"> </span><span class="n">echo</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="w"> </span><span class="n">include</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="w"> </span><span class="n">warning</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="nb">F</span><span class="p">}</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## libraries</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">knitr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## settings/macros</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## NB:</span><span class="w">
+</span><span class="c1">## - echo (FALSE): don't repeat this code in output</span><span class="w">
+</span><span class="c1">## - include (FALSE): run code, but don't include output (unless a plot)</span><span class="w">
+</span><span class="c1">## - message (FALSE): don't output any messages</span><span class="w">
+</span><span class="c1">## - warning (FALSE): don't output any warnings</span><span class="w">
+</span><span class="c1">## - error (FALSE: don't output any errors</span><span class="w">
+</span><span class="c1">##</span><span class="w">
+</span><span class="c1">## We'll include these in the general knitr::opts_chunk() below, but</span><span class="w">
+</span><span class="c1">## need them here to silence unnecessary output before we can set the options</span><span class="w">
+
+</span><span class="c1">## set up knitr options</span><span class="w">
+</span><span class="n">opts_chunk</span><span class="o">$</span><span class="n">set</span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
+               </span><span class="n">echo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
+               </span><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
+               </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
+               </span><span class="n">warning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
+               </span><span class="n">fig.path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"../figures/repo-"</span><span class="p">,</span><span class="w"> </span><span class="c1"># where figures should be stored</span><span class="w">
+               </span><span class="n">dpi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">300</span><span class="p">,</span><span class="w">                  </span><span class="c1"># print quality (300 standard for print)</span><span class="w">
+               </span><span class="n">out.width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"100%"</span><span class="p">,</span><span class="w">         </span><span class="c1"># figures should be as wide as margins</span><span class="w">
+               </span><span class="n">comment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NA</span><span class="p">)</span><span class="w">               </span><span class="c1"># if code output, no comment char on LHS</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## directory paths</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## read in our data here, assuming we're in scripts like always</span><span class="w">
+</span><span class="n">dat_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span><span class="w"> </span><span class="s2">"data"</span><span class="p">)</span><span class="w">
+</span><span class="n">sch_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"sch_test"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>In our first code chunk, notice how we still load our libraries and set
+our file paths. For the libraries, we need to load knitr with
+<code class="language-plaintext highlighter-rouge">library(knitr)</code> in addition to whichever libraries we need for our
+analysis.</p>
+
+<p>In addition to our normal analysis setup, notice that we add
+knitr-specific options in two places.</p>
+
+<p>First, we can set <em>code chunk-specific</em> options within the braces that
+start the code chunk. After <code class="language-plaintext highlighter-rouge">r</code>, the first word is the name of the
+chunk. While not strictly necessary to name your chunks, it can come in
+handy as your documents become more complex: if you get an error, it’s
+much easier to find <code class="language-plaintext highlighter-rouge">data_input</code> chunk than <code class="language-plaintext highlighter-rouge">unnamed_chunk_38</code>.</p>
+
+<p><a href="https://yihui.org/knitr/options/">There are a lot of options you can set for
+your</a> chunks. Here we set the
+following:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">echo=F</code> (FALSE): don’t repeat this code in output</li>
+  <li><code class="language-plaintext highlighter-rouge">include=F</code> (FALSE): run code, but don’t include output (unless a
+plot)</li>
+  <li><code class="language-plaintext highlighter-rouge">message=F</code> (FALSE): don’t output any messages</li>
+  <li><code class="language-plaintext highlighter-rouge">warning=F</code> (FALSE): don’t output any warnings</li>
+  <li><code class="language-plaintext highlighter-rouge">error=F</code> (FALSE): don’t output any errors</li>
+</ul>
+
+<p>In sum, this keeps our chunk from echoing the input code into our
+document and prevents any output. Basically, silence. Sometimes we want
+our code to echo; sometimes we want output. But since we are making a
+report, we generally want the underlying code to remain hidden. Readers
+of our report should only see the write up and any relevant tables and
+figures — but not all the hard coding we did to make them!</p>
+
+<p>After this first chunk, we can save some typing by setting these options
+for the rest of the document using <code class="language-plaintext highlighter-rouge">knitr::opt_chunks$set()</code>. Notice
+that we include the same settings as above plus a few more:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">fig.path</code>: path + prefix for all figures (put them in our
+<code class="language-plaintext highlighter-rouge">/figures</code> folder)</li>
+  <li><code class="language-plaintext highlighter-rouge">dpi</code> (dots per inch): the print quality of our figures; 300 dpi is
+a nice standard for print (72dpi is sufficient for most web output)</li>
+  <li><code class="language-plaintext highlighter-rouge">out.width</code>: our figures should fill the line width</li>
+  <li><code class="language-plaintext highlighter-rouge">comment</code>: if we return code output, don’t prepend with <code class="language-plaintext highlighter-rouge">#</code> or
+anything — just the output.</li>
+</ul>
+
+<p><a href="https://yihui.org/knitr/options/">There are other options we can use</a>.
+We can also override these setting as necessary for individual code
+chunks (as you’ll see below). The main idea with the set up code chunk
+is to get our document settings as close as possible to the way we
+generally want them.</p>
+
+<h3 id="chunk-to-chunk">Chunk to chunk</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+```r
+```{r input}
+## ---------------------------
+## input
+## ---------------------------
+
+df &lt;- read_csv(file.path(sch_dir, "all_schools.csv"))
+
+```
+
+From 1980 to 1985, students at four schools took end of year exams in
+three subjects --- math, reading, and science. While these tests did
+not affect students' grades or promotion, they were meant to measure
+what students had learned over the course of the school year. In each
+year, only 9th grade students took the exam. This means that each year
+of data represents a different cohort of 9th grade students. Because
+test scores are standardized within subject area, student cohorts can
+be compared across time. The table below shows average test scores for
+each school in each year.
+
+```{r table_all, include = T}
+## ---------------------------
+## make table of all scores
+## ---------------------------
+
+## use the kable() function in knitr to make nicer table
+kable(df,
+      digits = 0,
+      col.names = c("", "Year", "Math", "Reading", "Science"))
+```
+</code></pre></div></div>
+
+<p>Your coding environment carries from chunk to chunk, meaning that if you
+read in data in the <code class="language-plaintext highlighter-rouge">input</code> code chunk as <code class="language-plaintext highlighter-rouge">df</code>, then <code class="language-plaintext highlighter-rouge">df</code> will still be
+available to you in the next chunk <code class="language-plaintext highlighter-rouge">table_all</code> after writing some
+Markdown text. This means that you can still organize your RMD scripts
+like your R scripts (no need to do everything at once in a single huge
+chunk).</p>
+
+<h3 id="make-a-nicer-table-with-knitrkable">Make a nice(r) table with <code class="language-plaintext highlighter-rouge">knitr::kable()</code></h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">```</span><span class="p">{</span><span class="n">r</span><span class="w"> </span><span class="n">table_all</span><span class="p">,</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">}</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## make table of all scores</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## use the kable() function in knitr to make nicer table</span><span class="w">
+</span><span class="n">kable</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w">
+      </span><span class="n">digits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w">
+      </span><span class="n">col.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="s2">"Year"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Math"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Reading"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Science"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Since we want to show all of our data (which isn’t very big) and because
+the data frame <code class="language-plaintext highlighter-rouge">df</code> already is organized in the way we want to show the
+data (school by year with different columns for each test), we can just
+print out the data frame.</p>
+
+<p>But to make it nicer, we use <a href="https://bookdown.org/yihui/rmarkdown-cookbook/kable.html"><code class="language-plaintext highlighter-rouge">kable()</code> which is part of
+knitr</a>. Even
+without options, <code class="language-plaintext highlighter-rouge">kable()</code> will make a nicer table for us. We add
+<code class="language-plaintext highlighter-rouge">digits = 0</code> to make sure that we only show whole numbers and we change
+our column names to something nicer (leaving a blank <code class="language-plaintext highlighter-rouge">""</code> for the school
+name column, which is obvious). Notice that in the chunk braces we add
+<code class="language-plaintext highlighter-rouge">include = T</code> so that the output — our table — for just this one code
+chunk will be printed.</p>
+
+<h3 id="inline-code">Inline code</h3>
+
+<p>You can also call R code inline, that is, outside of code chunks proper,
+inline with your Markdown text.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+```r
+```{r table_averages, include = T}
+## ---------------------------
+## make table of averages
+## ---------------------------
+
+df_tab &lt;- df %&gt;%
+    ## group by school
+    group_by(school) %&gt;%
+    ## get average across years
+    summarise(math_mean = mean(math),
+              read_mean = mean(read),
+              science_mean = mean(science))
+
+## store variables to use in text below
+hi_math_sch &lt;- df_tab %&gt;% filter(math_mean == max(math_mean)) %&gt;% pull(school)
+hi_math_scr &lt;- df_tab %&gt;% filter(math_mean == max(math_mean)) %&gt;% pull(math_mean)
+
+hi_read_sch &lt;- df_tab %&gt;% filter(read_mean == max(read_mean)) %&gt;% pull(school)
+hi_read_scr &lt;- df_tab %&gt;% filter(read_mean == max(read_mean)) %&gt;% pull(read_mean)
+
+hi_sci_sch &lt;- df_tab %&gt;% filter(science_mean == max(science_mean)) %&gt;% pull(school)
+hi_sci_scr &lt;- df_tab %&gt;% filter(science_mean == max(science_mean)) %&gt;% pull(science_mean)
+
+## use the kable() function in knitr to make nicer table
+kable(df_tab,
+      digits = 0,
+      col.names = c("", "Math", "Reading", "Science"))
+```
+
+Across the six years of data, `r hi_math_sch` had the
+highest average math score (`r hi_math_scr %&gt;% round`); 
+`r hi_read_sch` had the highest average reading score 
+(`r hi_read_scr %&gt;% round`); and 
+`r hi_sci_sch` had the highest average science score 
+(`r hi_sci_scr %&gt;% round`). However, these six year averages cover a fair
+amount of variation within schools across time. In the next sections, I'll
+investigate this variation.
+```
+</code></pre></div></div>
+
+<p>Inside the code chunk called <code class="language-plaintext highlighter-rouge">table_averages</code> we do three things:</p>
+
+<ol>
+  <li>use dplyr to munge our data to get averages</li>
+  <li>store names and scores for high test scores in distinct well named
+objects:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">hi_&lt;test&gt;_sch</code>: school name with highest average
+math/read/science score</li>
+      <li><code class="language-plaintext highlighter-rouge">hi_&lt;test&gt;_scr</code>: highest average math/read/science score</li>
+    </ul>
+  </li>
+  <li>make/print table using <code class="language-plaintext highlighter-rouge">kable()</code></li>
+</ol>
+
+<p>In the Markdown text below this code chunk, we call the values using the
+inline code method</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`r `
+</code></pre></div></div>
+
+<p>that is, single back tick, an <code class="language-plaintext highlighter-rouge">r</code>, the code we want, then closing back
+tick. We also pipe the object value to <code class="language-plaintext highlighter-rouge">round</code> so that we don’t return
+averages with extra and unnecessary decimal points. We could have simply
+run all the code inline (included what we did in step 2 of the code
+chunk above), but that would have made for extra messy code.</p>
+
+<p>Being able to incorporate data-driven values directly in your test is
+very powerful. You can include all kinds of <code class="language-plaintext highlighter-rouge">ifelse()</code> logic to make
+complex dynamic documents. Be aware, however, that your document text
+still needs to make sense. It can be difficult enough writing one clear
+sentence; having to write a sentence that will remain coherent despite
+variable inputs can be <em>very tough</em>!</p>
+
+<h3 id="figures">Figures</h3>
+
+<p>Finally, making figures is pretty much the same as making tables:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">```</span><span class="p">{</span><span class="n">r</span><span class="w"> </span><span class="n">fig_unadjusted</span><span class="p">,</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">}</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## fig: unadjusted</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## facet line graph, with one column so they stack</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df_long</span><span class="p">,</span><span class="w">
+            </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">score</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">school</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">test</span><span class="p">,</span><span class="w"> </span><span class="n">ncol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">scales</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"free_y"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">geom_line</span><span class="p">()</span><span class="w">
+</span><span class="n">p</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Having reshaped our original data frame long (<code class="language-plaintext highlighter-rouge">df_long</code>), we make a
+figure just as we’ve done in the past. While it’s not strictly necessary
+to store the figure in an object (<code class="language-plaintext highlighter-rouge">p</code>) that we then call, it works just
+fine.</p>
+
+<p>Notice that again added <code class="language-plaintext highlighter-rouge">include = T</code> to the chunk brace. Because we
+added figure options to <code class="language-plaintext highlighter-rouge">opt_chunks$set()</code> in the setup code chunk, this
+figure (as well as the next one) is sized so that it fills up the page
+width (with height determined as a ratio of that width) and printed at
+300 dpi quality. If you look in the <code class="language-plaintext highlighter-rouge">figures</code> folder, you’ll see the
+figure named <code class="language-plaintext highlighter-rouge">repo-fig_unadjusted</code>, which is the prefix we set above
+with the name of the code chunk.</p>
+
+<h2 id="text">Text</h2>
+
+<p>Throughout our RMD file, we’ve include Markdown text. This text lives
+outside of the code chunks and is always printed in the final document.
+It follows normal Markdown text rules, but can have r code placed
+inline, as seen before.</p>
+
+<h1 id="writing-an-rmd-document">Writing an RMD document</h1>
+
+<p>Just as when you write a plain R script, your progress from initial RMD
+draft to final product will be iterative. While you can run R code from
+inside code chunks just as you’ve been all semester, you may find it
+useful to start your analyses in plain R files first and only add them
+to an RMD document later.</p>
+
+<p>For big projects, such as dissertation, it also doesn’t make much sense
+to put <em>everything</em> — data reading, cleaning, analysis, table/figure
+making — inside a single RMD document. You have to redo your entire
+workflow each time you compile! For large projects, it might make sense
+to do all the heavy lifting in separate R scripts — saving cleaned up
+data sets, tables, and figures along the way — and putting all the
+pre-establish pieces together at the end.</p>
+
+<p>But for small projects, such a descriptive policy report, a single RMD
+document might suffice. In the next lesson, we’ll work on cleaning up
+this document to make it even more professional looking.</p>
+
+
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
+      </section>
+      <footer>
+        <p>
+  Benjamin Skinner</br>  
+  Assistant Professor</br>  
+  University of Florida</br>
+  <a href="https://www.btskinner.io" class="iconlink" alt="Personal website">
+    <i class="fas fa-home fa-lg"></i></a> | 
+  <a href="https://github.com/btskinner" class="iconlink" alt="Github
+								profile">
+    <i class="fab fa-github fa-lg"></i></a> |
+  <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
+    <i class="fab fa-twitter fa-lg"></i></a>
+</p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
+
+      </footer>
+    </div>
+
+    <!-- load Javascript if page requires it -->
+    
+    
+    
+
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-63981025-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>

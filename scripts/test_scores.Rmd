@@ -1,0 +1,216 @@
+```{r setup, echo=F, include=F, message=F, warning=F, error=F}
+## ---------------------------
+## libraries
+## ---------------------------
+
+library(knitr)
+library(tidyverse)
+
+## ---------------------------
+## settings/macros
+## ---------------------------
+
+## NB:
+## - echo (FALSE): don't repeat this code in output
+## - include (FALSE): run code, but don't include output (unless a plot)
+## - message (FALSE): don't output any messages
+## - warning (FALSE): don't output any warnings
+## - error (FALSE: don't output any errors
+##
+## We'll include these in the general knitr::opts_chunk() below, but
+## need them here to silence unnecessary output before we can set the options
+
+## set up knitr options
+opts_chunk$set(error = FALSE,
+               echo = FALSE,
+               include = FALSE,
+               message = FALSE,
+               warning = FALSE,
+               fig.path = "../figures/repo-", # where figures should be stored
+               dpi = 300,                  # print quality (300 standard for print)
+               out.width = "100%",         # figures should be as wide as margins
+               comment = NA)               # if code output, no comment char on LHS
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+## read in our data here, assuming we're in scripts like always
+dat_dir <- file.path("..", "data")
+sch_dir <- file.path(dat_dir, "sch_test")
+```
+
+```{r input}
+## ---------------------------
+## input
+## ---------------------------
+
+df <- read_csv(file.path(sch_dir, "all_schools.csv"))
+
+```
+
+From 1980 to 1985, students at four schools took end of year exams in
+three subjects --- math, reading, and science. While these tests did
+not affect students' grades or promotion, they were meant to measure
+what students had learned over the course of the school year. In each
+year, only 9th grade students took the exam. This means that each year
+of data represents a different cohort of 9th grade students. Because
+test scores are standardized within subject area, student cohorts can
+be compared across time. The table below shows average test scores for
+each school in each year.
+
+```{r table_all, include = T}
+## ---------------------------
+## make table of all scores
+## ---------------------------
+
+## use the kable() function in knitr to make nicer table
+kable(df,
+      digits = 0,
+      col.names = c("", "Year", "Math", "Reading", "Science"))
+```
+
+The tests are scaled as follows (observed averages and standard
+deviations are somewhat different due to natural variation):
+
+- **Math** --- mean: 500; standard deviation: 10
+- **Reading** --- mean: 300; standard deviation: 20
+- **Science** --- mean: 800; standard deviation: 15
+
+# Test score averages by school
+
+```{r table_averages, include = T}
+## ---------------------------
+## make table of averages
+## ---------------------------
+
+df_tab <- df %>%
+    ## group by school
+    group_by(school) %>%
+    ## get average across years
+    summarise(math_mean = mean(math),
+              read_mean = mean(read),
+              science_mean = mean(science))
+
+## store variables to use in text below
+hi_math_sch <- df_tab %>% filter(math_mean == max(math_mean)) %>% pull(school)
+hi_math_scr <- df_tab %>% filter(math_mean == max(math_mean)) %>% pull(math_mean)
+
+hi_read_sch <- df_tab %>% filter(read_mean == max(read_mean)) %>% pull(school)
+hi_read_scr <- df_tab %>% filter(read_mean == max(read_mean)) %>% pull(read_mean)
+
+hi_sci_sch <- df_tab %>% filter(science_mean == max(science_mean)) %>% pull(school)
+hi_sci_scr <- df_tab %>% filter(science_mean == max(science_mean)) %>% pull(science_mean)
+
+## use the kable() function in knitr to make nicer table
+kable(df_tab,
+      digits = 0,
+      col.names = c("", "Math", "Reading", "Science"))
+```
+
+Across the six years of data, `r hi_math_sch` had the
+highest average math score (`r hi_math_scr %>% round`); 
+`r hi_read_sch` had the highest average reading score 
+(`r hi_read_scr %>% round`); and 
+`r hi_sci_sch` had the highest average science score 
+(`r hi_sci_scr %>% round`). However, these six year averages cover a fair
+amount of variation within schools across time. In the next sections, I'll
+investigate this variation.
+
+```{r reshape}
+## ---------------------------
+## reshape for figure
+## ---------------------------
+
+## reshape data long
+df_long <- df %>%
+    pivot_longer(cols = c("math","read","science"), # cols to pivot long
+                 names_to = "test",                 # where col names go
+                 values_to = "score")               # where col values go
+
+```
+
+# Test score trends
+
+```{r fig_unadjusted, include = T}
+## ---------------------------
+## fig: unadjusted
+## ---------------------------
+
+## facet line graph, with one column so they stack
+p <- ggplot(data = df_long,
+            mapping = aes(x = year, y = score, colour = school)) +
+    facet_wrap(~ test, ncol = 1, scales = "free_y") +
+    geom_line()
+p
+
+```
+
+Considering test score trends over time, shown in the figure above, I
+note three important points:
+
+1. First, test scores varied across schools in each testing year. This
+is true of all tests.
+2. Second, test score varied within schools across time. Again, this
+   is true across tests.
+3. Third, no single school consistently performed better or worse than
+   other schools. Each school had up and down periods and when
+   performing well on one test, often performed less well on another.
+   
+
+# Test score trends: adjusted to 1980
+
+```{r add_first}
+## ---------------------------
+## standardize to first year
+## ---------------------------
+
+df_long <- df_long %>%
+    group_by(test, school) %>%
+    arrange(year) %>% 
+    mutate(score_year_one = first(score),
+           score_std_sch = (score - score_year_one) / sd(score)) %>%
+    ungroup
+
+```
+```{r fig_adjusted, include = T}
+## ---------------------------
+## fig: adjusted to first year
+## ---------------------------
+
+## facet line graph
+p <- ggplot(data = df_long,
+            mapping = aes(x = year, y = score_std_sch, colour = test)) +
+    facet_wrap(~ school) +
+    geom_line()
+p
+
+```
+
+All tests were revamped for the year 1980 to account for a significant
+curriculum change in the 1979-1980 school year. This is why data begin
+in this year, even though the district tested 9th graders in math,
+reading, and science from 1970. Because of these changes, it makes
+sense to compare score trends from a starting point of 1980.
+
+Two schools, Bend Gate and Niagara, show a general downward trend in
+math scores over time. East Heights, after an initial drop in math
+scores from 1980 to 1981, however, steadily increased students' math
+scores over time. East Heights also had generally strong science
+scores, though with a dip after an initial increase. Niagara should
+also be noted for its increasing science scores after an initial
+drop. Though there is a large single year dip in math scores for
+Spottsville in 1984, I note that the drop may be attributed to a
+school emergency that interrupted testing on the day the math exam was
+given.
+
+# Recommendations
+
+Despite variation across years, there is evidence that each school
+tended to peform better (or worse) in some subject areas than in
+others. Furthermore, schools differed in their relative strengths (and
+weaknesses). Though more formal analyses are warranted, these
+descriptive analyses suggest that district students may benefit from
+more cross-school interaction among teachers, particularly so that
+successful subject-specific practices and lessons may be replicated
+in classrooms across the district.
