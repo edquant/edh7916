@@ -8,7 +8,7 @@ category: lesson
 links:
   script: modeling.R
   pdf: modeling.pdf
-  data: hsls_small.dta
+  data: els_plans.dta
 output:
   md_document:
     variant: gfm

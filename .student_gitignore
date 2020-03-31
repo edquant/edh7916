@@ -10,6 +10,9 @@ _*
 # ignore all files in /data except those at bottom
 data/*
 
+# ignore figures
+figures/repo-*
+
 # ignore website index.md files
 index.md
 

@@ -8,7 +8,7 @@ category: lesson
 links:
   script: modeling.R
   pdf: modeling.pdf
-  data: hsls_small.dta
+  data: els_plans.dta
 output:
   md_document:
     variant: gfm
@@ -78,7 +78,7 @@ library(tidyverse)
     ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
 
     ✔ ggplot2 3.3.0     ✔ purrr   0.3.3
-    ✔ tibble  2.1.3     ✔ dplyr   0.8.5
+    ✔ tibble  3.0.0     ✔ dplyr   0.8.5
     ✔ tidyr   1.0.2     ✔ stringr 1.4.0
     ✔ readr   1.3.1     ✔ forcats 0.5.0
 

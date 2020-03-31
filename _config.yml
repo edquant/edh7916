@@ -51,7 +51,7 @@ mathjax: true
 future: true
 
 # files / directories to exclude when building
-exclude: ["*.Rmd", _working, _student, README.md, kbuild.sh, Gemfile, Gemfile.lock]
+exclude: ["_lessons/*.Rmd", "_assignments/*.Rmd", _working, _student, README.md, kbuild.sh, Gemfile, Gemfile.lock]
 
 # collections
 collections:
