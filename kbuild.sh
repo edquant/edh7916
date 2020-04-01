@@ -285,6 +285,8 @@ if [[ $knit_lessons == 1 ]] || [[ $knit_assignments == 1 ]]; then
     printf "  Built site ==>\n"
     printf "     config file:   _config$b\n"
     printf "     location:      _site$b\n"
+    # correct yaml-dropping for RMD files in scripts (want yaml)
+    cp $s/*.Rmd ./_site${b}/$s/
 fi
 
 # ==============================================================================
