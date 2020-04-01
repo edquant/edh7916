@@ -138,7 +138,7 @@ YAML, which stands for [“YAML Ain’t a Markup
 Language”](https://yaml.org), is a common way to configure dynamic
 documents like RMD documents. The YAML header is this piece of code:
 
-``` r
+``` markdown
 ---
 title: "Test scores from 1980-1985"
 author: Benjamin Skinner
@@ -180,15 +180,21 @@ print any output:
 
 #### Markdown code chunk
 
-    ```r
-    x <- rnorm(1000)
-    ```
+```` markdown
+```r
+## this is just a representation (nothing happens)
+x <- rnorm(1000)
+```
+````
 
 #### RMarkdown code chunk
 
-    ```{r}
-    x <- rnorm(1000)
-    ```
+```` markdown
+```{r}
+## this will produce 1000 random normal values and place in x
+x <- rnorm(1000)
+```
+````
 
 Notice the difference? It’s subtle, but notice that the RMD chunk places
 braces around the **r** after the tick marks: `{r}`. In a normal
@@ -198,7 +204,7 @@ output.
 
 ### Code chunk options
 
-```` r
+```` markdown
 ```{r setup, echo=F, include=F, message=F, warning=F, error=F}
 ## ---------------------------
 ## libraries
@@ -239,6 +245,7 @@ opts_chunk$set(error = FALSE,
 ## read in our data here, assuming we're in scripts like always
 dat_dir <- file.path("..", "data")
 sch_dir <- file.path(dat_dir, "sch_test")
+```
 ````
 
 In our first code chunk, notice how we still load our libraries and set
@@ -293,9 +300,7 @@ generally want them.
 
 ### Chunk to chunk
 
-```` 
-
-```r
+```` markdown
 ```{r input}
 ## ---------------------------
 ## input
@@ -336,7 +341,7 @@ chunk).
 
 ### Make a nice(r) table with `knitr::kable()`
 
-```` r
+```` markdown
 ```{r table_all, include = T}
 ## ---------------------------
 ## make table of all scores
@@ -346,6 +351,7 @@ chunk).
 kable(df,
       digits = 0,
       col.names = c("", "Year", "Math", "Reading", "Science"))
+```
 ````
 
 Since we want to show all of our data (which isn’t very big) and because
@@ -367,9 +373,7 @@ chunk will be printed.
 You can also call R code inline, that is, outside of code chunks proper,
 inline with your Markdown text.
 
-```` 
-
-```r
+```` markdown
 ```{r table_averages, include = T}
 ## ---------------------------
 ## make table of averages
@@ -407,7 +411,6 @@ highest average math score (`r hi_math_scr %>% round`);
 (`r hi_sci_scr %>% round`). However, these six year averages cover a fair
 amount of variation within schools across time. In the next sections, I'll
 investigate this variation.
-```
 ````
 
 Inside the code chunk called `table_averages` we do three things:
@@ -442,7 +445,7 @@ variable inputs can be *very tough*\!
 
 Finally, making figures is pretty much the same as making tables:
 
-```` r
+```` markdown
 ```{r fig_unadjusted, include = T}
 ## ---------------------------
 ## fig: unadjusted
@@ -454,6 +457,7 @@ p <- ggplot(data = df_long,
     facet_wrap(~ test, ncol = 1, scales = "free_y") +
     geom_line()
 p
+```
 ````
 
 Having reshaped our original data frame long (`df_long`), we make a

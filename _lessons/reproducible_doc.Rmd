@@ -147,9 +147,14 @@ YAML, which stands for ["YAML Ain't a Markup
 Language"](https://yaml.org), is a common way to configure dynamic documents
 like RMD documents. The YAML header is this piece of code:
 
-```{r, code = readLines(rmd_doc)[1:6], eval = F}
-
-```
+````markdown
+---
+title: "Test scores from 1980-1985"
+author: Benjamin Skinner
+date: 30 March 2020
+output: pdf_document
+---
+````
 
 Notice the opening and closing three hyphens (`---`). This is how R
 knows that this section of code is special. The YAML can become
@@ -184,16 +189,18 @@ the code and print any output:
 
 #### Markdown code chunk
 
-````
+````markdown
 `r ''````r
+## this is just a representation (nothing happens)
 x <- rnorm(1000)
 ```
 ````
 
 #### RMarkdown code chunk
 
-````
+````markdown
 `r ''````{r}
+## this will produce 1000 random normal values and place in x
 x <- rnorm(1000)
 ```
 ````
@@ -206,10 +213,50 @@ printing the output.
 
 ### Code chunk options
 
-```{r, code = readLines(rmd_doc)[7:47], eval = F}
+````markdown
+`r ''````{r setup, echo=F, include=F, message=F, warning=F, error=F}
+## ---------------------------
+## libraries
+## ---------------------------
 
+library(knitr)
+library(tidyverse)
+
+## ---------------------------
+## settings/macros
+## ---------------------------
+
+## NB:
+## - echo (FALSE): don't repeat this code in output
+## - include (FALSE): run code, but don't include output (unless a plot)
+## - message (FALSE): don't output any messages
+## - warning (FALSE): don't output any warnings
+## - error (FALSE: don't output any errors
+##
+## We'll include these in the general knitr::opts_chunk() below, but
+## need them here to silence unnecessary output before we can set the options
+
+## set up knitr options
+opts_chunk$set(error = FALSE,
+               echo = FALSE,
+               include = FALSE,
+               message = FALSE,
+               warning = FALSE,
+               fig.path = "../figures/repo-", # where figures should be stored
+               dpi = 300,                  # print quality (300 standard for print)
+               out.width = "100%",         # figures should be as wide as margins
+               comment = NA)               # if code output, no comment char on LHS
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+## read in our data here, assuming we're in scripts like always
+dat_dir <- file.path("..", "data")
+sch_dir <- file.path(dat_dir, "sch_test")
 ```
-
+````
+   
 In our first code chunk, notice how we still load our libraries and
 set our file paths. For the libraries, we need to load knitr with
 `library(knitr)` in addition to whichever libraries we need for our
@@ -264,9 +311,35 @@ document settings as close as possible to the way we generally want them.
 
 ### Chunk to chunk
 
-````
-```{r, code = readLines(rmd_doc)[49:77], eval = F}
+````markdown
+`r ''````{r input}
+## ---------------------------
+## input
+## ---------------------------
 
+df <- read_csv(file.path(sch_dir, "all_schools.csv"))
+
+```
+
+From 1980 to 1985, students at four schools took end of year exams in
+three subjects --- math, reading, and science. While these tests did
+not affect students' grades or promotion, they were meant to measure
+what students had learned over the course of the school year. In each
+year, only 9th grade students took the exam. This means that each year
+of data represents a different cohort of 9th grade students. Because
+test scores are standardized within subject area, student cohorts can
+be compared across time. The table below shows average test scores for
+each school in each year.
+
+`r ''````{r table_all, include = T}
+## ---------------------------
+## make table of all scores
+## ---------------------------
+
+## use the kable() function in knitr to make nicer table
+kable(df,
+      digits = 0,
+      col.names = c("", "Year", "Math", "Reading", "Science"))
 ```
 ````
 
@@ -279,9 +352,18 @@ single huge chunk).
 
 ### Make a nice(r) table with `knitr::kable()`
 
-```{r, code = readLines(rmd_doc)[69:77], eval = F}
+````markdown
+`r ''````{r table_all, include = T}
+## ---------------------------
+## make table of all scores
+## ---------------------------
 
+## use the kable() function in knitr to make nicer table
+kable(df,
+      digits = 0,
+      col.names = c("", "Year", "Math", "Reading", "Science"))
 ```
+````
 
 Since we want to show all of our data (which isn't very big) and
 because the data frame `df` already is organized in the way we want to
@@ -302,10 +384,47 @@ just this one code chunk will be printed.
 You can also call R code inline, that is, outside of code chunks
 proper, inline with your Markdown text.
 
-````
-```{r, code = readLines(rmd_doc)[89:126], eval = F}
+````markdown
+`r ''````{r table_averages, include = T}
+## ---------------------------
+## make table of averages
+## ---------------------------
+
+df_tab <- df %>%
+    ## group by school
+    group_by(school) %>%
+    ## get average across years
+    summarise(math_mean = mean(math),
+              read_mean = mean(read),
+              science_mean = mean(science))
+
+## store variables to use in text below
+hi_math_sch <- df_tab %>% filter(math_mean == max(math_mean)) %>% pull(school)
+hi_math_scr <- df_tab %>% filter(math_mean == max(math_mean)) %>% pull(math_mean)
+
+hi_read_sch <- df_tab %>% filter(read_mean == max(read_mean)) %>% pull(school)
+hi_read_scr <- df_tab %>% filter(read_mean == max(read_mean)) %>% pull(read_mean)
+
+hi_sci_sch <- df_tab %>% filter(science_mean == max(science_mean)) %>% pull(school)
+hi_sci_scr <- df_tab %>% filter(science_mean == max(science_mean)) %>% pull(science_mean)
+
+## use the kable() function in knitr to make nicer table
+kable(df_tab,
+      digits = 0,
+      col.names = c("", "Math", "Reading", "Science"))
 ```
+
+Across the six years of data, `r knitr::inline_expr('hi_math_sch')` had the
+highest average math score (`r knitr::inline_expr('hi_math_scr %>% round')`); 
+`r knitr::inline_expr('hi_read_sch')` had the highest average reading score 
+(`r knitr::inline_expr('hi_read_scr %>% round')`); and 
+`r knitr::inline_expr('hi_sci_sch')` had the highest average science score 
+(`r knitr::inline_expr('hi_sci_scr %>% round')`). However, these six year averages cover a fair
+amount of variation within schools across time. In the next sections, I'll
+investigate this variation.
+
 ````
+
 Inside the code chunk called `table_averages` we do three things:
 
 1. use dplyr to munge our data to get averages
@@ -340,9 +459,20 @@ despite variable inputs can be _very tough_!
 
 Finally, making figures is pretty much the same as making tables:
 
-```{r, code = readLines(rmd_doc)[142:153], eval = F}
+````markdown
+`r ''````{r fig_unadjusted, include = T}
+## ---------------------------
+## fig: unadjusted
+## ---------------------------
 
+## facet line graph, with one column so they stack
+p <- ggplot(data = df_long,
+            mapping = aes(x = year, y = score, colour = school)) +
+    facet_wrap(~ test, ncol = 1, scales = "free_y") +
+    geom_line()
+p
 ```
+````
 Having reshaped our original data frame long (`df_long`), we make a
 figure just as we've done in the past. While it's not strictly
 necessary to store the figure in an object (`p`) that we then call, it
