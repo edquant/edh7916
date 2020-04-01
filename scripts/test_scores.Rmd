@@ -1,3 +1,10 @@
+---
+title: "Test scores from 1980-1985"
+author: Benjamin Skinner
+date: 30 March 2020
+output: pdf_document
+---
+
 ```{r setup, echo=F, include=F, message=F, warning=F, error=F}
 ## ---------------------------
 ## libraries

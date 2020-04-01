@@ -205,13 +205,13 @@ header.</p>
 Language”</a>, is a common way to configure dynamic
 documents like RMD documents. The YAML header is this piece of code:</p>
 
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">---</span><span class="w">
-</span><span class="n">title</span><span class="o">:</span><span class="w"> </span><span class="s2">"Test scores from 1980-1985"</span><span class="w">
-</span><span class="n">author</span><span class="o">:</span><span class="w"> </span><span class="n">Benjamin</span><span class="w"> </span><span class="n">Skinner</span><span class="w">
-</span><span class="n">date</span><span class="o">:</span><span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="n">March</span><span class="w"> </span><span class="m">2020</span><span class="w">
-</span><span class="n">output</span><span class="o">:</span><span class="w"> </span><span class="n">pdf_document</span><span class="w">
-</span><span class="o">---</span><span class="w">
-</span></code></pre></div></div>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Test</span><span class="nv"> </span><span class="s">scores</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">1980-1985"</span>
+<span class="na">author</span><span class="pi">:</span> <span class="s">Benjamin Skinner</span>
+<span class="na">date</span><span class="pi">:</span> <span class="s">30 March </span><span class="m">2020</span>
+<span class="na">output</span><span class="pi">:</span> <span class="s">pdf_document</span>
+<span class="nn">---</span>
+</code></pre></div></div>
 
 <p>Notice the opening and closing three hyphens (<code class="language-plaintext highlighter-rouge">---</code>). This is how R
 knows that this section of code is special. The YAML can become complex,
@@ -254,16 +254,18 @@ print any output:</p>
 
 <h4 id="markdown-code-chunk">Markdown code chunk</h4>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```r
-x &lt;- rnorm(1000)
-```
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">r
+</span><span class="c1">## this is just a representation (nothing happens)</span><span class="w">
+</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span><span class="w">
+</span><span class="p">```</span>
 </code></pre></div></div>
 
 <h4 id="rmarkdown-code-chunk">RMarkdown code chunk</h4>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```{r}
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">{r}
+</span><span class="sb">## this will produce 1000 random normal values and place in x
 x &lt;- rnorm(1000)
-```
+</span><span class="p">```</span>
 </code></pre></div></div>
 
 <p>Notice the difference? It’s subtle, but notice that the RMD chunk places
@@ -274,47 +276,48 @@ output.</p>
 
 <h3 id="code-chunk-options">Code chunk options</h3>
 
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">```</span><span class="p">{</span><span class="n">r</span><span class="w"> </span><span class="n">setup</span><span class="p">,</span><span class="w"> </span><span class="n">echo</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="w"> </span><span class="n">include</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="w"> </span><span class="n">warning</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="o">=</span><span class="nb">F</span><span class="p">}</span><span class="w">
-</span><span class="c1">## ---------------------------</span><span class="w">
-</span><span class="c1">## libraries</span><span class="w">
-</span><span class="c1">## ---------------------------</span><span class="w">
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">{r setup, echo=F, include=F, message=F, warning=F, error=F}
+</span><span class="sb">## ---------------------------
+## libraries
+## ---------------------------
 
-</span><span class="n">library</span><span class="p">(</span><span class="n">knitr</span><span class="p">)</span><span class="w">
-</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+library(knitr)
+library(tidyverse)
 
-</span><span class="c1">## ---------------------------</span><span class="w">
-</span><span class="c1">## settings/macros</span><span class="w">
-</span><span class="c1">## ---------------------------</span><span class="w">
+## ---------------------------
+## settings/macros
+## ---------------------------
 
-</span><span class="c1">## NB:</span><span class="w">
-</span><span class="c1">## - echo (FALSE): don't repeat this code in output</span><span class="w">
-</span><span class="c1">## - include (FALSE): run code, but don't include output (unless a plot)</span><span class="w">
-</span><span class="c1">## - message (FALSE): don't output any messages</span><span class="w">
-</span><span class="c1">## - warning (FALSE): don't output any warnings</span><span class="w">
-</span><span class="c1">## - error (FALSE: don't output any errors</span><span class="w">
-</span><span class="c1">##</span><span class="w">
-</span><span class="c1">## We'll include these in the general knitr::opts_chunk() below, but</span><span class="w">
-</span><span class="c1">## need them here to silence unnecessary output before we can set the options</span><span class="w">
+## NB:
+## - echo (FALSE): don't repeat this code in output
+## - include (FALSE): run code, but don't include output (unless a plot)
+## - message (FALSE): don't output any messages
+## - warning (FALSE): don't output any warnings
+## - error (FALSE: don't output any errors
+##
+## We'll include these in the general knitr::opts_chunk() below, but
+## need them here to silence unnecessary output before we can set the options
 
-</span><span class="c1">## set up knitr options</span><span class="w">
-</span><span class="n">opts_chunk</span><span class="o">$</span><span class="n">set</span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
-               </span><span class="n">echo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
-               </span><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
-               </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
-               </span><span class="n">warning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w">
-               </span><span class="n">fig.path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"../figures/repo-"</span><span class="p">,</span><span class="w"> </span><span class="c1"># where figures should be stored</span><span class="w">
-               </span><span class="n">dpi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">300</span><span class="p">,</span><span class="w">                  </span><span class="c1"># print quality (300 standard for print)</span><span class="w">
-               </span><span class="n">out.width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"100%"</span><span class="p">,</span><span class="w">         </span><span class="c1"># figures should be as wide as margins</span><span class="w">
-               </span><span class="n">comment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NA</span><span class="p">)</span><span class="w">               </span><span class="c1"># if code output, no comment char on LHS</span><span class="w">
+## set up knitr options
+opts_chunk$set(error = FALSE,
+               echo = FALSE,
+               include = FALSE,
+               message = FALSE,
+               warning = FALSE,
+               fig.path = "../figures/repo-", # where figures should be stored
+               dpi = 300,                  # print quality (300 standard for print)
+               out.width = "100%",         # figures should be as wide as margins
+               comment = NA)               # if code output, no comment char on LHS
 
-</span><span class="c1">## ---------------------------</span><span class="w">
-</span><span class="c1">## directory paths</span><span class="w">
-</span><span class="c1">## ---------------------------</span><span class="w">
+## ---------------------------
+## directory paths
+## ---------------------------
 
-</span><span class="c1">## read in our data here, assuming we're in scripts like always</span><span class="w">
-</span><span class="n">dat_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span><span class="w"> </span><span class="s2">"data"</span><span class="p">)</span><span class="w">
-</span><span class="n">sch_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"sch_test"</span><span class="p">)</span><span class="w">
-</span></code></pre></div></div>
+## read in our data here, assuming we're in scripts like always
+dat_dir &lt;- file.path("..", "data")
+sch_dir &lt;- file.path(dat_dir, "sch_test")
+</span><span class="p">```</span>
+</code></pre></div></div>
 
 <p>In our first code chunk, notice how we still load our libraries and set
 our file paths. For the libraries, we need to load knitr with
@@ -372,16 +375,14 @@ generally want them.</p>
 
 <h3 id="chunk-to-chunk">Chunk to chunk</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-```r
-```{r input}
-## ---------------------------
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">{r input}
+</span><span class="sb">## ---------------------------
 ## input
 ## ---------------------------
 
 df &lt;- read_csv(file.path(sch_dir, "all_schools.csv"))
 
-```
+</span><span class="p">```</span>
 
 From 1980 to 1985, students at four schools took end of year exams in
 three subjects --- math, reading, and science. While these tests did
@@ -393,8 +394,8 @@ test scores are standardized within subject area, student cohorts can
 be compared across time. The table below shows average test scores for
 each school in each year.
 
-```{r table_all, include = T}
-## ---------------------------
+<span class="p">```</span><span class="nl">{r table_all, include = T}
+</span><span class="sb">## ---------------------------
 ## make table of all scores
 ## ---------------------------
 
@@ -402,7 +403,7 @@ each school in each year.
 kable(df,
       digits = 0,
       col.names = c("", "Year", "Math", "Reading", "Science"))
-```
+</span><span class="p">```</span>
 </code></pre></div></div>
 
 <p>Your coding environment carries from chunk to chunk, meaning that if you
@@ -414,16 +415,17 @@ chunk).</p>
 
 <h3 id="make-a-nicer-table-with-knitrkable">Make a nice(r) table with <code class="language-plaintext highlighter-rouge">knitr::kable()</code></h3>
 
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">```</span><span class="p">{</span><span class="n">r</span><span class="w"> </span><span class="n">table_all</span><span class="p">,</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">}</span><span class="w">
-</span><span class="c1">## ---------------------------</span><span class="w">
-</span><span class="c1">## make table of all scores</span><span class="w">
-</span><span class="c1">## ---------------------------</span><span class="w">
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">{r table_all, include = T}
+</span><span class="sb">## ---------------------------
+## make table of all scores
+## ---------------------------
 
-</span><span class="c1">## use the kable() function in knitr to make nicer table</span><span class="w">
-</span><span class="n">kable</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w">
-      </span><span class="n">digits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w">
-      </span><span class="n">col.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="s2">"Year"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Math"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Reading"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Science"</span><span class="p">))</span><span class="w">
-</span></code></pre></div></div>
+## use the kable() function in knitr to make nicer table
+kable(df,
+      digits = 0,
+      col.names = c("", "Year", "Math", "Reading", "Science"))
+</span><span class="p">```</span>
+</code></pre></div></div>
 
 <p>Since we want to show all of our data (which isn’t very big) and because
 the data frame <code class="language-plaintext highlighter-rouge">df</code> already is organized in the way we want to show the
@@ -444,10 +446,8 @@ chunk will be printed.</p>
 <p>You can also call R code inline, that is, outside of code chunks proper,
 inline with your Markdown text.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-```r
-```{r table_averages, include = T}
-## ---------------------------
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">{r table_averages, include = T}
+</span><span class="sb">## ---------------------------
 ## make table of averages
 ## ---------------------------
 
@@ -473,17 +473,16 @@ hi_sci_scr &lt;- df_tab %&gt;% filter(science_mean == max(science_mean)) %&gt;% 
 kable(df_tab,
       digits = 0,
       col.names = c("", "Math", "Reading", "Science"))
-```
+</span><span class="p">```</span>
 
-Across the six years of data, `r hi_math_sch` had the
-highest average math score (`r hi_math_scr %&gt;% round`); 
-`r hi_read_sch` had the highest average reading score 
-(`r hi_read_scr %&gt;% round`); and 
-`r hi_sci_sch` had the highest average science score 
-(`r hi_sci_scr %&gt;% round`). However, these six year averages cover a fair
+Across the six years of data, <span class="sb">`r hi_math_sch`</span> had the
+highest average math score (<span class="sb">`r hi_math_scr %&gt;% round`</span>); 
+<span class="sb">`r hi_read_sch`</span> had the highest average reading score 
+(<span class="sb">`r hi_read_scr %&gt;% round`</span>); and 
+<span class="sb">`r hi_sci_sch`</span> had the highest average science score 
+(<span class="sb">`r hi_sci_scr %&gt;% round`</span>). However, these six year averages cover a fair
 amount of variation within schools across time. In the next sections, I'll
 investigate this variation.
-```
 </code></pre></div></div>
 
 <p>Inside the code chunk called <code class="language-plaintext highlighter-rouge">table_averages</code> we do three things:</p>
@@ -524,18 +523,19 @@ variable inputs can be <em>very tough</em>!</p>
 
 <p>Finally, making figures is pretty much the same as making tables:</p>
 
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">```</span><span class="p">{</span><span class="n">r</span><span class="w"> </span><span class="n">fig_unadjusted</span><span class="p">,</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">}</span><span class="w">
-</span><span class="c1">## ---------------------------</span><span class="w">
-</span><span class="c1">## fig: unadjusted</span><span class="w">
-</span><span class="c1">## ---------------------------</span><span class="w">
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">{r fig_unadjusted, include = T}
+</span><span class="sb">## ---------------------------
+## fig: unadjusted
+## ---------------------------
 
-</span><span class="c1">## facet line graph, with one column so they stack</span><span class="w">
-</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df_long</span><span class="p">,</span><span class="w">
-            </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">score</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">school</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
-    </span><span class="n">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">test</span><span class="p">,</span><span class="w"> </span><span class="n">ncol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">scales</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"free_y"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
-    </span><span class="n">geom_line</span><span class="p">()</span><span class="w">
-</span><span class="n">p</span><span class="w">
-</span></code></pre></div></div>
+## facet line graph, with one column so they stack
+p &lt;- ggplot(data = df_long,
+            mapping = aes(x = year, y = score, colour = school)) +
+    facet_wrap(~ test, ncol = 1, scales = "free_y") +
+    geom_line()
+p
+</span><span class="p">```</span>
+</code></pre></div></div>
 
 <p>Having reshaped our original data frame long (<code class="language-plaintext highlighter-rouge">df_long</code>), we make a
 figure just as we’ve done in the past. While it’s not strictly necessary
