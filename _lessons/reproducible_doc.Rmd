@@ -7,7 +7,7 @@ order: 10
 category: lesson
 links:
   pdf: reproducible_doc.pdf
-  data: hsls_small.dta
+  data: sch_test.zip
   script: test_scores.Rmd
 output:
   md_document:
@@ -179,6 +179,13 @@ don't necessarily have to use quotation marks for strings with spaces:
 I do for the title, but not for my name. That said, if your title
 includes a colon, you need to wrap the entire title string in double
 quotation marks (`"`) --- otherwise the document won't compile.
+
+**NB** If you download `test_scores.Rmd` from the link at the top of
+the page, there's a good chance that the YAML header has been stripped
+from the file (something to do with the way this site is build and
+served). If it's missing, just cut and paste the YAML above (including
+the opening and closing `---`) into the top of the `test_scores.Rmd`
+file. 
 
 ## Code chunks
 
