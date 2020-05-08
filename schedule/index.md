@@ -3,8 +3,7 @@ layout: default
 title: Schedule
 ---
 
-Prior to first meeting, please follow the [getting
-started]({{ site.baseurl }}/software) link to download and install
+Prior to first meeting, please follow the [software]({{ site.baseurl }}/software) link to download and install
 all relevant software.
 
 In the schedule below, items are marked as follows: 

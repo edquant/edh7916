@@ -203,8 +203,7 @@ data. There are many, but the major ones that you'll use most often are:
 Understanding the nuanced differences between data types is not
 important right now. Just know that they exist and that you'll gain an
 intuitive understanding of them as you become better aquainted with
-R. For more information, see the [supplemental material on data types
-and structures](./types_structures.html).
+R.
 
 ## Packages
 

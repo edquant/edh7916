@@ -29,32 +29,31 @@ assignments.**
 For your draft report, I need the following in a cleanly formatted
 RMarkdown (`.Rmd`) file:
 
-1.  Well commented code that:
-      - Reads in your raw data set
-      - Performs all necessary data wrangling tasks to clean, join, and
-        reshape your data as necessary for your project
-      - Performs all necessary analyses
-2.  Plots (as necessary, but required) to show the results of your
-    analyses
-3.  Tables (as necessary, but not required) to show the results of your
-    analyses
-4.  First draft of the written elements of your report; these elements
-    should:
-      - Motivate your analyses
-      - Describe your data
-      - Describe your methodological approach, in high-level,
-        audience-appropriate manner (think your boss or colleagues, not
-        me specifically)
-      - Describe your findings
-      - Appropriately contextualize your results (*e.g.* limitations,
-        validity) and make appropriate recommendations
-      - **\[If necessary\]** Include citations
-      - Be well organized
+1. Well commented code that:
+   - Reads in your raw data set
+   - Performs all necessary data wrangling tasks to clean, join, and
+     reshape your data as necessary for your project
+   - Performs all necessary analyses
+1. Plots (as necessary, but required) to show the results of your analyses
+1. Tables (as necessary, but not required) to show the results of your
+   analyses
+1. First draft of the written elements of your report; these elements
+   should:
+   - Motivate your analyses
+   - Describe your data
+   - Describe your methodological approach, in high-level,
+     audience-appropriate manner (think your boss or colleagues, not
+     me specifically)
+   - Describe your findings
+   - Appropriately contextualize your results (_e.g._ limitations,
+     validity) and make appropriate recommendations
+   - **[If necessary]** Include citations
+   - Be well organized
 
 #### Submission details
 
-  - Upload to our CANVAS course site no later than 11:59 p.m. EDT on the
-    due date
-  - Save your file as: `<name>_draft_report.Rmd` (if submitting an Rmd
-    file) where your last name replaces `<name>` (*e.g.*
-    `skinner_draft_report.Rmd`)
+- Upload to our CANVAS course site no later than 11:59 p.m. EDT on the
+  due date 
+- Save your file as: `<name>_draft_report.Rmd` (if submitting an Rmd
+  file) where your last name replaces `<name>` (_e.g._
+  `skinner_draft_report.Rmd`)

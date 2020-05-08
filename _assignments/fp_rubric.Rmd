@@ -13,8 +13,6 @@ output:
     preserve_yaml: true
 ---
 
-## Rubric
-
 There are five major areas to the final project:
 
 1. Data Analysis

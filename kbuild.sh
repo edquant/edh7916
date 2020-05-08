@@ -250,7 +250,7 @@ if [[ $knit_assignments == 1 ]]; then
 	    printf "     skipping...\n"
 	else
 	    # knit
-	    Rscript -e "knitr::knit('$f', output='$oi/$l.md', quiet = $knit_q)" 2>&1 > /dev/null
+	    Rscript -e "knitr::knit('$f', output='$oj/$a.md', quiet = $knit_q)" 2>&1 > /dev/null
 	    printf "     $oj/$a.md\n"
 	    # md to pdf
 	    if [[ -f $oj/$a.md ]]; then
@@ -269,7 +269,7 @@ if [[ $knit_assignments == 1 ]]; then
 		printf "     skipping...\n"
 	    else
 		# knit
-		Rscript -e "knitr::knit('$file', output='$oi/$l.md', quiet = $knit_q)" 2>&1 > /dev/null
+		Rscript -e "knitr::knit('$file', output='$oj/$f.md', quiet = $knit_q)" 2>&1 > /dev/null
 		printf "     $oj/$f.md\n"
 		# md to pdf
 		if [[ -f $oj/$f.md ]]; then

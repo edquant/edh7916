@@ -21,7 +21,7 @@ From the syllabus:
 > fully reproducible with minimal effort. You must use data that is
 > either publicly available or that can be shared with others (no IRB
 > restrictions). Everyone will submit three preliminary assignments in
-> addition to the final report.
+> addition to the final report. 
 
 **This assignment represents the first of those three preliminary
 assignments.**
@@ -29,16 +29,16 @@ assignments.**
 For your final project proposal, I need the following in a cleanly
 formatted Markdown (`.md`) file:
 
-1.  A paragraph describing your project:
-      - What will you be predicting?
-      - Why is it interesting?
-2.  A description of where you will find this data.
-3.  A few lines describing your dependent variable in detail. What is
-    the nature of this outcome as a variable?
+1. A paragraph describing your project: 
+   - What will you be predicting?
+   - Why is it interesting?
+1. A description of where you will find this data.
+1. A few lines describing your dependent variable in detail. What is
+   the nature of this outcome as a variable?
 
 #### Submission details
 
-  - Upload to our CANVAS course site no later than 11:59 p.m. EDT on the
-    due date
-  - Save your file as `<name>_proposal.md` where your last name replaces
-    `<name>` (*e.g.* `skinner_proposal.md`)
+- Upload to our CANVAS course site no later than 11:59 p.m. EDT on the
+  due date 
+- Save your file as `<name>_proposal.md` where your last name
+  replaces `<name>` (_e.g._ `skinner_proposal.md`)

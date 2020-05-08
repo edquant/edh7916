@@ -27,18 +27,18 @@ From the syllabus:
 
 For your final report, I need:
 
-1.  A clearly formatted RMarkdown (`.Rmd`) file that will build your
-    report
-2.  Either:
-      - A copy of your data
-      - *Very clear* instructions on how to get your data
+1. A clearly formatted RMarkdown (`.Rmd`) file that will build your
+   report
+1. Either:
+   - A copy of your data
+   - _Very clear_ instructions on how to get your data
 
-Your report will be graded according to the final report rubric below.
+Your report will be graded according to the final report rubric.
 
 #### Submission details
 
-  - Upload to our CANVAS course site no later than 11:59 p.m. EDT on the
-    due date
-  - Save your file as: `<name>_final_report.Rmd` (if submitting an Rmd
-    file) where your last name replaces `<name>` (*e.g.*
-    `skinner_final_report.Rmd`)
+- Upload to our CANVAS course site no later than 11:59 p.m. EDT on the
+  due date 
+- Save your file as: `<name>_final_report.Rmd` (if submitting an Rmd
+  file) where your last name replaces `<name>` (_e.g._
+  `skinner_final_report.Rmd`)
