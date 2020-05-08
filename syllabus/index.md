@@ -25,7 +25,7 @@ be able to connect to the internet and you need to be able to install
 software (i.e., have administrator privileges).
 
 All software is freely available. You will need to download and
-install a few programs on your machine. See [getting started]({{
+install a few programs on your machine. See [software]({{
 site.baseurl }}/software) to find links for all required downloads.
 
 ## Texts 
