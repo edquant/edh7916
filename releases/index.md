@@ -17,10 +17,14 @@ numbers, `v<1>.<2>.<3>` follow the general format of:
 - `<2>`: Lesson / Assignment update
 - `<3>`: Bug fixes and small website updates
 
+
 {% for release in site.github.releases %}
-
-# [{{ release.name }}]({{ release.html_url }})
-
+{% assign rdate = release.created_at | date: '%s' %}
+{% assign rcuto = site.releasecutoff | date: '%s' %}
+{% if rdate > rcuto %}
+{% assign pdate = rdate | date: '%d %B %Y' %}
+# [{{ pdate }} ({{ release.name }})]({{ release.html_url }})
 {{ release.body }}
-
+{% endif %}
 {% endfor %}
+

@@ -12,22 +12,17 @@ errors. In this course, students will learn the fundamentals of a
 quantitative research workflow and apply these lessons using common
 open-source tools. We will cover project organization, data cleaning,
 and exploratory analyses as well as how to run basic econometric
-models and recover estimates for publication. Time and interest
-permitting, students will also cover some special coding and/or data
-gathering techniques. Throughout, students will use coding
-best-practices so that their workflow may be shared and easily
-reproduced.
+models and recover estimates for publication. Throughout, students
+will use coding best-practices so that their workflow may be shared
+and easily reproduced.
 
 In this course, students will learn:
 
 1. To use a number of tools that are useful for conducting applied
-   quantitative research, including:  
-  - R w/ RStudio  
-  - git w/ GitHub  
-  - R Markdown  
-2. To properly organize a project for maximum clarity and
-   reproducibility  
-3. Best practices for cleaning/tidying/wrangling raw data into
+   quantitative research
+1. To properly organize a project for maximum clarity and
+   reproducibility
+1. Best practices for cleaning/tidying/wrangling raw data into
    analysis-ready data
 
 

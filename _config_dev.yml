@@ -5,7 +5,7 @@ baseurl: ""
 description: |
   A course in quantitative research workflow for students in
   the higher education administration program at the University of Florida
-repo: https://github.com/btskinner/edh7916
+repo: https://github.com/edquant/edh7916
 zip: https://github.com/btskinner/edh7916/zipball/edh7916
 
 scripts: scripts
@@ -14,15 +14,18 @@ lessons: lessons
 pdf: assets/pdf
 img: assets/img
 
+# for github metadata (releases)
 repository: edquant/edh7916
+# don't show releases after this date (keep classes separated)
+releasecutoff: 2020-05-01
 
 info:
-  term: Spring 2020 
+  term: Summer 2020 (Session C) 
   location: University of Florida
-  building: Norman Hall
-  room: NRN 1-239
+  building: Online
+  room: 
   office: NRNA 2-230F
-  officehrs: "Tuesday (3p - 5p)"
+  officehrs: "TBD"
 
 contact:
   name: Benjamin Skinner
@@ -51,7 +54,7 @@ mathjax: true
 future: true
 
 # files / directories to exclude when building
-exclude: ["_lessons/*.Rmd", "_assignments/*.Rmd", _working, _student, README.md, kbuild.sh, Gemfile, Gemfile.lock]
+exclude: ["_lessons/*.Rmd", "_assignments/*.Rmd", _lessons_hold, _assignments_hold, _working, _student, README.md, kbuild.sh, Gemfile, Gemfile.lock]
 
 # collections
 collections:

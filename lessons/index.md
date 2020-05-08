@@ -13,7 +13,7 @@ linked at the top of the page.
 All modules assume the directory structure below. 
 
 ```
-student_<your_last_name>/
+edh7916/
 |
 |__ data/
 |   |
@@ -29,19 +29,19 @@ student_<your_last_name>/
 ```
 
 When running scripts in RStudio, the working directory should be
-`path/to/student_<your_last_name>/scripts`. You can check in RStudio
+`path/to/edh7916/scripts`. You can check in RStudio
 by typing `getwd()` in the console. For example, let's say you've
-cloned your personal repo into your home directory within a folder
-called `edh7916`. Then you should see (if on a Mac):
+saved the files in a folder called `courses`, which is in your home
+directory. Then you should see (if on a Mac):
 
 ```r
 > getwd()
-[1] "/Users/bts/edh7916/student_skinner/scripts"
+[1] "/Users/benski/courses/edh7916/scripts"
 ```
 
 ## Lessons
 
-<ol class="lessons">
+<ul class="lessons">
 {% assign lessons = site.lessons | where: 'category', 'lesson' %}
 {% assign lessons = lessons | sort:"order"  %}
 {% for l in lessons %}
@@ -49,11 +49,11 @@ called `edh7916`. Then you should see (if on a Mac):
 		<a href="{{ l.url | prepend: site.baseurl }}.html">{{ l.title }}</a>
 	</li>
 {% endfor %}
-</ol>
+</ul>
 
 ## Supplemental
 
-<ul class="lessons">
+<ul class="supplemental">
 {% assign supplemental = site.lessons | where: 'category', 'supplemental' %}
 {% assign supplemental = supplemental | sort:"order"  %}
 {% for s in supplemental %}

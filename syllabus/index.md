@@ -3,7 +3,7 @@ layout: default
 title: Course information
 category: page
 links:
-  pdf: edh7916_syllabus.pdf
+  pdf: syllabus.pdf
 ---
 
 |||  
@@ -12,21 +12,21 @@ links:
 |Office|2-230F (Norman Hall Annex)|  
 |Email|btskinner \<at\> coe.ufl.edu|  
 |Phone|352.273.4296|  
-|Class Meeting Time|Tuesday (5:10p - 8:10p)|  
-|Class Location|1-239 (Normal Hall)|  
-|Office Hours|Tuesday (3p - 5p)|  
+|Class Meeting Time|Online (asyncronous)|  
+|Class Location|Online (asyncronous)|  
+|Office Hours|_TBD_|  
 
 ## Required tools, software, and registrations
 
-Students will be expected to bring a laptop to class. It does not
-matter whether the machine runs MacOS, Windows, or Linux; however, the
-student’s machine needs to be relatively up to date and in good
-running order. It needs to be able to connect to the internet during
-class.
+You will need access to a computer. It does not matter whether you use
+a MacOS, Windows, or Linux-based operating system; however, your
+machine needs to be up to date and in good running order. It needs to
+be able to connect to the internet and you need to be able to install
+software (i.e., have administrator privileges).
 
-All software is freely available. Students need to download and
-install a few programs on their machine. See [getting started]({{
-site.baseurl }}/start) to find links for all required downloads.
+All software is freely available. You will need to download and
+install a few programs on your machine. See [getting started]({{
+site.baseurl }}/software) to find links for all required downloads.
 
 ## Texts 
 ### Required
@@ -37,11 +37,10 @@ materials are at this website or can be downloaded from external sources.
 Students may find some of the following books / online resources
 helpful:
 
-- Chacon, S., & Straub, B. (2014). [Pro git](https://git-scm.com/book/en/v2). Apress.  
-- Healy, K. (2018). [Data visualization: A practical
-  introduction](https://socviz.co). Princeton University Press.
 - Wickham, H., & Grolemund, G. (2017). [R for data
   science](https://r4ds.had.co.nz). O’Reilly Media.
+- Healy, K. (2018). [Data visualization: A practical
+  introduction](https://socviz.co). Princeton University Press.
   
 ## Grading
 

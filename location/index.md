@@ -9,11 +9,9 @@ custom_js:
 - map
 ---
 
-{{ site.info.building }}, {{ site.info.room }}  
+{{ site.info.building }}  
+{{ site.info.room }}  
 {{ site.info.location }}  
-
-**UPDATE** As of 17 March 2020, classes will be online via Zoom
-meeting until further notice.
 
 <div id='mapwrap'>
 	<div id='map'></div>

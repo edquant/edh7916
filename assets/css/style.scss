@@ -143,10 +143,60 @@ small {
     height: 100%;
 }
 
+.past_list {
+    padding-left: 2em;
+    li {
+	list-style-type: none;
+	font-size: 1.5em;
+    }
+    li:before {
+	margin-left: -1em;
+	content: '\2190\00a0\00a0 '
+    }
+}
+
 .lessons {
     padding-left: 2em;
     li {
+	list-style-type: none;
 	font-size: 1.5em;
+    }
+    li:before {
+	margin-left: -1em;
+	content: '>\00a0\00a0 '
+    }
+}
+
+.supplemental {
+    padding-left: 2em;
+    li {
+	list-style-type: none;
+	font-size: 1.5em;
+    }
+    li:before {
+	margin-left: -1em;
+	content: '+\00a0\00a0 '
+    }
+}
+
+.assignments {
+    padding-left: 2em;
+    li {
+	list-style-type: none;
+	font-size: 1.5em;
+
+	&.do {
+	    &:before {
+		margin-left: -1em;
+		content: '<\00a0\00a0 '
+	    }
+	}
+	&.rubric {
+	    &:before {
+		margin-left: -1em;
+		content: '>\00a0\00a0 '
+	    }
+	}
     }
 }
 

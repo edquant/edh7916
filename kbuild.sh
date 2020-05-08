@@ -66,10 +66,11 @@ student_repo="../${PWD##*/}_student"
 pdfs="assets/pdf"
 
 # pandoc
-pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex --variable monofont=\"Menlo\""
+pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex --variable monofont=\"Menlo\" -f markdown-implicit_figures"
 
 # sed
-sed_opts="s/\/edh7916\/assets/.\/assets/g; s/<img src=\"\(figures\/.*\.png\)\" width=\"100%\" \/>/\!\[\]\(${i}\/\1\)/g"
+sed_opts_1="s/\/edh7916\/assets/..\/assets/g"
+sed_opts_2="s/..\/assets/.\/assets/g; s/<img src=\"\(figures\/.*\.png\)\" width=\"100%\" \/>/\!\[\]\(${i}\/\1\)/g"
 
 while getopts "hl:a:i:j:o:p:s:b:cv" opt;
 do
@@ -191,15 +192,18 @@ if [[ $knit_lessons == 1 ]]; then
 	    printf "     skipping...\n"
 	else
 	    # knit
-	    Rscript -e "rmarkdown::render('$f', output_dir='$oi', quiet = $knit_q)"
+	    Rscript -e "knitr::knit('$f', output='$oi/$l.md', quiet = $knit_q)" 2>&1 > /dev/null
+	    # fix path for local build
+	    sed -i '' "${sed_opts_1}" $oi/$l.md 
 	    printf "     $oi/$l.md\n"
 	    # md to pdf
 	    if [[ -f $oi/$l.md ]]; then
-		sed "${sed_opts}" $oi/$l.md | pandoc ${pandoc_opts} -o $o/$l.pdf -
+		sed "${sed_opts_2}" $oi/$l.md | pandoc ${pandoc_opts} -o $o/$l.pdf -
+		# pandoc ${pandoc_opts} -o $o/$l.pdf $oi/$l.md
 		cp $o/$l.pdf $pdfs
 	    fi
 	    # purl
-	    Rscript -e "knitr::purl('$f', documentation = 0, quiet = $knit_q)"
+	    Rscript -e "knitr::purl('$f', documentation = 0, quiet = $knit_q)" 2>&1 > /dev/null
 	    printf "     $s/$l.R\n"
 	    # more than one line after removing \n? mv to scripts directory : rm
 	    [[ $(tr -d '\n' < ${l}.R | wc -c) -ge 1 ]] && mv ${l}.R $s/${l}.R || rm ${l}.R
@@ -213,15 +217,18 @@ if [[ $knit_lessons == 1 ]]; then
 	    # skip if starts with underscore
 	    if [[ $f = _* ]]; then printf "     skipping...\n"; continue; fi
 	    # knit
-	    Rscript -e "rmarkdown::render('$file', output_dir='$oi', quiet = $knit_q)"
+	    Rscript -e "knitr::knit('$file', output='$oi/$f.md', quiet = $knit_q)" 2>&1 > /dev/null
+	    # fix path for local build
+	    sed -i '' "${sed_opts_1}" $oi/$f.md
 	    printf "     $oi/$f.md\n"
 	    # md to pdf
 	    if [[ -f $oi/$f.md ]]; then
-		sed "${sed_opts}" $oi/$f.md | pandoc ${pandoc_opts} -o $o/$f.pdf -
+		sed "${sed_opts_2}" $oi/$f.md | pandoc ${pandoc_opts} -o $o/$f.pdf -
+		# pandoc ${pandoc_opts} -o $o/$f.pdf $oi/$f.md
 		cp $o/$f.pdf $pdfs
 	    fi
 	    # purl
-	    Rscript -e "knitr::purl('$file', documentation = 0, quiet = $knit_q)" 
+	    Rscript -e "knitr::purl('$file', documentation = 0, quiet = $knit_q)" 2>&1 > /dev/null
 	    printf "     $s/$f.R\n"
 	    # more than one line after removing \n? mv to scripts directory : rm
 	    [[ $(tr -d '\n' < ${f}.R | wc -c) -ge 1 ]] && mv ${f}.R $s/${f}.R || rm ${f}.R
@@ -243,12 +250,12 @@ if [[ $knit_assignments == 1 ]]; then
 	    printf "     skipping...\n"
 	else
 	    # knit
-	    Rscript -e "rmarkdown::render('$f', output_dir='$oj', quiet = $knit_q)"
+	    Rscript -e "knitr::knit('$f', output='$oi/$l.md', quiet = $knit_q)" 2>&1 > /dev/null
 	    printf "     $oj/$a.md\n"
 	    # md to pdf
 	    if [[ -f $oj/$a.md ]]; then
-	        pandoc ${pandoc_opts} -o $p/${a}_hw.pdf $oj/$a.md
-		cp $p/${a}_hw.pdf $pdfs
+	        pandoc ${pandoc_opts} -o $p/${a}.pdf $oj/$a.md
+		cp $p/${a}.pdf $pdfs
 	    fi
 	fi
     else
@@ -262,12 +269,12 @@ if [[ $knit_assignments == 1 ]]; then
 		printf "     skipping...\n"
 	    else
 		# knit
-		Rscript -e "rmarkdown::render('$file', output_dir='$oj', quiet = $knit_q)"
+		Rscript -e "knitr::knit('$file', output='$oi/$l.md', quiet = $knit_q)" 2>&1 > /dev/null
 		printf "     $oj/$f.md\n"
 		# md to pdf
 		if [[ -f $oj/$f.md ]]; then
-		    pandoc ${pandoc_opts} -o $p/${f}_hw.pdf $oj/$f.md
-		    cp $p/${f}_hw.pdf $pdfs
+		    pandoc ${pandoc_opts} -o $p/${f}.pdf $oj/$f.md
+		    cp $p/${f}.pdf $pdfs
 		fi
 	    fi
 	done	
@@ -281,12 +288,12 @@ fi
 if [[ $knit_lessons == 1 ]] || [[ $knit_assignments == 1 ]]; then
     printf "\n[ Building... ]\n\n"
     
-    bundle exec jekyll build $build_q --config ./_config${b}.yml --destination ./_site${b} --verbose
+    bundle exec jekyll build $build_q --config ./_config${b}.yml --destination ./_site${b} --verbose 2>/dev/null
     printf "  Built site ==>\n"
     printf "     config file:   _config$b\n"
     printf "     location:      _site$b\n"
     # correct yaml-dropping for RMD files in scripts (want yaml)
-    cp $s/*.Rmd ./_site${b}/$s/
+    # cp $s/*.Rmd ./_site${b}/$s/
 fi
 
 # ==============================================================================
