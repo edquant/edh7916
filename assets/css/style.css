@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url(https://fonts.googleapis.com/css?family=Lato:300,400,700&subset=latin-ext);
 @font-face { font-family: 'Noto Sans'; font-weight: 400; font-style: normal; src: url("../fonts/Noto-Sans-regular/Noto-Sans-regular.eot"); src: url("../fonts/Noto-Sans-regular/Noto-Sans-regular.eot?#iefix") format("embedded-opentype"), local("Noto Sans"), local("Noto-Sans-regular"), url("../fonts/Noto-Sans-regular/Noto-Sans-regular.woff2") format("woff2"), url("../fonts/Noto-Sans-regular/Noto-Sans-regular.woff") format("woff"), url("../fonts/Noto-Sans-regular/Noto-Sans-regular.ttf") format("truetype"), url("../fonts/Noto-Sans-regular/Noto-Sans-regular.svg#NotoSans") format("svg"); }
 @font-face { font-family: 'Noto Sans'; font-weight: 700; font-style: normal; src: url("../fonts/Noto-Sans-700/Noto-Sans-700.eot"); src: url("../fonts/Noto-Sans-700/Noto-Sans-700.eot?#iefix") format("embedded-opentype"), local("Noto Sans Bold"), local("Noto-Sans-700"), url("../fonts/Noto-Sans-700/Noto-Sans-700.woff2") format("woff2"), url("../fonts/Noto-Sans-700/Noto-Sans-700.woff") format("woff"), url("../fonts/Noto-Sans-700/Noto-Sans-700.ttf") format("truetype"), url("../fonts/Noto-Sans-700/Noto-Sans-700.svg#NotoSans") format("svg"); }
@@ -263,8 +264,22 @@ small { font-size: .8em; }
 
 #map { position: relative; width: 100%; height: 100%; }
 
+.past_list { padding-left: 2em; }
+.past_list li { list-style-type: none; font-size: 1.5em; }
+.past_list li:before { margin-left: -1em; content: "←  "; }
+
 .lessons { padding-left: 2em; }
-.lessons li { font-size: 1.5em; }
+.lessons li { list-style-type: none; font-size: 1.5em; }
+.lessons li:before { margin-left: -1em; content: ">  "; }
+
+.supplemental { padding-left: 2em; }
+.supplemental li { list-style-type: none; font-size: 1.5em; }
+.supplemental li:before { margin-left: -1em; content: "+  "; }
+
+.assignments { padding-left: 2em; }
+.assignments li { list-style-type: none; font-size: 1.5em; }
+.assignments li.do:before { margin-left: -1em; content: "<  "; }
+.assignments li.rubric:before { margin-left: -1em; content: ">  "; }
 
 code { background-color: #f8f8f8; }
 

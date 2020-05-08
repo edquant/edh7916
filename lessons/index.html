@@ -23,9 +23,9 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/btskinner/edh7916" class="iconlink">
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/edquant/edh7916" class="iconlink">
 	      <i class="fab fa-github fa-sm"></i></a></h1>
-	<h2 class="thin">Spring 2020</h2>
+	<h2 class="thin">Summer 2020 (Session C)</h2>
 	<p>A course in quantitative research workflow for students in
 the higher education administration program at the University of Florida
 </p>
@@ -34,13 +34,14 @@ the higher education administration program at the University of Florida
 	  <a href="/edh7916/">Overview</a></br>
 	  <a href="/edh7916/syllabus/">Course
 	    information</a></br>
-	  <a href="/edh7916/location/">Meeting
-	    location</a></br>
-	  <a href="/edh7916/start/">Getting started</a></br>
+	  <!-- <a href="/edh7916/location/">Meeting -->
+	  <!--   location</a></br> -->
+	  <a href="/edh7916/software/">Software</a></br>
 	  <a href="/edh7916/schedule/">Schedule</a></br>
 	  <a href="/edh7916/lessons/">Lessons</a></br>
 	  <a href="/edh7916/assignments/">Assignments</a></br>
 	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/past/">Past courses</a></br>
 	  <a href="/edh7916/about/">About</a></br>	  
 	</h2>
       </header>
@@ -57,7 +58,7 @@ linked at the top of the page.</p>
 
 <p>All modules assume the directory structure below.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>student_&lt;your_last_name&gt;/
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>edh7916/
 |
 |__ data/
 |   |
@@ -73,72 +74,36 @@ linked at the top of the page.</p>
 </code></pre></div></div>
 
 <p>When running scripts in RStudio, the working directory should be
-<code class="language-plaintext highlighter-rouge">path/to/student_&lt;your_last_name&gt;/scripts</code>. You can check in RStudio
+<code class="language-plaintext highlighter-rouge">path/to/edh7916/scripts</code>. You can check in RStudio
 by typing <code class="language-plaintext highlighter-rouge">getwd()</code> in the console. For example, let’s say you’ve
-cloned your personal repo into your home directory within a folder
-called <code class="language-plaintext highlighter-rouge">edh7916</code>. Then you should see (if on a Mac):</p>
+saved the files in a folder called <code class="language-plaintext highlighter-rouge">courses</code>, which is in your home
+directory. Then you should see (if on a Mac):</p>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">getwd</span><span class="p">()</span><span class="w">
-</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"/Users/bts/edh7916/student_skinner/scripts"</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"/Users/benski/courses/edh7916/scripts"</span><span class="w">
 </span></code></pre></div></div>
 
 <h2 id="lessons">Lessons</h2>
-
-<ol class="lessons">
-
-
-
-	<li>
-		<a href="/edh7916/lessons/intro.html">Introduction</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/organizing.html">Organizing</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/dw_one.html">Data Wrangling I: Enter the {tidyverse}</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/dw_two.html">Data Wrangling II: Appending, joining, and reshaping data</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/dw_three.html">Data Wrangling III: Working with strings and dates</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/programming.html">Functional programming</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/dw_four.html">Data Wrangling IV: A philosophy of data wrangling</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/eda_dv.html">Exploratory data analysis: Data visualization with ggplot2</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/modeling.html">Fitting regression models</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/reproducible_doc.html">Creating dynamic research reports using RMarkdown + {knitr}</a>
-	</li>
-
-</ol>
-
-<h2 id="supplemental">Supplemental</h2>
 
 <ul class="lessons">
 
 
 
 	<li>
-		<a href="/edh7916/lessons/types_structures.html">Data types and structures</a>
+		<a href="/edh7916/lessons/intro_r.html">Introduction to R</a>
 	</li>
+
+	<li>
+		<a href="/edh7916/lessons/intro_markdown.html">Introduction to Markdown</a>
+	</li>
+
+</ul>
+
+<h2 id="supplemental">Supplemental</h2>
+
+<ul class="supplemental">
+
+
 
 </ul>
 

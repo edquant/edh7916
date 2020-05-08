@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/edh7916/assets/css/style.css">
+<link rel="stylesheet" href="/edh7916/assets/css/syntax_default.css">
+<link rel="shortcut icon" type="image/png" href="/edh7916/assets/img/favicon.ico">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
+<script defer src="/edh7916/assets/js/all.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<title>edquant | EDH 7916: Contemporary Research in Higher Education</title>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/edquant/edh7916" class="iconlink">
+	      <i class="fab fa-github fa-sm"></i></a></h1>
+	<h2 class="thin">Summer 2020 (Session C)</h2>
+	<p>A course in quantitative research workflow for students in
+the higher education administration program at the University of Florida
+</p>
+	<!-- side / top bar menu -->
+	<h2 class="thin">
+	  <a href="/edh7916/">Overview</a></br>
+	  <a href="/edh7916/syllabus/">Course
+	    information</a></br>
+	  <!-- <a href="/edh7916/location/">Meeting -->
+	  <!--   location</a></br> -->
+	  <a href="/edh7916/software/">Software</a></br>
+	  <a href="/edh7916/schedule/">Schedule</a></br>
+	  <a href="/edh7916/lessons/">Lessons</a></br>
+	  <a href="/edh7916/assignments/">Assignments</a></br>
+	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/past/">Past courses</a></br>
+	  <a href="/edh7916/about/">About</a></br>	  
+	</h2>
+      </header>
+
+      <section>
+	<h1>Software installation</h1>
+	
+	<p>
+	  
+	  <a href="/edh7916/assets/pdf/installation.pdf"
+	     class="iconlink" download title="Download PDF">
+	    <i class="far fa-file-pdf fa-2x"></i>
+	  </a>
+	  
+	</p>
+	
+
+	<ul id="markdown-toc">
+  <li><a href="#getting-started" id="markdown-toc-getting-started">Getting started</a></li>
+  <li><a href="#installing-r" id="markdown-toc-installing-r">Installing R</a>    <ul>
+      <li><a href="#r-for-macos" id="markdown-toc-r-for-macos">R for MacOS</a></li>
+      <li><a href="#r-for-windows" id="markdown-toc-r-for-windows">R for Windows</a></li>
+    </ul>
+  </li>
+  <li><a href="#installing-rstudio" id="markdown-toc-installing-rstudio">Installing RStudio</a></li>
+  <li><a href="#installing-latex" id="markdown-toc-installing-latex">Installing LaTeX</a>    <ul>
+      <li><a href="#tinytex" id="markdown-toc-tinytex">TinyTex</a></li>
+      <li><a href="#optional-full-installation" id="markdown-toc-optional-full-installation">OPTIONAL: Full installation</a>        <ul>
+          <li><a href="#latex-for-macos-mactex" id="markdown-toc-latex-for-macos-mactex">LaTeX for MacOS (MacTeX)</a></li>
+          <li><a href="#latex-for-windows-miktex" id="markdown-toc-latex-for-windows-miktex">LaTeX for Windows (MiKTeX)</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="getting-started">Getting started</h1>
+
+<p>This course requires you to install a few bits of software on your
+computer. Specifically, you need:</p>
+
+<ul>
+  <li>R</li>
+  <li>RStudio</li>
+  <li>LaTeX</li>
+</ul>
+
+<p>These instructions should help you find and download what you
+need. You do not need to use this guide, but it may help, particularly
+if you aren’t used to downloading and installing open source software.</p>
+
+<p>I’ve done my best to include screenshots of each step. One snag,
+however, is that while some in the class may use Windows/PC, others
+use Apple/MacOS (I’m making the assumption that no one is using Linux
+— if you are, you probably don’t need these instructions!). I
+personally use MacOS. This means that some of the screenshots are
+based on what I see as a Mac user on the software websites. But where
+I can, I show sections for MacOS and Windows downloads.</p>
+
+<p>I also can’t walk you through each step of the installation once
+you’ve downloaded the correct files, again, because operating systems
+differ. That said, he good news is that with only one exception (sorry
+Windows users!), you should be able to install all software using the
+default process like you do with most other software.</p>
+
+<h1 id="installing-r">Installing R</h1>
+
+<p>First things first, we’ll get R, which you can find at
+<a href="https://cran.r-project.org">https://cran.r-project.org</a>. Depending on
+your operating system (OS), you’ll click one of the following links at
+the top of the home page.</p>
+
+<p><img src="/edh7916/assets/img/cran_home.png" alt="CRAN homepage" /></p>
+
+<h2 id="r-for-macos">R for MacOS</h2>
+
+<p>When downloading R for MacOS, you’ll want to click the link for the
+latest version of R: <code class="language-plaintext highlighter-rouge">R-&lt;#&gt;.&lt;#&gt;.&lt;#&gt;.pkg</code> where <code class="language-plaintext highlighter-rouge">&lt;#&gt;.&lt;#&gt;.&lt;#&gt;</code> represent
+the major, minor, and patch numbers. As of the writing of this
+document (May 2020), the latest version of R is R 4.0.0 — it may be
+different (higher) when you download. Just grab the one inside the red
+box.</p>
+
+<p>You may be asked if you want to allow the download. If so, say yes and
+pay attention to where you save it (typically your Downloads
+folder). Once it has finished downloading, double click on the package
+icon and follow the default directions to install.</p>
+
+<p><img src="/edh7916/assets/img/cran_mac_install.png" alt="Page to download R for MacOS" /></p>
+
+<h2 id="r-for-windows">R for Windows</h2>
+
+<p>When downloading R for Windows, you’ll first be taken to an
+intermediate screen. Just click the indicated link to go to the next
+page.</p>
+
+<p><img src="/edh7916/assets/img/cran_windows_intermediate_screen.png" alt="Intermediate page to download R for Windows" /></p>
+
+<p>On the next screen, click the link to “Download <code class="language-plaintext highlighter-rouge">R-&lt;#&gt;.&lt;#&gt;.&lt;#&gt;</code> for
+Windows” where <code class="language-plaintext highlighter-rouge">&lt;#&gt;.&lt;#&gt;.&lt;#&gt;</code> represent the major, minor, and patch
+numbers. As of the writing of this document (May 2020), the latest
+version of R is R 4.0.0 — it may be different (higher) when you
+download. Just grab the one inside the red box.</p>
+
+<p>You may be asked if you want to allow the download. If so, say yes and
+pay attention to where you save it (typically your Downloads
+folder). Once it has finished downloading, double click on the
+installation icon and follow the default directions to install.</p>
+
+<p>Depending on the level of control you have on your computer and how
+you typically install software, you may want to install R as an
+administrator. I would recommend that to head off issues down the
+road, but if you don’t have administrator privileges then go ahead an
+install as a user.</p>
+
+<p><img src="/edh7916/assets/img/cran_windows_install.png" alt="Page to download R for Windows" /></p>
+
+<h1 id="installing-rstudio">Installing RStudio</h1>
+
+<p>Now that you’ve installed R, it’s time to get RStudio, the program
+we’ll use to work with R. Start by going to the RStudio home page:
+<a href="https://rstudio.com">https://rstudio.com</a>.</p>
+
+<p>At the very top, you’ll see a link to “Downloads”: click that.</p>
+
+<p><img src="/edh7916/assets/img/rstudio_home.png" alt="Rstudio homepage" /></p>
+
+<p>You’ll be presented with a number of versions of RStudio to
+install. We’ll choose the free desktop version (naturally!).</p>
+
+<p><img src="/edh7916/assets/img/rstudio_version.png" alt="RStudio version selection" /></p>
+
+<p>You’ll now see a button to download RStudio. Step (1) is to download
+R, but we’ve already done that so we’re good.</p>
+
+<p>One thing: the RStudio website is smart and tries to guess your OS so
+that it can present you with a big button to download the correct
+version. As you can see, it worked for me: I’m shown a button to
+download RStudio for MacOS. If you go to the website on a computer
+using Windows, the button should instead be a link to install RStudio
+for Windows. If all works, then you can click the button either way
+(yours just may look different), download, and install as normal. If
+the button doesn’t have your correct OS, then go to the next step.</p>
+
+<p><img src="/edh7916/assets/img/rstudio_install.png" alt="RStudio install button" /></p>
+
+<p>Just below the big button, you’ll see the full list of RStudio
+versions. You can also pick your correct version here. Same as before,
+just click the link, download, and install as normal.</p>
+
+<p><img src="/edh7916/assets/img/rstudio_install_opt.png" alt="RStudio install options" /></p>
+
+<h1 id="installing-latex">Installing LaTeX</h1>
+
+<p>LaTeX is a document typesetting system/language. While it’s probably
+best known for its ability to nicely typeset mathematical equations,
+LaTeX works really well quantitative research workflows. That said, it
+can be difficult to install and work with.</p>
+
+<p>We’ll use LaTeX later in the semester so that you can make nice PDF
+reports. The good news is that you won’t really need to interact with
+LaTeX at all to do so — other than to install it now.</p>
+
+<p>Since you don’t need a full TeX distribution on your computer, you can
+most likely get by using the <a href="https://yihui.org/tinytex/">TinyTeX</a>
+distribution that we can install directly from R. If you want a full
+version of TeX on your computer (<strong>NOTE:</strong> It’s very large), then skip
+to the full installation for your computer.</p>
+
+<h2 id="tinytex">TinyTex</h2>
+
+<p>Once you’ve installed R and RStudio, open RStudio and type the
+following in the Console:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">install.packages</span><span class="p">(</span><span class="s2">"tinytex"</span><span class="p">)</span><span class="w">
+</span><span class="n">tinytex</span><span class="o">::</span><span class="n">install_tinytex</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This will install the <code class="language-plaintext highlighter-rouge">tinytex</code> R package and then install the TinyTeX
+distribution (it may take a minute or two).</p>
+
+<h2 id="optional-full-installation">OPTIONAL: Full installation</h2>
+
+<p>If you want the full installation, first go the LaTeX home page at
+<a href="https://www.latex-project.org">https://www.latex-project.org</a>.</p>
+
+<p><img src="/edh7916/assets/img/latex_home.png" alt="" /></p>
+
+<p>If you scroll down slightly, you’ll see options for MacOS (MacTeX) and
+Windows (MiKTeX) installations. Click the link that applies to your OS
+and follow the instructions below.</p>
+
+<p><img src="/edh7916/assets/img/latex_install.png" alt="" /></p>
+
+<h3 id="latex-for-macos-mactex">LaTeX for MacOS (MacTeX)</h3>
+
+<p>On the MacTeX home page, first click the link for the MacTeX Download.</p>
+
+<p><img src="/edh7916/assets/img/mactex_first.png" alt="" /></p>
+
+<p>On the next page, click the link for MacTeX.pkg, agree to download,
+and then double click on the downloaded file to install. Note that
+this package is very big (~ 4GB) because you are downloading just
+about everything TeX-related, including some software. It’s what I
+use, but I use TeX all the time. Just know this in case your storage
+space is limited on your computer.</p>
+
+<p><img src="/edh7916/assets/img/mactex_download.png" alt="" /></p>
+
+<h3 id="latex-for-windows-miktex">LaTeX for Windows (MiKTeX)</h3>
+
+<p>Once you reach the Windows (MiKTeX) homepage, click the Downloads link
+at the top of the page.</p>
+
+<p><img src="/edh7916/assets/img/miktex_home.png" alt="" /></p>
+
+<p>On the next screen, you’ll want to click on the blue “Download”
+button, agree to the download, and then install.</p>
+
+<p><img src="/edh7916/assets/img/miktex_download.png" alt="" /></p>
+
+<p><strong>ONE NOTE</strong> MiKTeX is much smaller than MacTeX, but that’s because it
+doesn’t download everything. Instead, it opts to only install packages
+as you need them. Cool, expect that doesn’t always work well with
+RStudio.</p>
+
+<p>The fix is this: when going through the installation, on the
+“Settings” screen, be sure to change the default selection for
+“Install missing packages on-the-fly” from <code class="language-plaintext highlighter-rouge">"Ask me first"</code> to
+<code class="language-plaintext highlighter-rouge">"Always"</code>. Continue the installation with the other default options.</p>
+
+<p><img src="/edh7916/assets/img/miktex_settings.png" alt="" /></p>
+
+
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
+      </section>
+      <footer>
+        <p>
+  Benjamin Skinner</br>  
+  Assistant Professor</br>  
+  University of Florida</br>
+  <a href="https://www.btskinner.io" class="iconlink" alt="Personal website">
+    <i class="fas fa-home fa-lg"></i></a> | 
+  <a href="https://github.com/btskinner" class="iconlink" alt="Github
+								profile">
+    <i class="fab fa-github fa-lg"></i></a> |
+  <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
+    <i class="fab fa-twitter fa-lg"></i></a>
+</p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
+
+      </footer>
+    </div>
+
+    <!-- load Javascript if page requires it -->
+    
+    
+    
+
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-63981025-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>
