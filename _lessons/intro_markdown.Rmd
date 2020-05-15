@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: Introduction to Markdown
-subtitle: "EDH7916 | Spring 2020"
+subtitle: "EDH7916 | Summer C 2020"
 author: Benjamin Skinner
 order: 2
 category: lesson

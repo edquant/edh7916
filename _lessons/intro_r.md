@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: Introduction to R
-subtitle: "EDH7916 | Spring 2020"
+subtitle: "EDH7916 | Summer C 2020"
 author: Benjamin Skinner
 order: 1
 category: lesson
@@ -286,7 +286,7 @@ library(tidyverse)
 ```
 ✔ ggplot2 3.3.0     ✔ purrr   0.3.4
 ✔ tibble  3.0.1     ✔ dplyr   0.8.5
-✔ tidyr   1.0.2     ✔ stringr 1.4.0
+✔ tidyr   1.0.3     ✔ stringr 1.4.0
 ✔ readr   1.3.1     ✔ forcats 0.5.0
 ```
 
@@ -391,6 +391,8 @@ Two question marks will search for the command name in CRAN packages
 |Package     |Topic              |Type     |Title                                                                       |
 |:-----------|:------------------|:--------|:---------------------------------------------------------------------------|
 |bit64       |qtile              |help     |(Q)uan(Tile)s                                                               |
+|caTools     |runmad             |help     |Median Absolute Deviation of Moving Windows                                 |
+|caTools     |runquantile        |help     |Quantile of Moving Window                                                   |
 |ellipsis    |safe_median        |help     |Safe version of median                                                      |
 |future      |sticky_globals     |help     |Place a sticky-globals environment immediately after the global environment |
 |ggplot2     |hmisc              |help     |A selection of summary functions from Hmisc                                 |

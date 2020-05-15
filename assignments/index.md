@@ -39,11 +39,11 @@ the course (percentage of final grade in parentheses):
 ## Assignments
 
 <ul class="assignments">
-{% assign assignments = site.assignments | where: 'category', 'assignment' %}
-{% assign assignments = assignments | sort:"order"  %}
-{% for a in assignments %}
+{% assign probset = site.assignments | where: 'category', 'problemset' %}
+{% assign probset = probset | sort:"order"  %}
+{% for ps in probset %}
 	<li class="do">
-		<a href="{{ a.url | prepend: site.baseurl }}.html">{{ a.title }}</a>
+		<a href="{{ ps.url | prepend: site.baseurl }}.html">{{ ps.title }}</a>
 	</li>
 {% endfor %}
 </ul>
@@ -51,17 +51,18 @@ the course (percentage of final grade in parentheses):
 ## Final project
 
 <ul class="assignments">
-{% assign assignments = site.assignments | where: 'category',
-'finalproject' | where: 'category', 'rubric' %%}
-{% assign assignments = site.assignments | sort:"order"  %}
-{% for a in assignments %}
-{% if a.category == "rubric" %}
+{% assign finalproj1 = site.assignments | where: 'category', 'finalproject' %}
+{% assign finalproj2 = site.assignments | where: 'category', 'rubric' %}
+{% assign finalproj = finalproj1 | concat: finalproj2 %}
+{% assign finalproj = finalproj | sort:"order"  %}
+{% for fp in finalproj %}
+{% if fp.category == "rubric" %}
 <li class="rubric">
-	<a href="{{ a.url | prepend: site.baseurl }}.html">{{ a.title }}</a>
+	<a href="{{ fp.url | prepend: site.baseurl }}.html">{{ fp.title }}</a>
 </li>
 {% else %}
 <li class="do">
-	<a href="{{ a.url | prepend: site.baseurl }}.html">{{ a.title }}</a>
+	<a href="{{ fp.url | prepend: site.baseurl }}.html">{{ fp.title }}</a>
 </li>
 {% endif %}
 {% endfor %}
