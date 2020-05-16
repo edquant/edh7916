@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/edh7916/assets/css/style.css">
+<link rel="stylesheet" href="/edh7916/assets/css/syntax_default.css">
+<link rel="shortcut icon" type="image/png" href="/edh7916/assets/img/favicon.ico">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
+<script defer src="/edh7916/assets/js/all.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<title>edquant | EDH 7916: Contemporary Research in Higher Education</title>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/edquant/edh7916" class="iconlink">
+	      <i class="fab fa-github fa-sm"></i></a></h1>
+	<h2 class="thin">Summer 2020 (Session C)</h2>
+	<p>A course in quantitative research workflow for students in
+the higher education administration program at the University of Florida
+</p>
+	<!-- side / top bar menu -->
+	<h2 class="thin">
+	  <a href="/edh7916/">Overview</a></br>
+	  <a href="/edh7916/syllabus/">Course
+	    information</a></br>
+	  <!-- <a href="/edh7916/location/">Meeting -->
+	  <!--   location</a></br> -->
+	  <a href="/edh7916/software/">Software</a></br>
+	  <a href="/edh7916/schedule/">Schedule</a></br>
+	  <a href="/edh7916/lessons/">Lessons</a></br>
+	  <a href="/edh7916/assignments/">Assignments</a></br>
+	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/past/">Past courses</a></br>
+	  <a href="/edh7916/about/">About</a></br>	  
+	</h2>
+      </header>
+
+      <section>
+	<h1>Organizing</h1>
+	
+
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/organizing.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  <a href="/edh7916/scripts/organizing.R"
+     class="iconlink" download title="Get script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+  
+  <a href="/edh7916/scripts/template.R"
+     class="iconlink" download title="Get extra script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+  
+  
+  <a href="/edh7916/data/test_scores.RDS"
+     class="iconlink" download title="Get data">
+    <i class="fas fa-database fa-2x"></i>
+  </a>
+  
+</p>
+
+
+<p>In this lesson, we’ll discuss how to organize both a project directory
+and an R script. While there’s no one exact way to do either, there
+are good practices that you should generally follow.</p>
+
+<h1 id="organizing-a-project-directory">Organizing a project directory</h1>
+
+<p>We’ll begin with how to organize your course and project files.</p>
+
+<h2 id="a-place-for-everything-and-everything-in-its-place">A place for everything and everything in its place</h2>
+
+<p>Every data analysis project should have its own set of organized
+folders. Just like you might organize a kitchen so that ingredients,
+cookbooks, and prepared food all have a specific cabinet or shelf, so
+too should you organize your project. We’ll organize our course
+directory in a similar fashion.</p>
+
+<p>But computers are pretty good at finding files, you say: you can use
+your machine’s search feature to look for what you need. If you don’t
+have that many files to look through, you might not be too bad at
+quickly scanning to find what you want either. If this is the case,
+then why bother organizing a project directory?  Why not just dump
+everything — scripts, data, figures, tables, notes, <em>etc</em> — into a
+single folder (<em>My downloads folder works just fine, thank you…</em>)? If
+you need something, the computer can definitely find it.</p>
+
+<p>So what’s the big deal?</p>
+
+<p>The big deal is that you are thinking from your computer’s perspective
+when you should be thinking from the perspective of you, your
+collaborators (which includes your future self), and future
+replicators (which also includes yourself). Search features are nice,
+but there’s no substitute for being able to look through a project’s
+files <em>just by looking through the project folders</em>. When a project is
+well organized, it’s much easier to understand how everything — each
+input, process, and output — fits together.</p>
+
+<h2 id="a-common-directory-structure">A common directory structure</h2>
+
+<p>Let’s set up a basic directory structure for this class:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>edh7916/
+|
+|__ assignments/
+|__ data/
+|__ figures/
+|__ final_project/
+|__ lessons/
+|__ scripts/
+|__ working/
+</code></pre></div></div>
+
+<p>As you can see, we have a main directory (or folder — same thing)
+for the course called <code class="language-plaintext highlighter-rouge">edh7916</code>. This can live on your computer
+wherever you want to put it: on your Desktop, in your home directory,
+in another folder where you store materials for your other classes —
+wherever makes sense for you.</p>
+
+<p>Inside the main course directory, there are subdirectories (or
+subfolders — again, same thing) for the different types of files
+you’ll collect or create this term. These subdirectories have
+self-explanatory names: PDFs for assignments go into <code class="language-plaintext highlighter-rouge">assignments</code>,
+PDFs for lessons into <code class="language-plaintext highlighter-rouge">lessons</code> and so on.</p>
+
+<p>Note that this type of structure works well with research projects. Of
+course, you’re unlike to have <code class="language-plaintext highlighter-rouge">assignments</code> or <code class="language-plaintext highlighter-rouge">lessons</code> subfolders
+within a research project directory, but you almost certainly will
+have subfolders for your <code class="language-plaintext highlighter-rouge">scripts</code>, <code class="language-plaintext highlighter-rouge">data</code>, and <code class="language-plaintext highlighter-rouge">figures</code> as well as a
+<code class="language-plaintext highlighter-rouge">working</code> folder (which some people call <code class="language-plaintext highlighter-rouge">scratch</code>, like a scratch
+pad) where you can store odds and ends or practice new ideas.</p>
+
+<p>You may ask: why these folders in particular or, why should I have
+separate <code class="language-plaintext highlighter-rouge">data</code>, <code class="language-plaintext highlighter-rouge">scripts</code>, and <code class="language-plaintext highlighter-rouge">figures</code> in my project directory?</p>
+
+<p>Think about it this way. Following our kitchen analogy from before, we
+have:</p>
+
+<ul>
+  <li><strong>Ingredients (Inputs)</strong> - <code class="language-plaintext highlighter-rouge">data</code></li>
+  <li><strong>Cookbooks (Processes)</strong> - <code class="language-plaintext highlighter-rouge">scripts</code></li>
+  <li><strong>Prepared food (Outputs)</strong> - <code class="language-plaintext highlighter-rouge">figures</code></li>
+</ul>
+
+<p>Particular projects may require particular folders (for example, you
+may find it useful to have a special subfolder for <code class="language-plaintext highlighter-rouge">tables</code> or one for
+regression output called <code class="language-plaintext highlighter-rouge">estimates</code>). But in almost all cases, your
+project directory should have separate subfolders for your data, your
+analysis scripts, and any output you produce.</p>
+
+<h3 id="great-how-to-i-set-this-up">Great! How to I set this up?</h3>
+
+<p>You can create new directories using your operating system. For both
+MacOS and Windows, one of the easiest ways to make a new folder is to
+right-click on your Desktop and choose to create a new folder. You can
+then open this folder and continue right-click creating subfolders
+until you have what you need.</p>
+
+<p>You can also use the RStudio <strong>Files</strong> tab (lower right facet) to
+create new folders. We’ll do it that way.</p>
+
+<p>Let’s say I want to create a course directory on my Desktop.</p>
+
+<p><img src="../assets/img/rstudio_file_home.png" alt="" /></p>
+
+<p>When I open RStudio, notice that it starts in my Home folder (we’ll
+talk more about what that means to “start in” below). You can see this
+by looking at the menu bar in the <strong>Files</strong> facet. It also helps that I
+can see all the folders and files listed in the window. Because I know
+generally what’s in my home directory (<code class="language-plaintext highlighter-rouge">Applications</code>, <code class="language-plaintext highlighter-rouge">Desktop</code>,
+<code class="language-plaintext highlighter-rouge">Documents</code>), it’s clear to me that that’s where I am. Depending on
+your settings, RStudio may start somewhere else for you — that’s
+fine, just check the menu bar.</p>
+
+<p>So I’m in my home folder, but I want to be in my Desktop folder. Easy
+enough: I can just click the Desktop link in the window.</p>
+
+<p><img src="../assets/img/rstudio_file_desktop.png" alt="" /></p>
+
+<p>Notice how the file list has changed. There’s nothing there! That’s
+because I have a very clean Desktop! But if you have files on your
+Desktop, you should see those now. Either way, I can see that the menu
+bar address has changed to add a folder: <em>Home &gt; Desktop</em>.</p>
+
+<p>To create a new folder, I can click on the <strong>New Folder</strong> button and
+then give my new folder a name in the drop down menu.</p>
+
+<p><img src="../assets/img/rstudio_file_new_folder_1.png" alt="" /></p>
+
+<p>Now you can see my course folder, which I’ve called
+<code class="language-plaintext highlighter-rouge">edh7916</code>.</p>
+
+<p><img src="../assets/img/rstudio_file_new_folder_2.png" alt="" /></p>
+
+<p>Clicking on that, I see the menu address change to <em>Home &gt; Desktop &gt;
+edh7916</em> and nothing inside, which is expected since it’s a newly
+created folder.</p>
+
+<p><img src="../assets/img/rstudio_file_edh7916.png" alt="" /></p>
+
+<p>Time to add the subdirectories!</p>
+
+<blockquote>
+  <h4 id="quick-exercise">Quick exercise</h4>
+  <p>Create your course directory (wherever you like — just keep
+track!) and add the following subdirectories to it:</p>
+  <ul>
+    <li>assignments</li>
+    <li>data</li>
+    <li>figures</li>
+    <li>final_project</li>
+    <li>lessons</li>
+    <li>scripts</li>
+    <li>working</li>
+  </ul>
+
+  <p>When you’re finished, it should look something like this in the
+<strong>Files</strong> facet:</p>
+</blockquote>
+
+<p><img src="../assets/img/rstudio_file_edh7916_full.png" alt="" /></p>
+
+<blockquote>
+  <p><strong>NB</strong>: Your menu path and course directory name may look different
+from mine, but the subdirectories in your course directory should
+look the same.</p>
+
+  <p>Once you’ve done that, place all the PDFs, scripts, and data you’ve
+downloaded so far into their proper folders.</p>
+
+  <p><strong>NB</strong> When you download course files, they most likely end up in
+your computer’s downloads folder by default. If that’s the case just
+use the file system on your computer to drag and drop these files
+where they belong.</p>
+</blockquote>
+
+<h2 id="quick-aside-into-how-applications-find-files">Quick aside into how applications find files</h2>
+
+<p>Above, I said</p>
+
+<blockquote>
+  <p>When I open RStudio, notice that it <strong>starts in my Home folder</strong>…</p>
+</blockquote>
+
+<p>What does that mean, <em>starts in</em>?</p>
+
+<p>There are two common ways to open a file on your computer with the
+correct application:</p>
+
+<ol>
+  <li>Open the application you know you need — let’s say Excel — and
+then choose to “<em>Open…</em>” an existing file from the main menu. When
+you go this route, a little window will open or you’ll see a drop down
+menu and will have to navigate to find your file.</li>
+  <li>Find the file you want open and then double-click it. On most
+computers, the correct application will automagically open and your
+file will be loaded (<em>e.g.</em> double click on an <code class="language-plaintext highlighter-rouge">*.xlsx</code> file and Excel
+will open with your file ready to go).</li>
+</ol>
+
+<p>In this way, RStudio is an application just like any other application
+on your computer. If you double-click on <code class="language-plaintext highlighter-rouge">*.R</code> scripts or <code class="language-plaintext highlighter-rouge">*.md</code> or
+<code class="language-plaintext highlighter-rouge">*.Rmd</code> files, it’s likely that RStudio will open. However, if you
+open RStudio first, it begins by assuming you want to look for/store
+files in a default location — most likely your <em>Home</em> directory
+unless you’ve changed the settings.</p>
+
+<p>This what I mean by <em>starts in</em>.</p>
+
+<p>As you might be guessing by this point, how people set up their
+computers or organize their files will affect where RStudio needs to
+look for the correct files. One skill you’ll have to develop is being
+able to navigate to the proper <strong>working directory</strong>, that is, telling
+RStudio where your files are located.</p>
+
+<h2 id="setting-your-working-directory">Setting your working directory</h2>
+
+<p>After downloading today’s scripts (the <i class="fas fa-code"></i>
+icons at the top of the page) and adding them to the <code class="language-plaintext highlighter-rouge">scripts</code>
+subdirectory of my course directory, I’ve opened one in
+RStudio.</p>
+
+<p><img src="../assets/img/rstudio_working_dir_1.png" alt="" /></p>
+
+<p>Despite what I see in the <strong>Files</strong> facet, however, my <strong>working
+directory</strong> is still set to my home directory. This means that when
+RStudio starts looking for files, it’s going to start in the home
+folder.</p>
+
+<p>How do I know that? Notice that the path shown on the <strong>Console</strong>
+facet doesn’t match the one on the <strong>Files</strong> facet. Also, when I run
+the R function <code class="language-plaintext highlighter-rouge">list.files()</code> — which by default lists all the files
+in the current directory — in the console, I see the files in my
+home (<code class="language-plaintext highlighter-rouge">~</code>) directory rather than those I see in
+<code class="language-plaintext highlighter-rouge">~/Desktop/edh7916/scripts</code> directory.</p>
+
+<p><img src="../assets/img/rstudio_working_dir_2.png" alt="" /></p>
+
+<p>There are a number of ways to fix this, but the easiest way is to
+click the <em>More</em> button (with the gear) in the <strong>Files</strong> facet. In the
+drop down menu, you’ll see an option to “Set As Working Directory.”
+Because you are in the <code class="language-plaintext highlighter-rouge">scripts</code> directory, you can click it to
+correctly tell RStudio that you are working in <code class="language-plaintext highlighter-rouge">scripts</code>, not elsewhere.</p>
+
+<p><img src="../assets/img/rstudio_working_dir_3.png" alt="" /></p>
+
+<p>Clicking “Set As Working Directory” sends the command <code class="language-plaintext highlighter-rouge">setwd()</code> to the
+<strong>Console</strong> with the correct path to get from where RStudio starts to
+where you want to be. Now you can see that the paths in each facet’s
+menu bar match and when we run <code class="language-plaintext highlighter-rouge">list.files()</code> again, we now see the
+two R scripts listed on the left that we see listed on the right.</p>
+
+<p><img src="../assets/img/rstudio_working_dir_4.png" alt="" /></p>
+
+<p>Now that you’ve found your course script files in RStudio, the next
+step is to understand how to make sure they can find your data and
+output folders.</p>
+
+<h2 id="absolute-vs-relative-paths">Absolute vs relative paths</h2>
+
+<p>Every quantitative data analysis will need to coordinate the three
+ingredients discussed above (data, scripts, output). When your script
+attempts to read in data, it has be able to find it on your
+computer. Similarly, when it’s time to make a figure, its needs to
+know where to save it. In other words, you need to give it <strong>paths</strong>
+to your other folders.</p>
+
+<p>There are two basic types of paths — <strong>relative</strong> and <strong>absolute</strong>
+— and which type you choose to use will affect the
+transferability and replicability of your work.</p>
+
+<p>A quick analogy. Imagine you ask a friend for directions: <em>how do I
+get to the state park?</em> Your friend has three ways they can give you
+directions:</p>
+
+<ol>
+  <li>Directions to the park from <em>their</em> house</li>
+  <li>Directions to the park from <em>your</em> house</li>
+  <li>Directions to the park from a common landmark</li>
+</ol>
+
+<p>The first way is really easy for your friend, but it puts extra work
+on you. Either you have to go to their house first so that the
+directions make sense, or you have to translate them from your
+perspective. Directions like these are annoying at best and useless if
+you don’t know how to get to their house.</p>
+
+<p>The second way is really nice to you, but difficult for your
+friend. However, the directions aren’t as useful if you don’t plan to
+start from your house. In addition, these directions also aren’t
+reusable for other people — if a third friend tries to get the
+directions from you, you’ll just replicate the first problem for them.</p>
+
+<p>The third way is the best compromise. If you each know how to get to a
+common landmark, then you can head to the landmark however works best
+for you and, once there, follow your friend’s directions to the
+park. As a bonus, these directions are shareable: anyone who can get
+to the common landmark can use the directions to get to the park.</p>
+
+<p>In the world of our class directory, the first two sets of directions
+are <strong>absolute</strong> paths while the third is a <strong>relative</strong> path. Since
+we all share the same course directory structure, as long as each of
+us can get to primary directory (<em>e.g.</em> <code class="language-plaintext highlighter-rouge">edh7916</code>), then all the
+subdirectories will be in the same relative locations on each of our
+computers. In practice, this means I can give you all the same script
+and it should work.</p>
+
+<p>The same holds true for a research project directory. If your project
+is organized into folders and you share the full project directory
+with another researcher, then as long as they can get to the correct
+starting point — <em>e.g.</em> your <code class="language-plaintext highlighter-rouge">scripts</code> folder — they can run your
+project easily.</p>
+
+<h3 id="examples">Examples</h3>
+
+<p>Let’s say I want to give you the path to the course <code class="language-plaintext highlighter-rouge">scripts</code>
+directory. Here are two:</p>
+
+<ul>
+  <li><strong>Absolute path</strong>: <code class="language-plaintext highlighter-rouge">~/Desktop/edh7916/scripts</code></li>
+  <li><strong>Relative path</strong>: <code class="language-plaintext highlighter-rouge">./scripts</code></li>
+</ul>
+
+<p>The first absolute path only works for you if you both named your
+course folder <code class="language-plaintext highlighter-rouge">edh7916</code> and put it on your desktop. For some of you,
+it might work, but that would be due to happenstance rather than good
+planning on my part.</p>
+
+<p>The second relative path assumes we are in the primary class directory
+(<code class="language-plaintext highlighter-rouge">edh7916</code>). Notice the <code class="language-plaintext highlighter-rouge">.</code> (dot)? On most systems, dots in a file
+path work like this:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.</code> (one dot): <em>this</em> directory/folder</li>
+  <li><code class="language-plaintext highlighter-rouge">..</code> (two dots): <em>up one</em> directory (<em>e.g.</em> from <code class="language-plaintext highlighter-rouge">edh7916/scripts</code>
+to <code class="language-plaintext highlighter-rouge">edh7916</code></li>
+</ul>
+
+<p>What if we are in the <code class="language-plaintext highlighter-rouge">scripts</code> folder, but want to access a file in
+the <code class="language-plaintext highlighter-rouge">data</code> directory? We use two dots (<code class="language-plaintext highlighter-rouge">..</code>):</p>
+
+<ul>
+  <li>from <code class="language-plaintext highlighter-rouge">scripts</code> to <code class="language-plaintext highlighter-rouge">data</code>: <code class="language-plaintext highlighter-rouge">../data</code></li>
+</ul>
+
+<p>What this says is</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">..</code>: back up into the main folder, <code class="language-plaintext highlighter-rouge">edh7916</code></li>
+  <li><code class="language-plaintext highlighter-rouge">/data</code>: from the main folder (<code class="language-plaintext highlighter-rouge">edh7916</code>), go into <code class="language-plaintext highlighter-rouge">data</code></li>
+</ol>
+
+<blockquote>
+  <h4 id="quick-exercise-1">Quick exercise</h4>
+  <p>Use R’s <code class="language-plaintext highlighter-rouge">list.files(".")</code> command in the console to show all the files
+in the current directory. Next, use <code class="language-plaintext highlighter-rouge">list.files("..")</code> to show all
+the files in the directory above the current. Finally, use
+<code class="language-plaintext highlighter-rouge">list.files("&lt;...&gt;")</code> with a relative link to see all the files
+inside the <code class="language-plaintext highlighter-rouge">data</code> folder (replace <code class="language-plaintext highlighter-rouge">&lt;...&gt;</code> with the correct relative
+path).</p>
+</blockquote>
+
+<h1 id="organizing-a-script">Organizing a script</h1>
+
+<h2 id="do-one-thing-and-do-it-well">Do one thing and do it well</h2>
+
+<p>A general philosophy for every project: your scripts should do one
+thing and do it well. Rather than have a single giant script with
+5,000 lines that run your entire analysis, it’s generally clearer to
+have many smaller scripts that are run in conjunction with one another
+(<em>e.g.</em> one script that reads in the data and cleans it, one that
+performs the analysis, one that makes the figures, <em>etc</em>).</p>
+
+<p>But even if you only need a single small script, this organizing
+principle still applies. Always organize your scripts into clear
+sections in which you perform specific analytic tasks.</p>
+
+<h2 id="template">Template</h2>
+
+<p>Here’s a template for an R script with clearly defined sections that
+you can use:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">################################################################################</span><span class="w">
+</span><span class="c1">##</span><span class="w">
+</span><span class="c1">## [ PROJ ] &lt; Name of the overall project &gt;</span><span class="w">
+</span><span class="c1">## [ FILE ] &lt; Name of this particular file &gt;</span><span class="w">
+</span><span class="c1">## [ AUTH ] &lt; Your name + email / Twitter / GitHub handle &gt;</span><span class="w">
+</span><span class="c1">## [ INIT ] &lt; Date you started the file &gt;</span><span class="w">
+</span><span class="c1">##</span><span class="w">
+</span><span class="c1">################################################################################</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## libraries</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## directory paths</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## settings/macros</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## functions</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+</span><span class="c1">## &lt; BODY &gt;</span><span class="w">
+</span><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## input</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## process</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## output</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+</span><span class="c1">## END SCRIPT</span><span class="w">
+</span><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+</span></code></pre></div></div>
+
+<p>And here’s the template with a very simple project outline:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">################################################################################</span><span class="w">
+</span><span class="c1">##</span><span class="w">
+</span><span class="c1">## [ PROJ ] EDH 7916: Organizing</span><span class="w">
+</span><span class="c1">## [ FILE ] organizing.R</span><span class="w">
+</span><span class="c1">## [ AUTH ] Benjamin Skinner (@btskinner)</span><span class="w">
+</span><span class="c1">## [ INIT ] 13 January 2020</span><span class="w">
+</span><span class="c1">##</span><span class="w">
+</span><span class="c1">################################################################################</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## libraries</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## directory paths</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">dat_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span><span class="w"> </span><span class="s2">"data"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## settings/macros</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">old_to_new_score_ratio</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1.1</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## functions</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">old_to_new_score</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">old_test_score</span><span class="p">,</span><span class="w"> </span><span class="n">ratio</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nf">return</span><span class="p">(</span><span class="n">old_test_score</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ratio</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+</span><span class="c1">## BODY</span><span class="w">
+</span><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## input</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">readRDS</span><span class="p">(</span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"test_scores.RDS"</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## process</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## add a column for new test score using our function</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">test_score_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old_to_new_score</span><span class="p">(</span><span class="n">old_test_score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">test_score</span><span class="p">,</span><span class="w">
+                                             </span><span class="n">ratio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old_to_new_score_ratio</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## output</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">saveRDS</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"test_scores_updated.RDS"</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+</span><span class="c1">## END SCRIPT</span><span class="w">
+</span><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="header">Header</h3>
+
+<p>At the very top of your script, give all the relevant information
+about the script.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">################################################################################</span><span class="w">
+</span><span class="c1">##</span><span class="w">
+</span><span class="c1">## [ PROJ ] EDH 7916: Organizing</span><span class="w">
+</span><span class="c1">## [ FILE ] organizing.R</span><span class="w">
+</span><span class="c1">## [ AUTH ] Benjamin Skinner (@btskinner)</span><span class="w">
+</span><span class="c1">## [ INIT ] 13 January 2020</span><span class="w">
+</span><span class="c1">##</span><span class="w">
+</span><span class="c1">################################################################################</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Specifically:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">[ PROJ ]</code>: tell what project it belongs to</li>
+  <li><code class="language-plaintext highlighter-rouge">[ FILE ]</code>: give the file’s name</li>
+  <li><code class="language-plaintext highlighter-rouge">[ AUTH ]</code>: give your name and a way to contact you</li>
+  <li><code class="language-plaintext highlighter-rouge">[ INIT ]</code>: give the date you started the file</li>
+</ul>
+
+<p>If you aren’t using a version control system like git, then it would
+make sense to also include a line for the last time you revised the
+file: <code class="language-plaintext highlighter-rouge">[ REVN ]</code>.</p>
+
+<p><strong>NOTE</strong> You don’t have to make your header look <em>exactly</em> like
+mine. This is just what I’ve landed on after a few years. As long as
+you have the relevant information, personalize the details as you
+will.</p>
+
+<h4 id="libraries-what-extra-code-do-we-need-to-make-this-code-work">Libraries: what extra code do we need to make this code work?</h4>
+
+<p>After the informational header, the first thing you want to include
+are the libraries you need to call for your script to work. In this
+course, you will almost always call the <strong>tidyverse</strong> library.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## libraries</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h4 id="paths-where-is-everything-and-where-is-it-going">Paths: where is everything and where is it going?</h4>
+
+<p>Rather than hard-coding / rewriting all the paths in the script below,
+we can save the paths in an object. We use the <code class="language-plaintext highlighter-rouge">file.path()</code> command
+because it is smart. Some computer operating systems use forward
+slashes, <code class="language-plaintext highlighter-rouge">/</code>, for their file paths; others use backslashes,
+<code class="language-plaintext highlighter-rouge">\</code>. Rather than try to guess or assume what operating system future
+users will use, we can use R’s function — <code class="language-plaintext highlighter-rouge">file.path()</code> — to check
+the current operating system and build the paths correctly for us.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## directory paths</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">dat_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span><span class="w"> </span><span class="s2">"data"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Notice our relative link? This script assumes that the data file we
+need for the analysis, <code class="language-plaintext highlighter-rouge">test_scores.RDS</code>, is stored in another
+subfolder called <code class="language-plaintext highlighter-rouge">data</code> that is <em>outside this subfolder, but in the
+same primary folder</em>. Visually:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>edh7916/
+|
+|__data/
+|    \--+ test_scores.RDS
+|
+|__scripts/
+     \--+ organizing.R
+</code></pre></div></div>
+
+<p>This means two things:</p>
+<ol>
+  <li>Your working directory needs to be set to <code class="language-plaintext highlighter-rouge">edh7916/scripts</code></li>
+  <li>You need to download and place the data file in <code class="language-plaintext highlighter-rouge">edh7916/data</code></li>
+</ol>
+
+<!-- > #### Quick exercise  -->
+<!-- > Run these lines of code and then print `dat_dir` and `fig_dir` to -->
+<!-- > the console. What do you see? -->
+
+<h4 id="settingsmacros-what-numbers-options-or-settings-should-be-consistent">Settings/Macros: what numbers, options, or settings should be consistent?</h4>
+
+<p>Programmers hate “magic” numbers. What are “magic” numbers (or “magic”
+strings or “magic” settings)? They are values that are hard-coded in
+your analysis script.</p>
+
+<p>Say you want to convert old test scores to a new test score based some
+ratio, say 1.1 (10% increase). You could multiply every old test
+score value throughout your script by 1.1, but what if you later
+decide it should be 1.2? You need to change every instance of
+1.1 — don’t miss any!</p>
+
+<p>In addition, does 1.1 have any inherent meaning? To me, not really. If
+later on you take a look at your script and see that you are
+multiplying by 1.1 (<em>e.g.</em> <code class="language-plaintext highlighter-rouge">x * 1.1</code>), you’ll have to go back to your
+notes or memory — or just guess (!) — what that 1.1 represents.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## settings/macros</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">old_to_new_score_ratio</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1.1</span><span class="w">
+</span></code></pre></div></div>
+
+<p>It’s better to store these constant reusable values at the top of your
+script in an object (or macro, as I call it here) that has a clear
+name. <code class="language-plaintext highlighter-rouge">old_to_new_score_ratio &lt;- 1.1</code> is clear in its meaning, so when
+we use it below, we’ll know what it means. Also, if we decide we need
+to fix / change the value later, we only have to change it once.</p>
+
+<p>Put all such numbers, strings, and settings here.</p>
+
+<h4 id="functions-what-useful-code-will-be-repeated-below">Functions: what useful code will be repeated below?</h4>
+
+<p>Other than the functions that come with the libraries we load, we
+might write functions ourselves. At this point in the course, I’m not
+concerned that you know how to write a function or how one works. Just
+notice how the function has a good name that tells what it does:
+converts old scores to new scores using a ratio (we’ll use the one we
+defined above).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## functions</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">old_to_new_score</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">old_test_score</span><span class="p">,</span><span class="w"> </span><span class="n">ratio</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nf">return</span><span class="p">(</span><span class="n">old_test_score</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ratio</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="body">Body</h3>
+
+<p>The body of your script is where the main work happens. You may need
+more sections, but at the very least you should generally have
+dedicated spots for reading in your data, working with your data, and
+saving any output.</p>
+
+<h4 id="input-read-in-or-create-data-well-work-with">Input: read in (or create) data we’ll work with</h4>
+
+<p>Here we read in a very small tibble (a tidyverse version of a data
+frame) with some student IDs and their test scores. We can see this if
+we look at the data.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## input</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">readRDS</span><span class="p">(</span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"test_scores.RDS"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-2">Quick exercise</h4>
+  <p>Look at the data, both using RStudio’s <strong>View</strong> and by just printing
+the object to the console.</p>
+</blockquote>
+
+<h4 id="process-do-the-analytic-work">Process: do the analytic work</h4>
+
+<p>Let’s say that all we want to do is add a new column to our tibble
+that holds the updated test scores as computed by our function and
+ratio. We will use the <code class="language-plaintext highlighter-rouge">mutate()</code> command from the <strong>dplyr</strong> library
+(part of the <strong>tidyverse</strong> — we’ll be using it a lot in this course)
+to create and add this column.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## process</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## add a column for new test score using our function</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">test_score_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old_to_new_score</span><span class="p">(</span><span class="n">old_test_score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">test_score</span><span class="p">,</span><span class="w">
+                                             </span><span class="n">ratio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old_to_new_score_ratio</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<h4 id="output-write-the-results-from-our-analyses">Output: write the results from our analyses</h4>
+
+<p>Finally, we save our tibble. Notice how we use a new name. We’ll talk
+more about data consistency in a later lesson, but suffice to say for
+now that we never want to overwrite our original data. Save a new file
+with a useful name to keep everything separate.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## output</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">saveRDS</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"test_scores_updated.RDS"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="footer-close-script">Footer (close script)</h3>
+
+<p>With that, we’re finished! While not necessary, it’s nice to have a
+clear indication of where your script ends. This is particularly handy
+down the road when you have many scripts called one after another. If
+you have a problem and have to go through lines of output, knowing
+where a script ends can be very helpful.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+</span><span class="c1">## END SCRIPT</span><span class="w">
+</span><span class="c1">## -----------------------------------------------------------------------------</span><span class="w">
+</span></code></pre></div></div>
+
+<p>And with that, we’re finished!</p>
+
+<h2 id="postscript-three-considerations-about-naming-files-and-macros">POSTSCRIPT: Three considerations about naming files and macros</h2>
+
+<p>When naming folders, files, objects, or macros, keep these naming
+rules in mind:</p>
+
+<ol>
+  <li>Name it well (be clear): <em>e.g.</em> <code class="language-plaintext highlighter-rouge">data_clean.R</code> or <code class="language-plaintext highlighter-rouge">old_to_new_score_ratio</code></li>
+  <li>Name it consistent with other items (have a style): <em>e.g.</em>
+<code class="language-plaintext highlighter-rouge">data_1.RDS</code>, <code class="language-plaintext highlighter-rouge">data_2.RDS</code>,<code class="language-plaintext highlighter-rouge">data_3.RDS</code>, <em>etc</em></li>
+  <li>Name it without spaces!
+    <ul>
+      <li><strong>NO</strong>: <code class="language-plaintext highlighter-rouge">data clean.R</code></li>
+      <li><strong>YES</strong>: <code class="language-plaintext highlighter-rouge">data_clean.R</code></li>
+    </ul>
+  </li>
+</ol>
+
+<p>Per this last point, more person hours are lost than can be counted
+dealing (or failing to deal) with file names that have spaces. Don’t
+do it! Use underscores or hyphens to separate words.</p>
+
+
+
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
+      </section>
+      <footer>
+        <p>
+  Benjamin Skinner</br>  
+  Assistant Professor</br>  
+  University of Florida</br>
+  <a href="https://www.btskinner.io" class="iconlink" alt="Personal website">
+    <i class="fas fa-home fa-lg"></i></a> | 
+  <a href="https://github.com/btskinner" class="iconlink" alt="Github
+								profile">
+    <i class="fab fa-github fa-lg"></i></a> |
+  <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
+    <i class="fab fa-twitter fa-lg"></i></a>
+</p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
+
+      </footer>
+    </div>
+
+    <!-- load Javascript if page requires it -->
+    
+    
+    
+
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-63981025-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>
