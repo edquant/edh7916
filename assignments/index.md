@@ -48,6 +48,18 @@ the course (percentage of final grade in parentheses):
 {% endfor %}
 </ul>
 
+## Supplemental assignments
+
+<ul class="assignments">
+{% assign sup = site.assignments | where: 'category', 'supplemental' %}
+{% assign sup = sup | sort:"order"  %}
+{% for s in sup %}
+	<li class="do">
+		<a href="{{ s.url | prepend: site.baseurl }}.html">{{ s.title }}</a>
+	</li>
+{% endfor %}
+</ul>
+
 ## Final project
 
 <ul class="assignments">

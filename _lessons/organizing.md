@@ -261,25 +261,6 @@ Now that you've found your course script files in RStudio, the next
 step is to understand how to make sure they can find your data and
 output folders.
 
-<!-- Therefore, aside from ocular clarity (_aha, data live in the `data` -->
-<!-- folder_), a reason we organize our course directory as we do is so -->
-<!-- that we share a common framework for loading, analyzing, and saving -->
-<!-- our work. If we all use the same framework --- now and in later -->
-<!-- projects --- then it becomes much easier to transfer project files -->
-<!-- across computers, collaborators, and replicators. -->
-
-<!-- Knowing where RStudio starts is very important because, unlike with -->
-<!-- most other programs you may use on your computer, RStudio isn't -->
-<!-- self-contained. It needs data and scripts and places to save output -->
-<!-- --- and needs to know where to find all those things. -->
-
-<!-- Both ways involve knowing where your file lives, but if you organize -->
-<!-- your files by either leaving them in your downloads folder or on your -->
-<!-- desktop (be honest!), then the second way is probably -->
-<!-- easier. However, the second way doesn't work so well for replication -->
-<!-- across computers, which is one overarching goal of a quantitative -->
-<!-- analysis. -->
-
 ## Absolute vs relative paths
 
 Every quantitative data analysis will need to coordinate the three
@@ -292,10 +273,6 @@ to your other folders.
 There are two basic types of paths --- **relative** and **absolute**
 --- and which type you choose to use will affect the
 transferability and replicability of your work.
-
-<!-- A second important component of a common directory framework that -->
-<!-- helps with this is the use of **relative** rather than **absolute** -->
-<!-- paths in our scripts. -->
 
 A quick analogy. Imagine you ask a friend for directions: _how do I
 get to the state park?_ Your friend has three ways they can give you

@@ -69,8 +69,8 @@ pdfs="assets/pdf"
 pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex --variable monofont=\"Menlo\" -f markdown-implicit_figures"
 
 # sed
-sed_opts_1="s/\/edh7916\/assets/..\/assets/g"
-sed_opts_2="s/..\/assets/.\/assets/g; s/<img src=\"\(figures\/.*\.png\)\" width=\"100%\" \/>/\!\[\]\(${i}\/\1\)/g"
+sed_opts_1="s/\/edh7916\/assets/..\/assets/g; s/\/edh7916\/lessons/..\/lessons/g"
+sed_opts_2="s/..\/assets/.\/assets/g; s/..\/lessons/https:\/equant.github.io\/edh7916\/lessons/g; s/<img src=\"\(figures\/.*\.png\)\" width=\"100%\" \/>/\!\[\]\(${i}\/\1\)/g"
 
 while getopts "hl:a:i:j:o:p:s:b:cv" opt;
 do
@@ -251,10 +251,12 @@ if [[ $knit_assignments == 1 ]]; then
 	else
 	    # knit
 	    Rscript -e "knitr::knit('$f', output='$oj/$a.md', quiet = $knit_q)" 2>&1 > /dev/null
+	    # fix path for local build
+	    sed -i '' "${sed_opts_1}" $oj/$a.md
 	    printf "     $oj/$a.md\n"
 	    # md to pdf
 	    if [[ -f $oj/$a.md ]]; then
-	        pandoc ${pandoc_opts} -o $p/${a}.pdf $oj/$a.md
+	        sed "${sed_opts_2}" $oj/$a.md | pandoc ${pandoc_opts} -o $p/${a}.pdf -
 		cp $p/${a}.pdf $pdfs
 	    fi
 	fi
@@ -270,10 +272,12 @@ if [[ $knit_assignments == 1 ]]; then
 	    else
 		# knit
 		Rscript -e "knitr::knit('$file', output='$oj/$f.md', quiet = $knit_q)" 2>&1 > /dev/null
+		# fix path for local build
+		sed -i '' "${sed_opts_1}" $oj/$f.md
 		printf "     $oj/$f.md\n"
 		# md to pdf
 		if [[ -f $oj/$f.md ]]; then
-		    pandoc ${pandoc_opts} -o $p/${f}.pdf $oj/$f.md
+		    sed "${sed_opts_2}" $oj/$f.md | pandoc ${pandoc_opts} -o $p/${f}.pdf -
 		    cp $p/${f}.pdf $pdfs
 		fi
 	    fi
