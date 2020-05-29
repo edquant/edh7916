@@ -1,27 +1,17 @@
 ---
 layout: lesson
 title: Assignment 4
-subtitle: "EDH7916 | Spring 2020"
+subtitle: "EDH7916 | Summer C 2020"
 author: Benjamin Skinner
-order: 5
-category: assignment
+order: 4
+category: problemset
 links:
-  pdf: dw_two_hw.pdf
+  pdf: assignment_4.pdf
 output:
   md_document:
     variant: gfm
     preserve_yaml: true
 ---
-
-_**NOTE** This assignment needs to be completed by the start of the
-next class. That means everything pushed to your remote GitHub repo
-before class starts._
-
-_Remember, I encourage you to save your work, commit smaller changes,
-and push to your remote GitHub repo often rather than wait until the
-last minute._
-
-# Task 1
 
 Using the `hsls_small.csv` data set and the online codebook, answer
 the following questions. You **do not** need to save the final output
@@ -30,8 +20,8 @@ fine. For each question, I would like you to try to pipe all the
 commands together. Throughout, you **should** account for missing values by
 dropping them.
 
-For each question, show your data work and then answer the question in
-a short (1-2 sentence(s)) comment. 
+For each question, show your data work and, if necessary, answer the
+question in a short (1-2 sentence(s)) comment.
 
 ## Questions
 
@@ -47,15 +37,21 @@ a short (1-2 sentence(s)) comment.
    - `x1stuedexpct`
    - `x1paredexpct`
    - `x4evratndclg`  
+   
    From this reduced data frame, reshape the data frame so that it is
    long in educational expectations, meaning that each observation
    should have two rows, one for each educational expectation type.
+   
+   _e.g. (your column names and values may be different)_
+   
+   | stu_id | expect\_type | expectation | x4evratndclg |
+   |:------:|:------------:|:-----------:|:------------:|
+   | 0001   | x1stuedexpct | 6           | 1            |
+   | 0001   | x1paredexpct | 7           | 1            |
+   | 0002   | x1stuedexpct | 5           | 1            |
+   | 0002   | x1paredexpct | 5           | 1            |
 
-# Task 2
+#### Submission details
 
-If you haven't already, download the raw data you will use for your
-final project. If this requires point-and-click steps, be sure to save
-them in a markdown file in your repo so that you can reproduce them
-later. Please save the data in your `data` directory (it should not
-push to your remote repo, but that's okay).
-
+- Upload your script (`<lastname>_assignment_4.R`) to our CANVAS
+  course site no later than 11:59 p.m. EDT on the due dat.e
