@@ -47,129 +47,105 @@ the higher education administration program at the University of Florida
       </header>
 
       <section>
-	<h1>Assignments</h1>
+	<h1>Assignment 4</h1>
 	
 
-	<p>Students are expected to complete the following assignments as part of
-the course (percentage of final grade in parentheses):</p>
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/assignment_4.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  
+  
+  
+</p>
+
+
+<p>Using the <code class="language-plaintext highlighter-rouge">hsls_small.csv</code> data set and the online codebook, answer
+the following questions. You <strong>do not</strong> need to save the final output
+as a data file: just having the final result print to the console is
+fine. For each question, I would like you to try to pipe all the
+commands together. Throughout, you <strong>should</strong> account for missing values by
+dropping them.</p>
+
+<p>For each question, show your data work and, if necessary, answer the
+question in a short (1-2 sentence(s)) comment.</p>
+
+<h2 id="questions">Questions</h2>
+
+<ol>
+  <li>Compute the average test score by region and join back into the
+full data frame. Next, compute the difference between each
+student’s test score and that of the region. Finally, return the
+mean of these differences by region.</li>
+  <li>Compute the average test score by region and family income
+level. Join back to the full data frame. <strong>HINT</strong> You can join on
+more than one key.</li>
+  <li>Select the following variables from the full data set:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">stu_id</code></li>
+      <li><code class="language-plaintext highlighter-rouge">x1stuedexpct</code></li>
+      <li><code class="language-plaintext highlighter-rouge">x1paredexpct</code></li>
+      <li><code class="language-plaintext highlighter-rouge">x4evratndclg</code></li>
+    </ul>
+
+    <p>From this reduced data frame, reshape the data frame so that it is
+long in educational expectations, meaning that each observation
+should have two rows, one for each educational expectation type.</p>
+
+    <p><em>e.g. (your column names and values may be different)</em></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: center">stu_id</th>
+          <th style="text-align: center">expect_type</th>
+          <th style="text-align: center">expectation</th>
+          <th style="text-align: center">x4evratndclg</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center">0001</td>
+          <td style="text-align: center">x1stuedexpct</td>
+          <td style="text-align: center">6</td>
+          <td style="text-align: center">1</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0001</td>
+          <td style="text-align: center">x1paredexpct</td>
+          <td style="text-align: center">7</td>
+          <td style="text-align: center">1</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0002</td>
+          <td style="text-align: center">x1stuedexpct</td>
+          <td style="text-align: center">5</td>
+          <td style="text-align: center">1</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0002</td>
+          <td style="text-align: center">x1paredexpct</td>
+          <td style="text-align: center">5</td>
+          <td style="text-align: center">1</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h4 id="submission-details">Submission details</h4>
 
 <ul>
-  <li>
-    <p><strong>Problem sets (50%):</strong> Every lesson module will have an associated
-set of questions that must be answered and submitted. You may work
-together and/or use online resources to solve the problem sets, but
-everyone must submit their own work and do their best to give
-accurate attribution for borrowed/repurposed code. There will be one
-problem set for each of ten (10) lessons, with each set worth 5% of
-the final grade. In general, problem set answers will need to be
-submitted via Canvas two (2) weeks after they are assigned.</p>
-
-    <p>There are four (4) supplemental lessons — two before the mid-course
-break and two after — that will include supplemental
-assignments. Though these are not required, you may find them
-useful. You may replace up to two (2) problem set submissions with
-submissions from the supplemental assignments. Please note that the
-supplemental assignments may be more difficult than the normal
-problem set assignments.</p>
-  </li>
-  <li>
-    <p><strong>Reproducible report (50%):</strong> Everyone must produce a 3-5 page
-report on a higher education topic of interest. The report should be
-a combination of writing, tables, and figures, have minimal
-citations (if any), and be fully reproducible with minimal
-effort. You must use data that is either publicly available or that
-can be shared with others (no IRB restrictions). Everyone will
-submit three preliminary assignments in addition to the final
-report. Each product is worth the following percentage of the final
-grade:</p>
-    <ul>
-      <li>Proposal (5%)</li>
-      <li>Initial set of analyses (15%)</li>
-      <li>Draft of final report (15%)</li>
-      <li>Final report (15%)</li>
-    </ul>
-  </li>
+  <li>Upload your script (<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_4.R</code>) to our CANVAS
+course site no later than 11:59 p.m. EDT on the due dat.e</li>
 </ul>
 
-<h2 id="assignments">Assignments</h2>
-
-<ul class="assignments">
-
-
-
-	<li class="do">
-		<a href="/edh7916/assignments/assignment_1.html">Assignment 1</a>
-	</li>
-
-	<li class="do">
-		<a href="/edh7916/assignments/assignment_2.html">Assignment 2</a>
-	</li>
-
-	<li class="do">
-		<a href="/edh7916/assignments/assignment_3.html">Assignment 3</a>
-	</li>
-
-	<li class="do">
-		<a href="/edh7916/assignments/assignment_4.html">Assignment 4</a>
-	</li>
-
-</ul>
-
-<h2 id="supplemental-assignments">Supplemental assignments</h2>
-
-<ul class="assignments">
-
-
-
-	<li class="do">
-		<a href="/edh7916/assignments/supplemental_assignment_1.html">Supplemental Assignment 1</a>
-	</li>
-
-	<li class="do">
-		<a href="/edh7916/assignments/supplemental_assignment_2.html">Supplemental Assignment 2</a>
-	</li>
-
-</ul>
-
-<h2 id="final-project">Final project</h2>
-
-<ul class="assignments">
-
-
-
-
-
-
-<li class="rubric">
-	<a href="/edh7916/assignments/fp_rubric.html">Rubric</a>
-</li>
-
-
-
-<li class="do">
-	<a href="/edh7916/assignments/fp_proposal.html">Proposal</a>
-</li>
-
-
-
-<li class="do">
-	<a href="/edh7916/assignments/fp_initial_analyses.html">Initial analyses</a>
-</li>
-
-
-
-<li class="do">
-	<a href="/edh7916/assignments/fp_draft_report.html">Draft report</a>
-</li>
-
-
-
-<li class="do">
-	<a href="/edh7916/assignments/fp_final_report.html">Final report</a>
-</li>
-
-
-</ul>
 
 
 	<!-- <p> -->
