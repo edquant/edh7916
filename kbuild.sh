@@ -69,8 +69,8 @@ pdfs="assets/pdf"
 pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex --variable monofont=\"Menlo\" -f markdown-implicit_figures"
 
 # sed
-sed_opts_1="s/\/edh7916\/assets/..\/assets/g; s/\/edh7916\/lessons/..\/lessons/g"
-sed_opts_2="s/..\/assets/.\/assets/g; s/..\/lessons/https:\/equant.github.io\/edh7916\/lessons/g; s/<img src=\"\(figures\/.*\.png\)\" width=\"100%\" \/>/\!\[\]\(${i}\/\1\)/g"
+sed_opts_1="s/\/edh7916\/assets/..\/assets/g; s/\/edh7916\/lessons/..\/lessons/g; s/\/edh7916\/figures/..\/figures/g;"
+sed_opts_2="s/..\/assets/.\/assets/g; s/..\/lessons/https:\/equant.github.io\/edh7916\/lessons/g; s/<img src=\"\(\.\.\/figures\/.*\.png\)\".* width=\"100%\" \/>/\!\[\]\(${i}\/\1\)/g"
 
 while getopts "hl:a:i:j:o:p:s:b:cv" opt;
 do

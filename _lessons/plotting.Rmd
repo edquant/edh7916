@@ -1,14 +1,13 @@
-
 ---
 layout: lesson
-title: "Exploratory data analysis: Data visualization with ggplot2"
-subtitle: "EDH7916 | Spring 2020"
+title: "Data visualization with ggplot2"
+subtitle: "EDH7916 | Summer C 2020"
 author: Benjamin Skinner
-order: 8
+order: 6
 category: lesson
 links:
-  script: eda_dv.R
-  pdf: eda_dv.pdf
+  script: plotting.R
+  pdf: plotting.pdf
   data: hsls_small.dta
 output:
   md_document:
@@ -16,50 +15,52 @@ output:
     preserve_yaml: true
 ---
 
-One key part of exploratory data analysis is making plots that let
-you visually inspect the data. This lesson will focus on
-graphics. 
+One key part of understanding your data and presenting your analyses
+lies making plots. This lesson will focus on graphics.
 
 R has three major graphing systems: the [base
 system](https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/00Index.html),
 [lattice](http://lattice.r-forge.r-project.org), and
 [ggplot2](http://ggplot2.tidyverse.org). Each system has its benefits
-and drawbacks and each is also very versatile with many, many options
-for creating and adjusting plots.
+and drawbacks. Each is also very versatile with many, many options for
+creating and adjusting plots.
 
 Unfortunately, there isn't enough time to go through all three
 graphing systems. After describing a few base R graphing functions,
-this lesson will focus on {ggplot2} since it allows users to build plots
-using the [grammar of
+this lesson will focus on using ggplot2 since it allows users to build
+plots using the [grammar of
 graphics](http://vita.had.co.nz/papers/layered-grammar.html) and
 integrates well with the tidyverse.
 
 # Setup
 
-We're using three libraries today:
+We're using two libraries today:
 
-- [{ggplot2}](http://ggplot2.tidyverse.org)
-- [{haven}](http://haven.tidyverse.org)
-- [{labelled}](https://CRAN.R-project.org/package=labelled)
+- [ggplot2](http://ggplot2.tidyverse.org)
+- [haven](http://haven.tidyverse.org)
+<!-- - [labelled](https://CRAN.R-project.org/package=labelled) -->
 
 The [ggplot2](http://ggplot2.tidyverse.org) library is part of the
 tidyverse, so we don't need to load it separately (we can
 just use `library(tidyverse)` as always). 
 
 We're also going to use [haven](http://haven.tidyverse.org), which
-allows us to read in data files from other software. We'll use it to
-read in a Stata (`*.dta`) version of the small HSLS data we've used
-before. Though {haven} is part of the tidyverse and should have been
-installed when you installed tidyverse, we'll have to explicitly call
-it
+allows us to read in data files from other software such as SPSS, SAS,
+and Stata. We'll use it to read in a Stata (`*.dta`) version of the
+small HSLS data we've used before. The Stata version, unlike the plain
+CSV version, has labels for the variables and values. These will be
+useful when plotting. 
 
-The [labelled](https://CRAN.R-project.org/package=labelled) library,
-however, is not part of the tidyverse, meaning that we will need to
-install it first and then load separately.
+Though haven is part of the tidyverse (and should have been installed
+when you installed tidyverse), we'll have to explicitly call it
 
-> #### QUICK EXERCISE
-> Using the console, install the new `labelled` package using
-> `install.packages("labelled")`.
+<!-- The [labelled](https://CRAN.R-project.org/package=labelled) library, -->
+<!-- however, is not part of the tidyverse, meaning that we will need to -->
+<!-- install it first and then load separately. -->
+
+<!-- > #### QUICK EXERCISE -->
+<!-- > Using the console, install the new `labelled` package using -->
+<!-- > `install.packages("labelled")`. -->
 
 ```{r, include = FALSE, purl = FALSE}
 source('knit_setup.R')
@@ -67,8 +68,8 @@ source('knit_setup.R')
 ```{r, include = FALSE, purl = TRUE}
 ################################################################################
 ##
-## <PROJ> EDH7916: Exploratory data analysis: Data visualization with {ggplot2}
-## <FILE> eda_dv.R 
+## <PROJ> EDH7916: Data visualization with ggplot2
+## <FILE> plotting.R 
 ## <INIT> 9 March 2020
 ## <AUTH> Benjamin Skinner (GitHub/Twitter: @btskinner)
 ##
@@ -82,14 +83,14 @@ source('knit_setup.R')
 
 library(tidyverse)
 library(haven)
-library(labelled)
 ```
 
 In addition to the Stata version of small HSLS, we'll also be using
 `all_schools.csv` in the lesson. After including its subdirectory path
-(`tsc_dir`), we'll read in both data files. **Note** that since we
-have two data files this lesson, we'll give them unique names instead
-of the normal `df`:
+(`tsc_dir`), we'll read in both data files.  
+
+**Note** that since we have two data files this lesson, we'll give
+them unique names instead of the normal `df`:
 
 - `df_hs` := `hsls_small.dta`
 - `df_ts` := `all_schools.csv`
@@ -110,6 +111,8 @@ tsc_dir <- file.path(dat_dir, "sch_test")
 ## ---------------------------
 
 ## assume we're running this script from the ./scripts subdirectory
+## read_dta() ==> read in Stata (*.dta) files
+## read_csv() ==> read in comma separated value (*.csv) files
 df_hs <- read_dta(file.path(dat_dir, "hsls_small.dta"))
 df_ts <- read_csv(file.path(tsc_dir, "all_schools.csv"))
 ```
@@ -121,19 +124,20 @@ df_ts <- read_csv(file.path(tsc_dir, "all_schools.csv"))
 ## -----------------------------------------------------------------------------
 ```
 
-Even though users have developed new graphics libraries, the base R
-graphics system is still very powerful. The base system is also very
-easy to use in a pinch. When I want a quick visual of a data
-distribution that's just for me, I often use base R.
+Even though new graphics libraries have been developed, the base R
+graphics system remains powerful. The base system is also very easy to
+use in a pinch. When I want a quick visual of a data distribution
+that's just for me, I often use base R.
 
-**Note** that for the next few plots, I'm not much concerned with how they
-look. Specifically, the axis labels won't be very nice or useful. We
+**Note** that for the next few plots, I'm not much concerned with how
+they look. Specifically, the axis labels won't look very nice. We
 could spend time learning to make really nice base R plots for
-publication, but I'd rather we spend that time with {ggplot2}
-graphics. 
+publication, but I'd rather we spend that time with ggplot2 graphics.
 
 **Also note** that we'll switch to using the base R data frame `$`
-notation to pull out the columns we want.
+notation to pull out the columns we want. If you need some more
+information on using `$` notation, [check out the supplemental lesson
+on data wrangling with base R](/edh7916/lessons/dw_one_base_r.html).
 
 ## Histogram
 ```{r, echo = FALSE, purl = TRUE}
@@ -144,10 +148,11 @@ notation to pull out the columns we want.
 
 For continuous variables, a histogram is a useful plot. Though the
 `hist()` function has many options to adjust how it looks, the
-defaults work really well.
+defaults work really well if you just want a quick look at the
+distribution.
 
 ```{r eda_base_histogram}
-## histogram of math scores
+## histogram of math scores (which should be normal by design)
 hist(df_hs$x1txmtscor)
 ```
 
@@ -176,10 +181,13 @@ hist(df_hs$x1txmtscor, freq = FALSE)
 
 Second, you can `plot()` the `density()` of a continuous
 variable. Unlike `hist()`, however, `density()` doesn't automatically
-ignore missing values, so we have to tell it to remove `NA`s.
+ignore missing values, so we have to tell it to remove `NA`s using the
+`na.rm = TRUE` argument (a common argument for base R functions that's
+useful to remember).
 
 ```{r eda_base_density}
 ## density plot of math scores
+## read inside out: get density value, then plot values
 plot(density(df_hs$x1txmtscor, na.rm = TRUE))
 ```
 
@@ -215,6 +223,11 @@ Notice how we can use the `data = df_hs` argument instead of adding
 boxplot(x1txmtscor ~ x1stuedexpct, data = df_hs)
 ```
 
+From the boxplot, we can see that math test scores tend to increase as
+students' educational expections increase (remember that 11 means "I
+don't know [how far I'll go in school]"), though there's quite a bit
+of overlap in the marginal distributions.
+
 ## Scatter
 ```{r, echo = FALSE, purl = TRUE}
 ## ---------------------------
@@ -222,9 +235,9 @@ boxplot(x1txmtscor ~ x1stuedexpct, data = df_hs)
 ## ---------------------------
 ```
 
-Finally, plot two continuous variables against one another using the
-base `plot()` function. There are two primary ways to make a scatter
-plot using `plot()`:
+Plot two continuous variables against one another using the base
+`plot()` function. There are two primary ways to make a scatter plot
+using `plot()`:
 
 * `plot(x, y)`
 * `plot(y ~ x)`
@@ -235,8 +248,13 @@ sense to you. We'll use the first.
 
 ```{r eda_base_scatter}
 ## scatter plot of math against SES
-plot(df_hs$x1txmtscor, df_hs$x1ses)
+plot(df_hs$x1ses, df_hs$x1txmtscor)
 ```
+
+While the data seem to show a positive correlation between
+socioeconomic status and math test score, there's also quite a bit of
+variation in that association (notice that the cloud-like nature of
+the circles). 
 
 > #### Quick exercise 
 > Rerun the above plot, but this time store it in an object,
@@ -293,7 +311,8 @@ The aesthetic mappings, that is, which variables go where or how they
 function on the plot, go inside the `aes()` function. Since we only
 have one variable, `x1txmtscor`, it is assigned to `x`.
 
-If we stop there and print...
+If we assign this first part to an object, `p`, and print by calling
+the object...
 
 ```{r eda_plot_histogram_blank, warning = F, message = F}
 ## init ggplot 
@@ -306,20 +325,21 @@ plot object `p` knows the data and the key variable mapping but
 doesn't know what do with them. What do we want?
 
 Since we want a histogram, we add the `geom_histogram()` function to
-the existing plot object. Trying again...
+the existing plot object with a plus sign(`+`). Once we do that, we'll
+try to print the plot again...
 
 ```{r eda_plot_histogram, warning = F, message = F}
-## add histogram instruction
+## add histogram instruction (notice we can add pieces using +)
 p <- p + geom_histogram()
 p
 ```
 
 Success!
 
-Let's repeat it, but without the middle step:
+Let's repeat it the whole process, but without the middle step:
 
 ```{r eda_plot_histogram_2, warning = F, message = F}
-## init ggplot 
+## create histogram using ggplot
 p <- ggplot(data = df_hs, mapping = aes(x = x1txmtscor)) +
     geom_histogram()
 p
@@ -453,9 +473,13 @@ make a new temporary data object that only has the data we need.
 ```{r}
 ## need to set up data
 plot_df <- df_hs %>%
+    ## select the columns we need
     select(x1paredu, x1txmtscor) %>%
-    drop_na() %>%                       # can't plot NA so will drop
+    ## can't plot NA so will drop
+    drop_na() %>%
+    ## create new variable that == 1 if parents have any college
     mutate(pared_coll = ifelse(x1paredu >= 3, 1, 0)) %>%
+    ## drop (using negative sign) the original variable we don't need now
     select(-x1paredu) 
 
 ## show
@@ -551,12 +575,18 @@ df_hs %>%
 ```
 
 We see that `x1stuedexpct >= 6` means a student plans to earn a
-Bachelor's degree or higher. Let's create that.
+Bachelor's degree or higher. But since we need to account for the fact
+that 11 means "I don't know", we need to make sure our test includes
+`x1stuedexpct < 11`. Remember from a prior lesson that we can connect
+these two statements together with the operator `&`. Let's create our
+new variable.
 
 ```{r}
 ## create variable for students who plan to graduate from college
 df_hs_10 <- df_hs_10 %>%
-    mutate(plan_col_grad = ifelse(x1stuedexpct >= 6, 1, 0))
+    mutate(plan_col_grad = ifelse(x1stuedexpct >= 6 & x1stuedexpct < 11,
+                                  1,        # if T: 1
+                                  0))       # if F: 0
 ```
 
 Now that we have our new variable `plan_col_grad`, we can add it the
@@ -834,7 +864,7 @@ test, it's more difficult to make a good comparison _between_
 tests. For example, East Heights has a little over 20 point drop in
 reading scores from 1981 to 1982 and about the same drop in science
 scores from 1982 to 1983. How should we think about these drops? Are
-they about the same or does one drop mean more than another?
+they about the same or is one drop relatively bigger than the other?
 
 To better answer this question, we could re-standardize each test
 score so that it is centered at 0 and a one unit change is equal to 1
