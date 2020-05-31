@@ -1,6 +1,6 @@
 ---
 layout: lesson
-title: "Data visualization with ggplot2"
+title: "Data Visualization with ggplot2"
 subtitle: "EDH7916 | Summer C 2020"
 author: Benjamin Skinner
 order: 6
@@ -8,7 +8,9 @@ category: lesson
 links:
   script: plotting.R
   pdf: plotting.pdf
-  data: hsls_small.dta
+  data: 
+  - hsls_small.dta
+  - sch_test.zip
 output:
   md_document:
     variant: gfm
@@ -38,7 +40,6 @@ We're using two libraries today:
 
 - [ggplot2](http://ggplot2.tidyverse.org)
 - [haven](http://haven.tidyverse.org)
-<!-- - [labelled](https://CRAN.R-project.org/package=labelled) -->
 
 The [ggplot2](http://ggplot2.tidyverse.org) library is part of the
 tidyverse, so we don't need to load it separately (we can
@@ -52,15 +53,7 @@ CSV version, has labels for the variables and values. These will be
 useful when plotting. 
 
 Though haven is part of the tidyverse (and should have been installed
-when you installed tidyverse), we'll have to explicitly call it
-
-<!-- The [labelled](https://CRAN.R-project.org/package=labelled) library, -->
-<!-- however, is not part of the tidyverse, meaning that we will need to -->
-<!-- install it first and then load separately. -->
-
-<!-- > #### QUICK EXERCISE -->
-<!-- > Using the console, install the new `labelled` package using -->
-<!-- > `install.packages("labelled")`. -->
+when you installed tidyverse), we'll have to explicitly call it.
 
 
 
@@ -95,8 +88,11 @@ library(haven)
 ```
 
 In addition to the Stata version of small HSLS, we'll also be using
-`all_schools.csv` in the lesson. After including its subdirectory path
-(`tsc_dir`), we'll read in both data files.  
+`all_schools.csv` in the lesson. [As in the prior
+lesson](../lessons/dw_two.html), unzip the file and place the entire
+`sch_test` subdirectory will all included files in the `data`
+subdirectory (if you don't already have it). After including its
+subdirectory path (`tsc_dir`), we'll read in both data files.  
 
 **Note** that since we have two data files this lesson, we'll give
 them unique names instead of the normal `df`:
@@ -242,7 +238,7 @@ boxplot(x1txmtscor ~ x1stuedexpct, data = df_hs)
 <img src="../figures/eda_base_box-1.png" title="plot of chunk eda_base_box" alt="plot of chunk eda_base_box" width="100%" />
 
 From the boxplot, we can see that math test scores tend to increase as
-students' educational expections increase (remember that 11 means "I
+students' educational expectations increase (remember that 11 means "I
 don't know [how far I'll go in school]"), though there's quite a bit
 of overlap in the marginal distributions.
 
@@ -464,7 +460,7 @@ a common task. Let's see the difference between student math scores
 between students with parents who have any postsecondary degree and
 those without. 
 
-Since we're using data that was labelled in Stata, we'll see the
+Since we're using data that was labeled in Stata, we'll see the
 labels when we use `count()`
 
 
@@ -553,6 +549,11 @@ p
 
 <img src="../figures/eda_plot_histogram_double-1.png" title="plot of chunk eda_plot_histogram_double" alt="plot of chunk eda_plot_histogram_double" width="100%" />
 
+By assigning `pared_coll` to the `fill` aesthetic, we can see a
+difference in the distribution of math test scores between students
+whose parents have at least some college and those whose parents do
+not. 
+
 > #### Quick exercise
 > Remove some of the new arguments in `geom_histogram()`. How does the
 > resulting plot change? Remove the `factor()` function from around
@@ -581,6 +582,11 @@ p
 
 <img src="../figures/eda_plot_box-1.png" title="plot of chunk eda_plot_box" alt="plot of chunk eda_plot_box" width="100%" />
 
+In a way, this plot is similar to the dual histogram above. But since
+we want to see the distribution of math scores across finer-grained
+levels of parental education, the box and whisker plot is clearer than
+trying to overlap seven histograms.
+
 > #### Quick exercise
 > Change the `as_factor()` and `factor()` functions above. How does
 > the plot change?
@@ -590,13 +596,19 @@ p
 
 To make a scatter plot, make sure that the `aes()` has mappings for
 the `x` axis and `y` axis and then use `geom_point()` to plot. To make
-things easier to see, we'll first reduce the data to 10% of the full
-sample using `sample_frac()` from dplyr.
+things easier to see (remembering the cloud from the base R plot
+above), we'll reduce the data to 10% of the full sample using
+`sample_frac()` from dplyr. We'll also limit our 10% to those who
+aren't missing information about student education expectations
 
 
 ```r
 ## sample 10% to make figure clearer
-df_hs_10 <- df_hs %>% sample_frac(0.1)
+df_hs_10 <- df_hs %>%
+    ## drop observations with missing values for x1stuedexpct
+    drop_na(x1stuedexpct) %>%
+    ## sample
+    sample_frac(0.1)
 
 ## scatter
 p <- ggplot(data = df_hs_10, mapping = aes(x = x1ses, y = x1txmtscor)) +

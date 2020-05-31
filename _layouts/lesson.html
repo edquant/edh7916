@@ -35,10 +35,13 @@ layout: default
   &nbsp;&nbsp;
   {% endif %}
   {% if page.links.data %}
-  <a href="{{ site.baseurl }}/{{ site.data }}/{{ page.links.data }}"
+  {% for data in page.links.data %}
+  <a href="{{ site.baseurl }}/{{ site.data }}/{{ data }}"
      class="iconlink" download title="Get data">
     <i class="fas fa-database fa-2x"></i>
   </a>
+  &nbsp;&nbsp;
+  {% endfor %}
   {% endif %}
 </p>
 {% endif %}

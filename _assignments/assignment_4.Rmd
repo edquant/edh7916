@@ -54,4 +54,4 @@ question in a short (1-2 sentence(s)) comment.
 #### Submission details
 
 - Upload your script (`<lastname>_assignment_4.R`) to our CANVAS
-  course site no later than 11:59 p.m. EDT on the due dat.e
+  course site no later than 11:59 p.m. EDT on the due date.

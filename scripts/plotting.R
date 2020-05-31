@@ -156,7 +156,11 @@ p
 ## ---------------------------
 
 ## sample 10% to make figure clearer
-df_hs_10 <- df_hs %>% sample_frac(0.1)
+df_hs_10 <- df_hs %>%
+    ## drop observations with missing values for x1stuedexpct
+    drop_na(x1stuedexpct) %>%
+    ## sample
+    sample_frac(0.1)
 
 ## scatter
 p <- ggplot(data = df_hs_10, mapping = aes(x = x1ses, y = x1txmtscor)) +
