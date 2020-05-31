@@ -1,6 +1,8 @@
 ## general knit options
-knitr::opts_chunk$set(base.url="../",
-                      fig.path="figures/",
+knitr::opts_knit$set(base.url="",
+                     base.dir="/Users/benski/orgs/edquant/edh7916/figures/")
+
+knitr::opts_chunk$set(fig.path="../figures/",
                       dpi=90,
                       out.width="100%",
                       error = TRUE,
