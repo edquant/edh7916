@@ -47,93 +47,66 @@ the higher education administration program at the University of Florida
       </header>
 
       <section>
-	<h1>Lessons</h1>
+	<h1>Assignment 6</h1>
 	
 
-	<p>Workshop modules are listed in order of the course. The R script
-(<span><i class="fas fa-code"></i></span>) and data (<span><i class="fas fa-database"></i></span>) used to create each module will be
-linked at the top of the page.</p>
-
-<h2 id="a-note-on-directory-structure">A note on directory structure</h2>
-
-<p>All modules assume the directory structure below.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>edh7916/
-|
-|__ data/
-|   |
-|   |-- lesson1.rds
-|   |-- lesson2.rds
-|   |...
-|
-|__ scripts/
-|   |
-|   |-- lesson1.R
-|   |-- lesson2.R
-|   |...
-</code></pre></div></div>
-
-<p>When running scripts in RStudio, the working directory should be
-<code class="language-plaintext highlighter-rouge">path/to/edh7916/scripts</code>. You can check in RStudio
-by typing <code class="language-plaintext highlighter-rouge">getwd()</code> in the console. For example, let’s say you’ve
-saved the files in a folder called <code class="language-plaintext highlighter-rouge">courses</code>, which is in your home
-directory. Then you should see (if on a Mac):</p>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">getwd</span><span class="p">()</span><span class="w">
-</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"/Users/benski/courses/edh7916/scripts"</span><span class="w">
-</span></code></pre></div></div>
-
-<h2 id="lessons">Lessons</h2>
-
-<ul class="lessons">
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/assignment_6.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  
+  
+  
+</p>
 
 
+<p>For this assignment, I want you to create a 1-2 page RMD document that
+uses <code class="language-plaintext highlighter-rouge">hsls_small.dta</code> to answer the following questions:</p>
 
-	<li>
-		<a href="/edh7916/lessons/intro_r.html">Introduction to R</a>
-	</li>
+<blockquote>
+  <p>Do educational expectations between a student and their parents
+generally differ?  If so, which group tends to have higher
+expectations? Do differences vary by the parents’ own educational
+attainment?</p>
+</blockquote>
 
-	<li>
-		<a href="/edh7916/lessons/intro_markdown.html">Introduction to Markdown</a>
-	</li>
+<p>Your final file should include at least one figure and at least one
+table of summary statistics. The figure and table should be formatted
+nicely, with good axis labels and column names. You should explain
+your findings in the document text using Markdown syntax. You do not
+need to use or cite outside sources — just describe what you
+find. You also do not need to perform inferential tests (<em>e.g.</em> t-test
+of differences), though you can if you wish. I should not see input
+code in the final document — only the final clean output. In other
+words, it should look like a product you would give to a superior or
+would want given to you.</p>
 
-	<li>
-		<a href="/edh7916/lessons/organizing.html">Organizing</a>
-	</li>
+<p>I recommend using <code class="language-plaintext highlighter-rouge">test_score.Rmd</code> as a template for how you should:</p>
 
-	<li>
-		<a href="/edh7916/lessons/dw_one.html">Data Wrangling I: Enter the tidyverse</a>
-	</li>
+<ol>
+  <li>Read in the data</li>
+  <li>Wrangle the data as necessary to generate your analysis</li>
+  <li>Create any tables you may have</li>
+  <li>Create any figures you may have</li>
+</ol>
 
-	<li>
-		<a href="/edh7916/lessons/dw_two.html">Data Wrangling II: Appending, joining, and reshaping data</a>
-	</li>
+<p>Feel free to repurpose any code you’ve seen in prior lessons, but make
+sure you answer the question to the best of your ability.</p>
 
-	<li>
-		<a href="/edh7916/lessons/plotting.html">Data Visualization with ggplot2</a>
-	</li>
+<h4 id="submission-details">Submission details</h4>
 
-	<li>
-		<a href="/edh7916/lessons/reproducible_doc.html">Creating research reports with RMarkdown</a>
-	</li>
-
+<ul>
+  <li>Upload your both your code file (<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_6.Rmd</code>) and
+compiled document (<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_6.pdf</code>) to our CANVAS
+course site no later than 11:59 p.m. EDT on the due date.</li>
 </ul>
 
-<h2 id="supplemental">Supplemental</h2>
-
-<ul class="supplemental">
-
-
-
-	<li>
-		<a href="/edh7916/lessons/getting_data.html">Getting higher education data from common sources</a>
-	</li>
-
-	<li>
-		<a href="/edh7916/lessons/dw_one_base_r.html">Data Wrangling with Base R</a>
-	</li>
-
-</ul>
 
 
 	<!-- <p> -->
