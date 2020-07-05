@@ -1,33 +1,25 @@
 ---
 layout: lesson
-title: Assignment 5
-subtitle: "EDH7916 | Spring 2020"
+title: Assignment 7
+subtitle: "EDH7916 | Summer C 2020"
 author: Benjamin Skinner
-order: 6
-category: assignment
+order: 7
+category: problemset
 links:
-  pdf: dw_three_hw.pdf
+  pdf: assignment_7.pdf
 output:
   md_document:
     variant: gfm
     preserve_yaml: true
 ---
 
-_**NOTE** This assignment needs to be completed by the start of the
-next class. That means everything pushed to your remote GitHub repo
-before class starts._
-
-_Remember, I encourage you to save your work, commit smaller changes,
-and push to your remote GitHub repo often rather than wait until the
-last minute._
-
-Use the the IPEDS data sets we used in class, `hd2007.csv`, joined
-with a new IPEDS data set, `ic2007mission.csv`, to answer the
-questions. You will need to join them. You may also need
-to look up the data dictionaries for each file. Click the "continue"
-button on [this
-page](https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx) to see the
-data and accompanying dictionary files.
+Use the IPEDS data sets, `hd2007.csv`and `ic2007mission.csv`, to
+answer the questions below. You may need to look up and download the
+data dictionaries for each file. Click the "continue" button on [this
+page](https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx?goToReportId=7)
+to see the data and accompanying dictionary files. [You can also use
+the supplementary lesson on getting higher education data for
+help.](../lessons/getting_data.html)
 
 You **do not** need to save the final output as a data file: just
 having the final result print to the console is fine. For each
@@ -40,18 +32,15 @@ a short (1-2 sentence(s)) comment.
 
 ## Questions
 
-**NB** You will need to join the two IPEDS data sets to answer these
-questions using the common `unitid` key. Note that column names in
+**NB** To answer the questions, you will need to join the two IPEDS
+data sets using the common `unitid` key. Note that column names in
 `hd2007.csv` are uppercase (`UNITID`) while those in
 `ic2007mission.csv` are lowercase (`unitid`). There are a few ways to
-join when the keys don't exactly match. 
-
-One is to set all column names to the same case. If you want to use
-`left_join()` starting with `hd2007.csv`, you can first use the the
-{dplyr} verb `rename_all(tolower)` in your chain to lower all column
-names.
-
-[See the help file for
+join when the keys don't exactly match. One is to set all column names
+to the same case. If you want to use `left_join()` starting with
+`hd2007.csv`, you can first use the the dplyr verb
+`rename_all(tolower)` in your chain to lower all column names. [See
+the help file for
 `left_join()`](https://dplyr.tidyverse.org/reference/join.html) for
 other ways to join `by` different variable names.
 
@@ -79,9 +68,7 @@ other ways to join `by` different variable names.
    1. How many days were there between the first school to close and
       the last?
 
+#### Submission details
 
-
-
-
-
-
+- Upload your script (`<lastname>_assignment_7.R`) to our CANVAS
+  course site no later than 11:59 p.m. EDT on the due date.
