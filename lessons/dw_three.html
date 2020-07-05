@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/edh7916/assets/css/style.css">
+<link rel="stylesheet" href="/edh7916/assets/css/syntax_default.css">
+<link rel="shortcut icon" type="image/png" href="/edh7916/assets/img/favicon.ico">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
+<script defer src="/edh7916/assets/js/all.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<title>edquant | EDH 7916: Contemporary Research in Higher Education</title>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/edquant/edh7916" class="iconlink">
+	      <i class="fab fa-github fa-sm"></i></a></h1>
+	<h2 class="thin">Summer 2020 (Session C)</h2>
+	<p>A course in quantitative research workflow for students in
+the higher education administration program at the University of Florida
+</p>
+	<!-- side / top bar menu -->
+	<h2 class="thin">
+	  <a href="/edh7916/">Overview</a></br>
+	  <a href="/edh7916/syllabus/">Course
+	    information</a></br>
+	  <!-- <a href="/edh7916/location/">Meeting -->
+	  <!--   location</a></br> -->
+	  <a href="/edh7916/software/">Software</a></br>
+	  <a href="/edh7916/schedule/">Schedule</a></br>
+	  <a href="/edh7916/lessons/">Lessons</a></br>
+	  <a href="/edh7916/assignments/">Assignments</a></br>
+	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/past/">Past courses</a></br>
+	  <a href="/edh7916/about/">About</a></br>	  
+	</h2>
+      </header>
+
+      <section>
+	<h1>Data Wrangling III: Working with strings and dates</h1>
+	
+
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/dw_three.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  <a href="/edh7916/scripts/dw_three.R"
+     class="iconlink" download title="Get script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+  
+  
+  
+  <a href="/edh7916/data/str_times_data.zip"
+     class="iconlink" download title="Get data">
+    <i class="fas fa-database fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+</p>
+
+
+<p>The data we’ve used so far in this course have been almost entirely
+numerical. Even when the field represented an expected level of
+education, for example, we didn’t see “complete a Bachelor’s degree.”
+Instead, we saw the number <code class="language-plaintext highlighter-rouge">6</code> — sometimes with a label and
+sometimes without (meaning we had to look up what <code class="language-plaintext highlighter-rouge">6</code> stood for). In
+the few cases in which we’ve seen strings or dates, the values have
+been very regular.</p>
+
+<p>Much education-related data, however, are not this
+uniform. Particularly when using administrative data files, you are
+likely to read in columns that contain <em>unstructured strings</em>: names,
+addresses, dates, <em>etc</em>. Why are they unstructured? Almost always the
+answer is that person who initially keyed in the data neither had a
+dropdown menu of options to choose from nor separate fields for each
+part of the data element (<em>e.g.</em>, <code class="language-plaintext highlighter-rouge">first name</code>, <code class="language-plaintext highlighter-rouge">last name</code>). Instead,
+they have a blank field in which they type:</p>
+
+<p><strong>Enter name</strong>: <code class="language-plaintext highlighter-rouge">Isaiah Berlin</code></p>
+
+<p>Why is this a problem? With an open field, the variations are (often)
+unlimited:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">I. Berlin</code></li>
+  <li><code class="language-plaintext highlighter-rouge">isaiah berlin</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Berlin, Isaiah</code></li>
+</ul>
+
+<p>Similarly, the same date can be written any number of ways:</p>
+
+<p><strong>Enter date</strong>: <code class="language-plaintext highlighter-rouge">February 11, 2020</code></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">11 February 2020</code></li>
+  <li><code class="language-plaintext highlighter-rouge">11 Feb 2020</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Feb. 11, 2020</code></li>
+  <li><code class="language-plaintext highlighter-rouge">2/11/2020</code> (American)</li>
+  <li><code class="language-plaintext highlighter-rouge">11/2/2020</code> (<a href="https://en.wikipedia.org/wiki/Date_and_time_notation_in_the_United_States">most everyone
+else</a>)</li>
+  <li><code class="language-plaintext highlighter-rouge">2/11/20</code></li>
+</ul>
+
+<p>To be clear, this is not to impugn those who enter the data. Rather,
+it’s an acknowledgment that the original uses of the data we analyze
+may differ from our own, <em>e.g.</em>, data input to meet compliance with an
+administrative task versus data input for statistical analysis.</p>
+
+<p>Now, imagine gaining access to an administrative data set with these
+two irregular columns, <code class="language-plaintext highlighter-rouge">name</code> and <code class="language-plaintext highlighter-rouge">date</code>, and thousands or even
+millions of rows. To complete your analytic task, you must clean the
+data such that for each observation, you keep only last names and need
+to convert the date into a format that will allow you to easily
+calculate time periods between dates. With so many observations, it’s
+an impossible task to do by hand. But because the data are irregular,
+you can’t, for example, just select the second word from the name
+(what if the last name is first in some rows?) or the second number
+after a forward slash, <code class="language-plaintext highlighter-rouge">/</code> (what about when the date uses hyphens,
+month name, or a different order?).</p>
+
+<p>You won’t always need to work with strings and dates, but when you do,
+having a few specialty tools in your toolbox will be greatly
+beneficial. Sometimes they can mean the difference between being able
+to answer your question and not. In this lesson, we’ll discuss two:
+regular expressions and dates.</p>
+
+<h1 id="setup">Setup</h1>
+
+<p>As before, we’ll continue working within the tidyverse. We’ll focus,
+however, on using two specific libraries:</p>
+
+<ul>
+  <li><a href="https://stringr.tidyverse.org">stringr for strings</a></li>
+  <li><a href="https://lubridate.tidyverse.org">lubridate for dates</a></li>
+</ul>
+
+<p>You may have noticed already that when we load the tidyverse library
+with <code class="language-plaintext highlighter-rouge">library(tidyverse)</code>, the stringr library is already
+loaded. The lubridate library, though part of the tidyverse, is
+not. We need to load it separately.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## libraries</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## NB: The stringr library is loaded with tidyverse, but</span><span class="w">
+</span><span class="c1">## lubridate is not, so we need to load it separately</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✔ ggplot2 3.3.2     ✔ purrr   0.3.4
+✔ tibble  3.0.1     ✔ dplyr   1.0.0
+✔ tidyr   1.1.0     ✔ stringr 1.4.0
+✔ readr   1.3.1     ✔ forcats 0.5.0
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">lubridate</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+Attaching package: 'lubridate'
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The following objects are masked from 'package:base':
+
+    date, intersect, setdiff, union
+</code></pre></div></div>
+<p><strong>NB</strong>: As we have done in the past few lessons, we’ll run this script assuming that
+our working directory is set to the <code class="language-plaintext highlighter-rouge">scripts</code> directory.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## directory paths</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## assume we're running this script from the ./scripts subdirectory</span><span class="w">
+</span><span class="n">dat_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span><span class="w"> </span><span class="s2">"data"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h1 id="part-1-working-with-strings">Part 1: Working with strings</h1>
+
+<p>To practice working with strings, we’ll use data from <a href="https://nces.ed.gov/ipeds/">Integrated
+Postsecondary Education Data System
+(IPEDS)</a>:</p>
+
+<blockquote>
+  <p>The National Center for Education Statistics (NCES) administers the
+Integrated Postsecondary Education Data System (IPEDS), which is a
+large-scale survey that collects institution-level data from
+postsecondary institutions in the United States (50 states and the
+District of Columbia) and other U.S. jurisdictions. IPEDS defines a
+postsecondary institution as an organization that is open to the
+public and has the provision of postsecondary education or training
+beyond the high school level as one of its primary missions. This
+definition includes institutions that offer academic, vocational and
+continuing professional education programs and excludes institutions
+that offer only avocational (leisure) and adult basic education
+programs. Definitions for other terms used in this report may be
+found in the IPEDS online glossary.</p>
+
+  <p>NCES annually releases national-level statistics on postsecondary
+institutions based on the IPEDS data. National statistics include
+tuition and fees, number and types of degrees and certificates
+conferred, number of students applying and enrolled, number of
+employees, financial statistics, graduation rates, student outcomes,
+student financial aid, and academic libraries.</p>
+</blockquote>
+
+<p><a href="https://nces.ed.gov/ipeds/ReportYourData/IpedsSurveyMethodology">You can find more information about IPEDS
+here</a>. As
+higher education scholars, IPEDS data are a valuable resource that you
+may often turn to (I do).</p>
+
+<p>We’ll use one file (<a href="https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx">which can be found
+here</a>), that
+covers institutional characteristics for one year:</p>
+
+<ul>
+  <li>Directory information, 2007 (<code class="language-plaintext highlighter-rouge">hd2007.csv</code>)</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## input</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## read in data and lower all names using rename_all(tolower)</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_csv</span><span class="p">(</span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"hd2007.csv"</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">rename_all</span><span class="p">(</span><span class="n">tolower</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Parsed with column specification:
+cols(
+  .default = col_double(),
+  INSTNM = col_character(),
+  ADDR = col_character(),
+  CITY = col_character(),
+  STABBR = col_character(),
+  ZIP = col_character(),
+  CHFNM = col_character(),
+  CHFTITLE = col_character(),
+  EIN = col_character(),
+  OPEID = col_character(),
+  WEBADDR = col_character(),
+  ADMINURL = col_character(),
+  FAIDURL = col_character(),
+  APPLURL = col_character(),
+  ACT = col_character(),
+  CLOSEDAT = col_character(),
+  IALIAS = col_character()
+)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>See spec(...) for full column specifications.
+</code></pre></div></div>
+
+<h1 id="finding-str_detect">Finding: <code class="language-plaintext highlighter-rouge">str_detect()</code></h1>
+
+<p>So far, we’ve filtered data using dplyr’s <code class="language-plaintext highlighter-rouge">filter()</code> verb. When
+matching a string, we have used <code class="language-plaintext highlighter-rouge">==</code> (or <code class="language-plaintext highlighter-rouge">!=</code> for negative match). For
+example, if we wanted to limit our data to only those institutions in
+Florida, we could filter using the <code class="language-plaintext highlighter-rouge">stabbr</code> column:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## filter using state abbreviation (not saving, just viewing)</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">filter</span><span class="p">(</span><span class="n">stabbr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 316 x 59
+   unitid instnm addr  city  stabbr zip    fips obereg chfnm chftitle gentele
+    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
+ 1 132268 Wyote… 470 … Ormo… FL     32174    12      5 Stev… Preside… 3.86e12
+ 2 132338 The A… 1799… Fort… FL     3331…    12      5 Char… Preside… 9.54e13
+ 3 132374 Atlan… 4700… Coco… FL     3306…    12      5 Robe… Director 7.54e 9
+ 4 132408 The B… 5400… Grac… FL     32440    12      5 Thom… Preside… 8.50e 9
+ 5 132471 Barry… 1130… Miami FL     3316…    12      5 Sist… Preside… 8.01e 9
+ 6 132523 Goodi… 615 … Pana… FL     32401    12      5 Dr. … CRNA Ph… 8.51e 9
+ 7 132602 Bethu… 640 … Dayt… FL     3211…    12      5 Dr T… Preside… 3.86e 9
+ 8 132657 Lynn … 3601… Boca… FL     3343…    12      5 Kevi… Preside… 5.61e 9
+ 9 132666 Brade… 5505… Brad… FL     34209    12      5 A. P… CEO      9.42e 9
+10 132675 Bradf… 609 … Star… FL     32091    12      5 Rand… Director 9.05e 9
+# … with 306 more rows, and 48 more variables: ein &lt;chr&gt;, opeid &lt;chr&gt;,
+#   opeflag &lt;dbl&gt;, webaddr &lt;chr&gt;, adminurl &lt;chr&gt;, faidurl &lt;chr&gt;, applurl &lt;chr&gt;,
+#   sector &lt;dbl&gt;, iclevel &lt;dbl&gt;, control &lt;dbl&gt;, hloffer &lt;dbl&gt;, ugoffer &lt;dbl&gt;,
+#   groffer &lt;dbl&gt;, fpoffer &lt;dbl&gt;, hdegoffr &lt;dbl&gt;, deggrant &lt;dbl&gt;, hbcu &lt;dbl&gt;,
+#   hospital &lt;dbl&gt;, medical &lt;dbl&gt;, tribal &lt;dbl&gt;, locale &lt;dbl&gt;, openpubl &lt;dbl&gt;,
+#   act &lt;chr&gt;, newid &lt;dbl&gt;, deathyr &lt;dbl&gt;, closedat &lt;chr&gt;, cyactive &lt;dbl&gt;,
+#   postsec &lt;dbl&gt;, pseflag &lt;dbl&gt;, pset4flg &lt;dbl&gt;, rptmth &lt;dbl&gt;, ialias &lt;chr&gt;,
+#   instcat &lt;dbl&gt;, ccbasic &lt;dbl&gt;, ccipug &lt;dbl&gt;, ccipgrad &lt;dbl&gt;, ccugprof &lt;dbl&gt;,
+#   ccenrprf &lt;dbl&gt;, ccsizset &lt;dbl&gt;, carnegie &lt;dbl&gt;, tenursys &lt;dbl&gt;,
+#   landgrnt &lt;dbl&gt;, instsize &lt;dbl&gt;, cbsa &lt;dbl&gt;, cbsatype &lt;dbl&gt;, csa &lt;dbl&gt;,
+#   necta &lt;dbl&gt;, dfrcgid &lt;dbl&gt;
+</code></pre></div></div>
+
+<p>This works well because the <code class="language-plaintext highlighter-rouge">stabbr</code> column, even though it uses
+strings, is regular. But what happens when the strings aren’t so
+regular? For example, let’s look the different titles chief college
+administrators take.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## see first few rows of distinct chief titles</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">distinct</span><span class="p">(</span><span class="n">chftitle</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 556 x 1
+   chftitle          
+   &lt;chr&gt;             
+ 1 Commandant        
+ 2 President         
+ 3 Chancellor        
+ 4 Interim President 
+ 5 CEO               
+ 6 Acting President  
+ 7 Director          
+ 8 President/CEO     
+ 9 Interim Chancellor
+10 President/COO     
+# … with 546 more rows
+</code></pre></div></div>
+
+<p>We find over 500 unique titles. Just looking at the first 10 rows, we
+see that some titles are pretty similar — <em>President</em> vs. <em>CEO</em>
+vs. <em>President/CEO</em> — but not exactly the same. Let’s look again,
+but this time get counts of each distinct title and arrange from most
+common to least.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## return the most common titles</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="c1">## get counts of each type</span><span class="w">
+    </span><span class="n">count</span><span class="p">(</span><span class="n">chftitle</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="c1">## arrange in descending order so we see most popular at top</span><span class="w">
+    </span><span class="n">arrange</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 556 x 2
+   chftitle               n
+   &lt;chr&gt;              &lt;int&gt;
+ 1 President           3840
+ 2 Director             560
+ 3 Chancellor           265
+ 4 Executive Director   209
+ 5 Owner                164
+ 6 Campus President     116
+ 7 Superintendent       105
+ 8 CEO                   90
+ 9 &lt;NA&gt;                  85
+10 Interim President     75
+# … with 546 more rows
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise">Quick exercise</h4>
+  <p>What do you notice about the data frames returned by <code class="language-plaintext highlighter-rouge">distinct()</code>
+and <code class="language-plaintext highlighter-rouge">count()</code>? What’s the same? What does <code class="language-plaintext highlighter-rouge">count()</code> do that
+<code class="language-plaintext highlighter-rouge">distinct()</code> does not?</p>
+</blockquote>
+
+<p>Getting our counts and arranging, we can see that <em>President</em> is by
+far the most common title. That said, we also see <em>Campus President</em>
+and <em>Interim President</em> (and before we saw <em>Acting President</em> as
+well).</p>
+
+<p>If your research question asked, <em>how many chief administrators use the
+title of “President”?</em> regardless the various iterations, you can’t
+really use a simple <code class="language-plaintext highlighter-rouge">==</code> filter any more. In theory, you could inspect
+your data, find the unique versions, get counts of each of those using
+<code class="language-plaintext highlighter-rouge">==</code>, and then sum them up — but that’s a lot of work and likely to
+be error prone!</p>
+
+<p>Instead, we can use the stringr function <code class="language-plaintext highlighter-rouge">str_detect()</code>, which looks
+for a <em>pattern</em> in a vector of strings:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">str_detect</span><span class="p">(</span><span class="o">&lt;</span><span class="w"> </span><span class="n">vector</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">strings</span><span class="w"> </span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">pattern</span><span class="w"> </span><span class="o">&gt;</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Going item by item in the vector, it compares what it sees to the
+pattern. If it matches, then it returns <code class="language-plaintext highlighter-rouge">TRUE</code>; it not, then
+<code class="language-plaintext highlighter-rouge">FALSE</code>. Here’s a toy example:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## string vector example</span><span class="w">
+</span><span class="n">fruits</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"green apple"</span><span class="p">,</span><span class="w"> </span><span class="s2">"banana"</span><span class="p">,</span><span class="w"> </span><span class="s2">"red apple"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## search for "apple", which should be true for the first and third item</span><span class="w">
+</span><span class="n">str_detect</span><span class="p">(</span><span class="n">fruits</span><span class="p">,</span><span class="w"> </span><span class="s2">"apple"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1]  TRUE FALSE  TRUE
+</code></pre></div></div>
+
+<p>We can use <code class="language-plaintext highlighter-rouge">str_detect()</code> inside <code class="language-plaintext highlighter-rouge">filter()</code> to select only certain
+rows in our data frame. In our case, we want only those observations
+in which the title <code class="language-plaintext highlighter-rouge">"President"</code> occurs in the <code class="language-plaintext highlighter-rouge">chftitle</code>
+column. Because we’re only detecting, as long as <code class="language-plaintext highlighter-rouge">"President"</code> occurs
+<em>anywhere</em> in the title, we’ll get that row back.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## how many use some form of the title president?</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="c1">## still starting with our count</span><span class="w">
+    </span><span class="n">count</span><span class="p">(</span><span class="n">chftitle</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="c1">## ...but keeping only those titles that contain "President"</span><span class="w">
+    </span><span class="n">filter</span><span class="p">(</span><span class="n">str_detect</span><span class="p">(</span><span class="n">chftitle</span><span class="p">,</span><span class="w"> </span><span class="s2">"President"</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="c1">## arranging as before</span><span class="w">
+    </span><span class="n">arrange</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 173 x 2
+   chftitle              n
+   &lt;chr&gt;             &lt;int&gt;
+ 1 President          3840
+ 2 Campus President    116
+ 3 Interim President    75
+ 4 President/COO        47
+ 5 President/CEO        46
+ 6 School President     31
+ 7 Vice President       29
+ 8 President and CEO    17
+ 9 College President    15
+10 President &amp; CEO      14
+# … with 163 more rows
+</code></pre></div></div>
+
+<p>Now we’re seeing many more versions. We can even more clearly see a
+few titles that are almost certainly the same title, but were just
+inputted differently — <em>President/CEO</em> vs. <em>President and CEO</em>
+vs. <em>President &amp; CEO</em>.</p>
+
+<blockquote>
+  <h4 id="quick-exercise-1">Quick exercise</h4>
+  <p>Ignoring the sub-counts of the various versions, how many chief
+administrators have the word “President” in their title?</p>
+</blockquote>
+
+<p>Seeing the different versions of basically the same title should have
+us stopping to think: since it seems that this data column contains
+free form input (<em>e.g.</em> <strong>Input chief administrator title:</strong>), maybe we
+should allow for typos? The easiest: Is there any reason to assume
+that “President” will be capitalized?</p>
+
+<blockquote>
+  <h4 id="quick-exercise-2">Quick exercise</h4>
+  <p>What happens if we search for “president” with a lowercase “p”?</p>
+</blockquote>
+
+<p>Ah! We find a few stragglers. How can we restructure our filter so
+that we get these, too? There are at least two solutions.</p>
+
+<h3 id="1-use-regular-expressions">1. Use regular expressions</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Regular_expression">Regular
+expressions</a> (aka
+<em>regex</em>) are strings that use a special syntax to create patterns that
+can be used to match other strings. They are very useful when you need
+to match strings that have some general form, but may differ in
+specifics.</p>
+
+<p>We already used this technique in the a prior lesson when we matched
+columns in the <code class="language-plaintext highlighter-rouge">all_schools_wide.csv</code> with <code class="language-plaintext highlighter-rouge">contains("19")</code> so that we
+could <code class="language-plaintext highlighter-rouge">pivot_longer()</code>. Instead of naming all the columns
+specifically, we recognized that each column took the form of
+<code class="language-plaintext highlighter-rouge">&lt;test&gt;_19&lt;YY&gt;</code>. This is a type of regular expression.</p>
+
+<p>In the tidyverse some of the stringr and <a href="https://www.rdocumentation.org/packages/tidyselect/versions/1.0.0/topics/select_helpers">tidyselect helper
+functions</a>
+abstract-away some of the nitty-gritty behind regular
+expressions. <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html">Knowing a little about regular expression syntax,
+particularly how it is used in
+R</a>,
+can go a long way.</p>
+
+<p>In our first case, we can match strings that have a capital <strong>P</strong>
+<em>President</em> or lowercase <strong>p</strong> <em>president</em> using square brackets
+(<code class="language-plaintext highlighter-rouge">[]</code>). If we want either “P” or “p”, then we can use the regex,
+<code class="language-plaintext highlighter-rouge">[Pp]</code>, in place of the first character: <code class="language-plaintext highlighter-rouge">"[Pp]resident"</code>. This will
+match either <code class="language-plaintext highlighter-rouge">"President"</code> or <code class="language-plaintext highlighter-rouge">"president"</code>.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## solution 1: look for either P or p</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">count</span><span class="p">(</span><span class="n">chftitle</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">filter</span><span class="p">(</span><span class="n">str_detect</span><span class="p">(</span><span class="n">chftitle</span><span class="p">,</span><span class="w"> </span><span class="s2">"[Pp]resident"</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">arrange</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 175 x 2
+   chftitle              n
+   &lt;chr&gt;             &lt;int&gt;
+ 1 President          3840
+ 2 Campus President    116
+ 3 Interim President    75
+ 4 President/COO        47
+ 5 President/CEO        46
+ 6 School President     31
+ 7 Vice President       29
+ 8 President and CEO    17
+ 9 College President    15
+10 President &amp; CEO      14
+# … with 165 more rows
+</code></pre></div></div>
+
+<p>Though we don’t see the new observations in the abbreviated output, we
+note that the number of rows has increased by two. This means that
+there are at least two title formats in which <code class="language-plaintext highlighter-rouge">"president"</code> is
+lowercase and that we weren’t picking up when we only used the
+uppercase version of <code class="language-plaintext highlighter-rouge">"President"</code> before.</p>
+
+<h3 id="2-put-everything-in-the-same-case-and-match-with-that-case">2. Put everything in the same case and match with that case</h3>
+
+<p>Another solution, which is probably much easier in this particular
+case, is to set all potential values in <code class="language-plaintext highlighter-rouge">chftitle</code> to the same case
+and then match using that case. In many situations, this is preferable
+since you don’t need to guess cases up front.</p>
+
+<p>We won’t change the values in <code class="language-plaintext highlighter-rouge">chftitle</code> permanently — only while
+filtering. To compare apples to apples (rather than <code class="language-plaintext highlighter-rouge">"Apples"</code> to
+<code class="language-plaintext highlighter-rouge">"apples"</code>), we’ll wrap our column name with the function
+<code class="language-plaintext highlighter-rouge">str_to_lower()</code>, which will make character lowercase, and match using
+lowercase <code class="language-plaintext highlighter-rouge">"president"</code>.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## solution 2: make everything lowercase so that case doesn't matter</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">count</span><span class="p">(</span><span class="n">chftitle</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">filter</span><span class="p">(</span><span class="n">str_detect</span><span class="p">(</span><span class="n">str_to_lower</span><span class="p">(</span><span class="n">chftitle</span><span class="p">),</span><span class="w"> </span><span class="s2">"president"</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">arrange</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 177 x 2
+   chftitle              n
+   &lt;chr&gt;             &lt;int&gt;
+ 1 President          3840
+ 2 Campus President    116
+ 3 Interim President    75
+ 4 President/COO        47
+ 5 President/CEO        46
+ 6 School President     31
+ 7 Vice President       29
+ 8 President and CEO    17
+ 9 College President    15
+10 President &amp; CEO      14
+# … with 167 more rows
+</code></pre></div></div>
+
+<p>We recover another two titles when using this second
+solution. Clearly, our first solution didn’t account for other cases
+(perhaps “<code class="language-plaintext highlighter-rouge">PRESIDENT"</code>?).</p>
+
+<p>In general, I find it’s a good idea to try a solution like the second
+one before a more complicated one like the first. But because every
+problem is different, so too are the solutions. You may find yourself
+using a combination of the two.</p>
+
+<blockquote>
+  <h4 id="not-so-quick-exercise">Not-so-quick exercise</h4>
+  <p>Another chief title that was high on the list was “Owner.” How many
+institutions have an “Owner” as their chief administrator? Of these,
+how many are private, for-profit institutions (<code class="language-plaintext highlighter-rouge">control == 3</code>)? How
+many have the word “Beauty” in their name?</p>
+</blockquote>
+
+<h2 id="replace-using-string-position-str_sub">Replace using string position: <code class="language-plaintext highlighter-rouge">str_sub()</code></h2>
+
+<p>In addition to filtering data, we sometimes need to create new
+variables from pieces of exiting variables. For example, let’s look at
+the zip code values that are included in the file.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show first few zip code values</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">select</span><span class="p">(</span><span class="n">unitid</span><span class="p">,</span><span class="w"> </span><span class="n">zip</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 7,052 x 2
+   unitid zip       
+    &lt;dbl&gt; &lt;chr&gt;     
+ 1 100636 36112-6613
+ 2 100654 35762     
+ 3 100663 35294-0110
+ 4 100690 36117-3553
+ 5 100706 35899     
+ 6 100724 36101-0271
+ 7 100733 35401     
+ 8 100751 35487-0166
+ 9 100760 35010     
+10 100812 35611     
+# … with 7,042 more rows
+</code></pre></div></div>
+
+<p>We can see that we have both regular 5 digit zip codes as well as
+those that include the extra 4 digits (ZIP+4). Let’s say we don’t need
+those last four digits for our analysis (particularly because not
+every school uses them anyway). Our task is to create a new column
+that pulls out only the main part of the zip code. It is has to work
+both for <code class="language-plaintext highlighter-rouge">zip</code> values that include the additional hyphen and 4 digits
+as well as those that only have the primary 5 digits to begin with.</p>
+
+<p>One solution in this case is to take advantage of the fact that zip
+codes — minus the sometimes extra 4 digits — should be regular: 5
+digits. If want the sub-part of a string and that sub-part is always
+in the same spot, we can use the function, <code class="language-plaintext highlighter-rouge">str_sub()</code>, which takes a
+string or column name first, and has arguments for the starting and
+ending character that mark the sub-string of interest.</p>
+
+<p>In our case, we want the first 5 digits so we should <code class="language-plaintext highlighter-rouge">start == 1</code> and
+<code class="language-plaintext highlighter-rouge">end == 5</code>:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## pull out first 5 digits of zip code</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">zip5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">str_sub</span><span class="p">(</span><span class="n">zip</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## show (use select() to subset so we can set new columns)</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">select</span><span class="p">(</span><span class="n">unitid</span><span class="p">,</span><span class="w"> </span><span class="n">zip</span><span class="p">,</span><span class="w"> </span><span class="n">zip5</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 7,052 x 3
+   unitid zip        zip5 
+    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;
+ 1 100636 36112-6613 36112
+ 2 100654 35762      35762
+ 3 100663 35294-0110 35294
+ 4 100690 36117-3553 36117
+ 5 100706 35899      35899
+ 6 100724 36101-0271 36101
+ 7 100733 35401      35401
+ 8 100751 35487-0166 35487
+ 9 100760 35010      35010
+10 100812 35611      35611
+# … with 7,042 more rows
+</code></pre></div></div>
+
+<p>A quick visual inspection of the first few rows shows that our
+<code class="language-plaintext highlighter-rouge">str_sub()</code> function performed as expected (for a real analysis,
+you’ll want to do more formal checks).</p>
+
+<h2 id="replace-using-regular-expressions-str_replace">Replace using regular expressions: <code class="language-plaintext highlighter-rouge">str_replace()</code></h2>
+
+<p>We can also use a more sophisticated regex pattern with the function
+<code class="language-plaintext highlighter-rouge">str_replace()</code>. The pieces of our regex pattern,
+<code class="language-plaintext highlighter-rouge">"([0-9]+)(-[0-9]+)?"</code>, are translated as this:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">[0-9]</code> := any digit, 0 1 2 3 4 5 6 7 8 9</li>
+  <li><code class="language-plaintext highlighter-rouge">+</code> := match the preceding one or more times</li>
+  <li><code class="language-plaintext highlighter-rouge">?</code> := match the preceding 0 or more times</li>
+  <li><code class="language-plaintext highlighter-rouge">()</code> := subexpression</li>
+</ul>
+
+<p>Put together, we have:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">([0-9]+)</code> := first, look for 1 or more digits</li>
+  <li><code class="language-plaintext highlighter-rouge">(-[0-9]+)?</code> := second, look for a hyphen and one or more digits, but
+you may not find any of that</li>
+</ul>
+
+<p>Because we used parentheses, <code class="language-plaintext highlighter-rouge">()</code>, to separate our subexpressions, we
+can call them using their numbers (in order) in the last argument of
+<code class="language-plaintext highlighter-rouge">str_replace()</code>:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">"\\1"</code> := return the first subexpression</li>
+</ul>
+
+<p>So what’s happening? If given a zip code that is <code class="language-plaintext highlighter-rouge">"32605"</code>, the regex
+pattern will collect each digit — <code class="language-plaintext highlighter-rouge">"3"</code> <code class="language-plaintext highlighter-rouge">"2"</code> <code class="language-plaintext highlighter-rouge">"6"</code> <code class="language-plaintext highlighter-rouge">"0"</code> <code class="language-plaintext highlighter-rouge">"5"</code> —
+into the first subexpression because it never sees a hyphen. That
+first subexpression, <code class="language-plaintext highlighter-rouge">"\\1"</code>, is returned: <code class="language-plaintext highlighter-rouge">"32605"</code>. That’s what we
+want.</p>
+
+<p>If given <code class="language-plaintext highlighter-rouge">"32605-1234"</code>, it will collect the first 5 digits in the
+first subexpression, but will stop adding characters there when it
+sees the hyphen. From then on out, it adds everything it sees the
+second subexpression: <code class="language-plaintext highlighter-rouge">"-"</code> <code class="language-plaintext highlighter-rouge">"1"</code> <code class="language-plaintext highlighter-rouge">"2"</code> <code class="language-plaintext highlighter-rouge">"3"</code> <code class="language-plaintext highlighter-rouge">"4"</code>. But because
+<code class="language-plaintext highlighter-rouge">str_replace()</code> only returns the first subexpression, we still get the
+same answer: <code class="language-plaintext highlighter-rouge">"32605"</code>. This is what we want.</p>
+
+<p>Let’s try it on the data.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## drop last four digits of extended zip code if they exist</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">zip5_v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">str_replace</span><span class="p">(</span><span class="n">zip</span><span class="p">,</span><span class="w"> </span><span class="s2">"([0-9]+)(-[0-9]+)?"</span><span class="p">,</span><span class="w"> </span><span class="s2">"\\1"</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## show (use select() to subset so we can set new columns)</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">select</span><span class="p">(</span><span class="n">unitid</span><span class="p">,</span><span class="w"> </span><span class="n">zip</span><span class="p">,</span><span class="w"> </span><span class="n">zip5</span><span class="p">,</span><span class="w"> </span><span class="n">zip5_v2</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 7,052 x 4
+   unitid zip        zip5  zip5_v2
+    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  
+ 1 100636 36112-6613 36112 36112  
+ 2 100654 35762      35762 35762  
+ 3 100663 35294-0110 35294 35294  
+ 4 100690 36117-3553 36117 36117  
+ 5 100706 35899      35899 35899  
+ 6 100724 36101-0271 36101 36101  
+ 7 100733 35401      35401 35401  
+ 8 100751 35487-0166 35487 35487  
+ 9 100760 35010      35010 35010  
+10 100812 35611      35611 35611  
+# … with 7,042 more rows
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-3">Quick exercise</h4>
+  <p>What if you wanted to the get the last 4 digits (after the hyphen)?
+What bit of two bits of code above would you change so that you can
+store the last 4 digits without including the hyphen? Make a new
+variable called <code class="language-plaintext highlighter-rouge">zip_plus4</code> and store these values. <strong>HINT</strong> Look at
+the help file for <code class="language-plaintext highlighter-rouge">str_replace()</code>.</p>
+</blockquote>
+
+<p>Let’s compare our two versions: do we get the same results?</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## check if both versions of new zip column are equal</span><span class="w">
+</span><span class="n">identical</span><span class="p">(</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">zip5</span><span class="p">),</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">zip5_v2</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1] FALSE
+</code></pre></div></div>
+
+<p>No! Let’s see where they are different:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## filter to rows where zip5 != zip5_v2 (not storing...just looking)</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">filter</span><span class="p">(</span><span class="n">zip5</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">zip5_v2</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">select</span><span class="p">(</span><span class="n">unitid</span><span class="p">,</span><span class="w"> </span><span class="n">zip</span><span class="p">,</span><span class="w"> </span><span class="n">zip5</span><span class="p">,</span><span class="w"> </span><span class="n">zip5_v2</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 4 x 4
+  unitid zip        zip5  zip5_v2   
+   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;     
+1 108199 90015--350 90015 90015--350
+2 113953 92113--191 92113 92113--191
+3 431707 06360--709 06360 06360--709
+4 435240 551012595  55101 551012595 
+</code></pre></div></div>
+<blockquote>
+  <h4 id="quick-exercise-4">Quick exercise</h4>
+  <p>What happened? In this scenario, which string subsetting technique
+worked better?</p>
+</blockquote>
+
+<p>Depending on the task, regular expressions can either feel like a
+blessing or a curse. To be honest, I’ve spent more time cursing than
+thanking them. That said, regular expressions are often <em>the only</em> way
+to perform a data wrangling task on unstructured string data. They are
+also a cornerstone of natural language processing techniques, which
+are increasingly of interest to education researchers.</p>
+
+<p>We’ve only scratched the surface of what regular expressions can
+do. If you face string data in the future, taking a little time to
+craft a regular expression can be well worth it.</p>
+
+<h1 id="part-2-working-with-dates">Part 2: Working with dates</h1>
+
+<p>In opening section, we’ve seen that dates often come in many different
+formats. While you can format and clean them using regular
+expressions, you may also want to format them such that R knows they
+are dates.</p>
+
+<p>Why?</p>
+
+<p>When dealing with something straightforward like years, it’s easy
+enough to store the years a regular numbers and then subtract the
+recent year from the past year to get a duration: <code class="language-plaintext highlighter-rouge">2020 - 2002</code> equals
+<code class="language-plaintext highlighter-rouge">18</code> years.</p>
+
+<p>But what if you have daily data for the school year and you want to
+know how many days a student had between a first and second test? What
+if the differences were more than a month of days and every student
+took the first and second tests on different days? What if you had a
+panel data set, with students across years, some of which were leap
+years? You can see how calculating the exact number days between tests
+for each student could quickly become difficult if trying to do it
+using regular numerical values.</p>
+
+<p>R makes this easier by having special time-based data types that will
+keep track of these issues for us and allow us to work with dates
+almost as we do with regular numbers.</p>
+
+<p>In our IPEDS data set, we can see that few institutions closed in 2007
+and 2008. We’ll limit our next analyses to these institutions.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## subset to schools who closed during this period</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">filter</span><span class="p">(</span><span class="n">closedat</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="m">-2</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show first few rows</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">unitid</span><span class="p">,</span><span class="w"> </span><span class="n">instnm</span><span class="p">,</span><span class="w"> </span><span class="n">closedat</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 83 x 3
+   unitid instnm                                                  closedat
+    &lt;dbl&gt; &lt;chr&gt;                                                   &lt;chr&gt;   
+ 1 103440 Sheldon Jackson College                                 6/29/07 
+ 2 104522 DeVoe College of Beauty                                 3/29/08 
+ 3 105242 Mundus Institute                                        Sep-07  
+ 4 105880 Long Technical College-East Valley                      3/31/07 
+ 5 119711 New College of California                               Jan-08  
+ 6 136996 Ross Medical Education Center                           7/31/07 
+ 7 137625 Suncoast II the Tampa Bay School of Massage Therapy LLC 5/31/08 
+ 8 141583 Hawaii Business College                                 Sep-07  
+ 9 150127 Ball Memorial Hospital School of Radiologic Technology  May-07  
+10 160144 Pat Goins Shreveport Beauty School                      3/1/08  
+# … with 73 more rows
+</code></pre></div></div>
+
+<p>We can see that <code class="language-plaintext highlighter-rouge">closedat</code> is stored as a string. Based on our domain
+knowledge and context clues, we know that the dates are generally in a
+<code class="language-plaintext highlighter-rouge">MM/DD/YYYY</code> (American) format.</p>
+
+<p>We can use the lubridate command <code class="language-plaintext highlighter-rouge">mdy()</code> to make a new variable that
+contains the same information, but in a format that R recognizes as a
+date.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## create a new close date column </span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">closedat_dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mdy</span><span class="p">(</span><span class="n">closedat</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Warning: 35 failed to parse.
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">starts_with</span><span class="p">(</span><span class="s2">"close"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 83 x 2
+   closedat closedat_dt
+   &lt;chr&gt;    &lt;date&gt;     
+ 1 6/29/07  2007-06-29 
+ 2 3/29/08  2008-03-29 
+ 3 Sep-07   NA         
+ 4 3/31/07  2007-03-31 
+ 5 Jan-08   NA         
+ 6 7/31/07  2007-07-31 
+ 7 5/31/08  2008-05-31 
+ 8 Sep-07   NA         
+ 9 May-07   NA         
+10 3/1/08   2008-03-01 
+# … with 73 more rows
+</code></pre></div></div>
+
+<p>Well, we are part of the way there. It seems that <code class="language-plaintext highlighter-rouge">mdy()</code> didn’t
+really work with dates like <code class="language-plaintext highlighter-rouge">Sep-2007</code>. What can we do?</p>
+
+<p>One solution is to add in a fake day for the ones that didn’t parse
+and then convert using <code class="language-plaintext highlighter-rouge">mdy()</code>. We’ll use regular expressions with an
+<code class="language-plaintext highlighter-rouge">str_replace()</code>.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## convert MON-YYYY to MON-01-YYYY</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">closedat_fix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">str_replace</span><span class="p">(</span><span class="n">closedat</span><span class="p">,</span><span class="w"> </span><span class="s2">"-"</span><span class="p">,</span><span class="w"> </span><span class="s2">"-01-"</span><span class="p">),</span><span class="w">
+           </span><span class="n">closedat_fix_dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mdy</span><span class="p">(</span><span class="n">closedat_fix</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Warning: 7 failed to parse.
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">starts_with</span><span class="p">(</span><span class="s2">"close"</span><span class="p">))</span><span class="w">                                
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 83 x 4
+   closedat closedat_dt closedat_fix closedat_fix_dt
+   &lt;chr&gt;    &lt;date&gt;      &lt;chr&gt;        &lt;date&gt;         
+ 1 6/29/07  2007-06-29  6/29/07      2007-06-29     
+ 2 3/29/08  2008-03-29  3/29/08      2008-03-29     
+ 3 Sep-07   NA          Sep-01-07    2007-09-01     
+ 4 3/31/07  2007-03-31  3/31/07      2007-03-31     
+ 5 Jan-08   NA          Jan-01-08    2008-01-01     
+ 6 7/31/07  2007-07-31  7/31/07      2007-07-31     
+ 7 5/31/08  2008-05-31  5/31/08      2008-05-31     
+ 8 Sep-07   NA          Sep-01-07    2007-09-01     
+ 9 May-07   NA          May-01-07    2007-05-01     
+10 3/1/08   2008-03-01  3/1/08       2008-03-01     
+# … with 73 more rows
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-5">Quick exercise</h4>
+  <p>We had 7 parsing errors. Can you figure out which rows failed to
+parse and guess why? <strong>HINT</strong> if <code class="language-plaintext highlighter-rouge">mdy()</code> failed to parse
+<code class="language-plaintext highlighter-rouge">closedat</code>, then the subsequent new columns are likely missing
+values.</p>
+</blockquote>
+
+<p>Now that we’ve successfully converted the string date into a proper
+date type, it’s easy to pull out the pieces of that date, including:</p>
+
+<ul>
+  <li><strong>year</strong> with <code class="language-plaintext highlighter-rouge">year()</code></li>
+  <li><strong>month</strong> with <code class="language-plaintext highlighter-rouge">month()</code></li>
+  <li><strong>day</strong> with <code class="language-plaintext highlighter-rouge">day()</code></li>
+  <li><strong>day of week</strong> with <code class="language-plaintext highlighter-rouge">wday()</code></li>
+</ul>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## add columns for</span><span class="w">
+</span><span class="c1">## - year</span><span class="w">
+</span><span class="c1">## - month</span><span class="w">
+</span><span class="c1">## - day</span><span class="w">
+</span><span class="c1">## - day of week (dow)</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">close_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">(</span><span class="n">closedat_fix_dt</span><span class="p">),</span><span class="w">
+           </span><span class="n">close_month</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">month</span><span class="p">(</span><span class="n">closedat_fix_dt</span><span class="p">),</span><span class="w">
+           </span><span class="n">close_day</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">day</span><span class="p">(</span><span class="n">closedat_fix_dt</span><span class="p">),</span><span class="w">
+           </span><span class="n">close_dow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wday</span><span class="p">(</span><span class="n">closedat_fix_dt</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">))</span><span class="w">
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">select</span><span class="p">(</span><span class="n">closedat_fix_dt</span><span class="p">,</span><span class="w"> </span><span class="n">close_year</span><span class="p">,</span><span class="w"> </span><span class="n">close_month</span><span class="p">,</span><span class="w"> </span><span class="n">close_day</span><span class="p">,</span><span class="w"> </span><span class="n">close_dow</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 83 x 5
+   closedat_fix_dt close_year close_month close_day close_dow
+   &lt;date&gt;               &lt;dbl&gt;       &lt;dbl&gt;     &lt;int&gt; &lt;ord&gt;    
+ 1 2007-06-29            2007           6        29 Fri      
+ 2 2008-03-29            2008           3        29 Sat      
+ 3 2007-09-01            2007           9         1 Sat      
+ 4 2007-03-31            2007           3        31 Sat      
+ 5 2008-01-01            2008           1         1 Tue      
+ 6 2007-07-31            2007           7        31 Tue      
+ 7 2008-05-31            2008           5        31 Sat      
+ 8 2007-09-01            2007           9         1 Sat      
+ 9 2007-05-01            2007           5         1 Tue      
+10 2008-03-01            2008           3         1 Sat      
+# … with 73 more rows
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-6">Quick exercise</h4>
+  <p>Can we trust our <code class="language-plaintext highlighter-rouge">close_dow</code> variable? Why?</p>
+</blockquote>
+
+<p>It’s also easy to calculate differences of time. We can use normal
+arithmetic — future date - past date — and R will take care of all
+the underlying calendar calculations for us (<em>e.g.</em>, days in a given
+month, leap years, <em>etc</em>).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## how long since the institution closed</span><span class="w">
+</span><span class="c1">## - as of 1 January 2020</span><span class="w">
+</span><span class="c1">## - as of today</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">mutate</span><span class="p">(</span><span class="n">time_since_close_jan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ymd</span><span class="p">(</span><span class="s2">"2020-01-01"</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">closedat_fix_dt</span><span class="p">,</span><span class="w">
+           </span><span class="n">time_since_close_now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">today</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">closedat_fix_dt</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">starts_with</span><span class="p">(</span><span class="s2">"time_since_close"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 83 x 2
+   time_since_close_jan time_since_close_now
+   &lt;drtn&gt;               &lt;drtn&gt;              
+ 1 4569 days            4755 days           
+ 2 4295 days            4481 days           
+ 3 4505 days            4691 days           
+ 4 4659 days            4845 days           
+ 5 4383 days            4569 days           
+ 6 4537 days            4723 days           
+ 7 4232 days            4418 days           
+ 8 4505 days            4691 days           
+ 9 4628 days            4814 days           
+10 4323 days            4509 days           
+# … with 73 more rows
+</code></pre></div></div>
+
+<p>As with strings and regular expressions, we’ve only scratched the
+surface of working with dates in R. For example, you can also work
+with times (hours, minutes, seconds, <em>etc</em>). Now that you’ve been
+introduced, however, you should have a starting point for working with
+panel and administrative data that includes strings and dates that you
+need to process before conducting your analyses.</p>
+
+
+
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
+      </section>
+      <footer>
+        <p>
+  Benjamin Skinner</br>  
+  Assistant Professor</br>  
+  University of Florida</br>
+  <a href="https://www.btskinner.io" class="iconlink" alt="Personal website">
+    <i class="fas fa-home fa-lg"></i></a> | 
+  <a href="https://github.com/btskinner" class="iconlink" alt="Github
+								profile">
+    <i class="fab fa-github fa-lg"></i></a> |
+  <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
+    <i class="fab fa-twitter fa-lg"></i></a>
+</p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
+
+      </footer>
+    </div>
+
+    <!-- load Javascript if page requires it -->
+    
+    
+    
+
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-63981025-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>
