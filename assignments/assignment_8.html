@@ -47,130 +47,74 @@ the higher education administration program at the University of Florida
       </header>
 
       <section>
-	<h1>Releases</h1>
+	<h1>Assignment 8</h1>
 	
 
-	<p>As the course website is updated, either to add lessons and
-assignments, correct bugs, or make general changes, I tag each version
-with a release number. This allows users to see all changes over time
-and go back to earlier versions of the class if necessary.</p>
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/assignment_8.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  
+  
+  
+</p>
 
-<p>Releases pull directly from
-<a href="https://github.com/edquant/edh7916/releases">GitHub</a>. Release
-numbers, <code class="language-plaintext highlighter-rouge">v&lt;1&gt;.&lt;2&gt;.&lt;3&gt;</code> follow the general format of:</p>
 
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">&lt;1&gt;</code>: Course</li>
-  <li><code class="language-plaintext highlighter-rouge">&lt;2&gt;</code>: Lesson / Assignment update</li>
-  <li><code class="language-plaintext highlighter-rouge">&lt;3&gt;</code>: Bug fixes and small website updates</li>
-</ul>
+<p>Using the <code class="language-plaintext highlighter-rouge">els_plans.dta</code> data set and the <a href="../lessons/modeling.html">abbreviated code book from
+the lesson</a>, answer the following
+questions. You do not need to save the final output as a data file:
+just having the final result print to the console is fine. You can
+account for missing values by dropping them.</p>
 
-<h1 id="09-july-2020-v270"><a href="https://github.com/edquant/edh7916/releases/tag/v2.7.0">09 July 2020 (v2.7.0)</a></h1>
-<h1 id="changes">Changes</h1>
+<p>For each question, show your data work and then answer the question in
+a short (1-2 sentence(s)) comment.</p>
 
-<h2 id="lessons">Lessons</h2>
-<ul>
-  <li>Added modeling lesson</li>
-</ul>
+<h2 id="questions">Questions</h2>
 
-<h2 id="assignments">Assignments</h2>
-<ul>
-  <li>Added assignment 8</li>
-</ul>
+<ol>
+  <li>Are reading scores significantly different between students who
+plan to attend college and those who don’t?
+    <ol>
+      <li>Compute the correlation between reading scores and college plans
+variable, unweighted</li>
+      <li>Compute using a <code class="language-plaintext highlighter-rouge">t.test()</code>, unweighted</li>
+      <li>Recompute using the survey weight (<code class="language-plaintext highlighter-rouge">bystuwt</code>) and <code class="language-plaintext highlighter-rouge">svyttest()</code>
+(don’t forget to set up your <code class="language-plaintext highlighter-rouge">svydesign()</code> first)</li>
+      <li>Compute using a linear model, <code class="language-plaintext highlighter-rouge">lm()</code>, unweighted</li>
+      <li>Recompute using the survey weight (<code class="language-plaintext highlighter-rouge">bystuwt</code>) and <code class="language-plaintext highlighter-rouge">svyglm()</code></li>
+    </ol>
+  </li>
+  <li>Regress student’s college plans, <code class="language-plaintext highlighter-rouge">plan_col_grad</code>, on base year
+socioeconomic status (<code class="language-plaintext highlighter-rouge">byses1</code>), gender (<code class="language-plaintext highlighter-rouge">female</code>), mother’s BA
+attainment (<code class="language-plaintext highlighter-rouge">moth_ba</code>), father’s BA attainment (<code class="language-plaintext highlighter-rouge">fath_ba</code>), and low
+income status (<code class="language-plaintext highlighter-rouge">lowinc</code>). Store the fit in an object called <code class="language-plaintext highlighter-rouge">fit</code>
+and show the full results using <code class="language-plaintext highlighter-rouge">summary()</code>.</li>
+  <li>Using the fit object, generate predicted values. If you used
+<code class="language-plaintext highlighter-rouge">glm()</code> to account for the binary response, then use the argument
+<code class="language-plaintext highlighter-rouge">type = "response"</code> in <code class="language-plaintext highlighter-rouge">predict()</code> to get predicted
+probabilities. Store these values in an object and make a histogram
+of the range of predicted responses.</li>
+  <li><strong>BONUS</strong> What’s the marginal difference in plans to attend college
+due to low income status (holding all other values at their means)?</li>
+</ol>
 
-<h1 id="05-july-2020-v260"><a href="https://github.com/edquant/edh7916/releases/tag/v2.6.0">05 July 2020 (v2.6.0)</a></h1>
-<h1 id="changes-1">Changes</h1>
-
-<h2 id="lessons-1">Lessons</h2>
-<ul>
-  <li>Added regex and dates lesson</li>
-</ul>
-
-<h2 id="assignments-1">Assignments</h2>
-<ul>
-  <li>Added assignment 7</li>
-</ul>
-
-<h1 id="03-june-2020-v250"><a href="https://github.com/edquant/edh7916/releases/tag/v2.5.0">03 June 2020 (v2.5.0)</a></h1>
-<h1 id="changes-2">Changes</h1>
-
-<h2 id="lessons-2">Lessons</h2>
-<ul>
-  <li>Added rmarkdown lesson</li>
-</ul>
-
-<h2 id="assignments-2">Assignments</h2>
-<ul>
-  <li>Added assignment 6</li>
-</ul>
-
-<h1 id="31-may-2020-v240"><a href="https://github.com/edquant/edh7916/releases/tag/v2.4.0">31 May 2020 (v2.4.0)</a></h1>
-<h1 id="changes-3">Changes</h1>
-
-<h2 id="lessons-3">Lessons</h2>
-<ul>
-  <li>Added plotting lesson</li>
-</ul>
-
-<h2 id="assignments-3">Assignments</h2>
-<ul>
-  <li>Added fifth assignment</li>
-</ul>
-
-<h1 id="29-may-2020-v230"><a href="https://github.com/edquant/edh7916/releases/tag/v2.3.0">29 May 2020 (v2.3.0)</a></h1>
-<h1 id="changes-4">Changes</h1>
-
-<h2 id="lessons-4">Lessons</h2>
-<ul>
-  <li>Added second data wrangling lesson</li>
-</ul>
-
-<h2 id="assignments-4">Assignments</h2>
-<ul>
-  <li>Added fourth assignment</li>
-</ul>
-
-<h1 id="22-may-2020-v220"><a href="https://github.com/edquant/edh7916/releases/tag/v2.2.0">22 May 2020 (v2.2.0)</a></h1>
-<h1 id="changes-5">Changes</h1>
-
-<h2 id="lessons-5">Lessons</h2>
-<ul>
-  <li>Added first data wrangling lesson</li>
-  <li>Added second supplemental lesson</li>
-</ul>
-
-<h2 id="assignments-5">Assignments</h2>
-<ul>
-  <li>Added third assignment</li>
-  <li>Added second supplemental assignment</li>
-</ul>
-
-<h1 id="16-may-2020-v210"><a href="https://github.com/edquant/edh7916/releases/tag/v2.1.0">16 May 2020 (v2.1.0)</a></h1>
-<h1 id="changes-6">Changes</h1>
-
-<h2 id="lessons-6">Lessons</h2>
-<ul>
-  <li>Added organizing lesson</li>
-  <li>Added first supplemental lesson</li>
-</ul>
-
-<h2 id="assignments-6">Assignments</h2>
-<ul>
-  <li>Added second assignment</li>
-  <li>Added first supplemental assignment</li>
-</ul>
-
-<h1 id="07-may-2020-v200"><a href="https://github.com/edquant/edh7916/releases/tag/v2.0.0">07 May 2020 (v2.0.0)</a></h1>
-<h1 id="changes-7">Changes</h1>
+<h4 id="submission-details">Submission details</h4>
 
 <ul>
-  <li>initial updates for Summer C 2020</li>
+  <li>Upload your script (<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_8.R</code>) to our CANVAS
+course site no later than 11:59 p.m. EDT on the due date.</li>
 </ul>
 
 
 
 	<!-- <p> -->
-	<!--   Updated: 07 January 2020 -->
+	<!--   Updated:  -->
 	<!-- </p> -->
       </section>
       <footer>
