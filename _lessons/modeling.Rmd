@@ -1,7 +1,7 @@
 ---
 layout: lesson
-title: "Fitting regression models"
-subtitle: "EDH7916 | Spring 2020"
+title: "Inferential tests and models"
+subtitle: "EDH7916 | Summer C 2020"
 author: Benjamin Skinner
 order: 9
 category: lesson
@@ -21,7 +21,7 @@ source('knit_setup.R')
 ```{r, include = FALSE, purl = TRUE}
 ################################################################################
 ##
-## <PROJ> EDH7916: Fitting regression models
+## <PROJ> EDH7916: Inferential tests and models
 ## <FILE> modeling.R 
 ## <INIT> 24 March 2020
 ## <AUTH> Benjamin Skinner (GitHub/Twitter: @btskinner)
@@ -35,15 +35,30 @@ are ready to model it and begin making inferences. As one should
 expect from a statistical language, R has a powerful system for
 fitting statistical and econometric models.
 
+Because the purpose of this course is to learn and practice using a
+good quantitative work flow, we won't spend time much time
+interpreting the results from our inferential models. Instead, this
+lesson will give you the basic understanding you need to run
+correlations, t-tests, and regressions in R as well as give a quick
+overview of how to use survey weights, make predictions, and compute
+marginal effects. That said, the lessons you've learned in other
+courses about proper statistical practice still stand --- this lesson
+should help you apply what you've learned before.
+
+# Data
+
 In this lesson, we'll use data from the [NCES Education Longitudinal
 Study of 2002](https://nces.ed.gov/surveys/els2002/). Much like HSLS,
 ELS is a nationally representative survey that initially surveyed
-students in their early high school career (10th grade) and followed
-them into college and the workforce. We'll use a smaller version of it
-because, unlike HSLS, the public use files for ELS include the
-variables we need to properly account for the survey design when we
-weight our data. Here's a codebook with descriptions of the variables
-included in our lesson today:
+students in their early high school career (10th grade in 2002) and
+followed them into college and the workforce. We'll again use a
+smaller version of the data, so be sure to get the full data files if
+you decide to use ELS in a future project. One additional benefit of
+ELS is that the public use files contain the weights we'll use to
+properly account for the survey design later in the lesson. 
+
+Here's a codebook with descriptions of the variables included in our
+lesson today:
 
 | variable        |                                         description |
 |:----------------|:----------------------------------------------------|
@@ -115,6 +130,54 @@ dat_dir <- file.path("..", "data")
 df <- read_dta(file.path(dat_dir, "els_plans.dta"))
 ```
 
+# Correlations
+```{r, echo = FALSE, purl = TRUE}
+## ---------------------------
+## correlation
+## ---------------------------
+```
+In prior lessons, we've visually checked for correlations between
+variables through plotting. We can also produce more formal tests of
+correlation using R's `cor()` function. By default, it gives us the
+[Pearson correlation
+coefficient](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient),
+though we can also use it to return other versions.
+
+First, let's check the correlation between math and reading
+scores. Because this is a base R function, we'll need to use `df$`
+notation. We'll also need to be explicit about removing missing values
+with the argument, `use = "complete.obs"` (one of the few annoying
+function options that doesn't really match how other functions work).
+
+```{r}
+## correlation between math and reading scores
+cor(df$bynels2m, df$bynels2r, use = "complete.obs")
+```
+
+As we might have hypothesized, there is a strong positive correlation
+between math and reading scores.
+
+We can also build a correlation matrix if we give `cor()` a data
+frame. Our data set, though smaller than the full ELS data set, is
+still rather large. We'll only check the correlations between a few
+variables. In this next example, I'll show you how you might do this
+using the tidyverse way we've used in other lessons.
+
+```{r}
+## correlation between various columns, using pipes
+df %>%
+    ## select a few variables
+    select(byses1, bynels2m, bynels2r, par_ba) %>%
+    ## use a . to be the placeholder for the piped in data.frame
+    cor(., use = "complete.obs")
+```
+
+Per our expectations, the main diagonal is all 1s --- every variable
+is perfectly correlated with itself --- and the mirror cells on either
+side of the line are the same: [2,1] == [1,2] because the correlation
+between `bynels2m` and `byses1` is the same as `byses1` and `bynels2m`
+(the order doesn't matter).
+
 # t-test
 ```{r, echo = FALSE, purl = TRUE}
 ## ---------------------------
@@ -123,23 +186,47 @@ df <- read_dta(file.path(dat_dir, "els_plans.dta"))
 ```
 
 One common statistical test is a t-test for a difference in means
-across groups (there are, of course, [others and R can compute
-them](https://www.rdocumentation.org/packages/stats/versions/3.4.3/topics/t.test)). This
-version of the test can be computed using the R formula syntax: `y
-~ x`.  In our example, we'll compute base-year math scores against
-mother's college education level. Notice that since we have the `data
+across groups (there are, of course, [other types of t-tests that R
+can compute](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/t.test.html)). This
+version of the test can be computed using the R formula syntax: `y ~
+x`.  In our example, we'll compute base-year math scores against
+parent's college education level. Notice that since we have the `data
 = df` argument after the comma, we don't need to include `df$` before
 the two variables.
 
-```{r}
-## t-test of difference in math scores across mother education (BA/BA or not)
-t.test(bynels2m ~ moth_ba, data = df, var.equal = TRUE)
-```
-
 ```{r, include = FALSE, purl = FALSE}
 ## t-test of difference in math scores across mother education (BA/BA or not)
-ttest <- t.test(bynels2m ~ moth_ba, data = df, var.equal = TRUE)
+ttest <- t.test(bynels2m ~ par_ba, data = df, var.equal = TRUE)
 ```
+
+```{r}
+## t-test of difference in math scores across parental education (BA/BA or not)
+t.test(bynels2m ~ par_ba, data = df, var.equal = TRUE)
+```
+
+Looking at the bottom of the output, we see the mean math scores
+across the two groups:
+
+- Math score of ```r ttest$estimate[[1]]``` for students for whom
+  neither parent has a Bachelor's degree or higher
+- Math score of ```r ttest$estimate[[2]]``` for students for whom
+  at least one parent has a Bachelor's degree or higher
+
+Are these differences statistically meaningful? Looking in the third
+line, we see a large t stat of ```r round(ttest$statistic, 2)``` which
+is highly statistically significant at conventional levels. Taken
+together, we can say that among this sample of students, those from
+households in which at least one parent had a Bachelor's degree or
+higher tended to score higher on the math exam than their peers whose
+parents did not have a Bachelor's degree or higher. Furthermore, this
+result is _statistically significant_, meaning that we can reject the
+null that there is no difference between the groups, that is, the
+difference we observe is just sampling noise. 
+
+Is the difference _practically significant_? Maybe, but to really know
+that we need to understand more about the design and scaling of the
+math test. Once we do, we can apply our content-area knowledge and
+place our findings in their proper context.
 
 > #### Quick exercise
 > Run a t-test of reading scores against whether the father has a
@@ -153,7 +240,8 @@ ttest <- t.test(bynels2m ~ moth_ba, data = df, var.equal = TRUE)
 
 ```
 Linear models are the go-to method of making inferences for many data
-analysts. In R, the `lm()` command is used to compute an OLS
+analysts. In R, the `lm()` command is used to compute an [ordinary
+least squares (OLS)](https://en.wikipedia.org/wiki/Ordinary_least_squares)
 regression. Unlike above, where we just let the `t.test()` output
 print to the console, we can and will store the output in an object.
 
@@ -164,7 +252,7 @@ the same results as we did before.
 
 ```{r}
 ## compute same test as above, but in a linear model
-fit <- lm(bynels2m ~ moth_ba, data = df)
+fit <- lm(bynels2m ~ par_ba, data = df)
 fit
 ```
 
@@ -176,11 +264,32 @@ range of information you want from regression output, use the
 ## use summary to see more information about regression
 summary(fit)
 ```
+We'll more fully discuss this output in the next section. For now, let's compare
+the key findings to those returned from the t test.
 
-Looks like the coefficient on `moth_ed`, ```r fit$coefficients[[2]]```,
-is the same as the difference between the groups in the ttest, ```r 
-ttest$estimate[[2]] - ttest$estimate[[1]]```, and the test statistics are
-the same value: ```r ttest$statistic```. Success!
+Because our right-hand side (RHS) variable is an indicator variable
+that `== 0` for parents without a BA/BS or higher and `== 1` if either
+parent has a BA/BS or higher, then the intercept reflects the math
+test score for students when `par_ba == 0`. This matches the `mean in
+group 0` value from the t test above.
+
+In a regression framework, the coefficient on `par_ba` is the marginal
+difference when `par_ba` increases by one unit. Since `pared` is the
+only parameter on the RHS (besides the intercept) and only takes on
+values 0 and 1, we can add its coefficient to the intercept to get the
+math test score mean for students with parents with a BA/BS or higher.
+
+```{r}
+## add intercept and par_ba coefficient
+fit$coefficients[["(Intercept)"]] + fit$coefficients[["par_ba"]]
+```
+
+Looks like this value matches what we saw before (within
+rounding). Going the other way, the coefficient on `par_ba`, ```r fit$coefficients[[2]]```, 
+is the same as the difference between the
+groups in the t test. Finally, notice that the absolute value of the
+test statistic for the t test and the `par_ba` coefficient are the
+same value: ```r abs(round(ttest$statistic, 2))```. Success!
 
 ## Multiple regression
 ```{r, echo = FALSE, purl = TRUE}
@@ -193,6 +302,11 @@ To fit a multiple regression, use the same formula framework that
 we've use before with the addition of all the terms you want on
 right-hand side of the equation separated by plus (`+`) signs.
 
+_**NB** From here on out, we'll spend less time interpreting the
+regression results so that we can focus on the tools of running
+regressions. That said, let me know if you have questions of
+interpretation._
+
 ```{r}
 ## linear model with more than one covariate on the RHS
 fit <- lm(bynels2m ~ byses1 + female + moth_ba + fath_ba + lowinc,
@@ -204,18 +318,19 @@ The full output tells you:
 
 * the model that you fit, under `Call:`
 * a table of coefficients with
-  * the main estimate (`Estimate`)
-  * the estimate error (`Std. Error`)
-  * the test statistic (`t value` with this model)
-  * the p value (`Pr(>|t|`)
+  * the point estimates (`Estimate`)
+  * the point estimate errors (`Std. Error`)
+  * the test statistic for each point estimate (`t value` with this model)
+  * the p value for each point estimate (`Pr(>|t|)`)
 * significance stars (`.` and `*`) along with legend
 * the R-squared values (`Multiple R-squared` and `Adjusted
     R-squared`)
 * the model F-statistic (`F-statistic`)	
 * number of observations dropped if any
 
-If observations were dropped, you can recover the number of
-observations used with the `nobs()` function.
+If observations were dropped due to missing values (`lm()` does this
+automatically by default), you can recover the number of observations
+actually used with the `nobs()` function.
 
 ```{r}
 ## check number of observations
@@ -230,7 +345,8 @@ sometimes useful.
 names(fit)
 ```
 
-For example, both `fitted.values` and `residuals` are stored in the
+In addition to the `coefficients`, which you pulled out of the first
+model, both `fitted.values` and `residuals` are stored in the
 object. You can access these "hidden" attributes by treating the `fit`
 object like a data frame and using the `$` notation.
 
@@ -257,7 +373,11 @@ What this shows is that the fit object actually stores a copy of the
 data used to run it. That's really convenient if you want to save the
 object to disk (with the `save()` function) so you can review the
 regression results later. But keep in mind that if you share that
-file, you are sharing the part of the data used to estimate it.
+file, you are sharing the part of the data used to estimate
+it. Because a lot of education data is restricted in some way --- via
+MOUs or IRB --- be careful about sharing the saved output
+object. Typically you'll only share the results in a table or figure,
+but just be aware.
 
 ## Using categorical variables or factors
 ```{r, echo = FALSE, purl = TRUE}
@@ -272,11 +392,25 @@ categorical variable wrapped in the `factor()` function. This tells R
 that the underlying variable shouldn't be treated as a continuous
 value, but should be discrete groups. R will make the dummy variables
 on the fly when fitting the model. We'll include the categorical
-variable `byrace` in this model.
+variable `bystexp` in this model. 
+
+```{r}
+## check values of student expectations
+df %>%
+    count(bystexp)
+```
+
+
+Even though student expectations of eventual degree attainment are
+roughly ordered, let's use them in our model as discrete groups. That
+way we can leave in "Don't know" and don't have to worry about that
+"attend college, 4-year degree incomplete" is somehow _higher_ than
+"attend or complete 2-year college/school".
 
 ```{r}
 ## add factors
-fit <- lm(bynels2m ~ byses1 + female + moth_ba + fath_ba + lowinc + factor(byrace),
+fit <- lm(bynels2m ~ byses1 + female + moth_ba + fath_ba
+          + lowinc + factor(bystexp),
           data = df)
 summary(fit)
 ```
@@ -284,7 +418,7 @@ summary(fit)
 If you're using labeled data like we have been for the past couple of
 modules, you can use the `as_factor()` function from
 the
-[haven library](https://www.rdocumentation.org/packages/haven/versions/1.1.0/topics/as_factor) in
+[haven library](https://haven.tidyverse.org/reference/as_factor.html) in
 place of the base `factor()` function. You'll still see the
 `as_factor(<var>)` prefix on each coefficient, but now you'll have
 labels instead of the underlying values, which should make parsing the
@@ -292,13 +426,15 @@ output a little easier.
 
 ```{r}
 ## same model, but use as_factor() instead of factor() to use labels
-fit <- lm(bynels2m ~ byses1 + female + moth_ba + fath_ba + lowinc + as_factor(byrace),
+fit <- lm(bynels2m ~ byses1 + female + moth_ba + fath_ba
+          + lowinc + as_factor(bystexp),
           data = df)
 summary(fit)
 ```
 
 If you look at the model matrix, you can see how R created the dummy
-variables from `byrace`.
+variables from `bystexp`: adding new columns of only 0/1s that
+correspond to the `bystexp` value of each student.
 
 ```{r}
 ## see what R did under the hood to convert categorical to dummies
@@ -351,17 +487,25 @@ summary(fit)
 > Fit a linear model with both interactions and a polynomial term. Then
 > look at the model matrix to see what R did under the hood.
 
-# Generalized linear model
+# Generalized linear model for binary outcomes
 ```{r, echo = FALSE, purl = TRUE}
 ## ---------------------------
 ## generalized linear model
 ## ---------------------------
 ```
 
-To fit a model with binary outcomes, switch to the `glm()`
-function. It is set up just like `lm()`, but it has an extra argument,
-`family`. Set the argument to `binomial()` when your dependent
-variable is binary. By default, the `link` function is a
+In some cases when you have binary outcomes --- 0/1 --- it may be
+appropriate to continue using regular OLS, fitting what is typically
+called a [_linear probability model_ or
+LPM](https://en.wikipedia.org/wiki/Linear_probability_model). In those
+cases, just use `lm()` as you have been.
+
+But in other cases, you'll want to fit a [generalized linear
+model](https://en.wikipedia.org/wiki/Generalized_linear_model), in
+which case you'll need to switch to the `glm()` function. It is set up
+just like `lm()`, but it has an extra argument, `family`. Set the
+argument to `binomial()` when your dependent variable is binary. By
+default, the `link` function is a
 [logit](https://en.wikipedia.org/wiki/Logit) link.
 
 ```{r}
@@ -393,18 +537,36 @@ summary(fit)
 ## ---------------------------
 ```
 
-So far we haven't used survey weights, but they are very important
-when using survey data. To use survey weights, you'll need to use the
-survey package (which we've already loaded above)
+So far we haven't used survey weights, but they are very important if
+we want to make population-level inferences using surveys with complex
+sampling designs. Yes, we can produce means, compute t-tests, and fit
+regressions without weights, but our results may not be externally
+valid due the fact that observations in our sample are almost
+certainly out of proportion to their occurrence in the
+population. Otherwise stated, it's likely that our sample
+under-represents some groups while over-representing others. The
+upshot is that any unweighted estimates will be a function of what we
+observe (sample) and not necessarily what we want
+(population). Furthermore, our standard errors --- which we use when
+determining statistical significance --- may be incorrect if we don't
+use survey weights, meaning that we may be more likely to commit Type
+I or Type II errors.
 
+So that we can make population-level inferences, survey designers
+often include weights that allow us to adjust the amount each
+observation contributes to our estimates. With this adjustment our
+estimate should better reflect the population value.  To use survey
+weights, you'll need to use the survey package (which we've already
+loaded above).
 
-To use survey weights, you need to set the survey design using the
-`svydesign()` function. You could do this in the `svyglm()` function
-we'll use to actually estimate the equation, but it's easier and
-clearer to do it first, store it in an object, and then use that
-object in the `syvglm()`.
+As a first step, you need to set the survey design using the
+`svydesign()` function. You could do this in the `svymean()` or
+`svyglm()` functions we'll use to actually produce our weighted
+estimates, but it's easier and clearer to do it first, store it in an
+object, and then re-use that object.
 
-ELS has a complex sampling design that we won't get into, but the
+[ELS has a complex sampling design that we won't get
+into](https://nces.ed.gov/training/datauser/ELS_04.html), but the
 appropriate columns from our data frame, `df`, are set to the proper
 arguments in `svydesign()`:
 
@@ -418,22 +580,39 @@ Finally, notice the `~` before each column name, which is necessary in
 this function.
 
 ```{r}
+## subset data
+svy_df <- df %>%
+    select(psu,                         # primary sampling unit
+           strat_id,                    # stratum ID
+           bystuwt,                     # weight we want to use
+           bynels2m,                    # variables we want...
+           moth_ba,
+           fath_ba,
+           par_ba,
+           byses1,
+           lowinc,
+           female) %>%
+    ## go ahead and drop observations with missing values
+    drop_na()
+
 ## set svy design data
 svy_df <- svydesign(ids = ~psu,
                     strata = ~strat_id,
                     weight = ~bystuwt,
-                    data = df,
+                    data = svy_df,
                     nest = TRUE)
 ```
 
 Now that we've set the survey design, let's compare the unweighted
-mean with one that accounts for the survey design;
+mean with one that accounts for the survey design.
 
 ```{r}
 ## compare unweighted and survey-weighted mean of math scores
-mean(df$bynels2m, na.rm = TRUE)
+df %>% summarise(bynels2m_m = mean(bynels2m, na.rm = TRUE))
 svymean(~bynels2m, design = svy_df, na.rm = TRUE)
 ```
+
+It's a little different!
 
 We can also use the survey package to properly weight our t-tests and
 regression models --- again, using the object `svy_df` in
@@ -441,14 +620,26 @@ the `design` argument in place of our unset `df` data frame.
 
 ```{r}
 ## get svymeans by group
-svyby(~bynels2m, by = ~moth_ba, design = svy_df, FUN = svymean, na.rm = TRUE)
+svyby(~bynels2m, by = ~par_ba, design = svy_df, FUN = svymean, na.rm = TRUE)
 
 ## t-test using survey design / weights
-svyttest(bynels2m ~ moth_ba, design = svy_df, var.equal = TRUE)
+svyttest(bynels2m ~ par_ba, design = svy_df, var.equal = TRUE)
 ```
+
+Notice that unlike the base R `t.test()` function, `svyttest()` gives
+the difference between the groups. That's part of the reason we began
+by using `svyby()` function with `FUN = svymean`. Looking at the full
+output between the two functions, our results are a little different
+from what we got earlier without weights.
 
 > #### QUICK EXERCISE
 > Compare this to the output from `t.test()` above.
+
+Here's how we run a weighted regression. Notice that it's `svyglm()`,
+even though we used `lm()` before (the default `"link"` function in
+`glm()` is `gaussian` or normal; if we had binary outcomes and wanted
+to use a logit link then we could include `family = binomial()` as we
+did before).
 
 ```{r}
 ## fit the svyglm regression and show output
@@ -457,8 +648,23 @@ svyfit <- svyglm(bynels2m ~ byses1 + female + moth_ba + fath_ba + lowinc,
 summary(svyfit)
 ```
 
-Note that the survey library has a ton of features and is worth diving
-into if you regularly work with survey data.
+Again, our results are little different when using the weights. 
+
+Two notes:
+
+First, the **survey** library has a ton of features and is worth diving
+into if you regularly work with survey data. We've only scratched the
+surface of what it can do. But keep in mind that whatever statistical
+test you want to perform, there's likely a version that works with
+survey weights via this library.
+
+Second, you'll have to spend **a lot** of time reading the survey
+methodology documents in order to understand which weights you should
+you use (context always matters) so that you can properly set up your
+survey design with `svydesign()`. But be warned: even then it won't
+always be clear which weights are the "correct" weights. That said, do
+as you always do: (1) your due diligence, and (2) be prepared to
+defend your choice as well as note potential limitations.
 
 ## Predictions
 ```{r, echo = FALSE, purl = TRUE}
@@ -489,7 +695,27 @@ names(fit_pred)
 head(fit_pred$fit)
 head(fit_pred$se.fit)
 ```
-### Predictions with new data
+
+With the standard errors, we can get a better feel for how much faith
+we want to put in our predictions. If the standard errors are low,
+then maybe we feel more secure than if the errors are
+large. Alternatively, perhaps the errors are uniformly lower for some
+parts of our data than others. If so, that might suggest more
+investigation or a note on the limitations of our predictions for
+parts of the sample.
+
+### Two other types of predictions
+
+We won't practice these since in application they work similarly to
+what we did above. However, I do want to note two other types of
+predictions that you might want to make. Both involve making
+predictions for data that you didn't use to fit your
+model. Predictions using new data or held-out data in a train/test
+framework are another way to evaluate your model. If you predict well
+to new/held-out data, that can be a good sign for the utility of your
+model.
+
+#### Predictions with new data
 
 Ideally, we would have a new observations with which to make
 predictions. Then we could test our modeling choices by seeing how
@@ -512,18 +738,18 @@ observed outcomes. Depending on our problem and model, we might care
 about minimizing the root mean square error, the mean absolute error,
 or some other metric of the error.
 
-### Predictions using training and testing data
+#### Predictions using training and testing data
 
 In the absence of new data, we instead could have separated our data
-into two data sets,
-a
-[training set and test set](https://en.wikipedia.org/wiki/Training,_test,_and_validation_sets). After
+into two data sets, a [training set and test
+set](https://en.wikipedia.org/wiki/Training,_test,_and_validation_sets). After
 fitting our model to the training data, we could have tested it by
 following either above procedure with the testing data (depending on
-the outcome type). Setting a rule
-for ourselves, we could evaluate how well we did, that is, how well
-our training data model classified test data outcomes, and perhaps
-decide to adjust our modeling assumptions.
+the outcome type). Setting a rule for ourselves, we could evaluate how
+well we did, that is, how well our training data model classified test
+data outcomes, and perhaps decide to adjust our modeling
+assumptions. This is a fundamental way that many machine learning
+algorithm assess fit.
 
 ## Margins
 
@@ -533,8 +759,13 @@ Stata's
 [`-margins-` suite of commands](https://www.stata.com/help.cgi?margins).
 
 For example, after fitting our multiple regression, we might ask
-ourselves, what is the marginal "effect" of having a low family income
-on math scores, holding all other terms in our model constant?
+ourselves, what is the marginal association of coming from a family
+with low income on math scores, holding all other terms in our model
+constant? In other words, if student A and student B are similar along
+dimensions we can observe (let's say the average student in our
+sample) except for the fact that student A's family is considered
+lower income and student B's is not, what if any test score difference
+might we expect?
 
 To answer this question, we first need to make a "new" data frame with
 a column each for the variables used in the model and rows that equal
@@ -573,14 +804,14 @@ mm <- mm[,-1]
 head(mm)
 
 ## (3) convert to data frame so we can use $ notation in next step
-mm <- as.data.frame(mm)
+mm <- as_tibble(mm)
 
 ## (4) new data frame of means where only lowinc changes
-new_df <- data.frame(byses1 = mean(mm$byses1),
-                     female = mean(mm$female),
-                     moth_ba = mean(mm$moth_ba),
-                     fath_ba = mean(mm$fath_ba),
-                     lowinc = c(0,1))
+new_df <- tibble(byses1 = mean(mm$byses1),
+                 female = mean(mm$female),
+                 moth_ba = mean(mm$moth_ba),
+                 fath_ba = mean(mm$fath_ba),
+                 lowinc = c(0,1))
 
 ## see new data
 new_df
@@ -588,7 +819,11 @@ new_df
 Notice how the new data frame has the same terms that were used in the
 original model, but has only two rows. In the `lowinc` column, the
 values switch from `0` to `1`. All the other rows are averages of the
-data used to fit the model.
+data used to fit the model. This of course makes for a somewhat
+nonsensical average (what does it mean that a single father to have
+.32 of a BA/BS?), but that's okay. Again, what we want right now are
+two students who represent the "average" student except one is low
+income and the other is not.
 
 To generate the prediction, we use the same function call as before,
 but use our `new_df` object with the `newdata` argument.
@@ -600,14 +835,21 @@ predict(fit, newdata = new_df, se.fit = TRUE)
 
 Our results show that compared to otherwise similar students, those
 with a family income less than $25,000 a year are predicted to score
-about two points lower on their math test. 
+about two points lower on their math test. To be clear, this is not a
+casual estimate, but rather associational. This means we would be
+wrong to say that having a lower family income _causes_ lower math
+test scores (which doesn't jibe with our domain knowledge either; low
+income is almost certainly a proxy for other omitted variables ---
+access to educational resources for just one thing --- that are much
+more directly linked to test scores).
 
-In this example, we held the other covariates at their means. We could
-have chosen other values (*e.g.* `fath_ba == 1` or `female == 1`),
-however, meaning that we could use the same procedure to produce
-predictions for low-income status (or other model covariates) across a
-range of margins.
-
+I also want to note that we held the other covariates at their
+means. We could have instead chosen other values (*e.g.* `fath_ba ==
+1` or `female == 1`), which would have given us different marginal
+associations. Dropping or including other covariates likely would
+change our results, as well. The takeaway is that is that margins you
+compute are a function of your model as well as (obviously) the margin
+you investigate.
 
 ```{r, echo = FALSE, purl = TRUE}
 ## =============================================================================
