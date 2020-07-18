@@ -1,10 +1,9 @@
-
 ---
 layout: lesson
-title: "Functional programming"
-subtitle: "EDH7916 | Spring 2020"
+title: Functional programming
+subtitle: "EDH7916 | Summer C 2020"
 author: Benjamin Skinner
-order: 6
+order: 10
 category: lesson
 links:
   script: programming.R
@@ -14,7 +13,7 @@ output:
   md_document:
     variant: gfm
     preserve_yaml: true
---- 
+---
 
 This lesson covers two core programming processes: control flow and
 writing functions.
@@ -44,8 +43,8 @@ behind this lesson.
 
 # **DRY** vs **WET** programming
 
-The watchwords for this lesson are [**DRY** vs
-**WET**](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself):
+The watchwords for this lesson are [DRY vs
+WET](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself):
 
 - **DRY**: _Don't repeat yourself_
 - **WET**: _Write every time_
@@ -118,6 +117,14 @@ our working directory is set to the `scripts` directory.
 ## ---------------------------
 
 ## assume we're running this script from the ./scripts subdirectory
+## and data are organized hierarchically:
+
+## /EDH7916
+## |__/scripts
+## |__/data
+##     |__/sch_test
+##         |__/by_school
+
 dat_dir <- file.path("..", "data")
 sch_dir <- file.path(dat_dir, "sch_test")
 bys_dir <- file.path(sch_dir, "by_school")
@@ -222,8 +229,10 @@ which means give the full sequence of values from `<start>` through
 
 Since we made it above, we know that there are ten letters in
 `chr_sequence`. We could just use `1:10`. However, this violates our
-**no magic numbers** rule (what happens if we want to add or subtract
-letters from the list later?). 
+[no magic
+numbers](https://en.wikipedia.org/wiki/Magic_number_(programming))
+rule (what happens if we want to add or subtract letters from the list
+later?).
 
 We can get around this issue by using the base-R function, `length()`,
 which will return the number of items in a one-dimensional object.
@@ -367,7 +376,7 @@ for (i in num_sequence) {
 }
 ```
 
-As with {dplyr} verbs, the small number of control functions (and
+As with dplyr verbs, the small number of control functions (and
 there are some others) can be combined in an infinite number of ways
 to help you control how your script is read. If you find, however,
 that your script keeps getting more complex, with multiple nested
@@ -480,7 +489,7 @@ One last thing to keep in mind about functions is that they follow
 Vegas rules: _what happens inside the function, stays inside the
 function_. A more technical way of stating this is that the function
 has its own
-[**scope**](https://en.wikipedia.org/wiki/Scope_(computer_science))
+[scope](https://en.wikipedia.org/wiki/Scope_(computer_science))
 and objects created / processes run within that scope stay within that
 scope. That's why even though we created an object called `out_string`
 in our `say_hi()` function, we can't call it directly from the
@@ -760,10 +769,11 @@ df_sp
 ## ---------------------------
 ```
 
-Finally, let's look at the fully {tidyverse} way of solving this
-problem. We'll use the {purrr} library, which is loaded when we load
-{tidyverse}, and approaches functional programming more like other
-languages. Specifically, we'll use `map()`. [According the reference
+Finally, let's look at the fully tidyverse way of solving this
+problem. We'll use the [purrr library](https://purrr.tidyverse.org),
+which is loaded when we load tidyverse, and approaches functional
+programming more like other languages. Specifically, we'll use
+`map()`. [According the reference
 site](https://purrr.tidyverse.org/reference/index.html):
 
 > The `map(.x, .f)` functions transforms each element of the vector
@@ -780,8 +790,8 @@ thing we want to do (function):
 - **object** := file list (`files`)
 - **function** := `read_csv()`
 
-What's nice about {purrr} functions is that they work directly with
-other {tidyverse} functions via pipes, `%>%`. This bit of code
+What's nice about purrr functions is that they work directly with
+other tidyverse functions via pipes, `%>%`. This bit of code
 reproduces what the first loop did to read in and bind all files:
 
 ```{r, message = FALSE}
@@ -810,7 +820,7 @@ This code is much more compact than our loops above. That said, it
 also is more abstract (read: less clear). In certain situations, using
 `map()` in place of a `for()` loop may be faster. But in general, you
 are just fine using loops. That said, functional programming via the
-{purrr} suite of functions can be very powerful and may be worth
+purrr suite of functions can be very powerful and may be worth
 learning more about.
 
 

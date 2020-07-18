@@ -1,10 +1,9 @@
-
 ---
 layout: lesson
 title: "Data Wrangling IV: A philosophy of data wrangling"
-subtitle: "EDH7916 | Spring 2020"
+subtitle: "EDH7916 | Summer C 2020"
 author: Benjamin Skinner
-order: 7
+order: 11
 category: lesson
 links:
   pdf: dw_four.pdf
@@ -12,22 +11,22 @@ output:
   md_document:
     variant: gfm
     preserve_yaml: true
---- 
+---
 
 Now that we've learned a variety of data wrangling tasks, we'll take
 some time to discuss good workflow, that is, moving from raw data to
 data that are ready for analysis. In the lessons and assignments we've
 had so far, we've actually already covered many of the major points
-that are discussed below. This lesson, therefore, mostly just makes
-explicit the good practices that we've implicitly followed.
+that are discussed below. This lesson, therefore, is one part review
+and one part making explicit the good practices that we've implicitly
+followed.
 
 # Organization
 
-From the [second
-lesson](https://edquant.github.io/edh7916/lessons/organizing.html),
-we've been very concerned about how our project is organized. This
-includes both the directory of folders and files on our machine and
-the scripts that run our analyses.
+From the [third lesson](/edh7916/lessons/organizing.html), we've been
+very concerned about how our project is organized. This includes both
+the directory of folders and files on our machine and the scripts that
+run our analyses.
 
 ## Project directory
 
@@ -80,9 +79,8 @@ running your code.
 
 ## Script
 
-In the [second lesson on
-organizing](https://edquant.github.io/edh7916/lessons/organizing.html),
-I also shared a template R script. While you do not need to use my
+In the [lesson on organizing](/edh7916/lessons/organizing.html), I
+also shared a template R script. While you do not need to use my
 particular template --- in fact, you should modify it to meet your
 needs --- it does follow a few organizational rules that you should
 follow as well.
@@ -116,7 +114,7 @@ to non-working code, it's very important that you comment liberally.
   ```
 - Why are you doing it this way?
   ```r
-  ## Converting 1/2 indicator to 0/1 for clarity
+  ## Converting 1/2 indicator to 0/1 so 1 == variable name
   ```
 - Links to supporting documents/websites
   ```r
@@ -177,17 +175,18 @@ between your comments and code over time.
 # Automation
 
 In the [functional programming
-lesson](https://edquant.github.io/edh7916/lessons/programming.html),
-we discussed the difference between **D**on't **R**epeat **Y**ourself
-programming and **W**rite **E**very **T**ime programming. As much as
-possible and within the dictates of organizing and clarity, it's a
-good idea to automate as much as you can.
+lesson](/edh7916/lessons/programming.html), we discussed the
+difference between **D**on't **R**epeat **Y**ourself programming and
+**W**rite **E**very **T**ime programming. As much as possible and
+within the dictates of organizing and clarity, it's a good idea to
+automate as much as you can.
 
 ## Push-button replication
 
-If I've said it once, I've said it 1,000 times: I want an analysis
-script --- in particular, a replication script --- to run by _just
-pushing a button_. What I mean by this is that I want to:
+In general, the goal for an analysis script --- in particular, a
+replication script --- is that it will run from top to bottom with no
+errors by _just pushing a button_. What I mean by this is that I want
+to:
 
 1. Download the project directory
 1. Open the script in R Studio
@@ -225,10 +224,12 @@ on. Fight that urge!
 ## Multiple scripts
 
 We've only worked with one script so far, but you can use the
-`source()` function in R to call other R scripts. For a very large
-project, you may decide to have multiple scripts. For example, you may
-have one script that downloads data, one that cleans the data, one
-that performs the analyses, and one that makes the figures. 
+[`source()`
+function](https://stat.ethz.ch/R-manual/R-devel/library/base/html/source.html)
+in R to call other R scripts. For a very large project, you may decide
+to have multiple scripts. For example, you may have one script that
+downloads data, one that cleans the data, one that performs the
+analyses, and one that makes the figures.
 
 Rather than telling a would-be replicator to "run the following files
 in the following order"
@@ -242,6 +243,13 @@ you could instead include a `run_all.R` script that only sources each
 script in order and tell the replicator to run that:
 
 ```r
+## To run all analyses, set the working directory to "scripts" and
+## enter
+##
+## source("./run_all.R")
+##
+## into the console. 
+
 ## download data
 source("./get_data.R")
 
@@ -259,7 +267,7 @@ Not only is that easier for others to run, you now have a single
 script that makes your analytic workflow much clearer. Note that there
 are other ways to do something like this, such as using
 [makefiles](https://en.wikipedia.org/wiki/Makefile) ([here's an
-example for one of my
+example of the replication code for one of my
 projects](https://github.com/btskinner/oa_online_broadband_rep)), but
 using only R will work pretty well.
 
@@ -293,6 +301,8 @@ build in more formal checks. We've done a little of this when using
 `identical()` or `all.equal()` to compare data frames. You could build
 these into your scripts. For example:
 
+- summing activity hours in a week, check if any exceed the total
+  number of hours that are possible
 - reading in data with student GPAs, check if they are negative
 - combining data from 100 students at 5 schools, make sure your final
   data frame has 500 rows
@@ -343,7 +353,7 @@ your primary script but rather in another script, perhaps called
 ```
 
 or more sophisticated tests using R's
-[{testthat}](https://testthat.r-lib.org) library.
+[testthat](https://testthat.r-lib.org) library.
 
 Again, the point isn't that you spend all your time writing unit
 tests. But spending just a bit of time checking that your functions do
@@ -395,11 +405,11 @@ point.
 In the lessons so far, we've generally read in raw data, done some
 processing that we printed to the console, and then finished. This is
 fine for our small lessons and assignments, but in your own work, you
-will want to save your changes to the data along the way --- that is,
-save updated data files at discrete points in your data analysis. This
-is particularly true for large projects in which wrangling your data
-is distinct from its analysis and you don't want to run each part
-every time.
+will often want to save your changes to the data along the way ---
+that is, save updated data files at discrete points in your data
+analysis. This is particularly true for large projects in which
+wrangling your data is distinct from its analysis and you don't want
+to run each part every time.
 
 Broadly, there are four stages of data:
 
@@ -415,7 +425,7 @@ from one stage to the next.
 We'll talk about each below. 
 
 **ACKNOWLEDGMENT** I want to give a quick hat tip to two people who've
-really helped me clarify my thinking about these stages of data: [Will
+really helped me clarify my thinking about these stages of data, [Will
 Doyle](https://twitter.com/wdoyle42) and [Sally
 Hudson](https://twitter.com/SallyLHudson): Will for first showing the
 importance of keeping raw data untouched; and Sally for showing how
@@ -501,7 +511,8 @@ The benefits are three-fold:
 
 - `0` and `1` are logically coded as `FALSE` and `TRUE`
 - `instate` gives a direction to the `0`s and `1`s: `1` means in-state
-- taking the mean of `instate` will give you the proportion
+- taking the mean of `instate` will give you the proportion of
+  in-state students in your data
 
 If your data or project (or number of projects) is large, you many
 want to save data files after your objective wrangling. These can be
@@ -526,9 +537,19 @@ bin your data the same way. This is a subjective task for two reasons:
   _i.e._ to make the data consistent or clearer
 - it's unlikely you'll need this new column of data for other projects
 
-But wait! Maybe you _do_ want to use this new binned value of EFC in
-multiple projects. And maybe the binned categories are standard across
-the literature. Isn't that _objective_? 
+Some other subjective changes you might make to a data set:
+
+- create an indicator variable that equals `1` when a student's family
+  income is below $35,000/year (why $30k? why not $25k or $35k?)
+- convert institutional enrollments to the log scale (do you always
+  need to do this?)
+- join in data on the unemployment rate in the student's county (do
+  you always need this information at the county level? at all?)
+
+But wait! Maybe you _do_ want to use the binned value of EFC in
+multiple projects --- perhaps the binned categories are standard
+across the literature --- or the other examples appear always useful
+and otherwise standard. Isn't that _objective_?
 
 Maybe! 
 
@@ -547,9 +568,9 @@ depending on your research question(s).
 ## Analysis data
 
 Finally, analysis data are data that are properly structured for the
-analysis you want to run (or the table or figure you want to
-make). In many cases, you're analysis data set will be the same as
-your clean data set:
+analysis you want to run (or the table or figure you want to make). In
+many cases, your analysis data set will be the same as your clean data
+set:
 
 - it's in the shape you want (rectangular, with observations in rows
   and variables in columns)
@@ -594,11 +615,12 @@ only take on `0`/`1` values if `parocc` equals that occupation:
 you may want to save this particular analysis data set. 
 
 As with the difference between _objective_ and _subjective_ data, the
-difference between _subjective_ and _analysis_ data may not be
-clear. That's okay! The main point is that as a data analyst, you make
-data wrangling decisions thinking about how you will go from _raw_ to
-_objective_ to _subjective_ to _analysis_ data in a logical and clear
-manner. Collaborators, replicators, and future you will appreciate it!
+difference between _subjective_ and _analysis_ data does not align to
+a set of hard and fast rules. That's okay! The main point is that as a
+data analyst, you make data wrangling decisions thinking about how you
+will go from _raw_ to _objective_ to _subjective_ to _analysis_ data
+in a logical and clear manner. Collaborators, replicators, and future
+you will appreciate it!
 
 # Recommended texts
 
