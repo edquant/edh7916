@@ -1,0 +1,533 @@
+---
+layout: lesson
+title: "Interactive graphics"
+subtitle: "EDH7916 | Summer C 2020"
+author: Benjamin Skinner
+order: 5
+category: supplemental
+links:
+  script: interactive.R
+  pdf: interactive.pdf
+  data: 
+  - hsls_small.dta
+  - sch_test.zip
+output:
+  md_document:
+    variant: gfm
+    preserve_yaml: true
+always_allow_html: yes
+---
+
+In this supplemental lesson, we'll make a few interactive plots using
+the [plotly](https://plotly.com/r/) library. The good news is that
+plotly works very similarly to ggplot. In fact, as you may have seen
+in a prior homework assignment, it's often trivial to convert a static
+ggplot figure into an interactive plotly figure.
+
+# Setup
+
+```{r, include = FALSE, purl = FALSE}
+source('knit_setup.R')
+```
+```{r, include = FALSE, purl = TRUE}
+################################################################################
+##
+## <PROJ> EDH7916: Interactive graphics
+## <FILE> interactive.R 
+## <INIT> 19 July 2020
+## <AUTH> Benjamin Skinner (GitHub/Twitter: @btskinner)
+##
+################################################################################
+
+```
+```{r}
+## ---------------------------
+## libraries
+## ---------------------------
+
+library(tidyverse)
+library(haven)
+library(plotly)
+```
+
+As we did with the [the lesson on making
+graphics](../lessons/dw_two.html), we'll use two sets of data:
+`hsls_small.dta` and `all_schools.csv`. 
+
+**Note** that since we have two data files this lesson, we'll give
+them unique names instead of the normal `df`:
+
+- `df_hs` := `hsls_small.dta`
+- `df_ts` := `all_schools.csv`
+
+```{r}
+## ---------------------------
+## directory paths
+## ---------------------------
+
+## assume we're running this script from the ./scripts subdirectory
+dat_dir <- file.path("..", "data")
+tsc_dir <- file.path(dat_dir, "sch_test")
+```
+
+```{r}
+## ---------------------------
+## input data
+## ---------------------------
+
+## assume we're running this script from the ./scripts subdirectory
+## read_dta() ==> read in Stata (*.dta) files
+## read_csv() ==> read in comma separated value (*.csv) files
+df_hs <- read_dta(file.path(dat_dir, "hsls_small.dta"))
+df_ts <- read_csv(file.path(tsc_dir, "all_schools.csv"))
+```
+
+# Plots using plotly
+```{r, echo = FALSE, purl = TRUE}
+## -----------------------------------------------------------------------------
+## Graphics with plotly
+## -----------------------------------------------------------------------------
+```
+
+## Histogram
+```{r, echo = FALSE, purl = TRUE}
+## ---------------------------
+## histogram
+## ---------------------------
+```
+
+```{r plotly_plot_histogram, warning = F, message = F, fig.show = 'hide', results = 'hide'}
+## create histogram plotly
+p <- plot_ly(data = df_hs, x = ~x1txmtscor, type = "histogram")
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_hist_1.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_hist_1.html"))
+```
+
+```{r plotly_plot_histogram_normed, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+## create histogram plotly
+p <- plot_ly(data = df_hs,
+             x = ~x1txmtscor,
+             histnorm = "probability",
+             type = "histogram")
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_hist_norm.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_hist_norm.html"))
+```
+
+```{r plotly_plot_histogram_labels, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+## create histogram plotly w/
+## 1. better labels
+## 2. add title
+## 3. change color of bars
+## 4. add outline to bars
+p <- plot_ly(data = df_hs,
+             x = ~x1txmtscor,
+             histnorm = "probability",
+             type = "histogram",
+             marker = list(color = "#E28F41",
+                           line = list(color = "#6C9AC3",
+                                       width = 2))) %>%
+    layout(title = "Distribution of math test scores",
+           xaxis = list(title = "Math test score"))
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_hist_lab.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_hist_lab.html"))
+```
+
+```{r, echo = FALSE, purl = TRUE}
+## ---------------------------
+## two way plot
+## ---------------------------
+```
+
+Plotting the difference in a continuous distribution across groups is
+a common task. Let's see the difference between student math scores
+between students with parents who have any postsecondary degree and
+those without. 
+
+Since we're using data that was labeled in Stata, we'll see the
+labels when we use `count()`
+
+```{r}
+## see the counts for each group
+df_hs %>% count(x1paredu)
+
+## need to set up data
+plot_df <- df_hs %>%
+    ## select the columns we need
+    select(x1paredu, x1txmtscor) %>%
+    ## can't plot NA so will drop
+    drop_na() %>%
+    ## create new variable that == 1 if parents have any college
+    mutate(pared_coll = ifelse(x1paredu >= 3, 1, 0)) %>%
+    ## drop (using negative sign) the original variable we don't need now
+    select(-x1paredu) 
+
+## show
+head(plot_df)
+```
+
+```{r plotly_histogram_double, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+## two way histogram
+p <- plot_ly(alpha = 0.5) %>%
+    add_histogram(data = plot_df %>% filter(pared_coll == 0),
+                  x = ~x1txmtscor,
+                  histnorm = "probability",
+                  type = "histogram",
+                  name = "No college") %>%
+    add_histogram(data = plot_df %>% filter(pared_coll == 1),
+                  x = ~x1txmtscor,
+                  histnorm = "probability",
+                  type = "histogram",
+                  name = "Some college or more") %>%
+    layout(barmode = "overlay",
+           title = "Distribution of math test scores",
+           xaxis = list(title = "Math test score"),
+           legend = list(title = list(text = "Parent's education level")))
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_hist_double.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_hist_double.html"))
+```
+
+## Box plot
+```{r, echo = FALSE, purl = TRUE}
+## ---------------------------
+## box plot
+## ---------------------------
+```
+
+```{r plotly_box, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+## box plot using both factor() and as_factor()
+p <- plot_ly(data = df_hs,
+             color = ~as_factor(x1paredu),
+             y = ~x1txmtscor,
+             type = "box") %>%
+    layout(title = "Math score by parental expectations",
+           yaxis = list(title ="Math score"),
+           legend = list(title = list(text = "Parental expectations")))
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_box.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_box.html"))
+```
+
+
+# Scatter
+```{r, echo = FALSE, purl = TRUE}
+## ---------------------------
+## scatter plot
+## ---------------------------
+```
+
+```{r, warning = F, message = F}
+## sample 10% to make figure clearer
+df_hs_10 <- df_hs %>%
+    ## drop observations with missing values for x1stuedexpct
+    drop_na(x1stuedexpct) %>%
+    ## sample
+    sample_frac(0.1)
+```
+
+```{r  plotly_scatter_1, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+## scatter
+p <- plot_ly(data = df_hs_10,
+             x = ~x1ses,
+             y = ~x1txmtscor,
+             type = "scatter",
+             mode = "markers")
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_scatter_1.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_scatter_1.html"))
+```
+
+```{r  plotly_scatter_2, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+## scatter
+p <- plot_ly(data = df_hs_10,
+             x = ~x1ses,
+             y = ~x1txmtscor,
+             type = "scatter",
+             mode = "markers",
+             marker = list(size = 10,
+                           color = "#E28F41",
+                           line = list(color = "#6C9AC3",
+                                       width = 2)),
+             name = "",
+             hovertemplate = paste("SES: %{x}",
+                                   "<br>", # add <br> for line break
+                                   "Math: %{y}")) %>%
+    layout(title = "Math scores as function of SES",
+           xaxis = list(title = "SES",
+                        zeroline = FALSE),
+           yaxis = list(title = "Math score"))
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_scatter_2.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_scatter_2.html"))
+```
+
+```{r}
+## see student base year plans
+df_hs %>%
+    count(x1stuedexpct)
+```
+
+We see that `x1stuedexpct >= 6` means a student plans to earn a
+Bachelor's degree or higher. But since we need to account for the fact
+that 11 means "I don't know", we need to make sure our test includes
+`x1stuedexpct < 11`. Remember from a prior lesson that we can connect
+these two statements together with the operator `&`. Let's create our
+new variable.
+
+```{r}
+## create variable for students who plan to graduate from college
+df_hs_10 <- df_hs_10 %>%
+    mutate(plan_col_grad = ifelse(x1stuedexpct >= 6 & x1stuedexpct < 11,
+                                  "Yes",        # if T: 1
+                                  "No"))       # if F: 0
+```
+
+Now that we have our new variable `plan_col_grad`, we can add it the
+`color` aesthetic, `aes()` in `geom_point()`. Don't forget to use
+`factor()` so that ggplot knows to treat it like a group!
+
+```{r plotly_scatter_group, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+## set color palette with names
+pal <- c("#E28F41","#6C9AC3")
+pal <- setNames(pal, c("Yes", "No"))
+
+## scatter
+p <- plot_ly() %>%
+    add_trace(data = df_hs_10,
+              x = ~x1ses,
+              y = ~x1txmtscor,
+              color = ~plan_col_grad,
+              colors = pal,             # using pal from above
+              type = "scatter",
+              mode = "markers",
+              hovertemplate = paste("SES: %{x}",
+                                    "<br>", # add <br> for line break
+                                    "Math: %{y}")) %>%
+    layout(title = "Math scores as function of SES",
+           xaxis = list(title = "SES",
+                        zeroline = FALSE),
+           yaxis = list(title = "Math score"),
+           legend = list(title = list(text = "Plans to graduate from college?")))
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_scatter_group.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_scatter_group.html"))
+```
+
+## Line graph
+```{r, echo = FALSE, purl = TRUE}
+## ---------------------------
+## line graph
+## ---------------------------
+```
+
+```{r}
+## show test score data
+df_ts
+
+## reshape data long
+df_ts_long <- df_ts %>%
+    pivot_longer(cols = c("math","read","science"), # cols to pivot long
+                 names_to = "test",                 # where col names go
+                 values_to = "score") %>%           # where col values go
+    group_by(test) %>%
+    mutate(score_std = (score - mean(score)) / sd(score)) %>%
+    group_by(test, school) %>%
+    arrange(year) %>% 
+    mutate(score_year_one = first(score),
+           ## note that we're using score_year_one instead of mean(score)
+           score_std_sch = (score - score_year_one) / sd(score)) %>%
+    ungroup
+
+## show
+df_ts_long
+```
+
+```{r plotly_line, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+## scatter
+p <- plot_ly() %>%
+    add_trace(data = df_ts %>% filter(school == "Bend Gate"),
+              x = ~year,
+              y = ~math,
+              name = "Math",
+              type = "scatter",
+              mode = "lines") %>%
+    add_trace(x = ~year,
+              y = ~read,
+              name = "Reading",
+              type = "scatter",
+              mode = "lines") %>%
+    add_trace(x = ~year,
+              y = ~science,
+              name = "Science",
+              type = "scatter",
+              mode = "lines") %>%
+    layout(title = "Test scores at Bend Gate: 1980 - 1985",
+           xaxis = list(title = "Year"),
+           yaxis = list(title = "Score"),
+           legend = list(title = list(text = "Test")),
+           hovermode = "x unified")
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_scatter_line.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_scatter_line.html"))
+```
+```{r plotly_line_2, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+schools <- c("Bend Gate", "East Heights", "Niagara", "Spottsville")
+plot_list <- list()
+for (i in schools) {
+    if_bg <- (i == schools[1])
+    ## scatter
+    plot_list[[i]] <- plot_ly() %>%
+        add_trace(data = df_ts_long %>% filter(school == i),
+                  x = ~year,
+                  y = ~score_std_sch,
+                  color = ~test,
+                  legendgroup = ~test,
+                  text = ~score,
+                  showlegend = if_bg,
+                  type = "scatter",
+                  mode = "lines",
+                  hovertemplate = paste("Year: %{x}",
+                                        "<br>",
+                                        "Score (scaled): %{y}",
+                                        "<br>",
+                                        "Score (actual): %{text}")) %>% 
+        layout(xaxis = list(title = "Year"),
+               yaxis = list(title = "Score"),
+               legend = list(title = list(text = "Test"))) %>%
+        add_annotations(text = i,
+                        x = 0,
+                        y = 1,
+                        yref = "paper",
+                        xref = "paper",
+                        xanchor = "middle",
+                        yanchor = "top",
+                        showarrow = FALSE,
+                        font = list(size = 15))
+}
+
+p <- subplot(plot_list[[1]], plot_list[[2]], plot_list[[3]], plot_list[[4]],
+             nrows = 2)
+```
+```r
+## show
+p
+```
+```{r, include = FALSE, purl = TRUE}
+## show
+p
+```
+```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
+htmltools::save_html(p,
+                     file.path(getwd(), "plotly", "plt_facet.html"),
+                     libdir = file.path(getwd(), "plotly", "lib"))
+htmltools::tags$iframe(src = file.path("plotly", "plt_facet.html"))
+```
+```{r, echo = FALSE, purl = TRUE}
+
+## =============================================================================
+## END SCRIPT
+################################################################################
+```
