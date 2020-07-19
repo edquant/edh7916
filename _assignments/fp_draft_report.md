@@ -50,10 +50,16 @@ RMarkdown (`.Rmd`) file:
    - **[If necessary]** Include citations
    - Be well organized
 
+_Please also submit your raw data files so that I can run your
+script. If your files are very large (too large to upload to CANVAS,
+contact me so that we can figure out another way for you to get your
+data to me._
+
 #### Submission details
 
 - Upload to our CANVAS course site no later than 11:59 p.m. EDT on the
   due date 
 - Save your file as: `<name>_draft_report.Rmd` (if submitting an Rmd
   file) where your last name replaces `<name>` (_e.g._
-  `skinner_draft_report.Rmd`)
+  `skinner_draft_report.Rmd`).
+- Submit data files (zipped if necessary)

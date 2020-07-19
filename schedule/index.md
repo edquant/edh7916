@@ -27,5 +27,5 @@ Sunday evening by 11:59 p.m. EDT in the week noted**.
 |**Week 8** <br/> (7/13 - 7/19)|> Inferential tests and models <br/> < Assignment 7|  
 |**Week 9** <br/> (7/20 - 7/26)|> Functional programming <br/> < Assignment 8|  
 |**Week 10** <br/> (7/27 - 8/2)|> Data wrangling IV: A philosophy of data wrangling <br/> < Assignment 9 <br/> < Final project: draft of final report|  
-|**Week 11** <br/> (8/3 - 8/9)|+ **Supplemental:** Interactive graphics <br/> < Assignment 10|  
-|**Week 12** <br/> (8/10 - 8/14)|+ **Supplemental:** Webscraping <br/> < Final project: final report <br/> < Supplemental problem sets from after break (if any)|  
+|**Week 11** <br/> (8/3 - 8/9)|+ **Supplemental:** Webscraping <br/> < Assignment 10|  
+|**Week 12** <br/> (8/10 - 8/14)|+ **Supplemental:**  Interactive graphics <br/> < Final project: final report <br/> < Supplemental problem sets from after break (if any)|  
