@@ -285,6 +285,8 @@ code { background-color: #f8f8f8; }
 
 code, pre { font-size: .9em; }
 
+iframe { margin: 0; padding: 0; border: none; width: 100%; height: 430px; display: block; }
+
 img[alt=badge] { width: 200px; }
 
 .centerpic { display: block; margin-left: auto; margin-right: auto; }
