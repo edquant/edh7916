@@ -9,3 +9,5 @@ below.
 
 * [Spring 2020 (PhD)](https://edquant.github.io/past/2020/spring/edh7916/)
 {:.past_list}
+* [Summer 2020 (EdD)](https://edquant.github.io/past/2020/summer/edh7916/)
+{:.past_list}
