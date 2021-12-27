@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: Initial analyses
-subtitle: "EDH7916 | Summer (C) 2020"
+subtitle: "EDH7916"
 author: Benjamin Skinner
 order: 2
 category: finalproject
@@ -48,11 +48,13 @@ formatted R (`.R`) script or RMarkdown (`.Rmd`) file:
 
 #### Submission details
 
-- Upload to our CANVAS course site no later than 11:59 p.m. EDT on the
-  due date 
 - Save your file as: 
   - `<name>_analyses.R` (if submitting an R script)
   - `<name>_analyses.Rmd` (if submitting an Rmd file)
   
   where your last name replaces `<name>` (_e.g._ `skinner_analyses.R` or
-  `skinner_analyses.Rmd`)
+  `skinner_analyses.Rmd`) in your `final_project` folder.
+- Push to your GitHub repo prior to the start of the class in which it
+  is due. If you are unsure whether you have successfully pushed your
+  changes, check the online version of your repo at GitHub.com. If you
+  can see your changes there, I can see them too.

@@ -17,12 +17,13 @@ usage()
  ARGUMENTS:
     [-l]        Lesson to knit (w/o ending)
     [-a]        Assignment to knit (w/o ending)
+    [-b] 	Build site w/o knitting lesson or assignment
     [-i]        Directory of lesson *.Rmd files
     [-j]        Directory of assignment *.Rmd files
     [-o]        Directory where pdf versions of lessons should go
     [-p]        Directory where pdf versions of assignments should go
     [-s]        Directory where purled scripts files should go
-    [-b]        Suffix to go on _config*.yml and _site* directory
+    [-d]        Development version of site (local *_dev)
     [-c]        Output directory for course assignments, data, lessons, and scripts
     [-v]        Render / build verbosely (optional flag)
     		
@@ -31,8 +32,9 @@ usage()
  ./kbuild.sh -l all
  ./kbuild.sh -l all -a all
  ./kbuild.sh -l intro -a intro
- ./kbuild.sh -l all -i _posts -b _dev
- ./kbuild.sh -l all -c 
+ ./kbuild.sh -l all -i _posts -d
+ ./kbuild.sh -l all -c
+ ./kbuild.sh -b 
 
  DEFAULT VALUES:
 
@@ -41,8 +43,9 @@ usage()
  o = lessons
  p = assignments
  s = scripts
- b = <empty string>
  c = ../<dir name>_student
+ d = 0 (create actual site)
+ b = 0 (nothing)
  v = 0 (knit/build quietly)
 
 EOF
@@ -56,7 +59,8 @@ oj=$j
 o="lessons"
 p="assignments"
 s="scripts"
-b=""
+d=0
+b=0
 c=0                             # assuming _student for central repo
 v=0
 
@@ -64,6 +68,7 @@ knit_q="TRUE"
 build_q="--quiet"
 student_repo="../${PWD##*/}_student"
 pdfs="assets/pdf"
+build_site=0
 
 # pandoc
 pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex --variable monofont=\"Menlo\" -f markdown-implicit_figures"
@@ -72,7 +77,7 @@ pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex
 sed_opts_1="s/\/edh7916\/assets/..\/assets/g; s/\/edh7916\/lessons/..\/lessons/g; s/\/edh7916\/figures/..\/figures/g;"
 sed_opts_2="s/..\/assets/.\/assets/g; s/..\/lessons/https:\/equant.github.io\/edh7916\/lessons/g; s/<img src=\"\(\.\.\/figures\/.*\.png\)\".* width=\"100%\" \/>/\!\[\]\(${i}\/\1\)/g"
 
-while getopts "hl:a:i:j:o:p:s:b:cv" opt;
+while getopts "hl:a:i:j:o:p:s:dbcv" opt;
 do
     case $opt in
 	h)
@@ -100,8 +105,11 @@ do
 	s)
 	    s=$OPTARG
 	    ;;
+	d)
+	    d=1
+	    ;;
 	b)
-	    b=$OPTARG
+	    b=1
 	    ;;
 	c)
 	    c=1
@@ -130,6 +138,20 @@ done
 if [[ $v == 1 ]]; then
     knit_q="FALSE"
     build_q=""
+fi
+
+# set paths for site build location
+if [[ $d == 1 ]]; then
+    config_yml="./_config_dev.yml"
+    site_path="./_site_dev"
+else
+    config_yml="./_config.yml"
+    site_path="./_site"
+fi
+
+# turn on build site
+if [[ $b == 1 ]]; then
+    build_site=1
 fi
 
 printf "\nKNIT RMARKDOWN / BUILD JEKYLL SITE\n"
@@ -172,6 +194,10 @@ fi
 
 if [[ $c == 1 ]]; then
     printf "  Student files directory            = %s\n" "$student_repo"
+fi
+
+if [[ $knit_assignments == 0 && $knit_lessons == 0 && $c == 0 ]]; then
+    printf "  None\n"
 fi
 
 # ==============================================================================
@@ -289,13 +315,13 @@ fi
 # BUILD
 # ==============================================================================
 
-if [[ $knit_lessons == 1 ]] || [[ $knit_assignments == 1 ]]; then
+if [[ $knit_lessons == 1 ]] || [[ $knit_assignments == 1 ]] || [[ $build_site == 1 ]]; then
     printf "\n[ Building... ]\n\n"
     
-    bundle exec jekyll build $build_q --config ./_config${b}.yml --destination ./_site${b} --verbose 2>/dev/null
+    bundle exec jekyll build $build_q --config $config_yml --destination $site_path --verbose 2>/dev/null
     printf "  Built site ==>\n"
-    printf "     config file:   _config$b\n"
-    printf "     location:      _site$b\n"
+    printf "     config file:   $config_yml\n"
+    printf "     location:      $site_path\n"
     # correct yaml-dropping for RMD files in scripts (want yaml)
     # cp $s/*.Rmd ./_site${b}/$s/
 fi

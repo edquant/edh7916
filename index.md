@@ -19,7 +19,10 @@ and easily reproduced.
 In this course, students will learn:
 
 1. To use a number of tools that are useful for conducting applied
-   quantitative research
+   quantitative research including
+   - [R](https://cran.r-project.org) with [RStudio](https://www.rstudio.com)
+   - [git](https://git-scm.com) with [GitHub](https://github.com)
+   - [RMarkdown](https://rmarkdown.rstudio.com)
 1. To properly organize a project for maximum clarity and
    reproducibility
 1. Best practices for cleaning/tidying/wrangling raw data into

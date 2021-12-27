@@ -16,15 +16,15 @@ img: assets/img
 
 # for github metadata (releases)
 repository: edquant/edh7916
-# don't show releases after this date (keep classes separated)
-releasecutoff: 2020-05-01
+# don't show releases prior to this date (keep classes separated)
+releasecutoff: 2020-09-01
 
 info:
-  term: Summer 2020 (Session C) 
+  term: Spring 2022
   location: University of Florida
-  building: Online
-  room: 
-  office: NRNA 2-230F
+  building: Norman Hall
+  room: NRN 2033
+  office: 2705G Norman Hall
   officehrs: "TBD"
 
 contact:
