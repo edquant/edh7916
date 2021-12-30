@@ -2,8 +2,6 @@
 layout: default
 title: "Software installation"
 category: page
-links:
-  pdf: installation.pdf
 ---
 
 * Table of Contents
