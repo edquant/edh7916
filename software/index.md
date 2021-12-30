@@ -16,19 +16,22 @@ computer. Specifically, you need:
 
 - R
 - RStudio
+- git
 - LaTeX
 
 These instructions should help you find and download what you
 need. You do not need to use this guide, but it may help, particularly
 if you aren't used to downloading and installing open source software.
 
-I've done my best to include screenshots of each step. One snag,
-however, is that while some in the class may use Windows/PC, others
-use Apple/MacOS (I'm making the assumption that no one is using Linux
---- if you are, you probably don't need these instructions!). I
-personally use MacOS. This means that some of the screenshots are
-based on what I see as a Mac user on the software websites. But where
-I can, I show sections for MacOS and Windows downloads.
+I've done my best to include screenshots of each step or provide links
+to external sites that already have excellent instructions (_e.g._,
+git). One snag, however, is that while some in the class may use
+Windows/PC, others use Apple/MacOS (I'm making the assumption that no
+one is using Linux --- if you are, you probably don't need these
+instructions!). I personally use MacOS. This means that some of the
+screenshots are based on what I see as a Mac user on the software
+websites. But where I can, I show sections for MacOS and Windows
+downloads.
 
 I also can't walk you through each step of the installation once
 you've downloaded the correct files, again, because operating systems
@@ -123,6 +126,21 @@ versions. You can also pick your correct version here. Same as before,
 just click the link, download, and install as normal.
 
 ![RStudio install options]({{ site.baseurl }}/{{ site.img }}/rstudio_install_opt.png)
+
+# Installing git
+
+There are two things you need to do to use git/GitHub in our course:
+(1) have an installation of git and (2) have a GitHub account. Rather
+than reinventing the wheel, I suggest following the instructions from
+Jenny Bryan.
+
+1. [Get a GitHub account](https://happygitwithr.com/github-acct.html)
+1. [Install git on your
+   computer](https://happygitwithr.com/install-git.html)
+
+**NOTE** As part of registering an account with GitHub, I recommend
+requesting an [Education Discount so you can get free private
+repositories for future work](https://happygitwithr.com/github-acct.html#free-private-repos).
 
 # Installing LaTeX
 
