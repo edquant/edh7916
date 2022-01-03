@@ -71,7 +71,8 @@ pdfs="assets/pdf"
 build_site=0
 
 # pandoc
-pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex --variable monofont=\"Menlo\" -f markdown-implicit_figures"
+pandoc_opts="-V geometry:margin=1in --highlight-style tango --pdf-engine=xelatex --variable monofont=\"Menlo\" -f markdown-implicit_figures "
+pandoc_opts+="-V colorlinks=true -V linkcolor=blue -V urlcolor=blue -V links-as-notes -H head.tex"
 
 # sed
 sed_opts_1="s/\/edh7916\/assets/..\/assets/g; s/\/edh7916\/lessons/..\/lessons/g; s/\/edh7916\/figures/..\/figures/g;"
@@ -189,7 +190,7 @@ fi
 
 if [[ $knit_assignments == 1 || $knit_lessons == 1 ]]; then
     printf "  *.R script output directory        = %s\n" "$s"
-    printf "  Directory of built site            = _site%s\n" "$b"
+    printf "  Directory of built site            = %s\n" "$site_path"
 fi
 
 if [[ $c == 1 ]]; then
