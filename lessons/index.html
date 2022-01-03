@@ -48,11 +48,66 @@ the higher education administration program at the University of Florida
 	<h1>Lessons</h1>
 	
 
-	<h1 id="lessons">Lessons</h1>
+	<p>Workshop modules are listed in order of the course. The R script
+(<span><i class="fas fa-code"></i></span>) and data (<span><i class="fas fa-database"></i></span>) used to create each module will be
+linked at the top of the page.</p>
 
-<p>PDF versions of the website modules / lessons go in this directory. By
-design, they should be exactly the same as what you see on the site,
-but in PDF form in case you’d rather use them that way.</p>
+<h2 id="a-note-on-directory-structure">A note on directory structure</h2>
+
+<p>All modules assume the directory structure below.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>edh7916/
+|
+|__ data/
+|   |
+|   |-- lesson1.rds
+|   |-- lesson2.rds
+|   |...
+|
+|__ scripts/
+|   |
+|   |-- lesson1.R
+|   |-- lesson2.R
+|   |...
+</code></pre></div></div>
+
+<p>When running scripts in RStudio, the working directory should be
+<code class="language-plaintext highlighter-rouge">path/to/edh7916/scripts</code>. You can check in RStudio
+by typing <code class="language-plaintext highlighter-rouge">getwd()</code> in the console. For example, let’s say you’ve
+saved the files in a folder called <code class="language-plaintext highlighter-rouge">courses</code>, which is in your home
+directory. Then you should see (if on a Mac):</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">getwd</span><span class="p">()</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"/Users/benski/courses/edh7916/scripts"</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="lessons">Lessons</h2>
+
+<ul class="lessons">
+
+
+
+	<li>
+		<a href="/edh7916/lessons/intro_r.html">Introduction to R</a>
+	</li>
+
+	<li>
+		<a href="/edh7916/lessons/intro_git.html">Introduction to Git</a>
+	</li>
+
+	<li>
+		<a href="/edh7916/lessons/intro_markdown.html">Introduction to Markdown</a>
+	</li>
+
+</ul>
+
+<h2 id="supplemental">Supplemental</h2>
+
+<ul class="supplemental">
+
+
+
+</ul>
 
 
 	<!-- <p> -->
