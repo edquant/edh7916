@@ -5,8 +5,9 @@ knitr::opts_knit$set(base.url="",
 knitr::opts_chunk$set(fig.path="../figures/",
                       dpi=90,
                       out.width="100%",
-                      error = TRUE,
-                      comment = NA)
+                      error = TRUE## ,
+                      ## comment = NA
+                      )
 
 ## limit output lines (h/t https://stackoverflow.com/a/23147563)
 hook_output <- knitr::knit_hooks$get("output")
