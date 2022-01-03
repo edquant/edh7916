@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: Rubric
-subtitle: "EDH7916 | Summer (C) 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
 order: 0
 category: rubric
