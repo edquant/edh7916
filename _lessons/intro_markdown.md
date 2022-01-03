@@ -1,9 +1,9 @@
 ---
 layout: lesson
 title: Introduction to Markdown
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
-order: 2
+order: 1.3
 category: lesson
 links:
   pdf: intro_markdown.pdf
@@ -13,9 +13,7 @@ output:
     preserve_yaml: true
 ---
 
-```{r, include = FALSE, purl = FALSE}
-source('knit_setup.R')
-```
+
 
 In addition to using R in this course, you will also learn to use
 [Markdown, a plain text markup language created by John Gruber in
@@ -138,7 +136,7 @@ footnotes)](https://www.markdownguide.org/extended-syntax/).
 Here's an example from the [Markdown Guide basic syntax page for
 making headers](https://www.markdownguide.org/basic-syntax/):
 
-![Markdown Guide](/edh7916/assets/img/markdown_guide_example.png)
+![Markdown Guide](../assets/img/markdown_guide_example.png)
 
 On the left you have the Markdown syntax. To make a header, just put a
 pound sign / hash (`#`) in front of the line. As you want smaller

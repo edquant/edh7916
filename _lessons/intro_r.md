@@ -1,9 +1,9 @@
 ---
 layout: lesson
 title: Introduction to R
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
-order: 1
+order: 1.1
 category: lesson
 links:
   script: intro_r.R
@@ -14,28 +14,17 @@ output:
     preserve_yaml: true
 ---
 
-```{r, include = FALSE, purl = FALSE}
-source('knit_setup.R')
-```
-```{r, include = FALSE, purl = TRUE}
-################################################################################
-##
-## <PROJ> EDH7916: Introduction
-## <FILE> intro_r.R 
-## <INIT> 6 January 2020
-## <AUTH> Benjamin Skinner (GitHub/Twitter: @btskinner)
-##
-################################################################################
 
-```
-```{r, include = FALSE, purl = TRUE}
-## ---------------------------------------------------------
-## Welcome!
-## ---------------------------------------------------------
-```
 
-```{r}
+
+
+
+```r
 print('Hello, World!')
+```
+
+```
+## [1] "Hello, World!"
 ```
 R is a port of the [S
 language](https://en.wikipedia.org/wiki/S_(programming_language)),
@@ -74,7 +63,7 @@ languages and remote site, _etc_. There are other options for working
 with R, but RStudio is a great all-around program that we will use in
 this course.
 
-![](/edh7916/assets/img/rstudio_script.png)
+![](../assets/img/rstudio_script.png)
 
 RStudio has 3-4 main frames:
 
@@ -93,11 +82,7 @@ console itself.
 > and run the first line. Welcome to R!
 
 ## Assignment
-```{r, include = FALSE, purl = TRUE}
-## ---------------------------------------------------------
-## Assignment
-## ---------------------------------------------------------
-```
+
 
 R is a type of [object-oriented
 programming](https://en.wikipedia.org/wiki/Object-oriented_programming)
@@ -111,7 +96,8 @@ reasons](http://blog.revolutionanalytics.com/2008/12/use-equals-or-arrow-for-ass
 the primary means of assignment is the arrow, `<-`, which is a less
 than symbol, `<`, followed by a hyphen, `-`.
 
-```{r}
+
+```r
 ## assign value to object x using <-
 x <- 1
 ```
@@ -134,10 +120,22 @@ functions similarly print to the console if you don't assign the
 output to an object. You can see this when simply type a number or
 character into the console.
 
-```{r}
+
+```r
 ## when you input a number or character, R returns it back to you
 1
+```
+
+```
+## [1] 1
+```
+
+```r
 "a"
+```
+
+```
+## [1] "a"
 ```
 
 Basically, you've just told R "Here's a `1`" and R said "The content
@@ -148,17 +146,27 @@ the first item. Since we only have one item, it's just `[1]`.
 When you store something in an object, you can type the object's name
 into the console to see what's in it.
 
-```{r}
+
+```r
 ## what's in x?
 x
+```
+
+```
+## [1] 1
 ```
 
 A neat trick if you want to both assign a value _and_ see the results
 printed to the output is to to wrap the entire line in `()`.
 
-```{r}
+
+```r
 ## wrap in () to print after assignment
 (x <- 5)
+```
+
+```
+## [1] 5
 ```
 
 > #### Quick exercise
@@ -229,7 +237,8 @@ is that you should feel okay downloading these packages from CRAN.
 
 To download a package from CRAN, use:
 
-```{r, eval = FALSE, purl = FALSE}
+
+```r
 install.packages("<package name>")
 ```
 **NOTE** Throughout this course, if you see something in triangle
@@ -253,7 +262,8 @@ download the right operating system file type.
 Package libraries can loaded in a number of ways, but the easiest
 it to write:
 
-```{r, eval = FALSE, purl = FALSE}
+
+```r
 library("<library name>")
 ```
 
@@ -263,9 +273,27 @@ scripts. Typically, they are placed at the top of the script file.
 
 For example, let's load the `tidyverse` library we just installed:
 
-```{r}
+
+```r
 ## load library (note quirk that you don't need quotes here)
 library(tidyverse)
+```
+
+```
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+```
+
+```
+## ✔ ggplot2 3.3.5     ✔ purrr   0.3.4
+## ✔ tibble  3.1.6     ✔ dplyr   1.0.7
+## ✔ tidyr   1.1.4     ✔ stringr 1.4.0
+## ✔ readr   2.1.1     ✔ forcats 0.5.1
+```
+
+```
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 Notice that when you load the tidyverse (which, again, is actually
@@ -274,11 +302,7 @@ packages are this noisy, but the information is useful here because it
 shows all the libraries that are now loaded and ready for you to use.
 
 ## Help
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------------------------------------
-## Help
-## ---------------------------------------------------------
-```
+
 
 I don't have every R function and nuance memorized, so I certainly
 don't expect that you will. With all the user-written packages, it
@@ -291,24 +315,124 @@ In the console, typing a function name immediately after a question
 mark will bring up that function's help file (in RStudio, you should
 see in the bottom right facet):
 
-```{r, echo = FALSE, purl = FALSE, include = FALSE}
-loadNamespace("printr")
-```
-```{r}
+
+
+```r
 ## get help file for function
 ?median
+```
+
+```
+## Median Value
+## 
+## Description:
+## 
+##      Compute the sample median.
+## 
+## Usage:
+## 
+##      median(x, na.rm = FALSE, ...)
+##      
+## Arguments:
+## 
+##        x: an object for which a method has been defined, or a numeric
+##           vector containing the values whose median is to be computed.
+## 
+##    na.rm: a logical value indicating whether 'NA' values should be
+##           stripped before the computation proceeds.
+## 
+##      ...: potentially further arguments for methods; not used in the
+##           default method.
+## 
+## Details:
+## 
+##      This is a generic function for which methods can be written.
+##      However, the default method makes use of 'is.na', 'sort' and
+##      'mean' from package 'base' all of which are generic, and so the
+##      default method will work for most classes (e.g., '"Date"') for
+##      which a median is a reasonable concept.
+## 
+## Value:
+## 
+##      The default method returns a length-one object of the same type as
+##      'x', except when 'x' is logical or integer of even length, when
+##      the result will be double.
+## 
+##      If there are no values or if 'na.rm = FALSE' and there are 'NA'
+##      values the result is 'NA' of the same type as 'x' (or more
+##      generally the result of 'x[FALSE][NA]').
+## 
+## References:
+## 
+##      Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) _The New S
+##      Language_.  Wadsworth & Brooks/Cole.
+## 
+## See Also:
+## 
+##      'quantile' for general quantiles.
+## 
+## Examples:
+## 
+##      median(1:4)                # = 2.5 [even number]
+##      median(c(1:3, 100, 1000))  # = 3 [odd, robust]
 ```
 
 Two question marks will search for the command name in CRAN packages
 (again, in the bottom right facet):
 
-```{r}
+
+```r
 ## search for function in CRAN
 ??median
 ```
-```{r, echo = FALSE, purl = FALSE, include = FALSE}
-unloadNamespace("printr")
-```
+
+
+
+|Package         |Topic                       |Title                                                                                   |
+|:---------------|:---------------------------|:---------------------------------------------------------------------------------------|
+|bit64           |qtile                       |(Q)uan(Tile)s                                                                           |
+|broom           |tidy.mediate                |Tidy a(n) mediate object                                                                |
+|distributional  |median.distribution         |Median of a probability distribution                                                    |
+|ellipsis        |safe_median                 |Safe version of median                                                                  |
+|future          |readImmediateConditions     |Read All 'immediateCondition' RDS Files                                                 |
+|future          |sticky_globals              |Place a sticky-globals environment immediately after the global environment             |
+|ggplot2         |hmisc                       |A selection of summary functions from Hmisc                                             |
+|googledrive     |drive_put                   |PUT new media into a Drive file                                                         |
+|Hmisc           |smean.cl.normal             |Compute Summary Statistics on a Vector                                                  |
+|httr            |guess_media                 |Guess the media type of a path from its extension.                                      |
+|httr            |parse_media                 |Parse a media type.                                                                     |
+|igraph          |time_bins.sir               |SIR model on graphs                                                                     |
+|matrixStats     |rowMedians                  |Calculates the median for each row (column) in a matrix                                 |
+|matrixStats     |rowWeightedMedians          |Calculates the weighted medians for each row (column) in a matrix                       |
+|matrixStats     |weightedMad                 |Weighted Median Absolute Deviation (MAD)                                                |
+|matrixStats     |weightedMedian              |Weighted Median Value                                                                   |
+|miscTools       |colMedians                  |Medians of Columns                                                                      |
+|miscTools       |rowMedians                  |Medians of Rows                                                                         |
+|posterior       |ess_quantile                |Effective sample sizes for quantiles                                                    |
+|posterior       |mcse_quantile               |Monte Carlo standard error for quantiles                                                |
+|posterior       |rvar-summaries-over-draws   |Summaries of random variables within array elements, over draws                         |
+|posterior       |rvar-summaries-within-draws |Summaries of random variables over array elements, within draws                         |
+|PowerUpR        |cra2                        |Two-level Cluster-randomized Trials to Detect Main, Moderation and Mediation Effects    |
+|PowerUpR        |cra3                        |Three-level Cluster-randomized Trials to Detect Main, Moderation, and Mediation Effects |
+|PowerUpR        |med_pn                      |Partially Nested Designs Probing Multilevel Mediation                                   |
+|purrr           |accumulate                  |Accumulate intermediate results of a vector reduction                                   |
+|raster          |Summary-methods             |Summary methods                                                                         |
+|recipes         |step_impute_median          |Impute numeric data using the median                                                    |
+|recipes         |tidy.step_BoxCox            |Tidy the Result of a Recipe                                                             |
+|spatstat.geom   |mean.im                     |Mean and Median of Pixel Values in an Image                                             |
+|spatstat.geom   |weighted.median             |Weighted Median, Quantiles or Variance                                                  |
+|spatstat.linnet |mean.linim                  |Mean, Median, Quantiles of Pixel Values on a Linear Network                             |
+|survival        |Math.Surv                   |Methods for Surv objects                                                                |
+|terra           |Summary-methods             |Summarize                                                                               |
+|zoo             |rollmean                    |Rolling Means/Maximums/Medians/Sums                                                     |
+|zoo             |zoo                         |Z's Ordered Observations                                                                |
+|stats           |mad                         |Median Absolute Deviation                                                               |
+|stats           |median                      |Median Value                                                                            |
+|stats           |medpolish                   |Median Polish (Robust Twoway Decomposition) of a Matrix                                 |
+|stats           |runmed                      |Running Medians - Robust Scatter Plot Smoothing                                         |
+|stats           |smooth                      |Tukey's (Running Median) Smoothing                                                      |
+|stats           |smoothEnds                  |End Points Smoothing (for Running Medians)                                              |
+
 
 At first, using help files may feel like trying to use a dictionary to
 see how to spell a word --- if you knew how to spell it, you wouldn't
@@ -340,18 +464,32 @@ Google it!
 
 When needing help for this class, your order of operations should be:
 
-1. Try a lot on your own
-2. R help files
-3. Google
-4. Class peern (directly or through our
+1. Try a lot on your own (perhaps using [rubber duck debugging](https://en.wikipedia.org/wiki/Rubber_duck_debugging))
+1. R help files
+1. Google
+1. Class peers (directly or through our
    [Issues](https://github.com/edquant/edh7916/issues?q=is%3Aissue+is%3Aopen)
    page)
-5. Me
+1. Me
 
 This is not because I don't want to help. My concern is the opposite:
 that I'm likely to just show you. Data analysis is tricky because no
 two problems are alike. But over time, they do rhyme. The time you put
 in now learning to figure things out on your own will be well paid in
 the future. 
+
+## Useful packages
+
+We're going to use a number of packages this semester. While we may
+need more than this list --- and you almost certainly will in your own
+future work --- let's install these to get us started.
+
+> #### Quick exercise
+> Install the following packages using the `install.packages()`
+> function:
+> - `devtools` 
+> - `here`
+> - `usethis`
+> - `gitcreds`
 
 
