@@ -9,6 +9,8 @@ student_<your_last_name>/
 |
 |__ assignments/
 |__ data/
+|__ final_project/
+|__ final_project_example/
 |__ lessons/
 |__ scripts/
 |__ working/
