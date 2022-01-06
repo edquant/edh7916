@@ -413,7 +413,7 @@ this course, if you see the changes on GitHub, that means I can see
 them. Conversely, if you don't see the changes on GitHub, then I can't
 see them. Double check!
 
-![RStudio new project: GitHub post push](../assets/img/gitHub_post_push.png)
+![RStudio new project: GitHub post push](../assets/img/github_post_push.png)
 
 ## Pulling down changes from GitHub
 
