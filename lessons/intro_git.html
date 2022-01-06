@@ -119,74 +119,7 @@ using RStudio or another GUI is fine.</p>
 
 <p><em>Credit: Lbhtw (Own work)</em></p>
 
-<h3 id="some-notes-on-work-flow-good-habits">Some notes on work flow (good habits)</h3>
-
-<ol>
-  <li>Always <code class="language-plaintext highlighter-rouge">pull</code> from your local repo with your remote repo before
-starting any work. This makes sure you have the latest
-files. RStudio has a <code class="language-plaintext highlighter-rouge">pull</code> button in the <strong>Git</strong> tab.</li>
-  <li>Don’t wait to <code class="language-plaintext highlighter-rouge">push</code> your commits. Just like you save your papers
-every few lines or paragraphs, you should push to your remote
-repo. This way, you’re less likely to lose work in the event of a
-computer crash. Also, should you want to return to a prior version,
-small changes make it easier to find what you want.</li>
-  <li>Add useful <code class="language-plaintext highlighter-rouge">commit</code> messages. RStudio will make you add
-something. Don’t say “stuff.” A version history of 95 “stuff”s is
-pretty non-helpful. Also, I would keep it clean. Even in a private
-repository, work as if someone will see what you write someday.</li>
-  <li>Don’t freak out! If you accidentally push and overwrite or delete
-something on the remote, you can get it back. That’s the point of
-version control! Sometimes weird things like merges happen (two
-files with the same name are shoved together). They can be a pain
-to fix, but they can be fixed.</li>
-  <li>Avoid tracking overly large files and pushing them to your remote
-repository. GitHub has a file size limit of 100 MB per file and 1
-GB per repo. The history of large files compounds quickly, so think
-carefully before adding them. Usually this means that small
-datasets are okay; big ones are better backed up somewhere else and
-left on your machine.</li>
-  <li>Remember: even in a private repository, your files are potentially
-viewable. If any of your datasets or files are restricted, do no
-push them remotely. Use <code class="language-plaintext highlighter-rouge">.gitignore</code> to make sure that git doesn’t
-track or push them.</li>
-</ol>
-
-<p>Every class and work session should go like this:</p>
-
-<ol>
-  <li><code class="language-plaintext highlighter-rouge">pull</code> from GitHub remote</li>
-  <li><em>do work</em></li>
-  <li><code class="language-plaintext highlighter-rouge">add</code> or <code class="language-plaintext highlighter-rouge">stage</code> (if new file)</li>
-  <li><code class="language-plaintext highlighter-rouge">commit</code> with message</li>
-  <li><code class="language-plaintext highlighter-rouge">push</code> back to GitHub remote</li>
-</ol>
-
-<p>If you’d like you can also use terminal commands to accomplish the
-same things. Many people (including me) like to use the terminal
-commands directly.</p>
-
-<ul>
-  <li>Pull: <code class="language-plaintext highlighter-rouge">git pull</code></li>
-  <li>Stage: <code class="language-plaintext highlighter-rouge">git add &lt;filenames&gt;</code></li>
-  <li>Committ: <code class="language-plaintext highlighter-rouge">git commit -m "&lt;your message here&gt;"</code></li>
-  <li>Push: <code class="language-plaintext highlighter-rouge">git push</code></li>
-</ul>
-
-<p>That said, you should use whatever works best for you.</p>
-
-<p>By far the most useful guide to working with R and git/GitHub is
-<a href="https://happygitwithr.com/">Jenny Bryan’s guide</a>. In fact, we’ll use
-it first to set up your user credentials so you can interact with
-GitHub.</p>
-
-<blockquote>
-  <h4 id="quick-exercise">Quick exercise</h4>
-  <p><a href="https://happygitwithr.com/https-pat.html#tldr">Using these instructions from Jenny Bryan’s
-site</a>, let’s set up a 
-Personal Access Token or PAT that you’ll save to your machine.</p>
-</blockquote>
-
-<h3 id="some-more-notes-on-using-git-plain-text">Some more notes on using Git: plain text</h3>
+<h3 id="plain-text-and-git">Plain text and git</h3>
 
 <p>Git works best with <a href="https://en.wikipedia.org/wiki/Plain_text">plain text
 files</a>. This is because it
@@ -213,13 +146,384 @@ change will just make a whole new copy of the file. This is why we
 generally don’t commit large binary data files to Git: your repo just
 becomes larger and larger with each small change to your data.</p>
 
-<blockquote>
-  <h4 id="not-so-quick-exercise">Not-so-quick exercise</h4>
-  <p>In this first exercise, we’ll practice using RStudio to pull down
-your student repository from GitHub. We’ll also practice making a
-few quick file changes, staging, commiting, and pushing them back to
-the remote.</p>
-</blockquote>
+<h3 id="some-notes-on-work-flow-good-habits">Some notes on work flow (good habits)</h3>
+
+<ol>
+  <li>Always <code class="language-plaintext highlighter-rouge">pull</code> from your local repo with your remote repo before
+starting any work. This makes sure you have the latest
+files. RStudio has a <code class="language-plaintext highlighter-rouge">pull</code> button in the <strong>Git</strong> tab.</li>
+  <li>Don’t wait to <code class="language-plaintext highlighter-rouge">push</code> your commits. Just like you save your papers
+every few lines or paragraphs, you should push to your remote
+repo. This way, you’re less likely to lose work in the event of a
+computer crash. Also, should you want to return to a prior version,
+small changes make it easier to find what you want.</li>
+  <li>Add useful <code class="language-plaintext highlighter-rouge">commit</code> messages. RStudio will make you add
+something. Don’t say “stuff.” A version history of 95 “stuff”s is
+pretty non-helpful. Also, I would keep it clean. Even in a private
+repository, work as if someone will see what you write someday.</li>
+  <li>Don’t freak out! If you accidentally push and overwrite or delete
+something on the remote, you can get it back. That’s the point of
+version control! Sometimes weird things like merges happen (two
+files with the same name are shoved together). They can be a pain
+to fix, but they can be fixed.</li>
+  <li>Avoid tracking overly large files and pushing them to your remote
+repository. GitHub has a file size limit of 100 MB per file and 1
+GB per repo. The history of large files compounds quickly, so think
+carefully before adding them. Usually this means that small
+data sets are okay; big ones are better backed up somewhere else and
+left on your machine.</li>
+  <li>Remember: even in a private repository, your files are potentially
+viewable. If any of your data sets or files are restricted, do no
+push them remotely. Use <code class="language-plaintext highlighter-rouge">.gitignore</code> to make sure that git doesn’t
+track or push them.</li>
+</ol>
+
+<p>Every class and work session should go like this:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">pull</code> from GitHub remote</li>
+  <li><em>do work</em></li>
+  <li><code class="language-plaintext highlighter-rouge">add</code> or <code class="language-plaintext highlighter-rouge">stage</code> (if new file)</li>
+  <li><code class="language-plaintext highlighter-rouge">commit</code> with message</li>
+  <li><code class="language-plaintext highlighter-rouge">push</code> back to GitHub remote</li>
+</ol>
+
+<p>If you’d like you can also use terminal commands to accomplish the
+same things. Many people (including me) like to use the terminal
+commands directly.</p>
+
+<ul>
+  <li>Pull: <code class="language-plaintext highlighter-rouge">git pull</code></li>
+  <li>Stage: <code class="language-plaintext highlighter-rouge">git add &lt;filenames&gt;</code></li>
+  <li>Commit: <code class="language-plaintext highlighter-rouge">git commit -m "&lt;your message here&gt;"</code></li>
+  <li>Push: <code class="language-plaintext highlighter-rouge">git push</code></li>
+</ul>
+
+<p>That said, you should use whatever works best for you.</p>
+
+<h2 id="getting-your-class-repo-and-linking-with-git">Getting your class repo and linking with git</h2>
+
+<p>In this class, you’ll work in and submit your work through a private
+git repository that only you and I will be able to access. I’ve
+already set that up in our course organization on GitHub. Let’s get
+your repo onto your computer.</p>
+
+<h3 id="step-0-install-git-on-your-computer">Step 0: Install git on your computer</h3>
+
+<p><a href="/edh7916/software">Follow these directions to install git on your computer</a>, 
+if you need it and haven’t already done so. If you use a Mac, there’s
+a good chance you already have git on your machine. You can check by
+opening the Terminal application and typing <code class="language-plaintext highlighter-rouge">which git</code> at the
+prompt. If you get a response like <code class="language-plaintext highlighter-rouge">/usr/bin/git</code> then you have
+git. It’s unlikely to be the newest version, but is probably good
+enough for our class. That said, it generally doesn’t hurt to install
+a newer version.</p>
+
+<h3 id="step-1-setting-a-personal-access-token-or-pat">Step 1: setting a personal access token or PAT</h3>
+
+<p>Before we try to use git through RStudio, we need to set up your
+GitHub user credentials on your computer. This is a security feature
+of GitHub that prevents others from accessing your account. Think of a
+personal access token or PAT as a special type of password that links
+your computer to GitHub and that can be set with different levels of
+permission on your account. It can be very limited, allowing the
+computer user only a very number of options or very broad, giving the
+computer user a many ways to interact with GitHub. It can also be set
+to expire if you want.</p>
+
+<p>To set up your PAT, we’ll once again use <a href="https://happygitwithr.com/">Jenny Bryan’s GitHub
+guide</a>. Specifically, <a href="https://happygitwithr.com/https-pat.html#tldr">we’ll use
+instructions found
+here</a>. Repeating the
+instructions, they are:</p>
+
+<p>In the RStudio console, type the following and press enter:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">usethis</span><span class="o">::</span><span class="n">create_github_token</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="../assets/img/rstudio_gitcred1.png" alt="RStudio gitcred prompt" /></p>
+
+<p>This should open up a web page on GitHub to create a token with some
+presents. The presets are fine, though I would recommend setting the
+PAT to last at least until the course is over (so you don’t have to do
+all of this again in a month). In this example, I put this course id
+in the use <em>Note</em> box and set the expiration for middle of the summer
+after the course has ended. Once you’ve set these, scroll to the
+bottom and click the button to generate the PAT.</p>
+
+<p><img src="../assets/img/github_pat.png" alt="GitHub PAT page" /></p>
+
+<p>You see a screen that looks like this:</p>
+
+<p><img src="../assets/img/github_pat2.png" alt="GitHub PAT page" /></p>
+
+<p>I’ve blocked out the letters and numbers after <code class="language-plaintext highlighter-rouge">gh_</code> (not that I’m
+using this PAT since it’s now public!), but you should see a full
+string. Keep this window open and head back to RStudio.</p>
+
+<p>In the console type and press enter:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gitcreds</span><span class="o">::</span><span class="n">gitcreds_set</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="../assets/img/gitcreds_set.png" alt="GitHub PAT page" /></p>
+
+<p>It will as you to add your password. Paste the <code class="language-plaintext highlighter-rouge">gh_</code> PAT and press
+enter. If it worked, you should see the following:</p>
+
+<p><img src="../assets/img/gitcreds_finish.png" alt="GitHub PAT page: finish" /></p>
+
+<p>If you (or someone you share your computer with) has already set up a
+PAT in the past, you will be given the option to keep your current set
+up or replace. I’ll leave that to you. All else being equal, it’s
+probably better to replace the old PAT with the new PAT unless you
+have compelling reason not to do so.</p>
+
+<p>You should now be set to use GitHub with class!</p>
+
+<h3 id="step-2-clone-your-github-repo-to-your-computer">Step 2: clone your GitHub repo to your computer</h3>
+
+<p>Navigate to your GitHub repo at github.com. Once you’ve signed into
+your account, you should be able to navigate to it through GitHub’s
+interface. Because the repos are structured the same way, you can also
+use this link:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://github.com/edquant/&lt;...&gt;
+</code></pre></div></div>
+
+<p>Where <code class="language-plaintext highlighter-rouge">&lt;...&gt;</code> is your repo name. Unless otherwise said, it should take
+the form of <code class="language-plaintext highlighter-rouge">student_&lt;last name&gt;</code> (students with shared last names
+will have a slightly different repo name since repo names within the
+organization must be unique — ask me or check your email). For
+example, my repo is <code class="language-plaintext highlighter-rouge">student_skinner</code> and is found at:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://github.com/edquant/student_skinner
+</code></pre></div></div>
+
+<p>If you click on this an you aren’t me, you’ll get a 404 error
+page. That’s because it’s a private repository, meaning only those
+with access can see it — GitHub pretends it doesn’t exist
+otherwise. If you can’t find your repo, double check two things:</p>
+
+<ul>
+  <li>that you have the correct repo name (no typos)</li>
+  <li>that you are signed into GitHub</li>
+</ul>
+
+<p>If you are signed in and have the right link, you should see your
+page. For example, mine looks like this:</p>
+
+<p><img src="../assets/img/github_student_repo.png" alt="GitHub student repo" /></p>
+
+<p>Just above the list of files, click on the button that says clone
+(it’s green by default).</p>
+
+<p><img src="../assets/img/github_clone.png" alt="GitHub clone" /></p>
+
+<p>You’ll see a drop down. Confirm that <strong>HTTPS</strong> is bold and
+underlined. You’ll want to copy to the web address in the text box for
+the next step (you can use the overlapping box symbol just to the
+right of the address to copy it to your clipboard).</p>
+
+<p>Now, return to RStudio. In the upper right hand corner, you’ll see
+<em>Project: (none)</em> (if you’ve been using RStudio, you may have a
+project going, meaning it won’t say “none”, but that’s okay). Click on
+that to see a drop down list of options. You will click on the first
+option <em>New Project</em>.</p>
+
+<p><img src="../assets/img/rstudio_new_project.png" alt="RStudio new project" /></p>
+
+<p>This window will pop up.</p>
+
+<p><img src="../assets/img/rstudio_new_project_vc.png" alt="RStudio new project: version control" /></p>
+
+<p>Choose the option <em>Version Control</em> option. In the next window that
+opens, choose <em>Git</em>.</p>
+
+<p><img src="../assets/img/rstudio_new_project_git.png" alt="RStudio new project:
+git" /></p>
+
+<p>In the final window, paste the URL for your GitHub repo in the first
+text box. The middle text box should auto-fill with your repo name:
+<code class="language-plaintext highlighter-rouge">student_&lt;last_name&gt;</code>. The last text box is where you want to store
+your repo. On my computer, it shows the Desktop. If you’d rather place
+your course files in another place on your computer (<em>e.g.</em> a
+<em>projects</em> folder or maybe a <em>class</em> folder), then use the <em>Browse</em>
+button to select a new location. <strong>The main thing is to remember where
+you saved it!</strong> Once you’re satisfied, click the <em>Create Project</em>
+button.</p>
+
+<p><img src="../assets/img/rstudio_new_project_create.png" alt="RStudio new project:
+create" /></p>
+
+<p>If everything works, you’ll see a drop down window that looks like
+it’s doing some work with files. It will quickly close and RStudio
+will look like it is restarting, when it reopens, you should see your
+repo files in the bottom right pane, a new tab that says <em>Git</em>, and
+your repo name in the upper right as the new project name. You are now
+ready to work with your class files!</p>
+
+<p><img src="../assets/img/rstudio_new_project_complete.png" alt="RStudio new project: complete" /></p>
+
+<h2 id="stagingadding-committing-and-pushing-files-from-your-computer-to-github">Staging/adding, committing, and pushing files from your computer to GitHub</h2>
+
+<p>There is nothing special about working in a git directory compared to
+a normal directory: you still open your files, edit them, and save as
+normal. The difference is that along the way, you take an extra step
+that involves:</p>
+
+<ol>
+  <li><em>Staging/adding</em> your files (telling git to pay attention to the
+changes you’ve made)</li>
+  <li><em>Committing</em> your files (confirming that you want git to store your
+changes in your local repository)</li>
+  <li><em>Pushing</em> your changes (copying changes to your local repository to
+your remote repository — GitHub)</li>
+</ol>
+
+<p>If you click on the <em>Git</em> tab, you’ll a new file listed with some
+boxes next to it.</p>
+
+<p><img src="../assets/img/rstudio_git_tab.png" alt="RStudio new project: Git tab" /></p>
+
+<p>This particular file is a settings file and not that important for us,
+but it will be good to use as an example. If you want to see
+information about the file, click the <em>Diff</em> button on the far left,
+just under the <em>Environment</em> tab.</p>
+
+<p>A new window will open. The bottom window shows the changes made to
+the file. Lines with additions are in green; lines with subtractions
+are in red. Because this is a new file, the entire text is
+green.</p>
+
+<p><img src="../assets/img/rstudio_git_diff.png" alt="RStudio new project: Git
+diff" /></p>
+
+<p>If you click on the <em>History</em> button, you can see the history
+of changes to the repo. There’s not much right now, but over time, the
+history can be <em>very</em> helpful for finding deleted code or pinpointing
+when a bug was introduced.</p>
+
+<p><img src="../assets/img/rstudio_git_history.png" alt="RStudio new project: Git history" /></p>
+
+<p>Going back by clicking on <em>Changes</em> window, let’s stage/add our file, commit it,
+and push it.</p>
+
+<h3 id="stageadd">Stage/add</h3>
+
+<p>To stage/add a file, click the box next to the file name. You’ll
+notice that the two boxes under the <em>Status</em> header become a single
+box with an “A” in it for <strong>Add</strong>.</p>
+
+<p><img src="../assets/img/rstudio_git_add.png" alt="RStudio new project: Git add" /></p>
+
+<h3 id="commit">Commit</h3>
+
+<p>Next, you need to <strong>Commit</strong> the changes to the local repository. Do
+this by writing a message in the box on the right. You can write
+whatever you want, but per the suggestions above, I recommend
+something short and informative. Once you’re done, click the <em>Commit</em> button.</p>
+
+<p><img src="../assets/img/rstudio_git_commit.png" alt="RStudio new project: Git commit" /></p>
+
+<p>You’ll see a drop down menu telling you what has happened. At first
+this can seem like nothing, but over time, you’ll get the hang of the
+messages. This tells you that 1 file (our <code class="language-plaintext highlighter-rouge">Rproj</code> file changed with 13
+new lines (if there were deletions, it would say that, too). You can
+close this out.</p>
+
+<p><img src="../assets/img/rstudio_git_commit2.png" alt="RStudio new project: Git commit result" /></p>
+
+<p>After closing, notice that you don’t see the file name any more or the
+changes in the bottom panel. However, there is new line towards the
+top left that tells you “Your branch is ahead of origin/main by 1
+commit.” <em>origin/main</em> is the git name of your remote repo: <em>origin</em>
+is the remote (GitHub) and <em>main</em> is the specific branch (we will only
+use the “main” branch in this course). In other words, your local repo
+has changes that are one step ahead of what’s on GitHub. Time to sync
+them up!</p>
+
+<p><img src="../assets/img/rstudio_git_post_commit.png" alt="RStudio new project: Git post commit" /></p>
+
+<h3 id="push">Push</h3>
+
+<p>Pushing the changes to GitHub is simple: just click the <em>Push</em> button
+in the far upper right (up arrow). Once again, you’ll get a drop down
+window with messages from git. There’s no error (it’ll let you know),
+so you can close the window.</p>
+
+<p><img src="../assets/img/rstudio_git_push.png" alt="RStudio new project: Git push" /></p>
+
+<p>When you go back to the main RStudio window, you’ll notice that file
+is no longer listed in the <em>Git</em> tab. Should you make changes to it,
+it will reappear. Similarly, any files in your local repo that you
+change, add, or delete will show up here.</p>
+
+<p><img src="../assets/img/rstudio_git_post_push.png" alt="RStudio new project: Git post push" /></p>
+
+<p>If you want to confirm that the push worked, go to your repo at
+GitHub. If you can see the new file and the commit message, then you
+know your changes have made it to your GitHub repo. Importantly for
+this course, if you see the changes on GitHub, that means I can see
+them. Conversely, if you don’t see the changes on GitHub, then I can’t
+see them. Double check!</p>
+
+<p><img src="../assets/img/GitHub_post_push.png" alt="RStudio new project: GitHub post push" /></p>
+
+<h2 id="pulling-down-changes-from-github">Pulling down changes from GitHub</h2>
+
+<p>Closing the loop, you also need to <strong>pull</strong> down changes from
+GitHub. In general, this is necessary when are you are using multiple
+computers or working with a collaborator. For this course, you’ll need
+to pull down updates and comments I make to your repo.</p>
+
+<p>To pull, all you need to do is click the <em>Pull</em> button in the <em>Git</em>
+tab (with the down arrow).</p>
+
+<p><img src="../assets/img/rstudio_git_pull.png" alt="RStudio: pull" /></p>
+
+<p>If there’s nothing new, you’ll get a message like this. If so, you’re
+good to go!</p>
+
+<p><img src="../assets/img/rstudio_git_post_pull.png" alt="RStudio: post pull" /></p>
+
+<p>If there are changes, you’ll be informed of those and you’ll see them
+reflected in your local files. If there’s a new file, you’ll see it
+appear in your local directory. If a file is deleted, it will be removed
+from your local directory. If there were any changes in a file, you’ll
+see them when you next open the file.</p>
+
+<h3 id="committing-changes-before-pulling-down">Committing changes before pulling down</h3>
+
+<p>One thing that catches new (and experienced!) git users is forgetting
+to stage/add and commit changes <strong>before</strong> pulling down new changes
+from the remote repo. If you try to pull from GitHub and there’s a
+change to a file you have changed but haven’t add/stage + committed,
+the pull won’t work. It’s annoying, but it’s actually a nice feature:
+this prevents changes that you aren’t tracking and therefore can’t
+recover.</p>
+
+<p>If this happens, stage/add and commit your local changes and then
+pull. If you have made changes that don’t align with the new changes
+you just pulled down, you’ll end up with a merged file. It can look
+messy, but it’s totally fixable. If this happens and you have trouble,
+let me know.</p>
+
+<h2 id="final-note-about-git-and-this-course">Final note about git and this course</h2>
+
+<p><a href="https://www.btskinner.io/grm/">By construction of the scripts I use to build this
+course</a>, I have the ability to
+overwrite files you use. That said, I will only overwrite stuff that I
+put in there, like lessons, assignments, class scripts, etc. I will
+never overwrite anything you add. Also, I will not overwrite
+anything you put in the <code class="language-plaintext highlighter-rouge">working</code> folder. That’s yours.</p>
+
+<p>If you want to, for example, take notes in class scripts using
+comments (a very good idea), then simply rename the script. For
+example, you could rename the <code class="language-plaintext highlighter-rouge">intro_r.R</code> script to
+<code class="language-plaintext highlighter-rouge">intro_r_notes.R</code>. That way, when I update your repo, you won’t lose
+your notes when <code class="language-plaintext highlighter-rouge">intro_r.R</code> is reset.</p>
 
 
 
