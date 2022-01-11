@@ -64,22 +64,34 @@ the higher education administration program at the University of Florida
 </p>
 
 
+<h2 id="creating-a-new-directory">Creating a new directory</h2>
+
 <ol>
   <li>Create a new top-level subdirectory in your course directory
 (<em>i.e.</em>, the same level as <code class="language-plaintext highlighter-rouge">scripts</code>, <code class="language-plaintext highlighter-rouge">data</code>, and <code class="language-plaintext highlighter-rouge">figures</code>) called
 <code class="language-plaintext highlighter-rouge">tables</code>.</li>
-  <li>Take a screenshot of your RStudio application that shows this new
-folder in the <strong>Files</strong> facet and name it
-<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_2_screenshot.*</code> (where <code class="language-plaintext highlighter-rouge">*</code> is whatever file
-type your screenshot is in: <code class="language-plaintext highlighter-rouge">png</code>, <code class="language-plaintext highlighter-rouge">jpg</code>, <em>etc</em>).</li>
+  <li>Create a Markdown file called <code class="language-plaintext highlighter-rouge">README.md</code> and place it in your new
+<code class="language-plaintext highlighter-rouge">tables</code> directory. In the <code class="language-plaintext highlighter-rouge">tables/README.md</code> file, 
+add a header line that looks like the following, and save.
+    <div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Tables</span>
+   
+</code></pre></div>    </div>
+    <!-- 1. Take a screenshot of your RStudio application that shows this new -->
+    <!--    folder in the **Files** facet and name it -->
+    <!--    `<lastname>_assignment_2_screenshot.*` (where `*` is whatever file -->
+    <!--    type your screenshot is in: `png`, `jpg`, _etc_). -->
+  </li>
 </ol>
+
+<h2 id="creating-your-first-script">Creating your first script</h2>
 
 <p>Using <code class="language-plaintext highlighter-rouge">template.R</code> (and <code class="language-plaintext highlighter-rouge">organizing.R</code> for help), create a script that
 does the following tasks — be sure your script is well organized:</p>
 
 <ol>
-  <li>Rename it to <code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_2.R</code> and put it in your
-<code class="language-plaintext highlighter-rouge">scripts</code> folder if its not already there.</li>
+  <li>Make a copy of <code class="language-plaintext highlighter-rouge">template.R</code> and rename it to
+<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_2.R</code>. Make sure it is in your <code class="language-plaintext highlighter-rouge">scripts</code>
+folder if its not already there.</li>
   <li>Fill in all relevant header information about the script.</li>
   <li>Load the <strong>tidyverse</strong> library</li>
   <li>Create objects/macros with the paths to the following directories:
@@ -108,9 +120,11 @@ like the <code class="language-plaintext highlighter-rouge">organizing.R</code> 
 <h4 id="submission-details">Submission details</h4>
 
 <ul>
-  <li>Save your script (<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_2.R</code>) and screenshot
-(<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_2_screenshot.*</code>) in your <code class="language-plaintext highlighter-rouge">assignments</code>
-directory and push to GitHub prior to the next class session.</li>
+  <li>Save your script (<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_2.R</code>) in your <code class="language-plaintext highlighter-rouge">scripts</code>
+directory (<strong>NOTE the different location</strong>) and your new <code class="language-plaintext highlighter-rouge">README.md</code>
+file in your new <code class="language-plaintext highlighter-rouge">tables/</code> directory.</li>
+  <li>Push changes to your repo (the new script and new folder) to GitHub
+prior to the next class session.</li>
 </ul>
 
 
