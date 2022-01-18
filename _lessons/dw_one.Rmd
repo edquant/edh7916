@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: "Data Wrangling I: Enter the tidyverse"
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
 order: 4
 category: lesson
@@ -60,8 +60,7 @@ well together and can be used in place of base R functions. A few of
 the tidyverse packages that you will often use are:
 
 * [dplyr](https://dplyr.tidyverse.org) for data manipulation  
-* [tidyr](https://tidyr.tidyverse.org) for making data 
-[tidy](https://vita.had.co.nz/papers/tidy-data.html)  
+* [tidyr](https://tidyr.tidyverse.org) for making data [tidy](https://vita.had.co.nz/papers/tidy-data.html)  
 * [readr](https://readr.tidyverse.org) for flat file I/O  
 * [readxl](https://readxl.tidyverse.org) for Excel file I/O  
 * [haven](https://haven.tidyverse.org) for other file format I/O  
@@ -109,7 +108,7 @@ data file is in the `data` subdirectory, and that both subdirectories
 are at the same level in the course directory. Like this:
 
 ```
-edh7916/                 <--- Top-level
+student_skinner/         <--- Top-level
 |
 |__/data                 <--- Sub-level 1
 |    |--+ hsls_small.csv
@@ -215,15 +214,15 @@ out information about the data just read in. Nothing is wrong! The
 `read_csv()` function, like many other functions in the tidyverse,
 assumes you'd rather have more rather than less information and acts
 accordingly.  We can see that all the columns were read in as doubles
-(`col_double()`), which is just a type of number that the computer
+(`dbl(16)`), which is just a type of number that the computer
 understands in a special way (a distinction that's not important for
 us in this case). For other data (or if we had told `read_csv()` how
 to parse the columns), we might see other column types like:
 
-- `col_integer()`: another type of number (again, an important
+- `int()`: another type of number (again, an important
   distinction for the computer, but not usually for us)
-- `col_character()`: strings (_e.g._, `"Ben"` or `"1"` [notice the quotes]) 
-- `col_logical()`: Boolean values of `TRUE` or `FALSE`
+- `chr()`: strings (_e.g._, `"Ben"` or `"1"` [notice the quotes]) 
+- `lgl()`: Boolean values of `TRUE` or `FALSE`
 
 > #### Quick exercise 
 > `read_csv()` is special version of `read_delim()`,
@@ -708,7 +707,7 @@ Tidyverse pipes, `%>%`, come from the [magrittr
 package](http://magrittr.tidyverse.org).
 
 <span style="display:block;text-align:center">
-[![badge](https://www.rstudio.com/wp-content/uploads/2014/04/magrittr.png)](https://www.fine-arts-museum.be/uploads/exhibitions/images/magritte_la_trahison_des_images_large@2x.jpg)
+[![badge](https://raw.githubusercontent.com/tidyverse/magrittr/main/man/figures/logo.png)](https://www.fine-arts-museum.be/uploads/exhibitions/images/magritte_la_trahison_des_images_large@2x.jpg)
 </span>
 
 Pipes take output from the left side and pipe it to the input of the

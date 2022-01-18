@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: "Data Wrangling with Base R"
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
 order: 2
 category: supplemental
@@ -95,7 +95,7 @@ data file is in the `data` subdirectory, and that both subdirectories
 are at the same level in the course directory. Like this:
 
 ```
-edh7916/                 <--- Top-level
+student_skinner/         <--- Top-level
 |
 |__/data                 <--- Sub-level 1
 |    |--+ hsls_small.csv

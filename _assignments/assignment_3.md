@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: Assignment 3
-subtitle: "EDH7916 | Summer (C) 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
 order: 3
 category: problemset
@@ -48,6 +48,8 @@ a short (1-2 sentence(s)) comment.
   
 #### Submission details
 
-- Upload your script (`<lastname>_assignment_3.R`) to our CANVAS
-  course site no later than 11:59 p.m. EDT on the due date.
+- Save your script (`<lastname>_assignment_3.R`) in your `scripts`
+  directory.
+- Push changes to your repo (the new script and new folder) to GitHub
+  prior to the next class session.
 

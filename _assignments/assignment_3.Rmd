@@ -1,12 +1,12 @@
 ---
 layout: lesson
-title: Supplemental Assignment 2
-subtitle: "EDH7916 | Summer C 2020"
+title: Assignment 3
+subtitle: EDH7916
 author: Benjamin Skinner
-order: 2
-category: supplemental
+order: 3
+category: problemset
 links:
-  pdf: supplemental_assignment_2.pdf
+  pdf: assignment_3.pdf
 output:
   md_document:
     variant: gfm
@@ -16,12 +16,12 @@ output:
 Using the `hsls_small.csv` data set and the online code book, answer
 the following questions. You **do not** need to save the final output
 as a data file: just having the final result print to the console is
-fine. For each question, **you must answer using base R commands (no
-tidyverse)**.  You can account for missing values by dropping them.
+fine. For each question, I would like you to try to pipe all the
+commands together. You can account for missing values by dropping
+them.
 
 For each question, show your data work and then answer the question in
-a short (1-2 sentence(s)) comment. (**NOTE:** If you also completed
-assignment 3, your written answers can be similar to what you wrote before.) 
+a short (1-2 sentence(s)) comment. 
 
 ## Questions
 
@@ -43,9 +43,13 @@ assignment 3, your written answers can be similar to what you wrote before.)
 	 
    This means you should have percentages for 8 groups: above/below
    $35k within each region.   
+   
+   **HINT** You can `group_by()` on more than one group.
   
 #### Submission details
 
-- Upload your script (`<lastname>_supplemental_assignment_2.R`) to our CANVAS
-  course site no later than 11:59 p.m. EDT on the due date.
+- Save your script (`<lastname>_assignment_3.R`) in your `scripts`
+  directory.
+- Push changes to your repo (the new script and new folder) to GitHub
+  prior to the next class session.
 

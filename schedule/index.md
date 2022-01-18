@@ -17,7 +17,7 @@ In the schedule below, items are marked as follows:
 |:---|:----|  
 |**Week 1** <br/> (1/5)| > Course welcome <br/> > Getting and installing required software <br/> > Introduction to RStudio (R, RMarkdown, git)|  
 |**Week 2** <br/> (1/12)|> Computer file structure <br/> > Organizing a script and project directory <br/> + _Supplemental:_ Getting higher education data from common sources <br/> < Assignment 1|  
-|**Week 3** <br/> (1/9)|> Data wrangling I: Enter the Tidyverse <br/> + _Supplemental:_ Data wrangling with base R <br/> < Assignment 2 <br/> < Final project: proposal|  
+|**Week 3** <br/> (1/19)|> Data wrangling I: Enter the Tidyverse <br/> + _Supplemental:_ Data wrangling with base R <br/> < Assignment 2 <br/> < Final project: proposal|  
 |**Week 4** <br/> (1/26)|> Data wrangling II: Appending, joining, and reshaping data <br/> < Assignment 3|  
 |**Week 5** <br/> (2/2)|> Data visualization with ggplot2 <br/> < Assignment 4|  
 |**Week 6** <br/> (2/9)|> Creating research reports with RMarkdown <br/> < Assignment 5 <br/> < Supplemental problem sets so far (if any)|  
