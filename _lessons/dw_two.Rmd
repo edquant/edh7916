@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: "Data Wrangling II: Appending, joining, and reshaping data"
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
 order: 5
 category: lesson
@@ -475,9 +475,9 @@ a single _school_, _year_, _test_, _score_:
 
 | school    | year | test | score                                                            |
 |:----------|:----:|:-----|:----------------------------------------------------------------:|
-| Bend Gate | 1980 | math | `r filter(df, school == "Bend Gate", year == 1980) %>% pull(math)` |
-| Bend Gate | 1980 | read | `r filter(df, school == "Bend Gate", year == 1980) %>% pull(read)` |
-| Bend Gate | 1980 | science | `r filter(df, school == "Bend Gate", year == 1980) %>% pull(science)` |
+| Bend Gate | 1980 | math | `r dplyr::filter(df, school == "Bend Gate", year == 1980) %>% dplyr::pull(math)` |
+| Bend Gate | 1980 | read | `r dplyr::filter(df, school == "Bend Gate", year == 1980) %>% dplyr::pull(read)` |
+| Bend Gate | 1980 | science | `r dplyr::filter(df, school == "Bend Gate", year == 1980) %>% dplyr::pull(science)` |
 | ... |...|...|...|
 
 
