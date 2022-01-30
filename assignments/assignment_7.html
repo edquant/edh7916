@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/edh7916/assets/css/style.css">
+<link rel="stylesheet" href="/edh7916/assets/css/syntax_default.css">
+<link rel="shortcut icon" type="image/png" href="/edh7916/assets/img/favicon.ico">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
+<script defer src="/edh7916/assets/js/all.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<title>edquant | EDH 7916: Contemporary Research in Higher Education</title>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/edquant/edh7916" class="iconlink">
+	      <i class="fab fa-github fa-sm"></i></a></h1>
+	<h2 class="thin">Spring 2022</h2>
+	<p>A course in quantitative research workflow for students in
+the higher education administration program at the University of Florida
+</p>
+	<!-- side / top bar menu -->
+	<h2 class="thin">
+	  <a href="/edh7916/">Overview</a></br>
+	  <a href="/edh7916/syllabus/">Course information</a></br>
+	  <a href="/edh7916/location/">Meeting location</a></br>
+	  <a href="/edh7916/software/">Software</a></br>
+	  <a href="/edh7916/schedule/">Schedule</a></br>
+	  <a href="/edh7916/lessons/">Lessons</a></br>
+	  <a href="/edh7916/assignments/">Assignments</a></br>
+	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/past/">Past courses</a></br>
+	  <a href="/edh7916/about/">About</a></br>	  
+	</h2>
+      </header>
+
+      <section>
+	<h1>Assignment 7</h1>
+	
+
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/assignment_7.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  
+  
+  
+</p>
+
+
+<p>Use the IPEDS data sets, <code class="language-plaintext highlighter-rouge">hd2007.csv</code>and <code class="language-plaintext highlighter-rouge">ic2007mission.csv</code>, to
+answer the questions below. You may need to look up and download the
+data dictionaries for each file. Click the “continue” button on <a href="https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx?goToReportId=7">this
+page</a>
+to see the data and accompanying dictionary files. <a href="../lessons/getting_data.html">You can also use
+the supplementary lesson on getting higher education data for
+help.</a></p>
+
+<p>You <strong>do not</strong> need to save the final output as a data file: just
+having the final result print to the console is fine. For each
+question, I would like you to try to pipe all the commands
+together. Throughout, you <strong>should</strong> account for missing values to the
+best of your ability by dropping them.</p>
+
+<p>For each question, show your data work and then answer the question in
+a short (1-2 sentence(s)) comment.</p>
+
+<h2 id="questions">Questions</h2>
+
+<p><strong>NB</strong> To answer the questions, you will need to join the two IPEDS
+data sets using the common <code class="language-plaintext highlighter-rouge">unitid</code> key. Note that column names in
+<code class="language-plaintext highlighter-rouge">hd2007.csv</code> are uppercase (<code class="language-plaintext highlighter-rouge">UNITID</code>) while those in
+<code class="language-plaintext highlighter-rouge">ic2007mission.csv</code> are lowercase (<code class="language-plaintext highlighter-rouge">unitid</code>). There are a few ways to
+join when the keys don’t exactly match. One is to set all column names
+to the same case. If you want to use <code class="language-plaintext highlighter-rouge">left_join()</code> starting with
+<code class="language-plaintext highlighter-rouge">hd2007.csv</code>, you can first use the the dplyr verb
+<code class="language-plaintext highlighter-rouge">rename_all(tolower)</code> in your chain to lower all column names. <a href="https://dplyr.tidyverse.org/reference/join.html">See
+the help file for
+<code class="language-plaintext highlighter-rouge">left_join()</code></a> for
+other ways to join <code class="language-plaintext highlighter-rouge">by</code> different variable names.</p>
+
+<ol>
+  <li>How many chief administrator names start with “Dr.”?<br />
+<strong>NB</strong> Many
+chief administrators are listed on more than one line due to branch
+campuses. Make sure to take this into account by keeping only
+distinct names.</li>
+  <li><strong>BONUS</strong> How many chief administrator names end with the title “PH.D.” or
+some variant?</li>
+  <li>Among those schools that give their mission statement:
+    <ol>
+      <li>How many repeat their institutional name in their mission
+statement?</li>
+      <li>How many use the word <em>civic</em>?</li>
+      <li>Which top 3 states have the most schools with mission statements
+that use the word <em>future</em>?</li>
+      <li>Which type of schools (public, private-non-profit,
+private-for-profit) are most likely to use the word <em>skill</em> in
+their mission statement?</li>
+    </ol>
+  </li>
+  <li>Among the schools that closed in 2007 or 2008 and give a date with
+at least a month and year:
+    <ol>
+      <li>Which has been closed for the longest time? How many months has
+it been from its close date to the beginning of this current
+month (1 February 2020)?</li>
+      <li>How many days were there between the first school to close and
+the last?</li>
+    </ol>
+  </li>
+</ol>
+
+<h4 id="submission-details">Submission details</h4>
+
+<ul>
+  <li>Save your script (<code class="language-plaintext highlighter-rouge">&lt;lastname&gt;_assignment_7.R</code>) in your <code class="language-plaintext highlighter-rouge">scripts</code>
+directory.</li>
+  <li>Push changes to your repo (the new script and new folder) to GitHub
+prior to the next class session.</li>
+</ul>
+
+
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
+      </section>
+      <footer>
+        <p>
+  Benjamin Skinner</br>  
+  Assistant Professor</br>  
+  University of Florida</br>
+  <a href="https://www.btskinner.io" class="iconlink" alt="Personal website">
+    <i class="fas fa-home fa-lg"></i></a> | 
+  <a href="https://github.com/btskinner" class="iconlink" alt="Github
+								profile">
+    <i class="fab fa-github fa-lg"></i></a> |
+  <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
+    <i class="fab fa-twitter fa-lg"></i></a>
+</p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
+
+      </footer>
+    </div>
+
+    <!-- load Javascript if page requires it -->
+    
+    
+    
+
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-63981025-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>
