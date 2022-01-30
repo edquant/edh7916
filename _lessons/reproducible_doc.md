@@ -1,9 +1,9 @@
 ---
 layout: lesson
 title: "Creating research reports with RMarkdown"
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
-order: 7
+order: 6
 category: lesson
 links:
   pdf: reproducible_doc.pdf
@@ -15,16 +15,10 @@ output:
     preserve_yaml: true
 ---
 
-```{r, include = FALSE, purl = FALSE}
-source('knit_setup.R')
-knitr::opts_chunk$set(purl = FALSE)
 
-## get rmarkdown document as lines
-rmd_doc <- file.path("..", "scripts", "test_scores.Rmd")
-```
 
 In this lesson, we'll combine many of the pieces we've already
-covered --- reading in data, cleaning data, making tables and figures
+covered --- reading in data, cleaning data, making figures
 --- into a single RMarkdown document. We'll purposefully keep it
 simple at first by reusing some code we've seen before.
 
@@ -74,7 +68,7 @@ combine `R` code with `md` text. To _compile_ an RMD file, meaning to
 2. run R code, producing all output along the way
 3. combine the Markdown text plus R output into a finished document
 
-you will use the **rmarkdown** `render()` function, which in turn uses
+You will use the **rmarkdown** `render()` function, which in turn uses
 the **knitr** `knit()` function under the hood. [It can be a bit
 confusing how all the pieces work
 together](https://stackoverflow.com/a/40563480), but luckily, you can
@@ -94,11 +88,11 @@ you don't need).
 ---
 title: "Document Title"
 author: "Benjamin Skinner"
-date: "3/30/2020"
+date: "1/30/21"
 output: pdf_document
 ---
 
-`r ''````{r setup, include=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -112,7 +106,7 @@ When you click the **Knit** button a document will be generated that
 includes both content as well as the output of any embedded R code
 chunks within the document. You can embed an R code chunk like this:
 
-`r ''````{r cars}
+```{r cars}
 summary(cars)
 ```
 
@@ -120,7 +114,7 @@ summary(cars)
 
 You can also embed plots, for example:
 
-`r ''````{r pressure, echo=FALSE}
+```{r pressure, echo=FALSE}
 plot(pressure)
 ```
 
@@ -145,7 +139,7 @@ unzipped data in the `data` directory.
 When you open `test_scores.Rmd` in RStudio, you should see a button in
 the upper left facet that says **Knit** with a ball of string icon.
 
-![](/edh7916/assets/img/rstudio_rmarkdown.png)
+![](../assets/img/rstudio_rmarkdown.png)
 
 If you have the working directory correctly set to
 `scripts` and have placed the `sch_test/` data folder inside `data`,
@@ -165,8 +159,14 @@ Language"](https://yaml.org), is a common way to configure dynamic documents
 like RMD documents. It's the first thing you see at the top of an
 RMarkdown file. The YAML header is this piece of code:
 
-```{r, echo = F}
-writeLines(readLines("../scripts/test_scores.Rmd")[2:7])
+
+```
+---
+title: "Test scores from 1980-1985"
+author: Benjamin Skinner
+date: \today
+output: pdf_document
+---
 ```
 
 Notice the opening and closing three hyphens (`---`). This is how R
@@ -177,7 +177,8 @@ complex, as you add document options, but for now we keep it simple:
 - **author**: the document author (printed)
 - **date**: manually set date (printed)
   - leave **date** out of YAML and the date on which the document is
-    compiled will be added automatically
+    compiled will be added automatically, or you can use the LaTeX
+    macro `\today`, which will also print today's date
   - set **date** to `""` (empty string) for no printed date
 - **output**: document output
   - `pdf_output`: for PDF (uses LaTeX)
@@ -203,7 +204,7 @@ try to run the code and print any output:
 #### Markdown code chunk
 
 ````markdown
-`r ''````r
+```r
 ## this is just a representation 
 ## when compiled: nothing happens, only code is printed
 x <- rnorm(1000)
@@ -214,7 +215,7 @@ x
 #### RMarkdown code chunk
 	
 ````markdown
-`r ''````{r}
+```{r}
 ## this is active R code
 ## when compiled: the R code is run, and both code and results are printed
 x <- rnorm(1000)
@@ -230,9 +231,49 @@ running the code before printing the code and its output.
 
 ### Code chunk options
 
-```{r, echo = F}
-writeLines(readLines("../scripts/test_scores.Rmd")[9:48])
+
+````
+```{r setup, echo=F, include=F, message=F, warning=F, error=F}
+## ---------------------------
+## libraries
+## ---------------------------
+
+library(knitr)
+library(tidyverse)
+
+## ---------------------------
+## settings/macros
+## ---------------------------
+
+## NB:
+## - echo (FALSE): don't repeat this code in output
+## - include (FALSE): run code, but don't include output (unless a plot)
+## - message (FALSE): don't output any messages
+## - warning (FALSE): don't output any warnings
+## - error (FALSE: don't output any errors
+##
+## We'll include these in the general knitr::opts_chunk() below, but
+## need them here to silence unnecessary output before we can set the options
+
+## set up knitr options
+opts_chunk$set(error = FALSE,
+               echo = FALSE,
+               include = FALSE,
+               message = FALSE,
+               warning = FALSE,
+               fig.path = "../figures/ts-", # where figures should be stored
+               dpi = 300,                   # print quality (300 standard for print)
+               out.width = "100%",          # figures should be as wide as margins
+               comment = NA)                # if code output, no comment char on LHS
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+## read in our data here, assuming we're in scripts like always
+dat_dir <- file.path("..", "data", "sch_test")
 ```
+````
    
 In our first code chunk, notice how we still load our libraries and
 set our file paths. For the libraries, we need to load knitr with
@@ -248,9 +289,10 @@ First, we can set _local code chunk options_ within the braces that
 start the code chunk. These options will only affect this particular
 code chunk.
 
-```{r, echo = F}
-writeLines(readLines("../scripts/test_scores.Rmd")[9])
-```
+
+````
+```{r setup, echo=F, include=F, message=F, warning=F, error=F}
+````
 
 After `r`, the first word is the name of the chunk. I've called it
 `setup`, since that's what this chunk is doing, but you can name it
@@ -262,9 +304,9 @@ or your document will not compile. If really like a particular chunk
 and want to reuse it, you can always add a number at the end:
 `data_input_1`, `data_input_2`, `data_input_3`, _etc_.
 
-[There are a lot of options you can set for
-your](https://yihui.org/knitr/options/) chunks. Here we set the
-following:
+There are a lot of [options you can
+set](https://yihui.org/knitr/options/) for your chunks. Here we set
+the following:
 
 - `echo=F` (FALSE): don't repeat this code in output
 - `include=F` (FALSE): run code, but don't include output (unless a
@@ -273,13 +315,43 @@ following:
 - `warning=F` (FALSE): don't output any warnings
 - `error=F` (FALSE): don't output any errors
 
-In sum, this keeps our chunk from echoing the input code into our
-document and prevents any output. Basically, silence. Sometimes we
-want our code to echo; sometimes we want output. But since we are
-making a report, we generally want the underlying code to remain
-hidden. Readers of our report should only see the write up and any
-relevant tables and figures --- but not all the hard coding we did to
-make them!
+As of [knitr 1.35](https://github.com/yihui/knitr/releases/tag/v1.35),
+you can also include chunk options in rows below the opening line
+using the `#|` symbol pair. We could rewrite our example options
+using:
+
+````markdown
+```{r setup}
+#| echo = FALSE, include = FALSE, message = FALSE
+#| warning = FALSE, error = FALSE
+
+< ...chunk code... >
+```
+````
+
+We could also use yaml syntax, which is nice for very long lines 
+(we don't need that now, but it does come up sometimes).
+
+````markdown
+```{r setup}
+#| echo: FALSE 
+#| include: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| error: FALSE
+
+< ...chunk code... >   
+```
+````
+
+However you choose to include them, these options keep our chunk from
+echoing the input code into our document and prevents any
+output. Basically, silence. Sometimes we want our code to echo;
+sometimes we want output. But since we are making a report, we
+generally want the underlying code to remain hidden. Readers of our
+report should only see the write up and any relevant tables and
+figures --- but not all the hard coding we did to make them!
+
 
 #### Global code chunk options (affect _all_ code chunks)
 
@@ -308,9 +380,38 @@ possible to the way we generally want them.
 
 Below, you see two code chunks with some Markdown text in the middle.
 
-```{r, echo = F}
-writeLines(readLines("../scripts/test_scores.Rmd")[50:78])
+
+````
+```{r input}
+## ---------------------------
+## input
+## ---------------------------
+
+## read in data
+df <- read_csv(file.path(dat_dir, "all_schools.csv"))
 ```
+
+From 1980 to 1985, students at four schools took end of year exams in
+three subjects --- math, reading, and science. While these tests did
+not affect students' grades or promotion, they were meant to measure
+what students had learned over the course of the school year. In each
+year, only 9th grade students took the exam. This means that each year
+of data represents a different cohort of 9th grade students. Because
+test scores are standardized within subject area, student cohorts can
+be compared across time. The table below shows average test scores for
+each school in each year.
+
+```{r table_all, include = T}
+## ---------------------------
+## make table of all scores
+## ---------------------------
+
+## use the kable() function in knitr to make nicer table
+kable(df,
+      digits = 0,
+      col.names = c("", "Year", "Math", "Reading", "Science"))
+```
+````
 
 An important thing to remember is that your coding environment carries
 from chunk to chunk, meaning that if you read in data in the code
@@ -332,9 +433,19 @@ We could just print the data frame by calling `df` in a chunk. But to
 make it look nicer with a better format, we use [`kable()` which is part of
 knitr](https://bookdown.org/yihui/rmarkdown-cookbook/kable.html).
 
-```{r, echo = F}
-writeLines(readLines("../scripts/test_scores.Rmd")[69:78])
+
+````
+```{r table_all, include = T}
+## ---------------------------
+## make table of all scores
+## ---------------------------
+
+## use the kable() function in knitr to make nicer table
+kable(df,
+      digits = 0,
+      col.names = c("", "Year", "Math", "Reading", "Science"))
 ```
+````
  
 Even using mostly default options, `kable()` will make a nice looking
 table for us. We add `digits = 0` to make sure that we only show whole
@@ -350,9 +461,46 @@ options.
 You can also call R code _inline_, that is, R code that sits outside of code chunks
 proper and instead is mixed in with your Markdown text.
 
-```{r, echo = F}
-writeLines(readLines("../scripts/test_scores.Rmd")[89:126])
+
+````
+```{r table_averages, include = T}
+## ---------------------------
+## make table of averages
+## ---------------------------
+
+df_tab <- df %>%
+    ## group by school
+    group_by(school) %>%
+    ## get average across years
+    summarise(math_mean = mean(math),
+              read_mean = mean(read),
+              science_mean = mean(science))
+
+## store variables to use in text below
+hi_math_sch <- df_tab %>% filter(math_mean == max(math_mean)) %>% pull(school)
+hi_math_scr <- df_tab %>% filter(math_mean == max(math_mean)) %>% pull(math_mean)
+
+hi_read_sch <- df_tab %>% filter(read_mean == max(read_mean)) %>% pull(school)
+hi_read_scr <- df_tab %>% filter(read_mean == max(read_mean)) %>% pull(read_mean)
+
+hi_sci_sch <- df_tab %>% filter(science_mean == max(science_mean)) %>% pull(school)
+hi_sci_scr <- df_tab %>% filter(science_mean == max(science_mean)) %>% pull(science_mean)
+
+## use the kable() function in knitr to make nicer table
+kable(df_tab,
+      digits = 0,
+      col.names = c("", "Math", "Reading", "Science"))
 ```
+
+Across the six years of data, `r hi_math_sch` had the
+highest average math score (`r hi_math_scr %>% round`); 
+`r hi_read_sch` had the highest average reading score 
+(`r hi_read_scr %>% round`); and 
+`r hi_sci_sch` had the highest average science score 
+(`r hi_sci_scr %>% round`). However, these six year averages cover a fair
+amount of variation within schools across time. In the next sections, I'll
+investigate this variation.
+````
 
 Inside the code chunk called `table_averages` we do three things:
 
@@ -367,7 +515,7 @@ Inside the code chunk called `table_averages` we do three things:
 In the Markdown text below this code chunk, we call the values using
 the inline code method 
 
-````
+````markdown
 `r `
 ````
 
@@ -382,7 +530,8 @@ Why do this? One reason is that being able to incorporate data-driven
 values directly in your test is very powerful. Imagine you need to
 reproduce the same report on a monthly or quarterly basis when data
 are updated. Part of the written report includes values directly taken
-or calculated from the data. Rather than update these ["magic numbers"](https://en.wikipedia.org/wiki/Magic_number_(programming))
+or calculated from the data. Rather than update these ["magic
+numbers"](https://en.wikipedia.org/wiki/Magic_number_(programming))
 each time (potentially missing some), you can use inline R code like
 we've done here. All you need to do then is update the data and
 recompile the report. Voila! Everything is properly updated.
@@ -399,9 +548,39 @@ despite variable inputs can be _very tough_!
 
 Finally, making figures is pretty much the same as making tables:
 
-```{r, echo = F}
-writeLines(readLines("../scripts/test_scores.Rmd")[129:158])
+
+````
+```{r fig_unadjusted, include = T}
+## ---------------------------
+## fig: unadjusted
+## ---------------------------
+
+## reshape data long for figure
+df_long <- df %>%
+    pivot_longer(cols = c("math","read","science"), # cols to pivot long
+                 names_to = "test",                 # where col names go
+                 values_to = "score")               # where col values go
+
+## facet line graph, with one column so they stack
+p <- ggplot(data = df_long,
+            mapping = aes(x = year, y = score, colour = school)) +
+    facet_wrap(~ test, ncol = 1, scales = "free_y",
+               ## assign test score names new values for facet titles
+               ## e.g., when test == "math" make title "Math"
+               labeller = labeller(test = c(math = "Math",
+                                            read = "Reading",
+                                            science = "Science"))) +
+    geom_line() +
+    ## add axis and legend labels
+    labs(y = "Test score (normalized within test)",
+         x = "Test year (spring)",
+         ## assign legend title to match aes mapping: colour
+         colour = "School") 
+
+## call figure object, which will now print to document
+p
 ```
+````
 
 Having reshaped our original data frame long (`df_long`), we make a
 figure just as we've done in the past --- with some formatting

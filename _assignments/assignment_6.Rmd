@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: Assignment 6
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
 order: 6
 category: problemset
@@ -29,8 +29,8 @@ need to use or cite outside sources --- just describe what you
 find. You also do not need to perform inferential tests (_e.g._ t-test
 of differences), though you can if you wish. I should not see input
 code in the final document --- only the final clean output. In other
-words, it should look like a product you would give to a superior or
-would want given to you.
+words, it should look like a product you would give to a boss or would
+want given to you.
 
 I recommend using `test_score.Rmd` as a template for how you should:
 
@@ -44,6 +44,8 @@ sure you answer the question to the best of your ability.
 
 #### Submission details
 
-- Upload your both your code file (`<lastname>_assignment_6.Rmd`) and
-  compiled document (`<lastname>_assignment_6.pdf`) to our CANVAS
-  course site no later than 11:59 p.m. EDT on the due date.
+- Save both your code file (`<lastname>_assignment_6.Rmd`) and
+  compiled document (`<lastname>_assignment_6.pdf`) in your scripts
+  directory.
+- Push changes to your repo (the new script and new folder) to GitHub
+  prior to the next class session.

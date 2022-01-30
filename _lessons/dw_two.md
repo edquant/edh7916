@@ -3,7 +3,7 @@ layout: lesson
 title: "Data Wrangling II: Appending, joining, and reshaping data"
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 5
+order: 4
 category: lesson
 links:
   script: dw_two.R
@@ -179,16 +179,10 @@ df_1 <- read_csv(file.path(bys_dir, "bend_gate_1980.csv"))
 
 ```
 ## Rows: 1 Columns: 5
-```
-
-```
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr (1): school
 ## dbl (4): year, math, read, science
-```
-
-```
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -200,16 +194,10 @@ df_2 <- read_csv(file.path(bys_dir, "bend_gate_1981.csv"))
 
 ```
 ## Rows: 1 Columns: 5
-```
-
-```
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr (1): school
 ## dbl (4): year, math, read, science
-```
-
-```
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -221,16 +209,10 @@ df_3 <- read_csv(file.path(bys_dir, "bend_gate_1982.csv"))
 
 ```
 ## Rows: 1 Columns: 5
-```
-
-```
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr (1): school
 ## dbl (4): year, math, read, science
-```
-
-```
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -375,16 +357,10 @@ df <- read_csv(file.path(sch_dir, "all_schools.csv"))
 
 ```
 ## Rows: 24 Columns: 5
-```
-
-```
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr (1): school
 ## dbl (4): year, math, read, science
-```
-
-```
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -625,16 +601,10 @@ df <- read_csv(file.path(sch_dir, "all_schools.csv"))
 
 ```
 ## Rows: 24 Columns: 5
-```
-
-```
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr (1): school
 ## dbl (4): year, math, read, science
-```
-
-```
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -800,16 +770,10 @@ df <- read_csv(file.path(sch_dir, "all_schools_wide.csv"))
 
 ```
 ## Rows: 4 Columns: 19
-```
-
-```
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr  (1): school
 ## dbl (18): math_1980, read_1980, science_1980, math_1981, read_1981, science_...
-```
-
-```
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.

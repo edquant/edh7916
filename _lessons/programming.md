@@ -1,9 +1,9 @@
 ---
 layout: lesson
 title: Functional programming
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
-order: 10
+order: 8
 category: lesson
 links:
   script: programming.R
@@ -87,31 +87,39 @@ data until the last section, but we'll continue following our good
 organizational practice by setting the directory paths at the top of
 our script.
 
-```{r, include = FALSE, purl = FALSE}
-source('knit_setup.R')
-```
-```{r, include = FALSE, purl = TRUE}
-################################################################################
-##
-## <PROJ> EDH7916: Functional programming
-## <FILE> programming.R 
-## <INIT> 14 February 2020
-## <AUTH> Benjamin Skinner (GitHub/Twitter: @btskinner)
-##
-################################################################################
-```
 
-```{r}
+
+
+
+```r
 ## ---------------------------
 ## libraries
 ## ---------------------------
 
 library(tidyverse)
 ```
+
+```
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+```
+
+```
+## ✔ ggplot2 3.3.5     ✔ purrr   0.3.4
+## ✔ tibble  3.1.6     ✔ dplyr   1.0.7
+## ✔ tidyr   1.1.4     ✔ stringr 1.4.0
+## ✔ readr   2.1.1     ✔ forcats 0.5.1
+```
+
+```
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
 **NB**: As we have done in the past few lessons, we'll run this script assuming that
 our working directory is set to the `scripts` directory.
 
-```{r}
+
+```r
 ## ---------------------------
 ## directory paths
 ## ---------------------------
@@ -145,18 +153,10 @@ R, mostly for being slow. But they aren't *that* slow and they are
 easy to write and understand.
 
 
-```{r, purl = TRUE, include = FALSE}
-## -----------------------------------------------------------------------------
-## Part I: Control flow
-## -----------------------------------------------------------------------------
-```
+
 
 ## for
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## for
-## ---------------------------
-```
+
 
 The `for()` function allows you to build the aptly named **for
 loops**. There are few ways to use `for()`, but its construction is the
@@ -170,7 +170,8 @@ run through the loop. When the `sequence` is finished, so is the loop.
 First, let's loop through a sequence of 10 numbers, printing each one
 at a time as we work through the loop.
 
-```{r}
+
+```r
 ## make vector of numbers between 1 and 10
 num_sequence <- 1:10
 
@@ -180,6 +181,19 @@ for (i in num_sequence) {
 }
 ```
 
+```
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10
+```
+
 Notice the braces `{}` that come after `for()`. This is the code in
 the loop that will be repeated as long as the loop is run. With each
 loop, `i` takes on the next value in the `num_sequence`. This is why
@@ -187,7 +201,8 @@ we see 1 through 10 printed to the console.
 
 Let's do it again, but this time with characters.
 
-```{r}
+
+```r
 ## character vector using letters object from R base
 chr_sequence <- letters[1:10]
 
@@ -195,6 +210,19 @@ chr_sequence <- letters[1:10]
 for (i in chr_sequence) {
     print(i)
 }
+```
+
+```
+## [1] "a"
+## [1] "b"
+## [1] "c"
+## [1] "d"
+## [1] "e"
+## [1] "f"
+## [1] "g"
+## [1] "h"
+## [1] "i"
+## [1] "j"
 ```
 
 Once more, with each loop, `i` takes on each `chr_sequence` value in
@@ -210,11 +238,25 @@ indices, that is, instead of pulling out each item directly and
 storing it in `i`, we can use `i` as an _index counter_ and then call
 items based on their index: `chr_sequence[i]`. Here's an example.
 
-```{r}
+
+```r
 ## for loop by indices
 for (i in 1:length(chr_sequence)) {
     print(chr_sequence[i])
 }
+```
+
+```
+## [1] "a"
+## [1] "b"
+## [1] "c"
+## [1] "d"
+## [1] "e"
+## [1] "f"
+## [1] "g"
+## [1] "h"
+## [1] "i"
+## [1] "j"
 ```
 
 To understand what's happening, let's break the code into pieces to
@@ -241,25 +283,56 @@ that `1:length(chr_sequence)` is the same thing as saying `1:10`. It's
 just another more flexible way to get the end number of our
 sequence. We can show this by just printing `i` again.
 
-```{r}
+
+```r
 ## for loop by indices (just show indices)
 for (i in 1:length(chr_sequence)) {
     print(i)
 }
 ```
 
-Back to the original function, we see that inside the braces (`{}`),
-we have `print(chr_sequence[i])`. From earlier lessons, we know that
-brackets (`[]`) are way of pulling out specific values from a
-vector. We've only used numbers before, but we can also use variables
-that represent numbers. Here's a non-looped test:
+```
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10
+```
 
-```{r}
+Back to the original function, we see that inside the braces (`{}`),
+we have `print(chr_sequence[i])`. If you've taken a look at the
+[supplemental lesson for base R](../lessons/dw_one_base_r.html), you
+know that brackets (`[]`) are way of pulling out specific values from
+a vector. For example, if you have a vector of 3 items, _e.g._, `x <-
+c("a", "b", "c")`, you can select the 2nd item by using square
+brackets and an index value: `x[2]`.  While an index value is a number
+(think of it like a street address or room number in a hall), we can
+also use variables that represent numbers, which is useful for
+programming. Here's a non-looped test:
+
+
+```r
 ## confirm that we can use variables as indices
 i <- 1                     # set i == 1
 chr_sequence[i]      
+```
+
+```
+## [1] "a"
+```
+
+```r
 i <- 2                     # now set i == 2
 chr_sequence[i]            # notice that code is exactly the same here
+```
+
+```
+## [1] "b"
 ```
 
 We know that `i` is going to take on values 1 through 10 in the loop,
@@ -268,11 +341,25 @@ which means the `print()` function will get `chr_sequence[1]`,
 into...`a`, `b`, and so on. We should get the same thing as before!
 Let's put all the pieces together and run again:
 
-```{r}
+
+```r
 ## for loop by indices (once again)
 for (i in 1:length(chr_sequence)) {
     print(chr_sequence[i])
 }
+```
+
+```
+## [1] "a"
+## [1] "b"
+## [1] "c"
+## [1] "d"
+## [1] "e"
+## [1] "f"
+## [1] "g"
+## [1] "h"
+## [1] "i"
+## [1] "j"
 ```
 
 Success!
@@ -287,11 +374,7 @@ do whatever works best for you at that time.
 > `i` with each loop.
 
 ## while
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## while
-## ---------------------------
-```
+
 
 The `while()` function is similar to `for()` except that it doesn't
 have a predetermined stopping point. As long the expression inside the
@@ -302,7 +385,8 @@ One way to use a `while()` loop is to set up a counter. When the
 counter reaches some value, the expression inside the `while()`
 parentheses is no longer true and the loop stops.
 
-```{r}
+
+```r
 ## set up a counter
 i <- 1
 ## with each loop, add one to i
@@ -310,6 +394,19 @@ while(i < 11) {
     print(i)
     i <- i + 1
 }
+```
+
+```
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10
 ```
 
 Using a `while()` loop with a counter is often the same as using a
@@ -334,11 +431,7 @@ error or return what it has so far (depending on your needs).
 You have been warned!
 
 ## if
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## if
-## ---------------------------
-```
+
 
 We've already used a version of if, `ifelse()`, quite a bit. We can
 use **if** statements in our script to decide whether a section of
@@ -346,13 +439,26 @@ code should be run or skipped. We can also use `if()` inside a `for()`
 loop to set a condition that changes behavior on some iterations of
 the loop.
 
-```{r}
+
+```r
 ## only print if number is not 5
 for (i in num_sequence) {
     if (i != 5) {
         print(i)
     }
 }
+```
+
+```
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10
 ```
 
 Notice how `5` wasn't printed to the console. It worked!
@@ -363,7 +469,8 @@ Notice how `5` wasn't printed to the console. It worked!
 We can add one or more `else if() / else()` partners to `if()` if we
 need, for example, option **B** to happen if option **A** does not.
 
-```{r}
+
+```r
 ## if/else loop
 for (i in num_sequence) {
     if (i != 3 & i != 5) {
@@ -376,6 +483,19 @@ for (i in num_sequence) {
 }
 ```
 
+```
+## [1] 1
+## [1] 2
+## [1] "three"
+## [1] 4
+## [1] "five"
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10
+```
+
 As with dplyr verbs, the small number of control functions (and
 there are some others) can be combined in an infinite number of ways
 to help you control how your script is read. If you find, however,
@@ -385,15 +505,7 @@ your approach or to write your own functions that can handle
 expectations in a clearer way.
 
 # Part 2: Writing functions
-```{r, echo = FALSE, purl = TRUE}
-## -----------------------------------------------------------------------------
-## Part II: Writing functions
-## -----------------------------------------------------------------------------
 
-## ---------------------------
-## hello function
-## ---------------------------
-```
 
 You can write your own functions in R and should! They don't need to
 be complex. In fact, they tend to be best when kept
@@ -410,7 +522,8 @@ arguments and prints a simple string when called. After you've built
 it, call your function using its name, not forgetting to include the
 parentheses.
 
-```{r}
+
+```r
 ## function to say hi!
 say_hi <- function() {
     print("Hi!")
@@ -420,6 +533,10 @@ say_hi <- function() {
 say_hi()
 ```
 
+```
+## [1] "Hi!"
+```
+
 Let's make another one with an argument so that it's more
 flexible. Let's have our function take a name and print it. We'll use
 the base-R function, `paste0()`, to combine all the string parts into
@@ -427,7 +544,8 @@ one string. `paste0()` is like `paste()`, but it assumes we don't want
 any space between the pieces. That works for us here because we'll add
 our spaces manually.
 
-```{r}
+
+```r
 ## function to say hi!
 say_hi <- function(name) {
     ## combine (notice we add space after comma)
@@ -440,16 +558,17 @@ say_hi <- function(name) {
 say_hi("Leo")
 ```
 
+```
+## [1] "Hi, Leo!"
+```
+
 This time, we want it to print out a sequence of numbers, but we want
 to be able to change the number each time we call it.
 
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## print sequence of numbers
-## ---------------------------
-```
 
-```{r}
+
+
+```r
 ## new function to print sequence of numbers
 print_nums <- function(num_vector) {
     ## this code looks familiar...
@@ -462,6 +581,19 @@ print_nums <- function(num_vector) {
 print_nums(1:10)
 ```
 
+```
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10
+```
+
 Notice how the variable `num_vector` is repeated in both the main
 function argument and inside the `for` parentheses. The `for()`
 function sees `num_vector` and looks for it in the main function. It
@@ -469,15 +601,45 @@ finds it because the `num_vector` you give the main function,
 `print_nums()`, is passed through to the code inside. Now `for()` can
 see it and use it! Let's try a few more inputs:
 
-```{r}
+
+```r
 ## v1
 print_nums(1)
+```
 
+```
+## [1] 1
+```
+
+```r
 ## v2
 print_nums(1:5)
+```
 
+```
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+```
+
+```r
 ## v3
 print_nums(seq(1, 20, by = 2))
+```
+
+```
+## [1] 1
+## [1] 3
+## [1] 5
+## [1] 7
+## [1] 9
+## [1] 11
+## [1] 13
+## [1] 15
+## [1] 17
+## [1] 19
 ```
 
 > #### Quick exercise
@@ -511,15 +673,7 @@ there or make it an argument.
 
 ## Example 1: missing data
 
-```{r, echo = FALSE, purl = TRUE}
-## -----------------------------------------------------------------------------
-## Part III: Practical examples
-## -----------------------------------------------------------------------------
 
-## ---------------------------
-## missing values to NA
-## ---------------------------
-```
 
 Now that we've seen some control flow and programming methods, let's
 move to a more realistic use case. In this first example, we'll make a
@@ -530,7 +684,8 @@ Note that since we're using R's `sample()` function, your data will
 look a little different from mine due to randomness in the sample, but
 everything will work the same.
 
-```{r}
+
+```r
 ## create a data frame with around 10% missing values (-97,-98,-99) in
 ## three columns
 df <- tibble("id" = 1:100,
@@ -551,13 +706,31 @@ df <- tibble("id" = 1:100,
 df
 ```
 
+```
+## # A tibble: 100 × 4
+##       id   age sibage parage
+##    <int> <dbl>  <dbl>  <dbl>
+##  1     1   -97    -98     50
+##  2     2    12     10     51
+##  3     3    18     12     45
+##  4     4    18    -98     54
+##  5     5    19      6     53
+##  6     6    17     11    -99
+##  7     7    12      9     45
+##  8     8    11      7    -98
+##  9     9    17     10     52
+## 10    10    20    -98     49
+## # … with 90 more rows
+```
+
 We could fix these manually like we have been in past lessons and
 assignments, but it would be nice have a shorthand function. The
 function needs to flexible though, because the missing data values are
 coded differently in each column.
 
 
-```{r}
+
+```r
 ## function to fix missing values
 fix_missing <- function(x, miss_val) {
     ## use ifelse(< test >, < do this if TRUE >, < do that if FALSE >)
@@ -577,11 +750,31 @@ hard-coded value (a [magic
 number](https://en.wikipedia.org/wiki/Magic_number_(programming))), we
 can change it each time we call the function. Let's try it out.
 
-```{r}
+
+```r
 ## check
 df %>%
     count(age)
+```
 
+```
+## # A tibble: 11 × 2
+##      age     n
+##    <dbl> <int>
+##  1   -97     9
+##  2    11     9
+##  3    12     4
+##  4    13    10
+##  5    14    11
+##  6    15     8
+##  7    16    11
+##  8    17    14
+##  9    18    11
+## 10    19     5
+## 11    20     8
+```
+
+```r
 ## missing values in age are coded as -97
 df <- df %>%
     mutate(age = fix_missing(age, -97))
@@ -589,6 +782,23 @@ df <- df %>%
 ## recheck
 df %>%
     count(age)
+```
+
+```
+## # A tibble: 11 × 2
+##      age     n
+##    <dbl> <int>
+##  1    11     9
+##  2    12     4
+##  3    13    10
+##  4    14    11
+##  5    15     8
+##  6    16    11
+##  7    17    14
+##  8    18    11
+##  9    19     5
+## 10    20     8
+## 11    NA     9
 ```
 
 It worked! All the values that were -97 before, are now in the `NA`
@@ -603,30 +813,122 @@ table column. Importantly, none of the other values changed.
 
 ### Download all files
 
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## batch read files: all
-## ---------------------------
-```
+
 
 In our lesson on appending, joining, and merging, we read in a few
 administrative test score files. In that lesson, we read in each file
 individually and then appended them. 
 
-```{r, message = FALSE}
+
+```r
 ## read in all Bend Gate test score files
 df_1 <- read_csv(file.path(bys_dir, "bend_gate_1980.csv"))
-df_2 <- read_csv(file.path(bys_dir, "bend_gate_1981.csv"))
-df_3 <- read_csv(file.path(bys_dir, "bend_gate_1982.csv"))
-df_4 <- read_csv(file.path(bys_dir, "bend_gate_1983.csv"))
-df_5 <- read_csv(file.path(bys_dir, "bend_gate_1984.csv"))
-df_6 <- read_csv(file.path(bys_dir, "bend_gate_1985.csv"))
+```
 
+```
+## Rows: 1 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (1): school
+## dbl (4): year, math, read, science
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```r
+df_2 <- read_csv(file.path(bys_dir, "bend_gate_1981.csv"))
+```
+
+```
+## Rows: 1 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (1): school
+## dbl (4): year, math, read, science
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```r
+df_3 <- read_csv(file.path(bys_dir, "bend_gate_1982.csv"))
+```
+
+```
+## Rows: 1 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (1): school
+## dbl (4): year, math, read, science
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```r
+df_4 <- read_csv(file.path(bys_dir, "bend_gate_1983.csv"))
+```
+
+```
+## Rows: 1 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (1): school
+## dbl (4): year, math, read, science
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```r
+df_5 <- read_csv(file.path(bys_dir, "bend_gate_1984.csv"))
+```
+
+```
+## Rows: 1 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (1): school
+## dbl (4): year, math, read, science
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```r
+df_6 <- read_csv(file.path(bys_dir, "bend_gate_1985.csv"))
+```
+
+```
+## Rows: 1 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (1): school
+## dbl (4): year, math, read, science
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```r
 ## append
 df <- bind_rows(df_1, df_2, df_3, df_4, df_5, df_6)
 
 ## show
 df
+```
+
+```
+## # A tibble: 6 × 5
+##   school     year  math  read science
+##   <chr>     <dbl> <dbl> <dbl>   <dbl>
+## 1 Bend Gate  1980   515   281     808
+## 2 Bend Gate  1981   503   312     814
+## 3 Bend Gate  1982   514   316     816
+## 4 Bend Gate  1983   491   276     793
+## 5 Bend Gate  1984   502   310     788
+## 6 Bend Gate  1985   488   280     789
 ```
 
 That was fine then, but when you see that much repeated code, you
@@ -646,12 +948,40 @@ those situations, we've just printed the output to the console. But as
 with all things R, we can save that output in an object instead and
 put it to good use.
 
-```{r}
+
+```r
 ## get names (with full path) of all school test score files
 files <- list.files(bys_dir, full.names = TRUE)
 
 ## show
 files
+```
+
+```
+##  [1] "../data/sch_test/by_school/bend_gate_1980.csv"   
+##  [2] "../data/sch_test/by_school/bend_gate_1981.csv"   
+##  [3] "../data/sch_test/by_school/bend_gate_1982.csv"   
+##  [4] "../data/sch_test/by_school/bend_gate_1983.csv"   
+##  [5] "../data/sch_test/by_school/bend_gate_1984.csv"   
+##  [6] "../data/sch_test/by_school/bend_gate_1985.csv"   
+##  [7] "../data/sch_test/by_school/east_heights_1980.csv"
+##  [8] "../data/sch_test/by_school/east_heights_1981.csv"
+##  [9] "../data/sch_test/by_school/east_heights_1982.csv"
+## [10] "../data/sch_test/by_school/east_heights_1983.csv"
+## [11] "../data/sch_test/by_school/east_heights_1984.csv"
+## [12] "../data/sch_test/by_school/east_heights_1985.csv"
+## [13] "../data/sch_test/by_school/niagara_1980.csv"     
+## [14] "../data/sch_test/by_school/niagara_1981.csv"     
+## [15] "../data/sch_test/by_school/niagara_1982.csv"     
+## [16] "../data/sch_test/by_school/niagara_1983.csv"     
+## [17] "../data/sch_test/by_school/niagara_1984.csv"     
+## [18] "../data/sch_test/by_school/niagara_1985.csv"     
+## [19] "../data/sch_test/by_school/spottsville_1980.csv" 
+## [20] "../data/sch_test/by_school/spottsville_1981.csv" 
+## [21] "../data/sch_test/by_school/spottsville_1982.csv" 
+## [22] "../data/sch_test/by_school/spottsville_1983.csv" 
+## [23] "../data/sch_test/by_school/spottsville_1984.csv" 
+## [24] "../data/sch_test/by_school/spottsville_1985.csv"
 ```
 
 > #### Quick exercise
@@ -666,33 +996,77 @@ blank list. We've not used lists before, but think of them as special
 vectors, which we have used.
 
 Once we have a list, we'll read in each file, but instead of storing
-it in an object like `df`, we'll put it in the list.
+it in an object like `df`, we'll put it in the list. Since we'll be
+reading in a large number of data files in the next few steps, we'll
+also include the argument `show_col_types = FALSE` so that
+`read_csv()` doesn't print information for each file (our assumption
+is that we've already spot checked a few files and know what we're
+getting). 
 
-```{r, message = FALSE}
+
+```r
 ## init list
 df_list <- list()
 
 ## use loop to read in files
 for (i in 1:length(files)) {
     ## read in file (f) and store in list (note double brackets for list)
-    df_list[[i]] <- read_csv(files[i])    
+    df_list[[i]] <- read_csv(files[i], show_col_types = FALSE)    
 }
 
 ## show first 3 items
 df_list[1:3]
 ```
 
+```
+## [[1]]
+## # A tibble: 1 × 5
+##   school     year  math  read science
+##   <chr>     <dbl> <dbl> <dbl>   <dbl>
+## 1 Bend Gate  1980   515   281     808
+## 
+## [[2]]
+## # A tibble: 1 × 5
+##   school     year  math  read science
+##   <chr>     <dbl> <dbl> <dbl>   <dbl>
+## 1 Bend Gate  1981   503   312     814
+## 
+## [[3]]
+## # A tibble: 1 × 5
+##   school     year  math  read science
+##   <chr>     <dbl> <dbl> <dbl>   <dbl>
+## 1 Bend Gate  1982   514   316     816
+```
+
 Now that the items are in a list, we can again use `bind_rows()`,
 which, in addition to individual objects, can take a single list of
 objects.
 
-```{r}
+
+```r
 ## bind our list to single data frame
 df <- df_list %>%
     bind_rows()
 
 ## show
 df
+```
+
+```
+## # A tibble: 24 × 5
+##    school        year  math  read science
+##    <chr>        <dbl> <dbl> <dbl>   <dbl>
+##  1 Bend Gate     1980   515   281     808
+##  2 Bend Gate     1981   503   312     814
+##  3 Bend Gate     1982   514   316     816
+##  4 Bend Gate     1983   491   276     793
+##  5 Bend Gate     1984   502   310     788
+##  6 Bend Gate     1985   488   280     789
+##  7 East Heights  1980   501   318     782
+##  8 East Heights  1981   487   323     813
+##  9 East Heights  1982   496   294     818
+## 10 East Heights  1983   497   306     795
+## # … with 14 more rows
 ```
 
 Aside from being more aesthetically pleasing, this code is better
@@ -710,11 +1084,7 @@ just as before.
 ### Read in only some files
 
 
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## batch read files: some
-## ---------------------------
-```
+
 
 What if we only want files for Spottsville? Overall, the code is
 exactly the same except that we want our list to only contain the
@@ -726,12 +1096,22 @@ default value of `NULL`. This means it doesn't do any filtering if we
 leave it out. But if we want to filter which files are stored in
 `files`, we should use it.
 
-```{r}
+
+```r
 ## filter files to be read in using pattern
 files_sp <- list.files(bys_dir, pattern = "spottsville", full.names = TRUE)
 
 ## check
 files_sp
+```
+
+```
+## [1] "../data/sch_test/by_school/spottsville_1980.csv"
+## [2] "../data/sch_test/by_school/spottsville_1981.csv"
+## [3] "../data/sch_test/by_school/spottsville_1982.csv"
+## [4] "../data/sch_test/by_school/spottsville_1983.csv"
+## [5] "../data/sch_test/by_school/spottsville_1984.csv"
+## [6] "../data/sch_test/by_school/spottsville_1985.csv"
 ```
 
 Luckily, our regular expression pattern can simply be
@@ -742,14 +1122,15 @@ The rest of the code should be as it was before (with the small
 addition of `_sp` in various names to keep distinct from our first
 attempt).
 
-```{r, message = FALSE}
+
+```r
 ## init list
 df_sp_list <- list()
 
 ## use loop to read in files
 for (i in 1:length(files_sp)) {
     ## read in file (f) and store in list
-    df_sp_list[[i]] <- read_csv(files_sp[i])    
+    df_sp_list[[i]] <- read_csv(files_sp[i], show_col_types = FALSE)    
 }
 
 ## bind our list to single data frame
@@ -760,14 +1141,22 @@ df_sp <- df_sp_list %>%
 df_sp
 ```
 
+```
+## # A tibble: 6 × 5
+##   school       year  math  read science
+##   <chr>       <dbl> <dbl> <dbl>   <dbl>
+## 1 Spottsville  1980   498   288     813
+## 2 Spottsville  1981   494   270     765
+## 3 Spottsville  1982   507   289     801
+## 4 Spottsville  1983   515   288     775
+## 5 Spottsville  1984   475   289     779
+## 6 Spottsville  1985   515   285     784
+```
+
 ### Use `purrr::map()`
 
 
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## batch read files: map()
-## ---------------------------
-```
+
 
 Finally, let's look at the fully tidyverse way of solving this
 problem. We'll use the [purrr library](https://purrr.tidyverse.org),
@@ -794,14 +1183,32 @@ What's nice about purrr functions is that they work directly with
 other tidyverse functions via pipes, `%>%`. This bit of code
 reproduces what the first loop did to read in and bind all files:
 
-```{r, message = FALSE}
+
+```r
 ## use purrr::map() to read in all files; then pipe into bind rows
 df <- map(files,
-          ~ read_csv(.x)) %>%
+          ~ read_csv(.x, show_col_types = FALSE)) %>%
     bind_rows()
 
 ## show
 df
+```
+
+```
+## # A tibble: 24 × 5
+##    school        year  math  read science
+##    <chr>        <dbl> <dbl> <dbl>   <dbl>
+##  1 Bend Gate     1980   515   281     808
+##  2 Bend Gate     1981   503   312     814
+##  3 Bend Gate     1982   514   316     816
+##  4 Bend Gate     1983   491   276     793
+##  5 Bend Gate     1984   502   310     788
+##  6 Bend Gate     1985   488   280     789
+##  7 East Heights  1980   501   318     782
+##  8 East Heights  1981   487   323     813
+##  9 East Heights  1982   496   294     818
+## 10 East Heights  1983   497   306     795
+## # … with 14 more rows
 ```
 
 What's happening here? One at a time;
@@ -824,8 +1231,4 @@ purrr suite of functions can be very powerful and may be worth
 learning more about.
 
 
-```{r, include = FALSE, purl = TRUE}
-## -----------------------------------------------------------------------------
-## end script
-################################################################################
-```
+

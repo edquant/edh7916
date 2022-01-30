@@ -3,7 +3,7 @@ layout: lesson
 title: "Data Wrangling II: Appending, joining, and reshaping data"
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 5
+order: 4
 category: lesson
 links:
   script: dw_two.R

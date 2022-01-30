@@ -1,7 +1,7 @@
 ---
 layout: lesson
 title: Assignment 5
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
 order: 5
 category: problemset
@@ -38,13 +38,16 @@ it answers the question).
    - more than 6 months between high school graduation and
      postsecondary enrollment?
    - more than 12 months?
-1. **BONUS** Using the [plotly](https://plotly.com/r/) library,
-   recreate one of the plots from the lesson, but add an interactive
-   component. For example, in one of the scatter plots, make it so
-   that hovering over a point produces a pop-up that shows its value
-   and the student to which it belongs.
+<!-- 1. **BONUS** Using the [plotly](https://plotly.com/r/) library, -->
+<!--    recreate one of the plots from the lesson, but add an interactive -->
+<!--    component. For example, in one of the scatter plots, make it so -->
+<!--    that hovering over a point produces a pop-up that shows its value -->
+<!--    and the student to which it belongs. -->
 
 #### Submission details
 
-- Upload your script (`<lastname>_assignment_5.R`) to our CANVAS
-  course site no later than 11:59 p.m. EDT on the due date.
+- Save your script (`<lastname>_assignment_5.R`) in your `scripts`
+  directory.
+- Push changes to your repo (the new script and new folder) to GitHub
+  prior to the next class session.
+

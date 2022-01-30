@@ -1,9 +1,9 @@
 ---
 layout: lesson
 title: "Data Wrangling III: Working with strings and dates"
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
-order: 8
+order: 7
 category: lesson
 links:
   script: dw_three.R
@@ -89,22 +89,11 @@ with `library(tidyverse)`, the stringr library is already
 loaded. The lubridate library, though part of the tidyverse, is
 not. We need to load it separately.
 
-```{r, include = FALSE, purl = FALSE}
-source('knit_setup.R')
-```
-```{r, include = FALSE, purl = TRUE}
-################################################################################
-##
-## <PROJ> EDH7916: Data Wrangling III: Working with strings and dates
-## <FILE> dw_three.R 
-## <INIT> 10 February 2020
-## <AUTH> Benjamin Skinner (GitHub/Twitter: @btskinner)
-##
-################################################################################
 
-```
 
-```{r}
+
+
+```r
 ## ---------------------------
 ## libraries
 ## ---------------------------
@@ -113,12 +102,44 @@ source('knit_setup.R')
 ## lubridate is not, so we need to load it separately
 
 library(tidyverse)
+```
+
+```
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+```
+
+```
+## ✔ ggplot2 3.3.5     ✔ purrr   0.3.4
+## ✔ tibble  3.1.6     ✔ dplyr   1.0.7
+## ✔ tidyr   1.1.4     ✔ stringr 1.4.0
+## ✔ readr   2.1.1     ✔ forcats 0.5.1
+```
+
+```
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```r
 library(lubridate)
+```
+
+```
+## 
+## Attaching package: 'lubridate'
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     date, intersect, setdiff, union
 ```
 **NB**: As we have done in the past few lessons, we'll run this script assuming that
 our working directory is set to the `scripts` directory.
 
-```{r}
+
+```r
 ## ---------------------------
 ## directory paths
 ## ---------------------------
@@ -165,7 +186,8 @@ covers institutional characteristics for one year:
 
 - Directory information, 2007 (`hd2007.csv`)
 
-```{r}
+
+```r
 ## ---------------------------
 ## input
 ## ---------------------------
@@ -175,12 +197,19 @@ df <- read_csv(file.path(dat_dir, "hd2007.csv")) %>%
     rename_all(tolower)
 ```
 
-
-```{r, purl = TRUE, include = FALSE}
-## -----------------------------------------------------------------------------
-## Working with strings
-## -----------------------------------------------------------------------------
 ```
+## Rows: 7052 Columns: 59
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (16): INSTNM, ADDR, CITY, STABBR, ZIP, CHFNM, CHFTITLE, EIN, OPEID, WEBA...
+## dbl (43): UNITID, FIPS, OBEREG, GENTELE, OPEFLAG, SECTOR, ICLEVEL, CONTROL, ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+
+
 
 # Finding: `str_detect()`
 
@@ -189,10 +218,34 @@ matching a string, we have used `==` (or `!=` for negative match). For
 example, if we wanted to limit our data to only those institutions in
 Florida, we could filter using the `stabbr` column:
 
-```{r}
+
+```r
 ## filter using state abbreviation (not saving, just viewing)
 df %>%
     filter(stabbr == "FL")
+```
+
+```
+## # A tibble: 316 × 59
+##    unitid instnm    addr  city  stabbr zip    fips obereg chfnm chftitle gentele
+##     <dbl> <chr>     <chr> <chr> <chr>  <chr> <dbl>  <dbl> <chr> <chr>      <dbl>
+##  1 132268 Wyotech-… 470 … Ormo… FL     32174    12      5 Stev… Preside… 3.86e12
+##  2 132338 The Art … 1799… Fort… FL     3331…    12      5 Char… Preside… 9.54e13
+##  3 132374 Atlantic… 4700… Coco… FL     3306…    12      5 Robe… Director 7.54e 9
+##  4 132408 The Bapt… 5400… Grac… FL     32440    12      5 Thom… Preside… 8.50e 9
+##  5 132471 Barry Un… 1130… Miami FL     3316…    12      5 Sist… Preside… 8.01e 9
+##  6 132523 Gooding … 615 … Pana… FL     32401    12      5 Dr. … CRNA Ph… 8.51e 9
+##  7 132602 Bethune-… 640 … Dayt… FL     3211…    12      5 Dr T… Preside… 3.86e 9
+##  8 132657 Lynn Uni… 3601… Boca… FL     3343…    12      5 Kevi… Preside… 5.61e 9
+##  9 132666 Bradento… 5505… Brad… FL     34209    12      5 A. P… CEO      9.42e 9
+## 10 132675 Bradford… 609 … Star… FL     32091    12      5 Rand… Director 9.05e 9
+## # … with 306 more rows, and 48 more variables: ein <chr>, opeid <chr>,
+## #   opeflag <dbl>, webaddr <chr>, adminurl <chr>, faidurl <chr>, applurl <chr>,
+## #   sector <dbl>, iclevel <dbl>, control <dbl>, hloffer <dbl>, ugoffer <dbl>,
+## #   groffer <dbl>, fpoffer <dbl>, hdegoffr <dbl>, deggrant <dbl>, hbcu <dbl>,
+## #   hospital <dbl>, medical <dbl>, tribal <dbl>, locale <dbl>, openpubl <dbl>,
+## #   act <chr>, newid <dbl>, deathyr <dbl>, closedat <chr>, cyactive <dbl>,
+## #   postsec <dbl>, pseflag <dbl>, pset4flg <dbl>, rptmth <dbl>, ialias <chr>, …
 ```
 
 This works well because the `stabbr` column, even though it uses
@@ -200,10 +253,28 @@ strings, is regular. But what happens when the strings aren't so
 regular? For example, let's look the different titles chief college
 administrators take.
 
-```{r}
+
+```r
 ## see first few rows of distinct chief titles
 df %>%
     distinct(chftitle)
+```
+
+```
+## # A tibble: 556 × 1
+##    chftitle          
+##    <chr>             
+##  1 Commandant        
+##  2 President         
+##  3 Chancellor        
+##  4 Interim President 
+##  5 CEO               
+##  6 Acting President  
+##  7 Director          
+##  8 President/CEO     
+##  9 Interim Chancellor
+## 10 President/COO     
+## # … with 546 more rows
 ```
 
 We find over 500 unique titles. Just looking at the first 10 rows, we
@@ -212,13 +283,31 @@ vs. _President/CEO_ --- but not exactly the same. Let's look again,
 but this time get counts of each distinct title and arrange from most
 common to least.
 
-```{r}
+
+```r
 ## return the most common titles
 df %>%
     ## get counts of each type
     count(chftitle) %>%
     ## arrange in descending order so we see most popular at top
     arrange(desc(n))
+```
+
+```
+## # A tibble: 556 × 2
+##    chftitle               n
+##    <chr>              <int>
+##  1 President           3840
+##  2 Director             560
+##  3 Chancellor           265
+##  4 Executive Director   209
+##  5 Owner                164
+##  6 Campus President     116
+##  7 Superintendent       105
+##  8 CEO                   90
+##  9 <NA>                  85
+## 10 Interim President     75
+## # … with 546 more rows
 ```
 
 > #### Quick exercise
@@ -249,12 +338,17 @@ Going item by item in the vector, it compares what it sees to the
 pattern. If it matches, then it returns `TRUE`; it not, then
 `FALSE`. Here's a toy example:
 
-```{r}
+
+```r
 ## string vector example
 fruits <- c("green apple", "banana", "red apple")
 
 ## search for "apple", which should be true for the first and third item
 str_detect(fruits, "apple")
+```
+
+```
+## [1]  TRUE FALSE  TRUE
 ```
 
 We can use `str_detect()` inside `filter()` to select only certain
@@ -263,7 +357,8 @@ in which the title `"President"` occurs in the `chftitle`
 column. Because we're only detecting, as long as `"President"` occurs
 _anywhere_ in the title, we'll get that row back.
 
-```{r}
+
+```r
 ## how many use some form of the title president?
 df %>%
     ## still starting with our count
@@ -272,6 +367,23 @@ df %>%
     filter(str_detect(chftitle, "President")) %>%
     ## arranging as before
     arrange(desc(n))
+```
+
+```
+## # A tibble: 173 × 2
+##    chftitle              n
+##    <chr>             <int>
+##  1 President          3840
+##  2 Campus President    116
+##  3 Interim President    75
+##  4 President/COO        47
+##  5 President/CEO        46
+##  6 School President     31
+##  7 Vice President       29
+##  8 President and CEO    17
+##  9 College President    15
+## 10 President & CEO      14
+## # … with 163 more rows
 ```
 
 Now we're seeing many more versions. We can even more clearly see a
@@ -314,8 +426,8 @@ specifically, we recognized that each column took the form of
 In the tidyverse some of the stringr and [tidyselect helper
 functions](https://www.rdocumentation.org/packages/tidyselect/versions/1.0.0/topics/select_helpers)
 abstract-away some of the nitty-gritty behind regular
-expressions. [Knowing a little about regular expression syntax,
-particularly how it is used in
+expressions. Knowing a little about regular expression syntax,
+particularly [how it is used in
 R](https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html),
 can go a long way.
 
@@ -325,13 +437,30 @@ _President_ or lowercase **p** _president_ using square brackets
 `[Pp]`, in place of the first character: `"[Pp]resident"`. This will
 match either `"President"` or `"president"`.
 
-```{r}
+
+```r
 ## solution 1: look for either P or p
 df %>%
     count(chftitle) %>%
     filter(str_detect(chftitle, "[Pp]resident")) %>%
     arrange(desc(n))
+```
 
+```
+## # A tibble: 175 × 2
+##    chftitle              n
+##    <chr>             <int>
+##  1 President          3840
+##  2 Campus President    116
+##  3 Interim President    75
+##  4 President/COO        47
+##  5 President/CEO        46
+##  6 School President     31
+##  7 Vice President       29
+##  8 President and CEO    17
+##  9 College President    15
+## 10 President & CEO      14
+## # … with 165 more rows
 ```
 
 Though we don't see the new observations in the abbreviated output, we
@@ -353,13 +482,30 @@ filtering. To compare apples to apples (rather than `"Apples"` to
 `str_to_lower()`, which will make character lowercase, and match using
 lowercase `"president"`.
 
-```{r}
+
+```r
 ## solution 2: make everything lowercase so that case doesn't matter
 df %>%
     count(chftitle) %>%
     filter(str_detect(str_to_lower(chftitle), "president")) %>%
     arrange(desc(n))
+```
 
+```
+## # A tibble: 177 × 2
+##    chftitle              n
+##    <chr>             <int>
+##  1 President          3840
+##  2 Campus President    116
+##  3 Interim President    75
+##  4 President/COO        47
+##  5 President/CEO        46
+##  6 School President     31
+##  7 Vice President       29
+##  8 President and CEO    17
+##  9 College President    15
+## 10 President & CEO      14
+## # … with 167 more rows
 ```
 
 We recover another two titles when using this second
@@ -383,10 +529,28 @@ In addition to filtering data, we sometimes need to create new
 variables from pieces of exiting variables. For example, let's look at
 the zip code values that are included in the file.
 
-```{r}
+
+```r
 ## show first few zip code values
 df %>%
     select(unitid, zip)
+```
+
+```
+## # A tibble: 7,052 × 2
+##    unitid zip       
+##     <dbl> <chr>     
+##  1 100636 36112-6613
+##  2 100654 35762     
+##  3 100663 35294-0110
+##  4 100690 36117-3553
+##  5 100706 35899     
+##  6 100724 36101-0271
+##  7 100733 35401     
+##  8 100751 35487-0166
+##  9 100760 35010     
+## 10 100812 35611     
+## # … with 7,042 more rows
 ```
 
 We can see that we have both regular 5 digit zip codes as well as
@@ -407,7 +571,8 @@ ending character that mark the sub-string of interest.
 In our case, we want the first 5 digits so we should `start == 1` and
 `end == 5`:
 
-```{r}
+
+```r
 ## pull out first 5 digits of zip code
 df <- df %>%
     mutate(zip5 = str_sub(zip, start = 1, end = 5))
@@ -415,6 +580,23 @@ df <- df %>%
 ## show (use select() to subset so we can set new columns)
 df %>%
     select(unitid, zip, zip5)
+```
+
+```
+## # A tibble: 7,052 × 3
+##    unitid zip        zip5 
+##     <dbl> <chr>      <chr>
+##  1 100636 36112-6613 36112
+##  2 100654 35762      35762
+##  3 100663 35294-0110 35294
+##  4 100690 36117-3553 36117
+##  5 100706 35899      35899
+##  6 100724 36101-0271 36101
+##  7 100733 35401      35401
+##  8 100751 35487-0166 35487
+##  9 100760 35010      35010
+## 10 100812 35611      35611
+## # … with 7,042 more rows
 ```
 
 A quick visual inspection of the first few rows shows that our
@@ -459,7 +641,8 @@ same answer: `"32605"`. This is what we want.
 
 Let's try it on the data.
 
-```{r}
+
+```r
 ## drop last four digits of extended zip code if they exist
 df <- df %>%
     mutate(zip5_v2 = str_replace(zip, "([0-9]+)(-[0-9]+)?", "\\1"))
@@ -467,6 +650,23 @@ df <- df %>%
 ## show (use select() to subset so we can set new columns)
 df %>%
     select(unitid, zip, zip5, zip5_v2)
+```
+
+```
+## # A tibble: 7,052 × 4
+##    unitid zip        zip5  zip5_v2
+##     <dbl> <chr>      <chr> <chr>  
+##  1 100636 36112-6613 36112 36112  
+##  2 100654 35762      35762 35762  
+##  3 100663 35294-0110 35294 35294  
+##  4 100690 36117-3553 36117 36117  
+##  5 100706 35899      35899 35899  
+##  6 100724 36101-0271 36101 36101  
+##  7 100733 35401      35401 35401  
+##  8 100751 35487-0166 35487 35487  
+##  9 100760 35010      35010 35010  
+## 10 100812 35611      35611 35611  
+## # … with 7,042 more rows
 ```
 
 > #### Quick exercise
@@ -478,19 +678,34 @@ df %>%
 
 Let's compare our two versions: do we get the same results?
 
-```{r}
+
+```r
 ## check if both versions of new zip column are equal
 identical(df %>% select(zip5), df %>% select(zip5_v2))
 ```
 
+```
+## [1] FALSE
+```
+
 No! Let's see where they are different:
 
-```{r}
+
+```r
 ## filter to rows where zip5 != zip5_v2 (not storing...just looking)
 df %>%
     filter(zip5 != zip5_v2) %>%
     select(unitid, zip, zip5, zip5_v2)
+```
 
+```
+## # A tibble: 4 × 4
+##   unitid zip        zip5  zip5_v2   
+##    <dbl> <chr>      <chr> <chr>     
+## 1 108199 90015--350 90015 90015--350
+## 2 113953 92113--191 92113 92113--191
+## 3 431707 06360--709 06360 06360--709
+## 4 435240 551012595  55101 551012595
 ```
 > #### Quick exercise
 > What happened? In this scenario, which string subsetting technique
@@ -534,23 +749,36 @@ R makes this easier by having special time-based data types that will
 keep track of these issues for us and allow us to work with dates
 almost as we do with regular numbers.
 
-```{r, purl = TRUE, include = FALSE}
-## -----------------------------------------------------------------------------
-## Working with dates
-## -----------------------------------------------------------------------------
 
-```
 
 In our IPEDS data set, we can see that few institutions closed in 2007
 and 2008. We'll limit our next analyses to these institutions.
 
-```{r}
+
+```r
 ## subset to schools who closed during this period
 df <- df %>%
     filter(closedat != -2)
 
 ## show first few rows
 df %>% select(unitid, instnm, closedat)
+```
+
+```
+## # A tibble: 83 × 3
+##    unitid instnm                                                  closedat
+##     <dbl> <chr>                                                   <chr>   
+##  1 103440 Sheldon Jackson College                                 6/29/07 
+##  2 104522 DeVoe College of Beauty                                 3/29/08 
+##  3 105242 Mundus Institute                                        Sep-07  
+##  4 105880 Long Technical College-East Valley                      3/31/07 
+##  5 119711 New College of California                               Jan-08  
+##  6 136996 Ross Medical Education Center                           7/31/07 
+##  7 137625 Suncoast II the Tampa Bay School of Massage Therapy LLC 5/31/08 
+##  8 141583 Hawaii Business College                                 Sep-07  
+##  9 150127 Ball Memorial Hospital School of Radiologic Technology  May-07  
+## 10 160144 Pat Goins Shreveport Beauty School                      3/1/08  
+## # … with 73 more rows
 ```
 
 We can see that `closedat` is stored as a string. Based on our domain
@@ -561,14 +789,37 @@ We can use the lubridate command `mdy()` to make a new variable that
 contains the same information, but in a format that R recognizes as a
 date.
 
-```{r}
 
+```r
 ## create a new close date column 
 df <- df %>%
     mutate(closedat_dt = mdy(closedat))
+```
 
+```
+## Warning: 35 failed to parse.
+```
+
+```r
 ## show
 df %>% select(starts_with("close"))
+```
+
+```
+## # A tibble: 83 × 2
+##    closedat closedat_dt
+##    <chr>    <date>     
+##  1 6/29/07  2007-06-29 
+##  2 3/29/08  2008-03-29 
+##  3 Sep-07   NA         
+##  4 3/31/07  2007-03-31 
+##  5 Jan-08   NA         
+##  6 7/31/07  2007-07-31 
+##  7 5/31/08  2008-05-31 
+##  8 Sep-07   NA         
+##  9 May-07   NA         
+## 10 3/1/08   2008-03-01 
+## # … with 73 more rows
 ```
 
 Well, we are part of the way there. It seems that `mdy()` didn't
@@ -578,14 +829,38 @@ One solution is to add in a fake day for the ones that didn't parse
 and then convert using `mdy()`. We'll use regular expressions with an
 `str_replace()`.
 
-```{r}
+
+```r
 ## convert MON-YYYY to MON-01-YYYY
 df <- df %>%
     mutate(closedat_fix = str_replace(closedat, "-", "-01-"),
            closedat_fix_dt = mdy(closedat_fix))
+```
 
+```
+## Warning: 7 failed to parse.
+```
+
+```r
 ## show
 df %>% select(starts_with("close"))                                
+```
+
+```
+## # A tibble: 83 × 4
+##    closedat closedat_dt closedat_fix closedat_fix_dt
+##    <chr>    <date>      <chr>        <date>         
+##  1 6/29/07  2007-06-29  6/29/07      2007-06-29     
+##  2 3/29/08  2008-03-29  3/29/08      2008-03-29     
+##  3 Sep-07   NA          Sep-01-07    2007-09-01     
+##  4 3/31/07  2007-03-31  3/31/07      2007-03-31     
+##  5 Jan-08   NA          Jan-01-08    2008-01-01     
+##  6 7/31/07  2007-07-31  7/31/07      2007-07-31     
+##  7 5/31/08  2008-05-31  5/31/08      2008-05-31     
+##  8 Sep-07   NA          Sep-01-07    2007-09-01     
+##  9 May-07   NA          May-01-07    2007-05-01     
+## 10 3/1/08   2008-03-01  3/1/08       2008-03-01     
+## # … with 73 more rows
 ```
 
 > #### Quick exercise
@@ -602,7 +877,8 @@ date type, it's easy to pull out the pieces of that date, including:
 - **day** with `day()`
 - **day of week** with `wday()`
 
-```{r}
+
+```r
 ## add columns for
 ## - year
 ## - month
@@ -618,6 +894,23 @@ df %>%
     select(closedat_fix_dt, close_year, close_month, close_day, close_dow)
 ```
 
+```
+## # A tibble: 83 × 5
+##    closedat_fix_dt close_year close_month close_day close_dow
+##    <date>               <dbl>       <dbl>     <int> <ord>    
+##  1 2007-06-29            2007           6        29 Fri      
+##  2 2008-03-29            2008           3        29 Sat      
+##  3 2007-09-01            2007           9         1 Sat      
+##  4 2007-03-31            2007           3        31 Sat      
+##  5 2008-01-01            2008           1         1 Tue      
+##  6 2007-07-31            2007           7        31 Tue      
+##  7 2008-05-31            2008           5        31 Sat      
+##  8 2007-09-01            2007           9         1 Sat      
+##  9 2007-05-01            2007           5         1 Tue      
+## 10 2008-03-01            2008           3         1 Sat      
+## # … with 73 more rows
+```
+
 > #### Quick exercise
 > Can we trust our `close_dow` variable? Why?
 
@@ -626,7 +919,8 @@ arithmetic --- future date - past date --- and R will take care of all
 the underlying calendar calculations for us (_e.g._, days in a given
 month, leap years, _etc_).
 
-```{r}
+
+```r
 ## how long since the institution closed
 ## - as of 1 January 2020
 ## - as of today
@@ -638,6 +932,23 @@ df <- df %>%
 df %>% select(starts_with("time_since_close"))
 ```
 
+```
+## # A tibble: 83 × 2
+##    time_since_close_jan time_since_close_now
+##    <drtn>               <drtn>              
+##  1 4569 days            5329 days           
+##  2 4295 days            5055 days           
+##  3 4505 days            5265 days           
+##  4 4659 days            5419 days           
+##  5 4383 days            5143 days           
+##  6 4537 days            5297 days           
+##  7 4232 days            4992 days           
+##  8 4505 days            5265 days           
+##  9 4628 days            5388 days           
+## 10 4323 days            5083 days           
+## # … with 73 more rows
+```
+
 As with strings and regular expressions, we've only scratched the
 surface of working with dates in R. For example, you can also work
 with times (hours, minutes, seconds, _etc_). Now that you've been
@@ -645,8 +956,4 @@ introduced, however, you should have a starting point for working with
 panel and administrative data that includes strings and dates that you
 need to process before conducting your analyses.
 
-```{r, include = FALSE, purl = TRUE}
-## -----------------------------------------------------------------------------
-## end script
-################################################################################
-```
+

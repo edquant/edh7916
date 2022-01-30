@@ -1,9 +1,9 @@
 ---
 layout: lesson
 title: "Data Visualization with ggplot2"
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
-order: 6
+order: 5
 category: lesson
 links:
   script: plotting.R
@@ -694,7 +694,7 @@ to more clearly show observed trends.
 
 When you want to show changes in one variable as a function of another
 variable, _e.g._, changes in test scores over time, then a line graph
-is typically your best choice. Since our `hsls_small` data is
+is often a good choice. Since our `hsls_small` data is
 cross-sectional, we'll shift to using our school test score
 data. Remember that the test score data show three sets of test scores
 (math, science, and reading) for four schools over a period of six

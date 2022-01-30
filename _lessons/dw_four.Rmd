@@ -1,9 +1,9 @@
 ---
 layout: lesson
 title: "Data Wrangling IV: A philosophy of data wrangling"
-subtitle: "EDH7916 | Summer C 2020"
+subtitle: EDH7916
 author: Benjamin Skinner
-order: 11
+order: 9
 category: lesson
 links:
   pdf: dw_four.pdf
@@ -23,7 +23,7 @@ followed.
 
 # Organization
 
-From the [third lesson](/edh7916/lessons/organizing.html), we've been
+From the [organizing lesson](/edh7916/lessons/organizing.html), we've been
 very concerned about how our project is organized. This includes both
 the directory of folders and files on our machine and the scripts that
 run our analyses.
@@ -215,7 +215,19 @@ your code to work first_ and then clean it up later. My only warning
 here is that while you have to clean up a paper eventually (someone's
 going to read it), code still remains largely hidden from public
 view. There will be a temptation to get it to work and then move
-on. Fight that urge!
+on since "no one will see it anyway, right..._right?_" Fight that urge!
+
+Just like real debt, the [technical
+debt](https://en.wikipedia.org/wiki/Technical_debt) that you take out
+each time you settle for a hacky solution that's _good enough_ can
+grow exponentially. At some point, the bill will come due in the form
+of obviously (or even scarier, not-so-obviously) incorrect
+results. Tracking down the source of errors for large projects or
+those that reuse code from past projects can be maddening. Take a
+little extra time to write good code now and it will pay dividends in
+saved hours down the road, not to mention fewer 2 a.m. cold-sweat
+awakenings, _Is that weird finding maybe because I constructed my main
+outcome variable wrong...wait, how **did** I code that..._?
 
 > #### Quick question
 > In a world in which not everyone knows how to use R, what's another
@@ -266,10 +278,34 @@ source("./make_figures.R")
 Not only is that easier for others to run, you now have a single
 script that makes your analytic workflow much clearer. Note that there
 are other ways to do something like this, such as using
-[makefiles](https://en.wikipedia.org/wiki/Makefile) ([here's an
-example of the replication code for one of my
-projects](https://github.com/btskinner/oa_online_broadband_rep)), but
-using only R will work pretty well.
+[makefiles](https://en.wikipedia.org/wiki/Makefile), though using only
+R works pretty well. 
+
+Here are some replication examples for projects that I've done:
+
+1. Skinner, B. T., & Doyle, W. R. (2021). [Do civic returns to higher
+   education differ across subpopulations? An analysis using
+   propensity
+   forests.](https://www.btskinner.io/repository/skinner2021civicii.pdf)
+   Journal of Education Finance, 46(4), 519–562. [(Replication
+   files)](https://github.com/btskinner/civic_returns_pf_rep)
+1. Skinner, B. T. (2019). [Choosing College in the 2000s: An Updated
+   Analysis Using the Conditional Logistic Choice
+   Model.](https://www.btskinner.io/repository/skinner2018clogit.pdf)
+   Research in Higher Education, 60(2), 153–183. [(Replication
+   files)](https://github.com/btskinner/colchoice_rep)
+1. Skinner, B. T. (2019). [Making the connection: Broadband access and
+   online course enrollment at public open admissions
+   institutions.](https://www.btskinner.io/repository/skinner2019oa_online_broadband.pdf) 
+   Research in Higher Education, 60(7), 960–999. [(Replication
+   files)](https://github.com/btskinner/oa_online_broadband_rep) 
+   
+You can find the rest on my
+[website](https://www.btskinner.io/publications/) as well as on my
+[GitHub profile](https://github.com/btskinner). As you complete
+projects and create replication scripts, be sure to make them
+accessible. Not only is it good for the field, it also signals strong
+transparency and credibility on your part as a researcher.
 
 # Testing
 
@@ -386,14 +422,14 @@ gracefully](https://en.wikipedia.org/wiki/Graceful_exit), which means
 that when a problem occurs, the program should at the very least
 give the user a helpful error message rather than just stopping
 without note or looping forever until the machine [halts and
-catches fire](https://en.wikipedia.org/wiki/Halt_and_Catch_Fire).
+catches fire](https://en.wikipedia.org/wiki/Halt_and_Catch_Fire_(computing)).
 
 As data analysts, I want your scripts to do the opposite: I want your
 code to exit loudly and awkwardly if there's a problem. You aren't
 writing a program but rather an analysis. Therefore, the
 [UX](https://en.wikipedia.org/wiki/User_experience) I care about is
-the reader of your final results and your future replicators. [Rather
-than moving forward silently when something strange
+the reader of your final results and your future replicators. Rather
+than moving forward silently when [something strange
 happens](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-1044-7)
 --- which is lovely on the front end because everything keeps running
 but deadly on the back end --- your code should stop and yell at you
