@@ -129,3 +129,5 @@ $RECYCLE.BIN/
 !data/ic2007mission.csv
 !data/ufl_class_times.csv
 !data/els_plans.dta
+!data/rcpp
+!data/kmeans.RDS
