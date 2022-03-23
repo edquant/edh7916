@@ -438,7 +438,8 @@ output between the two functions, our results are a little different
 from what we got earlier without weights.
 
 > #### QUICK EXERCISE
-> Compare this to the output from `t.test()` above.
+> Compare this to the output from `t.test()` above. How is it
+> different? 
 
 Two notes:
 
