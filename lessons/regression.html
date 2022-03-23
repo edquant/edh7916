@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/edh7916/assets/css/style.css">
+<link rel="stylesheet" href="/edh7916/assets/css/syntax_default.css">
+<link rel="shortcut icon" type="image/png" href="/edh7916/assets/img/favicon.ico">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
+<script defer src="/edh7916/assets/js/all.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<title>edquant | EDH 7916: Contemporary Research in Higher Education</title>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/edquant/edh7916" class="iconlink">
+	      <i class="fab fa-github fa-sm"></i></a></h1>
+	<h2 class="thin">Spring 2022</h2>
+	<p>A course in quantitative research workflow for students in
+the higher education administration program at the University of Florida
+</p>
+	<!-- side / top bar menu -->
+	<h2 class="thin">
+	  <a href="/edh7916/">Overview</a></br>
+	  <a href="/edh7916/syllabus/">Course information</a></br>
+	  <a href="/edh7916/location/">Meeting location</a></br>
+	  <a href="/edh7916/software/">Software</a></br>
+	  <a href="/edh7916/schedule/">Schedule</a></br>
+	  <a href="/edh7916/lessons/">Lessons</a></br>
+	  <a href="/edh7916/assignments/">Assignments</a></br>
+	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/past/">Past courses</a></br>
+	  <a href="/edh7916/about/">About</a></br>	  
+	</h2>
+      </header>
+
+      <section>
+	<h1>Inferential II: Regression and prediction</h1>
+	
+
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/modeling.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  <a href="/edh7916/scripts/modeling.R"
+     class="iconlink" download title="Get script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+  
+  
+  
+  <a href="/edh7916/data/els_plans.dta"
+     class="iconlink" download title="Get data">
+    <i class="fas fa-database fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+</p>
+
+
+<p>In this lesson, we’ll move beyond t.tests to regression. As before,
+this lesson is too short to stand in for a full course on regression
+analyses. However, it should give you the basics of how to fit
+regression and store key parameters. We’ll also cover the basics of
+prediction and the estimate of marginal “effects” (nothing causal here!).</p>
+
+<h1 id="data">Data</h1>
+
+<p>In this lesson, we’ll use the same data from the <a href="https://nces.ed.gov/surveys/els2002/">NCES Education
+Longitudinal Study of 2002</a>. So
+you don’t have to go back to the prior lesson, here again is a
+codebook with descriptions of the variables included in our lesson
+today:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">variable</th>
+      <th style="text-align: left">description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">stu_id</td>
+      <td style="text-align: left">student id</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">sch_id</td>
+      <td style="text-align: left">school id</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">strat_id</td>
+      <td style="text-align: left">stratum</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">psu</td>
+      <td style="text-align: left">primary sampling unit</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">bystuwt</td>
+      <td style="text-align: left">student weight</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">bysex</td>
+      <td style="text-align: left">sex-composite</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">byrace</td>
+      <td style="text-align: left">student’s race/ethnicity-composite</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">bydob_p</td>
+      <td style="text-align: left">student’s year and month of birth</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">bypared</td>
+      <td style="text-align: left">parents’ highest level of education</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">bymothed</td>
+      <td style="text-align: left">mother’s highest level of education-composite</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">byfathed</td>
+      <td style="text-align: left">father’s highest level of education-composite</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">byincome</td>
+      <td style="text-align: left">total family income from all sources 2001-composite</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">byses1</td>
+      <td style="text-align: left">socio-economic status composite, v.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">byses2</td>
+      <td style="text-align: left">socio-economic status composite, v.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">bystexp</td>
+      <td style="text-align: left">how far in school student thinks will get-composite</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">bynels2m</td>
+      <td style="text-align: left">els-nels 1992 scale equated sophomore math score</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">bynels2r</td>
+      <td style="text-align: left">els-nels 1992 scale equated sophomore reading score</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">f1qwt</td>
+      <td style="text-align: left">questionnaire weight for f1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">f1pnlwt</td>
+      <td style="text-align: left">panel weight, by and f1 (2002 and 2004)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">f1psepln</td>
+      <td style="text-align: left">f1 post-secondary plans right after high school</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">f2ps1sec</td>
+      <td style="text-align: left">Sector of first postsecondary institution</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">female</td>
+      <td style="text-align: left">== 1 if female</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">moth_ba</td>
+      <td style="text-align: left">== 1 if mother has BA/BS</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">fath_ba</td>
+      <td style="text-align: left">== 1 if father has BA/BS</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">par_ba</td>
+      <td style="text-align: left">== 1 if either parent has BA/BS</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">plan_col_grad</td>
+      <td style="text-align: left">== 1 if student plans to earn college degree</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">lowinc</td>
+      <td style="text-align: left">== 1 if income &lt; $25k</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>We’ll load the same libraries and data!</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## libraries</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## ✔ ggplot2 3.3.5     ✔ purrr   0.3.4
+## ✔ tibble  3.1.6     ✔ dplyr   1.0.8
+## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+## ✔ readr   2.1.2     ✔ forcats 0.5.1
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">haven</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">survey</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Loading required package: grid
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Loading required package: Matrix
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Attaching package: 'Matrix'
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## The following objects are masked from 'package:tidyr':
+## 
+##     expand, pack, unpack
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Loading required package: survival
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Attaching package: 'survey'
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## The following object is masked from 'package:graphics':
+## 
+##     dotchart
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## directory paths</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## assume we're running this script from the ./scripts subdirectory</span><span class="w">
+</span><span class="n">dat_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span><span class="w"> </span><span class="s2">"data"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## input data</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## assume we're running this script from the ./scripts subdirectory</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_dta</span><span class="p">(</span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"els_plans.dta"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+<h1 id="linear-model">Linear model</h1>
+
+<p>Linear models are the go-to method of making inferences for many data
+analysts. In R, the <code class="language-plaintext highlighter-rouge">lm()</code> command is used to compute an <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares">ordinary
+least squares (OLS)</a>
+regression. Unlike above, where we just let the <code class="language-plaintext highlighter-rouge">t.test()</code> output
+print to the console, we can and will store the output in an object.</p>
+
+<p>First, let’s compute the same t-test as in the prior inferential
+lesson, but in a regression framework. This time, we’ll assume equal
+variances between the distributions in the t-test above (<code class="language-plaintext highlighter-rouge">var.equal =
+TRUE</code>), so we should get the same results as we did before.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## t-test of difference in math scores across parental education (BA/BA or not)</span><span class="w">
+</span><span class="n">t.test</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">par_ba</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">var.equal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## 	Two Sample t-test
+## 
+## data:  bynels2m by par_ba
+## t = -38.54, df = 15234, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+## 95 percent confidence interval:
+##  -8.669138 -7.830008
+## sample estimates:
+## mean in group 0 mean in group 1 
+##        41.97543        50.22501
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compute same test as above, but in a linear model</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">par_ba</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="n">fit</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## lm(formula = bynels2m ~ par_ba, data = df)
+## 
+## Coefficients:
+## (Intercept)       par_ba  
+##       41.98         8.25
+</code></pre></div></div>
+
+<p>The output is a little thin: just the coefficients. To see the full
+range of information you want from regression output, use the
+<code class="language-plaintext highlighter-rouge">summary()</code> function wrapped around the <code class="language-plaintext highlighter-rouge">fit</code> object.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## use summary to see more information about regression</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## lm(formula = bynels2m ~ par_ba, data = df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -35.515  -9.685   0.595   9.885  37.015 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  41.9754     0.1375  305.35   &lt;2e-16 ***
+## par_ba        8.2496     0.2141   38.54   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 13.01 on 15234 degrees of freedom
+##   (924 observations deleted due to missingness)
+## Multiple R-squared:  0.08884,	Adjusted R-squared:  0.08878 
+## F-statistic:  1485 on 1 and 15234 DF,  p-value: &lt; 2.2e-16
+</code></pre></div></div>
+<p>We’ll more fully discuss this output in the next section. For now, let’s compare
+the key findings to those returned from the t test.</p>
+
+<p>Because our right-hand side (RHS) variable is an indicator variable
+that <code class="language-plaintext highlighter-rouge">== 0</code> for parents without a BA/BS or higher and <code class="language-plaintext highlighter-rouge">== 1</code> if either
+parent has a BA/BS or higher, then the intercept reflects the math
+test score for students when <code class="language-plaintext highlighter-rouge">par_ba == 0</code>. This matches the <code class="language-plaintext highlighter-rouge">mean in
+group 0</code> value from the t test above.</p>
+
+<p>In a regression framework, the coefficient on <code class="language-plaintext highlighter-rouge">par_ba</code> is the marginal
+difference when <code class="language-plaintext highlighter-rouge">par_ba</code> increases by one unit. Since <code class="language-plaintext highlighter-rouge">pared</code> is the
+only parameter on the RHS (besides the intercept) and only takes on
+values 0 and 1, we can add its coefficient to the intercept to get the
+math test score mean for students with parents with a BA/BS or higher.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## add intercept and par_ba coefficient</span><span class="w">
+</span><span class="n">fit</span><span class="o">$</span><span class="n">coefficients</span><span class="p">[[</span><span class="s2">"(Intercept)"</span><span class="p">]]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fit</span><span class="o">$</span><span class="n">coefficients</span><span class="p">[[</span><span class="s2">"par_ba"</span><span class="p">]]</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 50.22501
+</code></pre></div></div>
+
+<p>Looks like this value matches what we saw before (within
+rounding). Going the other way, the coefficient on <code class="language-plaintext highlighter-rouge">par_ba</code>, <code class="language-plaintext highlighter-rouge">8.2495729</code>, 
+is the same as the difference between the
+groups in the t test. Finally, notice that the absolute value of the
+test statistic for the t test and the <code class="language-plaintext highlighter-rouge">par_ba</code> coefficient are the
+same value: <code class="language-plaintext highlighter-rouge">38.54</code>. Success!</p>
+
+<h2 id="multiple-regression">Multiple regression</h2>
+
+<p>To fit a multiple regression, use the same formula framework that
+we’ve use before with the addition of all the terms you want on
+right-hand side of the equation separated by plus (<code class="language-plaintext highlighter-rouge">+</code>) signs.</p>
+
+<p><em><strong>NB</strong> From here on out, we’ll spend less time interpreting the
+regression results so that we can focus on the tools of running
+regressions. That said, let me know if you have questions of
+interpretation.</em></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## linear model with more than one covariate on the RHS</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">byses1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">female</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">moth_ba</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fath_ba</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">lowinc</span><span class="p">,</span><span class="w">
+          </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## lm(formula = bynels2m ~ byses1 + female + moth_ba + fath_ba + 
+##     lowinc, data = df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -39.456  -8.775   0.432   9.110  40.921 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  45.7155     0.1811 252.420  &lt; 2e-16 ***
+## byses1        6.8058     0.2387  28.511  &lt; 2e-16 ***
+## female       -1.1483     0.1985  -5.784 7.42e-09 ***
+## moth_ba       0.4961     0.2892   1.715  0.08631 .  
+## fath_ba       0.8242     0.2903   2.840  0.00452 ** 
+## lowinc       -2.1425     0.2947  -7.271 3.75e-13 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 12.24 on 15230 degrees of freedom
+##   (924 observations deleted due to missingness)
+## Multiple R-squared:  0.1929,	Adjusted R-squared:  0.1926 
+## F-statistic: 728.1 on 5 and 15230 DF,  p-value: &lt; 2.2e-16
+</code></pre></div></div>
+
+<p>The full output tells you:</p>
+
+<ul>
+  <li>the model that you fit, under <code class="language-plaintext highlighter-rouge">Call:</code></li>
+  <li>a table of coefficients with
+    <ul>
+      <li>the point estimates (<code class="language-plaintext highlighter-rouge">Estimate</code>)</li>
+      <li>the point estimate errors (<code class="language-plaintext highlighter-rouge">Std. Error</code>)</li>
+      <li>the test statistic for each point estimate (<code class="language-plaintext highlighter-rouge">t value</code> with this model)</li>
+      <li>the p value for each point estimate (<code class="language-plaintext highlighter-rouge">Pr(&gt;|t|)</code>)</li>
+    </ul>
+  </li>
+  <li>significance stars (<code class="language-plaintext highlighter-rouge">.</code> and <code class="language-plaintext highlighter-rouge">*</code>) along with legend</li>
+  <li>the R-squared values (<code class="language-plaintext highlighter-rouge">Multiple R-squared</code> and <code class="language-plaintext highlighter-rouge">Adjusted
+  R-squared</code>)</li>
+  <li>the model F-statistic (<code class="language-plaintext highlighter-rouge">F-statistic</code>)</li>
+  <li>number of observations dropped if any</li>
+</ul>
+
+<p>If observations were dropped due to missing values (<code class="language-plaintext highlighter-rouge">lm()</code> does this
+automatically by default), you can recover the number of observations
+actually used with the <code class="language-plaintext highlighter-rouge">nobs()</code> function.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## check number of observations</span><span class="w">
+</span><span class="n">nobs</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 15236
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">fit</code> object also holds a lot of other information that is
+sometimes useful.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## see what fit object holds</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "coefficients"  "residuals"     "effects"       "rank"         
+##  [5] "fitted.values" "assign"        "qr"            "df.residual"  
+##  [9] "na.action"     "xlevels"       "call"          "terms"        
+## [13] "model"
+</code></pre></div></div>
+
+<p>In addition to the <code class="language-plaintext highlighter-rouge">coefficients</code>, which you pulled out of the first
+model, both <code class="language-plaintext highlighter-rouge">fitted.values</code> and <code class="language-plaintext highlighter-rouge">residuals</code> are stored in the
+object. You can access these “hidden” attributes by treating the <code class="language-plaintext highlighter-rouge">fit</code>
+object like a data frame and using the <code class="language-plaintext highlighter-rouge">$</code> notation.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## see first few fitted values and residuals</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">fit</span><span class="o">$</span><span class="n">fitted.values</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##        1        2        3        4        5        6 
+## 42.86583 48.51465 38.78234 36.98010 32.82855 38.43332
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">head</span><span class="p">(</span><span class="n">fit</span><span class="o">$</span><span class="n">residuals</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##          1          2          3          4          5          6 
+##   4.974173   6.785347  27.457659  -1.650095  -2.858552 -14.153323
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise">Quick exercise</h4>
+  <p>Add the fitted values to the residuals and store in an object
+(<code class="language-plaintext highlighter-rouge">x</code>). Compare these values to the math scores in the data frame.</p>
+</blockquote>
+
+<p>As a final note, the model matrix used fit the regression can be
+retrieved using <code class="language-plaintext highlighter-rouge">model.matrix()</code>. Since we have a lot of observations,
+we’ll just look at the first few rows.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## see the design matrix</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">model.matrix</span><span class="p">(</span><span class="n">fit</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##   (Intercept) byses1 female moth_ba fath_ba lowinc
+## 1           1  -0.25      1       0       0      0
+## 2           1   0.58      1       0       0      0
+## 3           1  -0.85      1       0       0      0
+## 4           1  -0.80      1       0       0      1
+## 5           1  -1.41      1       0       0      1
+## 6           1  -1.07      0       0       0      0
+</code></pre></div></div>
+
+<p>What this shows is that the fit object actually stores a copy of the
+data used to run it. That’s really convenient if you want to save the
+object to disk (with the <code class="language-plaintext highlighter-rouge">save()</code> function) so you can review the
+regression results later. But keep in mind that if you share that
+file, you are sharing the part of the data used to estimate
+it. Because a lot of education data is restricted in some way — via
+memorandums of understanding (MOUs) or IRB — be careful about
+sharing the saved output object. Typically you’ll only share the
+results in a table or figure, but just be aware.</p>
+
+<h2 id="using-categorical-variables-or-factors">Using categorical variables or factors</h2>
+
+<p>It’s not necessary to pre-construct dummy variables if you want to use
+a categorical variable in your model. Instead you can use the
+categorical variable wrapped in the <code class="language-plaintext highlighter-rouge">factor()</code> function. This tells R
+that the underlying variable shouldn’t be treated as a continuous
+value, but should be discrete groups. R will make the dummy variables
+on the fly when fitting the model. We’ll include the categorical
+variable <code class="language-plaintext highlighter-rouge">bystexp</code> in this model.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## check values of student expectations</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">count</span><span class="p">(</span><span class="n">bystexp</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 9 × 2
+##                                         bystexp     n
+##                                       &lt;dbl+lbl&gt; &lt;int&gt;
+## 1 -1 [{don^t know}]                              1450
+## 2  1 [less than high school graduation]           128
+## 3  2 [high school graduation or ged only]         983
+## 4  3 [attend or complete 2-year college/school]   879
+## 5  4 [attend college, 4-year degree incomplete]   561
+## 6  5 [graduate from college]                     5416
+## 7  6 [obtain master^s degree or equivalent]      3153
+## 8  7 [obtain phd, md, or other advanced degree]  2666
+## 9 NA                                              924
+</code></pre></div></div>
+
+<p>Even though student expectations of eventual degree attainment are
+roughly ordered, let’s use them in our model as discrete groups. That
+way we can leave in “Don’t know” and don’t have to worry about that
+“attend college, 4-year degree incomplete” is somehow <em>higher</em> than
+“attend or complete 2-year college/school”.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## add factors</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">byses1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">female</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">moth_ba</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fath_ba</span><span class="w">
+          </span><span class="o">+</span><span class="w"> </span><span class="n">lowinc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">bystexp</span><span class="p">),</span><span class="w">
+          </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## lm(formula = bynels2m ~ byses1 + female + moth_ba + fath_ba + 
+##     lowinc + factor(bystexp), data = df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -41.680  -8.267   0.541   8.423  38.696 
+## 
+## Coefficients:
+##                  Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       42.9534     0.3366 127.603  &lt; 2e-16 ***
+## byses1             5.1616     0.2297  22.468  &lt; 2e-16 ***
+## female            -2.3828     0.1909 -12.481  &lt; 2e-16 ***
+## moth_ba            0.4119     0.2742   1.502   0.1331    
+## fath_ba            0.6250     0.2754   2.270   0.0232 *  
+## lowinc            -2.2017     0.2794  -7.880 3.50e-15 ***
+## factor(bystexp)1 -10.0569     1.0710  -9.390  &lt; 2e-16 ***
+## factor(bystexp)2  -5.4527     0.4813 -11.329  &lt; 2e-16 ***
+## factor(bystexp)3  -1.2000     0.4966  -2.416   0.0157 *  
+## factor(bystexp)4  -3.5317     0.5771  -6.119 9.62e-10 ***
+## factor(bystexp)5   3.6345     0.3446  10.546  &lt; 2e-16 ***
+## factor(bystexp)6   7.6366     0.3736  20.442  &lt; 2e-16 ***
+## factor(bystexp)7   7.5114     0.3860  19.460  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 11.6 on 15223 degrees of freedom
+##   (924 observations deleted due to missingness)
+## Multiple R-squared:  0.2754,	Adjusted R-squared:  0.2748 
+## F-statistic: 482.1 on 12 and 15223 DF,  p-value: &lt; 2.2e-16
+</code></pre></div></div>
+
+<p>If you’re using labeled data like we have been for the past couple of
+modules, you can use the <code class="language-plaintext highlighter-rouge">as_factor()</code> function from
+the
+<a href="https://haven.tidyverse.org/reference/as_factor.html">haven library</a> in
+place of the base <code class="language-plaintext highlighter-rouge">factor()</code> function. You’ll still see the
+<code class="language-plaintext highlighter-rouge">as_factor(&lt;var&gt;)</code> prefix on each coefficient, but now you’ll have
+labels instead of the underlying values, which should make parsing the
+output a little easier.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## same model, but use as_factor() instead of factor() to use labels</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">byses1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">female</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">moth_ba</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fath_ba</span><span class="w">
+          </span><span class="o">+</span><span class="w"> </span><span class="n">lowinc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">as_factor</span><span class="p">(</span><span class="n">bystexp</span><span class="p">),</span><span class="w">
+          </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## lm(formula = bynels2m ~ byses1 + female + moth_ba + fath_ba + 
+##     lowinc + as_factor(bystexp), data = df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -41.680  -8.267   0.541   8.423  38.696 
+## 
+## Coefficients:
+##                                                            Estimate Std. Error
+## (Intercept)                                                 42.9534     0.3366
+## byses1                                                       5.1616     0.2297
+## female                                                      -2.3828     0.1909
+## moth_ba                                                      0.4119     0.2742
+## fath_ba                                                      0.6250     0.2754
+## lowinc                                                      -2.2017     0.2794
+## as_factor(bystexp)less than high school graduation         -10.0569     1.0710
+## as_factor(bystexp)high school graduation or ged only        -5.4527     0.4813
+## as_factor(bystexp)attend or complete 2-year college/school  -1.2000     0.4966
+## as_factor(bystexp)attend college, 4-year degree incomplete  -3.5317     0.5771
+## as_factor(bystexp)graduate from college                      3.6345     0.3446
+## as_factor(bystexp)obtain master^s degree or equivalent       7.6366     0.3736
+## as_factor(bystexp)obtain phd, md, or other advanced degree   7.5114     0.3860
+##                                                            t value Pr(&gt;|t|)    
+## (Intercept)                                                127.603  &lt; 2e-16 ***
+## byses1                                                      22.468  &lt; 2e-16 ***
+## female                                                     -12.481  &lt; 2e-16 ***
+## moth_ba                                                      1.502   0.1331    
+## fath_ba                                                      2.270   0.0232 *  
+## lowinc                                                      -7.880 3.50e-15 ***
+## as_factor(bystexp)less than high school graduation          -9.390  &lt; 2e-16 ***
+## as_factor(bystexp)high school graduation or ged only       -11.329  &lt; 2e-16 ***
+## as_factor(bystexp)attend or complete 2-year college/school  -2.416   0.0157 *  
+## as_factor(bystexp)attend college, 4-year degree incomplete  -6.119 9.62e-10 ***
+## as_factor(bystexp)graduate from college                     10.546  &lt; 2e-16 ***
+## as_factor(bystexp)obtain master^s degree or equivalent      20.442  &lt; 2e-16 ***
+## as_factor(bystexp)obtain phd, md, or other advanced degree  19.460  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 11.6 on 15223 degrees of freedom
+##   (924 observations deleted due to missingness)
+## Multiple R-squared:  0.2754,	Adjusted R-squared:  0.2748 
+## F-statistic: 482.1 on 12 and 15223 DF,  p-value: &lt; 2.2e-16
+</code></pre></div></div>
+
+<p>If you look at the model matrix, you can see how R created the dummy
+variables from <code class="language-plaintext highlighter-rouge">bystexp</code>: adding new columns of only 0/1s that
+correspond to the <code class="language-plaintext highlighter-rouge">bystexp</code> value of each student.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## see what R did under the hood to convert categorical to dummies</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">model.matrix</span><span class="p">(</span><span class="n">fit</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##   (Intercept) byses1 female moth_ba fath_ba lowinc
+## 1           1  -0.25      1       0       0      0
+## 2           1   0.58      1       0       0      0
+## 3           1  -0.85      1       0       0      0
+## 4           1  -0.80      1       0       0      1
+## 5           1  -1.41      1       0       0      1
+## 6           1  -1.07      0       0       0      0
+##   as_factor(bystexp)less than high school graduation
+## 1                                                  0
+## 2                                                  0
+## 3                                                  0
+## 4                                                  0
+## 5                                                  0
+## 6                                                  0
+##   as_factor(bystexp)high school graduation or ged only
+## 1                                                    0
+## 2                                                    0
+## 3                                                    0
+## 4                                                    0
+## 5                                                    0
+## 6                                                    0
+##   as_factor(bystexp)attend or complete 2-year college/school
+## 1                                                          1
+## 2                                                          0
+## 3                                                          0
+## 4                                                          0
+## 5                                                          0
+## 6                                                          0
+##   as_factor(bystexp)attend college, 4-year degree incomplete
+## 1                                                          0
+## 2                                                          0
+## 3                                                          0
+## 4                                                          0
+## 5                                                          0
+## 6                                                          1
+##   as_factor(bystexp)graduate from college
+## 1                                       0
+## 2                                       0
+## 3                                       0
+## 4                                       1
+## 5                                       1
+## 6                                       0
+##   as_factor(bystexp)obtain master^s degree or equivalent
+## 1                                                      0
+## 2                                                      0
+## 3                                                      0
+## 4                                                      0
+## 5                                                      0
+## 6                                                      0
+##   as_factor(bystexp)obtain phd, md, or other advanced degree
+## 1                                                          0
+## 2                                                          1
+## 3                                                          0
+## 4                                                          0
+## 5                                                          0
+## 6                                                          0
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-1">Quick exercise</h4>
+  <p>Add the categorical variable <code class="language-plaintext highlighter-rouge">byincome</code> to the model above. Next use
+<code class="language-plaintext highlighter-rouge">model.matrix()</code> to check the RHS matrix.</p>
+</blockquote>
+
+<h2 id="interactions">Interactions</h2>
+
+<p>Add interactions to a regression using an asterisks (<code class="language-plaintext highlighter-rouge">*</code>) between the
+terms you want to interact. This will add both main terms and the
+interaction(s) between the two to the model. Any interaction terms
+will be labeled using the base name or factor name of each term
+joined by a colon (<code class="language-plaintext highlighter-rouge">:</code>).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## add interactions</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">byses1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">bypared</span><span class="p">)</span><span class="o">*</span><span class="n">lowinc</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## lm(formula = bynels2m ~ byses1 + factor(bypared) * lowinc, data = df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -38.998  -8.852   0.326   9.063  39.257 
+## 
+## Coefficients:
+##                         Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)              44.0084     0.6345  69.355  &lt; 2e-16 ***
+## byses1                    7.6082     0.2772  27.448  &lt; 2e-16 ***
+## factor(bypared)2          1.5546     0.6544   2.376 0.017533 *  
+## factor(bypared)3          0.6534     0.7136   0.916 0.359863    
+## factor(bypared)4          1.8902     0.7198   2.626 0.008646 ** 
+## factor(bypared)5          1.5059     0.7200   2.091 0.036501 *  
+## factor(bypared)6          1.4527     0.7386   1.967 0.049235 *  
+## factor(bypared)7          2.0044     0.8286   2.419 0.015569 *  
+## factor(bypared)8          0.8190     0.9239   0.887 0.375360    
+## lowinc                    2.0347     0.8112   2.508 0.012140 *  
+## factor(bypared)2:lowinc  -2.9955     0.9298  -3.222 0.001278 ** 
+## factor(bypared)3:lowinc  -4.0551     1.0682  -3.796 0.000147 ***
+## factor(bypared)4:lowinc  -4.8143     1.1126  -4.327 1.52e-05 ***
+## factor(bypared)5:lowinc  -4.6890     1.0947  -4.283 1.85e-05 ***
+## factor(bypared)6:lowinc  -4.5252     1.0556  -4.287 1.82e-05 ***
+## factor(bypared)7:lowinc  -7.2222     1.3796  -5.235 1.67e-07 ***
+## factor(bypared)8:lowinc  -9.8773     1.6110  -6.131 8.94e-10 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 12.23 on 15219 degrees of freedom
+##   (924 observations deleted due to missingness)
+## Multiple R-squared:  0.1948,	Adjusted R-squared:  0.194 
+## F-statistic: 230.2 on 16 and 15219 DF,  p-value: &lt; 2.2e-16
+</code></pre></div></div>
+
+<h2 id="polynomials">Polynomials</h2>
+
+<p>To add quadratic and other polynomial terms to the model, use the
+<code class="language-plaintext highlighter-rouge">I()</code> function, which lets you raise the term to the power you want in
+the regression using the caret (<code class="language-plaintext highlighter-rouge">^</code>) operator. In the model below, we
+add a quadratic version of the reading score to the right-hand side.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## add polynomials</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">bynels2r</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">bynels2r</span><span class="o">^</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## lm(formula = bynels2m ~ bynels2r + I(bynels2r^2), data = df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -33.462  -5.947  -0.156   5.780  46.645 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   12.7765815  0.6241194  20.471   &lt;2e-16 ***
+## bynels2r       1.1197116  0.0447500  25.021   &lt;2e-16 ***
+## I(bynels2r^2) -0.0006246  0.0007539  -0.828    0.407    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 8.921 on 15881 degrees of freedom
+##   (276 observations deleted due to missingness)
+## Multiple R-squared:  0.5658,	Adjusted R-squared:  0.5657 
+## F-statistic: 1.035e+04 on 2 and 15881 DF,  p-value: &lt; 2.2e-16
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-2">Quick exercise</h4>
+  <p>Fit a linear model with both interactions and a polynomial term. Then
+look at the model matrix to see what R did under the hood.</p>
+</blockquote>
+
+<h1 id="generalized-linear-model-for-binary-outcomes">Generalized linear model for binary outcomes</h1>
+
+<p>In some cases when you have binary outcomes — 0/1 — it may be
+appropriate to continue using regular OLS, fitting what is typically
+called a <a href="https://en.wikipedia.org/wiki/Linear_probability_model"><em>linear probability model</em> or
+LPM</a>. In those
+cases, just use <code class="language-plaintext highlighter-rouge">lm()</code> as you have been.</p>
+
+<p>But in other cases, you’ll want to fit a <a href="https://en.wikipedia.org/wiki/Generalized_linear_model">generalized linear
+model</a>, in
+which case you’ll need to switch to the <code class="language-plaintext highlighter-rouge">glm()</code> function. It is set up
+just like <code class="language-plaintext highlighter-rouge">lm()</code>, but it has an extra argument, <code class="language-plaintext highlighter-rouge">family</code>. Set the
+argument to <code class="language-plaintext highlighter-rouge">binomial()</code> when your dependent variable is binary. By
+default, the <code class="language-plaintext highlighter-rouge">link</code> function is a
+<a href="https://en.wikipedia.org/wiki/Logit">logit</a> link.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## logit</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">glm</span><span class="p">(</span><span class="n">plan_col_grad</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">bynels2m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">as_factor</span><span class="p">(</span><span class="n">bypared</span><span class="p">),</span><span class="w">
+           </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">,</span><span class="w">
+           </span><span class="n">family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">binomial</span><span class="p">())</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## glm(formula = plan_col_grad ~ bynels2m + as_factor(bypared), 
+##     family = binomial(), data = df)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.6467  -0.9581   0.5211   0.7695   1.5815  
+## 
+## Coefficients:
+##                            Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)               -1.824413   0.090000 -20.271  &lt; 2e-16 ***
+## bynels2m                   0.056427   0.001636  34.491  &lt; 2e-16 ***
+## as_factor(bypared)hsged    0.042315   0.079973   0.529   0.5967    
+## as_factor(bypared)att2yr   0.204831   0.088837   2.306   0.0211 *  
+## as_factor(bypared)grad2ry  0.480828   0.092110   5.220 1.79e-07 ***
+## as_factor(bypared)att4yr   0.499019   0.090558   5.511 3.58e-08 ***
+## as_factor(bypared)grad4yr  0.754817   0.084271   8.957  &lt; 2e-16 ***
+## as_factor(bypared)ma       0.943558   0.101585   9.288  &lt; 2e-16 ***
+## as_factor(bypared)phprof   1.052006   0.121849   8.634  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 17545  on 15235  degrees of freedom
+## Residual deviance: 15371  on 15227  degrees of freedom
+##   (924 observations deleted due to missingness)
+## AIC: 15389
+## 
+## Number of Fisher Scoring iterations: 4
+</code></pre></div></div>
+
+<p>If you want a <a href="https://en.wikipedia.org/wiki/Probit_model">probit</a>
+model, just change the link to <code class="language-plaintext highlighter-rouge">probit</code>.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## probit</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">glm</span><span class="p">(</span><span class="n">plan_col_grad</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">bynels2m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">as_factor</span><span class="p">(</span><span class="n">bypared</span><span class="p">),</span><span class="w">
+           </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">,</span><span class="w">
+           </span><span class="n">family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">binomial</span><span class="p">(</span><span class="n">link</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"probit"</span><span class="p">))</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## glm(formula = plan_col_grad ~ bynels2m + as_factor(bypared), 
+##     family = binomial(link = "probit"), data = df)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.7665  -0.9796   0.5238   0.7812   1.5517  
+## 
+## Coefficients:
+##                             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)               -1.0522131  0.0539072 -19.519  &lt; 2e-16 ***
+## bynels2m                   0.0326902  0.0009357  34.938  &lt; 2e-16 ***
+## as_factor(bypared)hsged    0.0325415  0.0488225   0.667   0.5051    
+## as_factor(bypared)att2yr   0.1316456  0.0539301   2.441   0.0146 *  
+## as_factor(bypared)grad2ry  0.2958810  0.0554114   5.340 9.31e-08 ***
+## as_factor(bypared)att4yr   0.3065176  0.0544813   5.626 1.84e-08 ***
+## as_factor(bypared)grad4yr  0.4553127  0.0505009   9.016  &lt; 2e-16 ***
+## as_factor(bypared)ma       0.5525198  0.0588352   9.391  &lt; 2e-16 ***
+## as_factor(bypared)phprof   0.6115358  0.0688820   8.878  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 17545  on 15235  degrees of freedom
+## Residual deviance: 15379  on 15227  degrees of freedom
+##   (924 observations deleted due to missingness)
+## AIC: 15397
+## 
+## Number of Fisher Scoring iterations: 4
+</code></pre></div></div>
+
+<p>Note that the interpretation of parameters in logit and probit models
+differs from that in linear model with a normal / gaussian link
+function. For example, a one-unit change for a parameter in a logistic
+regression is associated with a change in <em>log odds</em> of the outcome, 
+\(log(\frac{p}{1-p})\) 
+, holding all other values at some fixed value
+(their means, for example). If this doesn’t sound particularly
+interpretable, it’s not! This is one reason people continue to use
+linear probability models (LPMs) rather than logits/probits (there are
+<a href="https://opa.hhs.gov/sites/default/files/2020-07/lpm-tabrief.pdf">other
+reasons</a>
+too). As always, make the choice that best fits your data, research
+questions, and intended audience.</p>
+
+<blockquote>
+  <h4 id="quick-exercise-3">Quick exercise</h4>
+  <p>Fit a logit or probit model to another binary outcome.</p>
+</blockquote>
+
+<h1 id="using-survey-weights-in-a-regression">Using survey weights in a regression</h1>
+
+<p>We spent time in the Inferential I lesson on setting up a data
+frame that accounted for survey weights. Review that if need a
+reminder of the intuition.</p>
+
+<p>Important for this lesson is that you can (and should!) use survey
+weights in a regression framework. As a reminder, here’s the
+information you need to set up the <code class="language-plaintext highlighter-rouge">svydesign()</code> that accounts for
+<a href="https://nces.ed.gov/training/datauser/ELS_04.html">ELS’s complex sampling design</a>:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ids</code> are the primary sampling units or <code class="language-plaintext highlighter-rouge">psu</code>s</li>
+  <li><code class="language-plaintext highlighter-rouge">strata</code> are indicated by the <code class="language-plaintext highlighter-rouge">strat_id</code>s</li>
+  <li><code class="language-plaintext highlighter-rouge">weight</code> is the base-year student weight or <code class="language-plaintext highlighter-rouge">bystuwt</code></li>
+  <li><code class="language-plaintext highlighter-rouge">data</code> is our data frame object, <code class="language-plaintext highlighter-rouge">df</code></li>
+  <li><code class="language-plaintext highlighter-rouge">nest = TRUE</code> because the <code class="language-plaintext highlighter-rouge">psu</code>s are nested in <code class="language-plaintext highlighter-rouge">strat_id</code>s</li>
+</ul>
+
+<p>Before running our survey-weighted regression, we’ll once again set up
+our data in a new object.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## subset data</span><span class="w">
+</span><span class="n">svy_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">select</span><span class="p">(</span><span class="n">psu</span><span class="p">,</span><span class="w">                         </span><span class="c1"># primary sampling unit</span><span class="w">
+           </span><span class="n">strat_id</span><span class="p">,</span><span class="w">                    </span><span class="c1"># stratum ID</span><span class="w">
+           </span><span class="n">bystuwt</span><span class="p">,</span><span class="w">                     </span><span class="c1"># weight we want to use</span><span class="w">
+           </span><span class="n">bynels2m</span><span class="p">,</span><span class="w">                    </span><span class="c1"># variables we want...</span><span class="w">
+           </span><span class="n">moth_ba</span><span class="p">,</span><span class="w">
+           </span><span class="n">fath_ba</span><span class="p">,</span><span class="w">
+           </span><span class="n">par_ba</span><span class="p">,</span><span class="w">
+           </span><span class="n">byses1</span><span class="p">,</span><span class="w">
+           </span><span class="n">lowinc</span><span class="p">,</span><span class="w">
+           </span><span class="n">female</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="c1">## go ahead and drop observations with missing values</span><span class="w">
+    </span><span class="n">drop_na</span><span class="p">()</span><span class="w">
+
+</span><span class="c1">## set svy design data</span><span class="w">
+</span><span class="n">svy_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">svydesign</span><span class="p">(</span><span class="n">ids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">psu</span><span class="p">,</span><span class="w">
+                    </span><span class="n">strata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">strat_id</span><span class="p">,</span><span class="w">
+                    </span><span class="n">weight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">bystuwt</span><span class="p">,</span><span class="w">
+                    </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">svy_df</span><span class="p">,</span><span class="w">
+                    </span><span class="n">nest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now that we’ve done that, here’s how we run a weighted
+regression. Notice that it’s <code class="language-plaintext highlighter-rouge">svyglm()</code>, even though we used <code class="language-plaintext highlighter-rouge">lm()</code>
+before (the default <code class="language-plaintext highlighter-rouge">"link"</code> function in <code class="language-plaintext highlighter-rouge">glm()</code> is <code class="language-plaintext highlighter-rouge">gaussian</code> or
+normal; if we had binary outcomes and wanted to use a logit link then
+we could include <code class="language-plaintext highlighter-rouge">family = binomial()</code> as we did before).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## fit the svyglm regression and show output</span><span class="w">
+</span><span class="n">svyfit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">svyglm</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">byses1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">female</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">moth_ba</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fath_ba</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">lowinc</span><span class="p">,</span><span class="w">
+                 </span><span class="n">design</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">svy_df</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">svyfit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Call:
+## svyglm(formula = bynels2m ~ byses1 + female + moth_ba + fath_ba + 
+##     lowinc, design = svy_df)
+## 
+## Survey design:
+## svydesign(ids = ~psu, strata = ~strat_id, weight = ~bystuwt, 
+##     data = svy_df, nest = TRUE)
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  45.2221     0.2710 166.867  &lt; 2e-16 ***
+## byses1        6.9470     0.2913  23.849  &lt; 2e-16 ***
+## female       -1.0715     0.2441  -4.389 1.47e-05 ***
+## moth_ba       0.6633     0.3668   1.809   0.0713 .  
+## fath_ba       0.5670     0.3798   1.493   0.1363    
+## lowinc       -2.4860     0.3644  -6.822 3.49e-11 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 150.5809)
+## 
+## Number of Fisher Scoring iterations: 2
+</code></pre></div></div>
+
+<p>As when compared t.test results when using unweighted and weighted
+data, our regression results are little different when using the
+weights. As a reminder, there’s no single quick answer to using
+weights in a regression framework. It’s up to you and your
+investigation of the code book to decide:</p>
+
+<ul>
+  <li>the appropriate weights to choose (there are usually many options!)</li>
+  <li>what weights mean in the context of missing data</li>
+  <li>what weights mean in a complex research design</li>
+</ul>
+
+<h2 id="predictions">Predictions</h2>
+
+<p>Being able to generate predictions from new data can be a powerful
+tool. Above, we were able to return the predicted values from the fit
+object. We can also use the <code class="language-plaintext highlighter-rouge">predict()</code> function to return the
+standard error of the prediction in addition to the predicted values
+for new observations.</p>
+
+<p>First, we’ll get predicted values using the original data along with
+their standard errors.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## predict from first model</span><span class="w">
+</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">byses1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">female</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">moth_ba</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fath_ba</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">lowinc</span><span class="p">,</span><span class="w">
+          </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## old data</span><span class="w">
+</span><span class="n">fit_pred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">se.fit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show options</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">fit_pred</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] "fit"            "se.fit"         "df"             "residual.scale"
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">head</span><span class="p">(</span><span class="n">fit_pred</span><span class="o">$</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##        1        2        3        4        5        6 
+## 42.86583 48.51465 38.78234 36.98010 32.82855 38.43332
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">head</span><span class="p">(</span><span class="n">fit_pred</span><span class="o">$</span><span class="n">se.fit</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 0.1755431 0.2587681 0.2314676 0.2396327 0.2737971 0.2721818
+</code></pre></div></div>
+
+<p>With the standard errors, we can get a better feel for how much faith
+we want to put in our predictions. If the standard errors are low,
+then maybe we feel more secure than if the errors are
+large. Alternatively, perhaps the errors are uniformly lower for some
+parts of our data than others. If so, that might suggest more
+investigation or a note on the limitations of our predictions for
+parts of the sample.</p>
+
+<h3 id="two-other-types-of-predictions">Two other types of predictions</h3>
+
+<p>We won’t practice these since in application they work similarly to
+what we did above. However, I do want to note two other types of
+predictions that you might want to make. Both involve making
+predictions for data that you didn’t use to fit your
+model. Predictions using new data or held-out data in a train/test
+framework are another way to evaluate your model. If you predict well
+to new/held-out data, that can be a good sign for the utility of your
+model.</p>
+
+<h4 id="predictions-with-new-data">Predictions with new data</h4>
+
+<p>Ideally, we would have a new observations with which to make
+predictions. Then we could test our modeling choices by seeing how
+well they predicted the outcomes of the new observations.</p>
+
+<p>With discrete outcomes (like binary 0/1 data), for example, we could
+use our model and right-hand side variables from new observations to
+predict whether the new observation should have a 0 or 1
+outcome. Then we could compare those predictions to the actual
+observed outcomes by making a 2 by
+2 <a href="https://en.wikipedia.org/wiki/Confusion_matrix">confusion matrix</a>
+that counted the numbers of true positives and negatives (correct
+predictions) and false positives and negatives (incorrect
+predictions).</p>
+
+<p>With continuous outcomes, we could follow the same procedure as above,
+but rather than using a confusion matrix, instead assess our model
+performance by measuring the error between our predictions and the
+observed outcomes. Depending on our problem and model, we might care
+about minimizing the root mean square error, the mean absolute error,
+or some other metric of the error.</p>
+
+<h4 id="predictions-using-training-and-testing-data">Predictions using training and testing data</h4>
+
+<p>In the absence of new data, we instead could have separated our data
+into two data sets, a <a href="https://en.wikipedia.org/wiki/Training,_test,_and_validation_sets">training set and test
+set</a>. After
+fitting our model to the training data, we could have tested it by
+following either above procedure with the testing data (depending on
+the outcome type). Setting a rule for ourselves, we could evaluate how
+well we did, that is, how well our training data model classified test
+data outcomes, and perhaps decide to adjust our modeling
+assumptions. This is a fundamental way that many machine learning
+algorithm assess fit.</p>
+
+<h2 id="margins">Margins</h2>
+
+<p>Using the <code class="language-plaintext highlighter-rouge">predict()</code> function alongside some other skills we have
+practiced, we can also make predictions on the margin a la
+Stata’s
+<a href="https://www.stata.com/help.cgi?margins"><code class="language-plaintext highlighter-rouge">-margins-</code> suite of commands</a>.</p>
+
+<p>For example, after fitting our multiple regression, we might ask
+ourselves, what is the marginal association of coming from a family
+with low income on math scores, holding all other terms in our model
+constant? In other words, if student A and student B are similar along
+dimensions we can observe (let’s say the average student in our
+sample) except for the fact that student A’s family is considered
+lower income and student B’s is not, what if any test score difference
+might we expect?</p>
+
+<p>To answer this question, we first need to make a “new” data frame with
+a column each for the variables used in the model and rows that equal
+the number of predictive margins that we want to create. In our
+example, that means making a data frame with two rows and five
+columns.</p>
+
+<p>With <code class="language-plaintext highlighter-rouge">lowinc</code>, the variable that we want to make marginal predictions
+for, we have two potential values: 0 and 1. This is the reason our
+“new” data frame has two rows. If <code class="language-plaintext highlighter-rouge">lowinc</code> took on four values, for
+example, then our “new” data frame would have four rows, one for each
+potential value. But since we have two, <code class="language-plaintext highlighter-rouge">lowinc</code> in our “new” data frame
+will equal <code class="language-plaintext highlighter-rouge">0</code> in one row and <code class="language-plaintext highlighter-rouge">1</code> in the other row.</p>
+
+<p>All other columns in the “new” data frame should have consistent
+values down their rows. Often, each column’s repeated value is the
+variable’s average in the data. Though we could use the original data
+frame (<code class="language-plaintext highlighter-rouge">df</code>) to generate these averages, the resulting values may
+summarize different data from what was used to fit the model if there
+were observations that <code class="language-plaintext highlighter-rouge">lm()</code> dropped due to missing values. That
+happened with our model. We could try to use the original data frame
+and account for dropped observations, but I think it’s easier to use
+the design matrix that’s retrieved from <code class="language-plaintext highlighter-rouge">model.matrix()</code>.</p>
+
+<p>The code below goes step-by-step to make the “new” data frame.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## create new data that has two rows, with averages and one marginal change</span><span class="w">
+
+</span><span class="c1">## (1) save model matrix</span><span class="w">
+</span><span class="n">mm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">model.matrix</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">mm</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##   (Intercept) byses1 female moth_ba fath_ba lowinc
+## 1           1  -0.25      1       0       0      0
+## 2           1   0.58      1       0       0      0
+## 3           1  -0.85      1       0       0      0
+## 4           1  -0.80      1       0       0      1
+## 5           1  -1.41      1       0       0      1
+## 6           1  -1.07      0       0       0      0
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## (2) drop intercept column of ones (predict() doesn't need them)</span><span class="w">
+</span><span class="n">mm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mm</span><span class="p">[,</span><span class="m">-1</span><span class="p">]</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">mm</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##   byses1 female moth_ba fath_ba lowinc
+## 1  -0.25      1       0       0      0
+## 2   0.58      1       0       0      0
+## 3  -0.85      1       0       0      0
+## 4  -0.80      1       0       0      1
+## 5  -1.41      1       0       0      1
+## 6  -1.07      0       0       0      0
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## (3) convert to data frame so we can use $ notation in next step</span><span class="w">
+</span><span class="n">mm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as_tibble</span><span class="p">(</span><span class="n">mm</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## (4) new data frame of means where only lowinc changes</span><span class="w">
+</span><span class="n">new_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tibble</span><span class="p">(</span><span class="n">byses1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">mm</span><span class="o">$</span><span class="n">byses1</span><span class="p">),</span><span class="w">
+                 </span><span class="n">female</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">mm</span><span class="o">$</span><span class="n">female</span><span class="p">),</span><span class="w">
+                 </span><span class="n">moth_ba</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">mm</span><span class="o">$</span><span class="n">moth_ba</span><span class="p">),</span><span class="w">
+                 </span><span class="n">fath_ba</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">mm</span><span class="o">$</span><span class="n">fath_ba</span><span class="p">),</span><span class="w">
+                 </span><span class="n">lowinc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## see new data</span><span class="w">
+</span><span class="n">new_df</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 2 × 5
+##   byses1 female moth_ba fath_ba lowinc
+##    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0.0421  0.503   0.274   0.320      0
+## 2 0.0421  0.503   0.274   0.320      1
+</code></pre></div></div>
+<p>Notice how the new data frame has the same terms that were used in the
+original model, but has only two rows. In the <code class="language-plaintext highlighter-rouge">lowinc</code> column, the
+values switch from <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">1</code>. All the other rows are averages of the
+data used to fit the model. This of course makes for a somewhat
+nonsensical average (what does it mean that a single father to have
+.32 of a BA/BS?), but that’s okay. Again, what we want right now are
+two students who represent the “average” student except one is low
+income and the other is not.</p>
+
+<p>To generate the prediction, we use the same function call as before,
+but use our <code class="language-plaintext highlighter-rouge">new_df</code> object with the <code class="language-plaintext highlighter-rouge">newdata</code> argument.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## predict margins</span><span class="w">
+</span><span class="n">predict</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new_df</span><span class="p">,</span><span class="w"> </span><span class="n">se.fit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## $fit
+##        1        2 
+## 45.82426 43.68173 
+## 
+## $se.fit
+##         1         2 
+## 0.1166453 0.2535000 
+## 
+## $df
+## [1] 15230
+## 
+## $residual.scale
+## [1] 12.24278
+</code></pre></div></div>
+
+<p>Our results show that compared to otherwise similar students, those
+with a family income less than $25,000 a year are predicted to score
+about two points lower on their math test. To be clear, this is not a
+casual estimate, but rather associational. This means we would be
+wrong to say that having a lower family income <em>causes</em> lower math
+test scores (which doesn’t jibe with our domain knowledge either; low
+income is almost certainly a proxy for other omitted variables —
+access to educational resources for just one thing — that are much
+more directly linked to test scores).</p>
+
+<p>I also want to note that we held the other covariates at their
+means. We could have instead chosen other values (<em>e.g.</em> <code class="language-plaintext highlighter-rouge">fath_ba ==
+1</code> or <code class="language-plaintext highlighter-rouge">female == 1</code>), which would have given us different marginal
+associations. Dropping or including other covariates likely would
+change our results, as well. The takeaway is that is that margins you
+compute are a function of your model as well as (obviously) the margin
+you investigate.</p>
+
+
+
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
+      </section>
+      <footer>
+        <p>
+  Benjamin Skinner</br>  
+  Assistant Professor</br>  
+  University of Florida</br>
+  <a href="https://www.btskinner.io" class="iconlink" alt="Personal website">
+    <i class="fas fa-home fa-lg"></i></a> | 
+  <a href="https://github.com/btskinner" class="iconlink" alt="Github
+								profile">
+    <i class="fab fa-github fa-lg"></i></a> |
+  <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
+    <i class="fab fa-twitter fa-lg"></i></a>
+</p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
+
+      </footer>
+    </div>
+
+    <!-- load Javascript if page requires it -->
+    
+    
+    
+
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-63981025-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>
