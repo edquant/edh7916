@@ -51,6 +51,18 @@ directory. Then you should see (if on a Mac):
 {% endfor %}
 </ul>
 
+## Extra
+
+<ul class="lessons">
+{% assign lessons = site.lessons | where: 'category', 'extra' %}
+{% assign lessons = lessons | sort:"order"  %}
+{% for l in lessons %}
+	<li>
+		<a href="{{ l.url | prepend: site.baseurl }}.html">{{ l.title }}</a>
+	</li>
+{% endfor %}
+</ul>
+
 ## Supplemental
 
 <ul class="supplemental">

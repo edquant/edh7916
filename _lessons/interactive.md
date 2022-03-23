@@ -1,10 +1,10 @@
 ---
 layout: lesson
-title: "Interactive graphics"
-subtitle: "EDH7916 | Summer C 2020"
+title: Interactive graphics
+subtitle: EDH7916
 author: Benjamin Skinner
-order: 5
-category: supplemental
+order: 4
+category: extra
 links:
   script: interactive.R
   pdf: interactive.pdf
@@ -45,10 +45,9 @@ change the underlying data. Interactive graphics can allow for more
 options since they can be changed on the fly.
 
 The good news is that plotly in R works very similarly to ggplot. In
-fact, as you may have seen in a prior homework assignment, it's often
-trivial to convert a static ggplot figure into an interactive plotly
-figure. In this lesson, however, I'll show you how to use plotly's
-particular interface, which is a little different.
+fact, it's often trivial to convert a static ggplot figure into an
+interactive plotly figure. In this lesson, however, I'll show you how
+to use plotly's particular interface, which is a little different.
 
 As a note, most of what I'm showing you here is just code from [the R
 plotly website](https://plotly.com/r/) that I've modified to replicate
@@ -63,32 +62,68 @@ figures there. Be sure to run the code in RStudio or use the website
 to see the interactive figures.
 
 # Setup
-```{r, include = FALSE, purl = FALSE}
-source('knit_setup.R')
-```
-```{r, include = FALSE, purl = TRUE}
-################################################################################
-##
-## <PROJ> EDH7916: Interactive graphics
-## <FILE> interactive.R 
-## <INIT> 19 July 2020
-## <AUTH> Benjamin Skinner (GitHub/Twitter: @btskinner)
-##
-################################################################################
 
-```
-```{r}
+
+Unless you have already done so, don't forget to install plotly
+library using `install.packages("plotly")`.
+
+
+
+```r
 ## ---------------------------
 ## libraries
 ## ---------------------------
 
 library(tidyverse)
+```
+
+```
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+```
+
+```
+## ✔ ggplot2 3.3.5     ✔ purrr   0.3.4
+## ✔ tibble  3.1.6     ✔ dplyr   1.0.8
+## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+## ✔ readr   2.1.2     ✔ forcats 0.5.1
+```
+
+```
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```r
 library(haven)
 library(plotly)
 ```
 
+```
+## 
+## Attaching package: 'plotly'
+```
+
+```
+## The following object is masked from 'package:ggplot2':
+## 
+##     last_plot
+```
+
+```
+## The following object is masked from 'package:stats':
+## 
+##     filter
+```
+
+```
+## The following object is masked from 'package:graphics':
+## 
+##     layout
+```
+
 As we did with the [the lesson on making
-graphics](../lessons/dw_two.html), we'll use two sets of data:
+graphics](../lessons/plotting.html), we'll use two sets of data:
 `hsls_small.dta` and `all_schools.csv`. 
 
 **Note** that since we have two data files this lesson, we'll give
@@ -99,7 +134,8 @@ them unique names instead of the normal `df`:
 
 And as always, we are working in the `./scripts` subdirectory.
 
-```{r}
+
+```r
 ## ---------------------------
 ## directory paths
 ## ---------------------------
@@ -109,7 +145,8 @@ dat_dir <- file.path("..", "data")
 tsc_dir <- file.path(dat_dir, "sch_test")
 ```
 
-```{r}
+
+```r
 ## ---------------------------
 ## input data
 ## ---------------------------
@@ -121,22 +158,25 @@ df_hs <- read_dta(file.path(dat_dir, "hsls_small.dta"))
 df_ts <- read_csv(file.path(tsc_dir, "all_schools.csv"))
 ```
 
-# Plots using plotly
-```{r, echo = FALSE, purl = TRUE}
-## -----------------------------------------------------------------------------
-## Graphics with plotly
-## -----------------------------------------------------------------------------
 ```
+## Rows: 24 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (1): school
+## dbl (4): year, math, read, science
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+# Plots using plotly
+
 
 Pretty much whatever plot you can make in ggplot(), you can make using
 plotly. We'll start with histograms to get our bearings.
 
 ## Histogram
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## histogram
-## ---------------------------
-```
+
 
 Just like ggplot starts with the function `ggplot()`, plotly starts
 with `plot_ly()` (notice the underscore in the function name). Like
@@ -164,7 +204,8 @@ files by default. This is the markup language for websites
 RStudio, the plot should pull up in your plot viewer. Outside of
 RStudio, it will open you in your web browser.
 
-```{r plotly_plot_histogram, warning = F, message = F, fig.show = 'hide', results = 'hide'}
+
+```r
 ## create basic histogram with plotly
 p <- plot_ly(data = df_hs, x = ~x1txmtscor, type = "histogram")
 ```
@@ -172,16 +213,8 @@ p <- plot_ly(data = df_hs, x = ~x1txmtscor, type = "histogram")
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_hist_1.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_hist_1.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_hist_1.html"></iframe><!--/html_preserve-->
 This first histogram is pretty plain, but run your mouse over it. You
 should notice a tooltip next to your mouse. There are
 two numbers. These represent the x-axis range of the histogram bin and
@@ -200,7 +233,8 @@ If we want to show a density histogram rather than a frequency
 histogram, we only need to add the option `histnorm = "probability"`
 as an argument. All else can stay the same.
 
-```{r plotly_plot_histogram_normed, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## create histogram plotly
 p <- plot_ly(data = df_hs,
              x = ~x1txmtscor,
@@ -211,20 +245,17 @@ p <- plot_ly(data = df_hs,
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_hist_norm.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_hist_norm.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_hist_norm.html"></iframe><!--/html_preserve-->
 
 Notice that the y-axis is now on the probability scale. Similarly, the
 tooltip now shows the probability of the bin rather than the count of
 observations that fall into it.
+
+> #### QUICK EXERCISE
+> Create an interactive histogram using another continuous variable in
+> the `hsls_small` data set. You can make either a frequency or
+> density histogram.
 
 Now that we've made a couple, let's make a nicer looking
 histogram. First, within the `plot_ly()` function, we'll add the
@@ -253,7 +284,8 @@ actually have a `y` value that we set explicitly. That said, we know
 that `y` is probability in this histogram. So that we don't have a
 redundant name on our tooltip, we set `name = ""`.
 
-```{r plotly_plot_histogram_labels, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## create histogram plotly w/
 ## 1. better labels
 ## 2. add title
@@ -278,16 +310,8 @@ p <- plot_ly(data = df_hs,
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_hist_lab.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_hist_lab.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_hist_lab.html"></iframe><!--/html_preserve-->
 
 That's much nicer looking! Notice how much nicer and more user
 friendly the tooltip is now, too.
@@ -295,11 +319,7 @@ friendly the tooltip is now, too.
 
 ### Two-way histogram
 
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## two way plot
-## ---------------------------
-```
+
 
 Plotting the difference in a continuous distribution across groups is
 a common task. As we've done before, let's see the difference between
@@ -308,9 +328,23 @@ postsecondary degree and those without. Since we're using data that
 was labeled in Stata, we'll see the labels when we use `count()`.
 
 
-```{r}
+
+```r
 ## see the counts for each group
 df_hs %>% count(x1paredu)
+```
+
+```
+## # A tibble: 7 × 2
+##                                       x1paredu     n
+##                                      <dbl+lbl> <int>
+## 1  1 [Less than high school]                    1010
+## 2  2 [High school diploma or GED]               5909
+## 3  3 [Associate's degree]                       2549
+## 4  4 [Bachelor's degree]                        4102
+## 5  5 [Master's degree]                          2116
+## 6  7 [Ph.D/M.D/Law/other high lvl prof degree]  1096
+## 7 NA                                            6721
 ```
 
 Now that we see our options, we'll make a new variable, `pared_coll`
@@ -318,20 +352,38 @@ that equals 1 if either of the student's parents have any college
 degree and 0 otherwise. We'll store this smaller data frame in a new
 object, `plot_df`, that we'll us to plot a new two-way histogram.
 
-```{r}
+
+```r
 ## need to set up data
 plot_df <- df_hs %>%
-    ## select the columns we need
-    select(x1paredu, x1txmtscor) %>%
-    ## can't plot NA so will drop
-    drop_na() %>%
-    ## create new variable that == 1 if parents have any college
-    mutate(pared_coll = ifelse(x1paredu >= 3, 1, 0)) %>%
-    ## drop (using negative sign) the original variable we don't need now
-    select(-x1paredu) 
+  ## select the columns we need
+  select(x1paredu, x1txmtscor) %>%
+  ## can't plot NA so will drop
+  drop_na() %>%
+  ## create new variable that == 1 if parents have any college
+  mutate(pared_coll = ifelse(x1paredu >= 3, 1, 0)) %>%
+  ## drop (using negative sign) the original variable we don't need now
+  select(-x1paredu) 
 
 ## show
 plot_df
+```
+
+```
+## # A tibble: 16,429 × 2
+##    x1txmtscor pared_coll
+##     <dbl+lbl>      <dbl>
+##  1       59.4          1
+##  2       47.7          1
+##  3       64.2          1
+##  4       49.3          1
+##  5       62.6          1
+##  6       58.1          1
+##  7       49.5          0
+##  8       54.6          1
+##  9       53.2          0
+## 10       63.8          1
+## # … with 16,419 more rows
 ```
 
 Unlike with ggplot, we won't just add a `group = ...` aesthetic to the
@@ -349,55 +401,52 @@ labeled. However, adding `name` back in means that we get that
 annoying extra label on our tooltip. To remove it, we add
 `"<extra></extra>"` at the end of our `hovertemplate`.
 
-```{r plotly_histogram_double, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## two way histogram: add one at a time
 p <- plot_ly(alpha = 0.5) %>%
-    ## first: when parents don't have college degree
-    add_histogram(data = plot_df %>% filter(pared_coll == 0),
-                  x = ~x1txmtscor,
-                  histnorm = "probability",
-                  type = "histogram",
-                  name = "No college",
-                  text = "No college",
-                  hovertemplate = paste("%{text}",
-                                        "<br>",
-                                        "Bin width: %{x}",
-                                        "<br>",
-                                        "Probability: %{y}",
-                                        "<extra></extra>")) %>%
-    ## second: when parents have college degree
-    add_histogram(data = plot_df %>% filter(pared_coll == 1),
-                  x = ~x1txmtscor,
-                  histnorm = "probability",
-                  type = "histogram",
-                  name = "Some college or more",
-                  text = "Some college or more",
-                  hovertemplate = paste("%{text}",
-                                        "<br>",
-                                        "Bin width: %{x}",
-                                        "<br>",
-                                        "Probability: %{y}",
-                                        "<extra></extra>")) %>%
-    ## tell plotly to overlay the histograms
-    layout(barmode = "overlay",
-           title = "Distribution of math test scores",
-           xaxis = list(title = "Math test score"),
-           legend = list(title = list(text = "Parent's education level")))
+  ## first: when parents don't have college degree
+  add_histogram(data = plot_df %>% filter(pared_coll == 0),
+                x = ~x1txmtscor,
+                histnorm = "probability",
+                type = "histogram",
+                name = "No college",
+                hovertemplate = paste("No college",
+                                      "<br>",
+                                      "Bin width: %{x}",
+                                      "<br>",
+                                      "Probability: %{y}",
+                                      "<extra></extra>")) %>%
+  ## second: when parents have college degree
+  add_histogram(data = plot_df %>% filter(pared_coll == 1),
+                x = ~x1txmtscor,
+                histnorm = "probability",
+                type = "histogram",
+                name = "Some college or more",
+                hovertemplate = paste("Some college or more",
+                                      "<br>",
+                                      "Bin width: %{x}",
+                                      "<br>",
+                                      "Probability: %{y}",
+                                      "<extra></extra>")) %>%
+  ## tell plotly to overlay the histograms
+  layout(barmode = "overlay",
+         title = "Distribution of math test scores",
+         xaxis = list(title = "Math test score"),
+         legend = list(title = list(text = "Parent's education level")))
 ```
 ```r
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_hist_double.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_hist_double.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_hist_double.html"></iframe><!--/html_preserve-->
+
+> #### QUICK EXERCISE
+> Create an interactive two-way histogram using another grouping variable in
+> the `hsls_small` data set (something other than parental
+> college). You can use an existing indicator variable or create your
+> own.
 
 ## Box plot
 
@@ -406,37 +455,26 @@ xaxis boxes and the different colors represent the same things---a
 different level of parental educational expectation---we'll turn off
 the legend with `showlegend = FALSE`.
 
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## box plot
-## ---------------------------
-```
 
-```{r plotly_box, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+
+```r
 ## box plot using as_factor()
 p <- plot_ly(data = df_hs,
              color = ~as_factor(x1paredu),
              y = ~x1txmtscor,
              type = "box") %>%
-    layout(title = "Math score by parental expectations",
-           xaxis = list(title = "Parental expectations"),
-           yaxis = list(title = "Math score"),
-           showlegend = FALSE)
+  layout(title = "Math score by parental expectations",
+         xaxis = list(title = "Parental expectations"),
+         yaxis = list(title = "Math score"),
+         showlegend = FALSE)
 ```
 ```r
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_box.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_box.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_box.html"></iframe><!--/html_preserve-->
 
 Nothing too fancy here. Our factor labels are a bit long, so we could
 probably make a cleaner figure if shortened them. The biggest benefit
@@ -446,11 +484,7 @@ fence`, and `max`. That said, it's a bit busy, so you'll have to
 decide whether the benefit outweighs the cost.
 
 # Scatter
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## scatter plot
-## ---------------------------
-```
+
 
 Interactive scatter plots can be really useful if for no other reason
 than they allow you to zoom in and pick out specific values, which is
@@ -460,7 +494,8 @@ As with a prior lesson, we'll limit our data to only a 10%
 sample. Remember that because it's a random process, your data and
 resulting figures will look a little different from mine.
 
-```{r, warning = F, message = F}
+
+```r
 ## sample 10% to make figure clearer
 df_hs_10 <- df_hs %>%
     ## drop observations with missing values for x1stuedexpct
@@ -472,7 +507,8 @@ df_hs_10 <- df_hs %>%
 To make the scatter plot, we'll start by setting `type = "scatter"`
 and `mode = "markers"`.
 
-```{r  plotly_scatter_1, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## scatter
 p <- plot_ly(data = df_hs_10,
              x = ~x1ses,
@@ -484,16 +520,8 @@ p <- plot_ly(data = df_hs_10,
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_scatter_1.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_scatter_1.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_scatter_1.html"></iframe><!--/html_preserve-->
 
 Like the other plotly figures, we can hover over specific points to
 get their values. Let's do another version, but cleaned up: better
@@ -503,7 +531,8 @@ figure from drawing a bold vertical line at 0. You can remove the
 option and have the bold line if you want, but it seemed unnecessary
 here so I've dropped it.
 
-```{r  plotly_scatter_2, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## scatter
 p <- plot_ly(data = df_hs_10,
              x = ~x1ses,
@@ -523,35 +552,46 @@ p <- plot_ly(data = df_hs_10,
              hovertemplate = paste("SES: %{x}",
                                    "<br>", # add <br> for line break
                                    "Math: %{y}")) %>%
-    layout(title = "Math scores as function of SES",
-           xaxis = list(title = "SES",
-                        zeroline = FALSE),
-           yaxis = list(title = "Math score"))
+  layout(title = "Math scores as function of SES",
+         xaxis = list(title = "SES",
+                      zeroline = FALSE),
+         yaxis = list(title = "Math score"))
 ```
 ```r
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_scatter_2.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_scatter_2.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_scatter_2.html"></iframe><!--/html_preserve-->
 
 Let's add another dimension: color representing whether the student
 planned to graduate from college or not. First, we'll check the levels
 of our key variable, `x1stuedexpct`).
 
 
-```{r}
+
+```r
 ## see student base year plans
 df_hs %>%
-    count(x1stuedexpct)
+  count(x1stuedexpct)
+```
+
+```
+## # A tibble: 12 × 2
+##                                    x1stuedexpct     n
+##                                       <dbl+lbl> <int>
+##  1  1 [Less than high school]                      93
+##  2  2 [High school diploma or GED]               2619
+##  3  3 [Start an Associate's degree]               140
+##  4  4 [Complete an Associate's degree]           1195
+##  5  5 [Start a Bachelor's degree]                 115
+##  6  6 [Complete a Bachelor's degree]             3505
+##  7  7 [Start a Master's degree]                   231
+##  8  8 [Complete a Master's degree]               4278
+##  9  9 [Start Ph.D/M.D/Law/other prof degree]      176
+## 10 10 [Complete Ph.D/M.D/Law/other prof degree]  4461
+## 11 11 [Don't know]                               4631
+## 12 NA                                            2059
 ```
 
 We see that `x1stuedexpct >= 6` means a student plans to earn a
@@ -561,12 +601,13 @@ that 11 means "I don't know", we need to make sure our test includes
 these two statements together with the operator `&`. Let's create our
 new variable.
 
-```{r}
+
+```r
 ## create variable for students who plan to graduate from college
 df_hs_10 <- df_hs_10 %>%
-    mutate(plan_col_grad = ifelse(x1stuedexpct >= 6 & x1stuedexpct < 11,
-                                  "Yes",        # if T: "Yes"
-                                  "No"))        # if F: "No"
+  mutate(plan_col_grad = ifelse(x1stuedexpct >= 6 & x1stuedexpct < 11,
+                                "Yes",        # if T: "Yes"
+                                "No"))        # if F: "No"
 ```
 
 Now that we have our new variable `plan_col_grad`, we can add it the
@@ -582,44 +623,37 @@ differently. We're using `add_trace()` this time. Most of the
 arguments are the same as before, but are in the `add_trace()`
 function rather than in the `plot_ly()` function.
 
-```{r plotly_scatter_group, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## set color palette with names
 pal <- c("#E28F41","#6C9AC3")
 pal <- setNames(pal, c("Yes", "No"))
 
 ## scatter plot
 p <- plot_ly() %>%
-    add_trace(data = df_hs_10,
-              x = ~x1ses,
-              y = ~x1txmtscor,
-              color = ~plan_col_grad,   # color changes by college plans
-              colors = pal,             # using pal from above
-              type = "scatter",
-              mode = "markers",
-              hovertemplate = paste("SES: %{x}",
-                                    "<br>",
-                                    "Math: %{y}",
-                                    "<extra></extra>")) %>%
-    layout(title = "Math scores as function of SES",
-           xaxis = list(title = "SES",
-                        zeroline = FALSE), # turn off bold zero line
-           yaxis = list(title = "Math score"),
-           legend = list(title = list(text = "Plans to graduate from college?")))
+  add_trace(data = df_hs_10,
+            x = ~x1ses,
+            y = ~x1txmtscor,
+            color = ~plan_col_grad,   # color changes by college plans
+            colors = pal,             # using pal from above
+            type = "scatter",
+            mode = "markers",
+            hovertemplate = paste("SES: %{x}",
+                                  "<br>",
+                                  "Math: %{y}",
+                                  "<extra></extra>")) %>%
+  layout(title = "Math scores as function of SES",
+         xaxis = list(title = "SES",
+                      zeroline = FALSE), # turn off bold zero line
+         yaxis = list(title = "Math score"),
+         legend = list(title = list(text = "Plans to graduate from college?")))
 ```
 ```r
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_scatter_group.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_scatter_group.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_scatter_group.html"></iframe><!--/html_preserve-->
 
 There's quite a bit of overlap, but we can see that students who plan
 to graduate from college tend to have a higher SES and math scores.
@@ -641,7 +675,8 @@ Labeling the axes is slightly different. For a 3D plot, all the x, y,
 and z-axis labels need to go inside the `scene` argument list. But
 other than that, the labels are the same.
 
-```{r plotly_scatter_group_3d, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## set color palette with names
 pal <- c("#E28F41","#6C9AC3")
 pal <- setNames(pal, c("Yes", "No"))
@@ -662,29 +697,21 @@ p <- plot_ly(data = df_hs_10,
                                    "<extra></extra>"),
              ## make marker a little smaller
              marker = list(size = 3)) %>%
-    ## now tell plot_ly to add points as markers
-    add_markers() %>%
-    ## in 3D, set axis titles inside scene() argument
-    layout(title = "Math scores as function of SES",
-           scene = list(xaxis = list(title = "SES"),
-                        yaxis = list(title = "Math score"),
-                        zaxis = list(title = "Months between HS and college")),
-           legend = list(title = list(text = "Plans to graduate from college?")))
+  ## now tell plot_ly to add points as markers
+  add_markers() %>%
+  ## in 3D, set axis titles inside scene() argument
+  layout(title = "Math scores as function of SES",
+         scene = list(xaxis = list(title = "SES"),
+                      yaxis = list(title = "Math score"),
+                      zaxis = list(title = "Months between HS and college")),
+         legend = list(title = list(text = "Plans to graduate from college?")))
 ```
 ```r
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_scatter_group_3d.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_scatter_group_3d.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_scatter_group_3d.html"></iframe><!--/html_preserve-->
 Click on the figure and move it around. You'll see that in addition to
 zooming in and out, you can rotate the figure to better see the
 relationship across the three variables. For this particular example,
@@ -694,12 +721,17 @@ soon after graduating high school. Just by looking, there doesn't seem
 to be much difference between the two groups (though some more formal
 testing might be in order).
 
+> #### QUICK EXERCISE
+> Create an interactive 3D scatter plot using SES, math scores, and a
+> categorical variable with more than two groups. This means your
+> legend should more than two items and your graph should have more
+> than two colors. Note that you likely need to increase the number of
+> colors in `pal` (you can find more hex codes at
+> [https://htmlcolorcodes.com](https://htmlcolorcodes.com)) or remove
+> the argument altogether. 
+
 ## Line graph
-```{r, echo = FALSE, purl = TRUE}
-## ---------------------------
-## line graph
-## ---------------------------
-```
+
 
 We can also make line graphs with plotly. For these, we'll once again
 use our school test score data. We won't go through all the iterations
@@ -709,26 +741,63 @@ interactive figures as well.
 We'll begin by showing our data (which is wide-ish) and creating a
 fully long version of the data.
 
-```{r}
+
+```r
 ## show test score data
 df_ts
+```
 
+```
+## # A tibble: 24 × 5
+##    school        year  math  read science
+##    <chr>        <dbl> <dbl> <dbl>   <dbl>
+##  1 Bend Gate     1980   515   281     808
+##  2 Bend Gate     1981   503   312     814
+##  3 Bend Gate     1982   514   316     816
+##  4 Bend Gate     1983   491   276     793
+##  5 Bend Gate     1984   502   310     788
+##  6 Bend Gate     1985   488   280     789
+##  7 East Heights  1980   501   318     782
+##  8 East Heights  1981   487   323     813
+##  9 East Heights  1982   496   294     818
+## 10 East Heights  1983   497   306     795
+## # … with 14 more rows
+```
+
+```r
 ## reshape data long (as we've done in a prior lesson)
 df_ts_long <- df_ts %>%
-    pivot_longer(cols = c("math","read","science"), # cols to pivot long
-                 names_to = "test",                 # where col names go
-                 values_to = "score") %>%           # where col values go
-    group_by(test) %>%
-    mutate(score_std = (score - mean(score)) / sd(score)) %>%
-    group_by(test, school) %>%
-    arrange(year) %>% 
-    mutate(score_year_one = first(score),
-           ## note that we're using score_year_one instead of mean(score)
-           score_std_sch = (score - score_year_one) / sd(score)) %>%
-    ungroup
+  pivot_longer(cols = c("math","read","science"), # cols to pivot long
+               names_to = "test",                 # where col names go
+               values_to = "score") %>%           # where col values go
+  group_by(test) %>%
+  mutate(score_std = (score - mean(score)) / sd(score)) %>%
+  group_by(test, school) %>%
+  arrange(year) %>% 
+  mutate(score_year_one = first(score),
+         ## note that we're using score_year_one instead of mean(score)
+         score_std_sch = (score - score_year_one) / sd(score)) %>%
+  ungroup
 
 ## show
 df_ts_long
+```
+
+```
+## # A tibble: 72 × 7
+##    school        year test    score score_std score_year_one score_std_sch
+##    <chr>        <dbl> <chr>   <dbl>     <dbl>          <dbl>         <dbl>
+##  1 Bend Gate     1980 math      515     1.40             515             0
+##  2 Bend Gate     1980 read      281    -0.863            281             0
+##  3 Bend Gate     1980 science   808     0.759            808             0
+##  4 East Heights  1980 math      501     0.115            501             0
+##  5 East Heights  1980 read      318     1.34             318             0
+##  6 East Heights  1980 science   782    -0.735            782             0
+##  7 Niagara       1980 math      514     1.31             514             0
+##  8 Niagara       1980 read      292    -0.208            292             0
+##  9 Niagara       1980 science   787    -0.448            787             0
+## 10 Spottsville   1980 math      498    -0.161            498             0
+## # … with 62 more rows
 ```
 
 First, we'll only plot one school, Bend Gate. As we did above, we
@@ -742,49 +811,42 @@ will be included by default. We set `type = "scatter"` and `mode =
 argument `hovermode = "x unified"` to the `layout()` function, which
 connects our line information in the tooltip.
 
-```{r plotly_line, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## scatter plot
 p <- plot_ly() %>%
-    ## add data for Bend Gate only; y == math
-    add_trace(data = df_ts %>% filter(school == "Bend Gate"),
-              x = ~year,
-              y = ~math,
-              name = "Math",
-              type = "scatter",
-              mode = "lines") %>%
-    ## repeated, but this time y == reading
-    add_trace(x = ~year,
-              y = ~read,
-              name = "Reading",
-              type = "scatter",
-              mode = "lines") %>%
-    ## repeated, but this time y == science
-    add_trace(x = ~year,
-              y = ~science,
-              name = "Science",
-              type = "scatter",
-              mode = "lines") %>%
-    ## add unified hovermode so that tooltip for all test scores pops ups
-    layout(title = "Test scores at Bend Gate: 1980 - 1985",
-           xaxis = list(title = "Year"),
-           yaxis = list(title = "Score"),
-           legend = list(title = list(text = "Test")),
-           hovermode = "x unified")
+  ## add data for Bend Gate only; y == math
+  add_trace(data = df_ts %>% filter(school == "Bend Gate"),
+            x = ~year,
+            y = ~math,
+            name = "Math",
+            type = "scatter",
+            mode = "lines") %>%
+  ## repeated, but this time y == reading
+  add_trace(x = ~year,
+            y = ~read,
+            name = "Reading",
+            type = "scatter",
+            mode = "lines") %>%
+  ## repeated, but this time y == science
+  add_trace(x = ~year,
+            y = ~science,
+            name = "Science",
+            type = "scatter",
+            mode = "lines") %>%
+  ## add unified hovermode so that tooltip for all test scores pops ups
+  layout(title = "Test scores at Bend Gate: 1980 - 1985",
+         xaxis = list(title = "Year"),
+         yaxis = list(title = "Score"),
+         legend = list(title = list(text = "Test")),
+         hovermode = "x unified")
 ```
 ```r
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_scatter_line.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_scatter_line.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_scatter_line.html"></iframe><!--/html_preserve-->
 
 Notice how the tooltip includes information for all tests in the same
 year, no matter which line you hover over? That's due to the
@@ -820,7 +882,8 @@ Once the loop has run, we use the function `subplot()` to join the
 plots into one figure. With argument `nrows = 2`, we'll end up with a
 2x2 grid.
 
-```{r plotly_line_2, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## set up vector of school names
 schools <- c("Bend Gate", "East Heights", "Niagara", "Spottsville")
 
@@ -830,41 +893,41 @@ plot_list <- list()
 ## loop through schools to make each plot at a time
 for (i in schools) {
 
-    ## TRUE if first school, otherwise FALSE;
-    ## use so we only end up with one legend
-    if_first <- (i == 1)
-    
-    ## store scatter plot in list using index i
-    plot_list[[i]] <- plot_ly() %>%
-        ## filter to school i (one school at a time)
-        add_trace(data = df_ts_long %>% filter(school == i),
-                  x = ~year,
-                  y = ~score_std_sch,
-                  color = ~test,
-                  legendgroup = ~test,
-                  text = ~score,
-                  showlegend = if_first,   # only TRUE the first time
-                  type = "scatter",
-                  mode = "lines",
-                  ## notice that we include scaled and actual score in hover
-                  hovertemplate = paste("Year: %{x}",
-                                        "<br>",
-                                        "Score (scaled): %{y}",
-                                        "<br>",
-                                        "Score (actual): %{text}")) %>% 
-        layout(xaxis = list(title = "Year"),
-               yaxis = list(title = "Score"),
-               legend = list(title = list(text = "Test"))) %>%
-        ## settings to add school name to title of each subplot
-        add_annotations(text = i,
-                        x = 0,
-                        y = 1,
-                        yref = "paper",
-                        xref = "paper",
-                        xanchor = "middle",
-                        yanchor = "top",
-                        showarrow = FALSE,
-                        font = list(size = 15))
+  ## TRUE if first school, otherwise FALSE;
+  ## use so we only end up with one legend
+  if_first <- (i == 1)
+  
+  ## store scatter plot in list using index i
+  plot_list[[i]] <- plot_ly() %>%
+    ## filter to school i (one school at a time)
+    add_trace(data = df_ts_long %>% filter(school == i),
+              x = ~year,
+              y = ~score_std_sch,
+              color = ~test,
+              legendgroup = ~test,
+              text = ~score,
+              showlegend = if_first,   # only TRUE the first time
+              type = "scatter",
+              mode = "lines",
+              ## notice that we include scaled and actual score in hover
+              hovertemplate = paste("Year: %{x}",
+                                    "<br>",
+                                    "Score (scaled): %{y}",
+                                    "<br>",
+                                    "Score (actual): %{text}")) %>% 
+    layout(xaxis = list(title = "Year"),
+           yaxis = list(title = "Score"),
+           legend = list(title = list(text = "Test"))) %>%
+    ## settings to add school name to title of each subplot
+    add_annotations(text = i,
+                    x = 0,
+                    y = 1,
+                    yref = "paper",
+                    xref = "paper",
+                    xanchor = "middle",
+                    yanchor = "top",
+                    showarrow = FALSE,
+                    font = list(size = 15))
 }
 
 ## combine subplots into on main plot like ggplot() facet_wrap()
@@ -875,16 +938,8 @@ p <- subplot(plot_list[[1]], plot_list[[2]], plot_list[[3]], plot_list[[4]],
 ## show
 p
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-p
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(p,
-                     file.path(getwd(), "plotly", "plt_facet.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_facet.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_facet.html"></iframe><!--/html_preserve-->
 
 Okay! The figure is a little scrunched on my website, but it might
 look better by itself on a larger monitor. We could also play with
@@ -926,55 +981,48 @@ header), we'll `unname()` the data frame. All together, it's
 `t(as.matrix(unname(df_ts)))`.
 
 
-```{r plotly_table, warning = F, message = F, fig.show = 'hide', results = 'asis'}
+
+```r
 ## make interactive table
 tab <- plot_ly(
-    type = "table",
-    ## adjust how header row looks
-    header = list(
-        ## use str_to_title() with tibble column names: math --> Math
-        values = c(str_to_title(names(df_ts))),
-        ## left align school names, and center all other columns (hence -1)
-        align = c("left", rep("center", ncol(df_ts) - 1)),
-        ## make vertical lines thicker
-        line = list(width = 1, color = "black"),
-        ## fill color with blue
-        fill = list(color = "rgba(108, 154, 195, 0.8)"),
-        ## set font to sans serif with bigger size and white color
-        font = list(family = "Arial", size = 14, color = "white")),
-    ## adjust how cells look
-    cells = list(
-        ## use df_ts, but...
-        ## 1. convert to matrix,
-        ## 2. transpose using t(),
-        ## 3. drop names (already in header row)
-        values = t(as.matrix(unname(df_ts))),
-        ## same alignment as header
-        align = c("left", rep("center", ncol(df_ts) - 1)),
-        ## same vertical line setup as header
-        line = list(color = "black", width = 1),
-        ## fill first column different color to stand out
-        fill = list(color = c("rgba(108, 154, 195, 0.5)",
-                              "rgba(226, 143, 65, 0.5)")),
-        ## same font as header, but smaller and different color
-        font = list(family = "Arial", size = 12, color = c("black"))
-    ))
+  type = "table",
+  ## adjust how header row looks
+  header = list(
+    ## use str_to_title() with tibble column names: math --> Math
+    values = c(str_to_title(names(df_ts))),
+    ## left align school names, and center all other columns (hence -1)
+    align = c("left", rep("center", ncol(df_ts) - 1)),
+    ## make vertical lines thicker
+    line = list(width = 1, color = "black"),
+    ## fill color with blue
+    fill = list(color = "rgba(108, 154, 195, 0.8)"),
+    ## set font to sans serif with bigger size and white color
+    font = list(family = "Arial", size = 14, color = "white")),
+  ## adjust how cells look
+  cells = list(
+    ## use df_ts, but...
+    ## 1. convert to matrix,
+    ## 2. transpose using t(),
+    ## 3. drop names (already in header row)
+    values = t(as.matrix(unname(df_ts))),
+    ## same alignment as header
+    align = c("left", rep("center", ncol(df_ts) - 1)),
+    ## same vertical line setup as header
+    line = list(color = "black", width = 1),
+    ## fill first column different color to stand out
+    fill = list(color = c("rgba(108, 154, 195, 0.5)",
+                          "rgba(226, 143, 65, 0.5)")),
+    ## same font as header, but smaller and different color
+    font = list(family = "Arial", size = 12, color = c("black"))
+  ))
 ```
 
 ```r
 ## show
 tab
 ```
-```{r, include = FALSE, purl = TRUE}
-## show
-tab
-```
-```{r, echo = FALSE, purl = FALSE, results = 'asis', warning = FALSE}
-htmltools::save_html(tab,
-                     file.path(getwd(), "plotly", "plt_table.html"),
-                     libdir = file.path(getwd(), "plotly", "lib"))
-htmltools::tags$iframe(src = file.path("plotly", "plt_table.html"))
-```
+
+<!--html_preserve--><iframe src="plotly/plt_table.html"></iframe><!--/html_preserve-->
 
 If you hover over a cell and then click, you should be able to drag
 and drop the columns into a new order. It seems a bit much for this
@@ -983,9 +1031,4 @@ manipulate could come in handy during meetings or your own research
 process.
 
 
-```{r, echo = FALSE, purl = TRUE}
 
-## =============================================================================
-## END SCRIPT
-################################################################################
-```
