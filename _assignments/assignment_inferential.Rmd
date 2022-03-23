@@ -13,7 +13,7 @@ output:
     preserve_yaml: true
 ---
 
-Using `hsls_small`, please answer the following questions. Use
+Using `els_plans.dta`, please answer the following questions. Use
 comments to respond as necessary.
 
 ## Questions
