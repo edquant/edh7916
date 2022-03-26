@@ -28,6 +28,7 @@ In the schedule below, items are marked as follows:
 |**Week 11** <br/> (3/16)|> _Choose your own module based on interests_ <br/> < Assignment 9 <br/> < Final project: initial set of analyses|  
 |**Week 12** <br/> (3/23)|> _Choose your own module based on interests_ <br/> < Assignment 10|  
 |**Week 13** <br/> (3/30)|> _Choose your own module based on interests_ <br/> < Assignment 11|  
-|**Week 14** <br/> (4/6)|> _Choose your own module based on interests_ <br/> < Assignment 12 <br/> < Final project: draft of final report|  
-|**Week 15** <br/> (4/13)|> _Choose your own module based on interests_ <br/> < Assignment 13|  
-|**Week 16** <br/> (4/20)|> Presentations <br/> < Final project: final report <br/> < Supplemental problem sets from after break (if any)|  
+|**Week 14** <br/> (4/6)|> _Choose your own module based on interests_ <br/> < Assignment 12 |  
+|**Week 15** <br/> (4/13)|> _Choose your own module based on interests_ <br/> < Assignment 13 <br/> < Final project: draft of final report|  
+|**Week 16** <br/> (4/20)|> Presentations |  
+|**FINALS** <br/> (4/27)| < Final project: final report <br/> < Supplemental problem sets from after break (if any)|  
