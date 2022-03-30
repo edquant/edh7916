@@ -131,3 +131,4 @@ $RECYCLE.BIN/
 !data/els_plans.dta
 !data/rcpp
 !data/kmeans.RDS
+!data/geo
