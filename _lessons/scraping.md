@@ -432,26 +432,19 @@ the problem is small (it's easy to see all the bad items) and regular
 
 ```r
 ## trim footnote that's become extra digit
-years <- years %>% str_sub(start = 1, stop = 4)
-```
+years <- years %>% str_sub(start = 1, end = 4)
 
-```
-## Error in str_sub(., start = 1, stop = 4): unused argument (stop = 4)
-```
-
-```r
 ## show
 years
 ```
 
 ```
-##  [1] "1960"  "1961"  "1962"  "1963"  "1964"  "1965"  "1966"  "1967"  "1968" 
-## [10] "1969"  "1970"  "1971"  "1972"  "1973"  "1974"  "1975"  "1976"  "1977" 
-## [19] "1978"  "1979"  "1980"  "1981"  "1982"  "1983"  "1984"  "1985"  "1986" 
-## [28] "1987"  "1988"  "1989"  "1990"  "1991"  "1992"  "1993"  "1994"  "1995" 
-## [37] "1996"  "1997"  "1998"  "1999"  "2000"  "2001"  "2002"  "2003"  "2004" 
-## [46] "2005"  "2006"  "2007"  "2008"  "2009"  "20103" "20113" "20123" "20133"
-## [55] "20143" "20153" "20163"
+##  [1] "1960" "1961" "1962" "1963" "1964" "1965" "1966" "1967" "1968" "1969"
+## [11] "1970" "1971" "1972" "1973" "1974" "1975" "1976" "1977" "1978" "1979"
+## [21] "1980" "1981" "1982" "1983" "1984" "1985" "1986" "1987" "1988" "1989"
+## [31] "1990" "1991" "1992" "1993" "1994" "1995" "1996" "1997" "1998" "1999"
+## [41] "2000" "2001" "2002" "2003" "2004" "2005" "2006" "2007" "2008" "2009"
+## [51] "2010" "2011" "2012" "2013" "2014" "2015" "2016"
 ```
 
 Fixed! Now we bind together with our high school completers
@@ -471,13 +464,7 @@ data first, then dropped the rows with double missing values.
 ## put in data frame
 df <- bind_cols(years = years, total = tot) %>%
   mutate(years = ymd(years, truncated = 2L))
-```
 
-```
-## Warning: 7 failed to parse.
-```
-
-```r
 ## show
 df
 ```
@@ -527,19 +514,10 @@ g <- ggplot(df, mapping = aes(x = years, y = total)) +
        y = "High school completers (1000s)",
        title = "Total number of high school completers: 1960 to 2016",
        caption = "Source: NCES Digest of Education Statistics, 2017, Table 302.10")
-```
-
-```
-## Error in seq.int(r1$year, to0$year, by): 'from' must be a finite number
-```
-
-```r
 g
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'g' not found
-```
+<img src="../figures/scrape_trends_tot-1.png" title="plot of chunk scrape_trends_tot" alt="plot of chunk scrape_trends_tot" width="100%" />
 
 > #### Quick exercise 
 > Pull in total percentage of enrollment (column 5), add to data

@@ -335,7 +335,7 @@ the problem is small (it's easy to see all the bad items) and regular
 
 ```{r}
 ## trim footnote that's become extra digit
-years <- years %>% str_sub(start = 1, stop = 4)
+years <- years %>% str_sub(start = 1, end = 4)
 
 ## show
 years

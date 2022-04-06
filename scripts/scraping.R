@@ -82,7 +82,7 @@ years <- years %>% str_subset(pattern = "")
 years
 
 ## trim footnote that's become extra digit
-years <- years %>% str_sub(start = 1, stop = 4)
+years <- years %>% str_sub(start = 1, end = 4)
 
 ## show
 years
