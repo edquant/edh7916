@@ -199,7 +199,7 @@ be converted to <code class="language-plaintext highlighter-rouge">NA</code> val
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 </code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="100%" /></p>
+<p><img src="../figures/plot_ii_1-1.png" title="plot of chunk plot_ii_1" alt="plot of chunk plot_ii_1" width="100%" /></p>
 
 <p>So there it is. Let’s make it better.</p>
 
@@ -231,7 +231,7 @@ default and will prevent a message from popping up each time.)</p>
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="100%" /></p>
+<p><img src="../figures/plot_ii_2-1.png" title="plot of chunk plot_ii_2" alt="plot of chunk plot_ii_2" width="100%" /></p>
 
 <p>Rather than accurately labeling the figure, I’ve repeated the
 arguments in strings so that it’s clearer where every piece goes. The
@@ -269,7 +269,7 @@ there’s no default value, we’ll just leave it out.</p>
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="100%" /></p>
+<p><img src="../figures/plot_ii_3-1.png" title="plot of chunk plot_ii_3" alt="plot of chunk plot_ii_3" width="100%" /></p>
 
 <p>That looks better. Now we’ll move to improving the axis scales.</p>
 
@@ -345,7 +345,7 @@ thinner, unnumbered lines between.</p>
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="100%" /></p>
+<p><img src="../figures/plot_ii_4-1.png" title="plot of chunk plot_ii_4" alt="plot of chunk plot_ii_4" width="100%" /></p>
 
 <p>We certainly have more lines now. Maybe too many on the <em>y</em> axis,
 which is a sort of low-information axis (do we need really <em>that</em> much
@@ -373,7 +373,7 @@ axis and increase the <code class="language-plaintext highlighter-rouge">by</cod
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="100%" /></p>
+<p><img src="../figures/plot_ii_5-1.png" title="plot of chunk plot_ii_5" alt="plot of chunk plot_ii_5" width="100%" /></p>
 
 <p>That seems like a better balance. We’ll stick with that and move on to
 legend labels.</p>
@@ -421,7 +421,7 @@ with <code class="language-plaintext highlighter-rouge">alpha</code>.</p>
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="100%" /></p>
+<p><img src="../figures/plot_ii_6-1.png" title="plot of chunk plot_ii_6" alt="plot of chunk plot_ii_6" width="100%" /></p>
 
 <p>Except for our labels and tick mark adjustments, this looks similar to
 what we’ve made before. The problem with this figure is two-fold:</p>
@@ -487,7 +487,7 @@ ggplot.</p>
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="100%" /></p>
+<p><img src="../figures/plot_ii_7-1.png" title="plot of chunk plot_ii_7" alt="plot of chunk plot_ii_7" width="100%" /></p>
 
 <p>Closer, but not quite! The 0/1 have been given proper labels, but the legend
 title is even worse! Not only is it not nice to look at it, it’s now
@@ -528,7 +528,7 @@ functions before <code class="language-plaintext highlighter-rouge">labs()</code
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="100%" /></p>
+<p><img src="../figures/plot_ii_8-1.png" title="plot of chunk plot_ii_8" alt="plot of chunk plot_ii_8" width="100%" /></p>
 
 <p>Much better!</p>
 
@@ -569,7 +569,7 @@ changes based on fill, we can remove <code class="language-plaintext highlighter
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="100%" /></p>
+<p><img src="../figures/plot_ii_9-1.png" title="plot of chunk plot_ii_9" alt="plot of chunk plot_ii_9" width="100%" /></p>
 
 <p>Notice how each facet has a proper label. Easy enough! Note that there
 is another way to fix facet labels using the <a href="https://ggplot2.tidyverse.org/reference/labeller.html"><code class="language-plaintext highlighter-rouge">labeller()</code>
@@ -615,7 +615,7 @@ remove it using <code class="language-plaintext highlighter-rouge">element_blank
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-18-1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" width="100%" /></p>
+<p><img src="../figures/plot_ii_10-1.png" title="plot of chunk plot_ii_10" alt="plot of chunk plot_ii_10" width="100%" /></p>
 
 <p>So we removed the panel, but since our grid lines were white to offset
 the gray, we don’t have grid lines any more. These would be
@@ -651,7 +651,7 @@ construction of the names) and setting them with <code class="language-plaintext
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="100%" /></p>
+<p><img src="../figures/plot_ii_11-1.png" title="plot of chunk plot_ii_11" alt="plot of chunk plot_ii_11" width="100%" /></p>
 
 <p>That returned our lines, but let’s say that we don’t really care about
 the horizontal lines. Rather than have the reader focus on counts, we
@@ -690,7 +690,7 @@ return to using <code class="language-plaintext highlighter-rouge">element_blank
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="100%" /></p>
+<p><img src="../figures/plot_ii_12-1.png" title="plot of chunk plot_ii_12" alt="plot of chunk plot_ii_12" width="100%" /></p>
 
 <p>Great! Now we only have vertical grid lines. Of course, we don’t
 really need the <em>y</em> axis ticks and labels now. We can ditch them by
@@ -730,7 +730,7 @@ label for <code class="language-plaintext highlighter-rouge">y</code> is ignored
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="100%" /></p>
+<p><img src="../figures/plot_ii_13-1.png" title="plot of chunk plot_ii_13" alt="plot of chunk plot_ii_13" width="100%" /></p>
 
 <p>Okay! We have what we set out to get.</p>
 
@@ -764,7 +764,7 @@ very similar to what we built before removing the horizontal lines.</p>
 </span><span class="n">p</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="100%" /></p>
+<p><img src="../figures/plot_ii_14-1.png" title="plot of chunk plot_ii_14" alt="plot of chunk plot_ii_14" width="100%" /></p>
 
 <p>There are other <a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">complete
 themes</a> you
@@ -825,7 +825,7 @@ values.</p>
 </span><span class="n">p2</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-23-1.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="100%" /></p>
+<p><img src="../figures/plot_ii_15-1.png" title="plot of chunk plot_ii_15" alt="plot of chunk plot_ii_15" width="100%" /></p>
 
 <p>Now that we have our new figure, let’s paste it side by side
 (left-right) with our first figure. Once we’ve loaded the patchwork
@@ -844,7 +844,7 @@ a new object, <code class="language-plaintext highlighter-rouge">pp</code>, and 
 </span><span class="n">pp</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" width="100%" /></p>
+<p><img src="../figures/plot_ii_16-1.png" title="plot of chunk plot_ii_16" alt="plot of chunk plot_ii_16" width="100%" /></p>
 
 <p>Definitely works, but it’s a little squished. Rather than side by
 side, let’s stack them this time. To stack two plots with patchwork,
@@ -861,7 +861,7 @@ use a forward slash, <code class="language-plaintext highlighter-rouge">/</code>
 </span><span class="n">pp</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="100%" /></p>
+<p><img src="../figures/plot_ii_17-1.png" title="plot of chunk plot_ii_17" alt="plot of chunk plot_ii_17" width="100%" /></p>
 
 <p>That looks better!</p>
 
@@ -896,7 +896,7 @@ status. After cleaning up that variable, we make a new plot.</p>
 </span><span class="n">p3</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="100%" /></p>
+<p><img src="../figures/plot_ii_18-1.png" title="plot of chunk plot_ii_18" alt="plot of chunk plot_ii_18" width="100%" /></p>
 
 <p>Now that we have this new plot, let’s paste it to the other figures in
 a 2 over 1 pattern. To make that clear to patchwork, we use
@@ -911,7 +911,7 @@ then stack this new combined plot above the new plot.</p>
 </span><span class="n">pp</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="100%" /></p>
+<p><img src="../figures/plot_ii_19-1.png" title="plot of chunk plot_ii_19" alt="plot of chunk plot_ii_19" width="100%" /></p>
 
 <p>Because of the new structure, the side by side of the first two
 figures doesn’t look quite as squished as before. That said, labels
@@ -1011,7 +1011,7 @@ ggplot chain.</p>
 </span><span class="n">pp</span><span class="w">
 </span></code></pre></div></div>
 
-<p><img src="../figures/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="100%" /></p>
+<p><img src="../figures/plot_ii_20-1.png" title="plot of chunk plot_ii_20" alt="plot of chunk plot_ii_20" width="100%" /></p>
 
 <p>Done and looking pretty good! Well, the blob of in plot C maybe isn’t
 that useful…</p>
