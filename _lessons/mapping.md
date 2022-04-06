@@ -285,7 +285,7 @@ p <- ggplot(df_us) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="100%" />
+<img src="../figures/mapping_1-1.png" title="plot of chunk mapping_1" alt="plot of chunk mapping_1" width="100%" />
 
 Ok...
 
@@ -320,7 +320,7 @@ p <- ggplot(df_l48) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="100%" />
+<img src="../figures/mapping_2-1.png" title="plot of chunk mapping_2" alt="plot of chunk mapping_2" width="100%" />
 
 Now that we've limited our data and effectively zoomed in on the lower 48
 states, our map is clearer and much more useful.
@@ -396,7 +396,7 @@ p <- ggplot(df_l48) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="100%" />
+<img src="../figures/mapping_3-1.png" title="plot of chunk mapping_3" alt="plot of chunk mapping_3" width="100%" />
 
 Much nicer!
 
@@ -459,7 +459,7 @@ p <- ggplot(df_usmap) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="100%" />
+<img src="../figures/mapping_4-1.png" title="plot of chunk mapping_4" alt="plot of chunk mapping_4" width="100%" />
 
 And now we have all the states in a nice projection, ready to make a
 choropleth map.
@@ -535,7 +535,7 @@ p <- ggplot(df_usmap %>% filter(year == 2019)) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="100%" />
+<img src="../figures/mapping_5-1.png" title="plot of chunk mapping_5" alt="plot of chunk mapping_5" width="100%" />
 
 To show changes over time, we'll filter in more years --- 2005, 2010,
 2015, 2019 --- and include `facet_wrap(~ year)`, which will split our
@@ -554,7 +554,7 @@ p <- ggplot(df_usmap %>% filter(year %in% c(2005, 2010, 2015, 2019))) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="100%" />
+<img src="../figures/mapping_6-1.png" title="plot of chunk mapping_6" alt="plot of chunk mapping_6" width="100%" />
 
 Just like our first figure, the differences are somewhat difficult to
 see. Perhaps another color gradient would help. Alternately, we can
@@ -588,7 +588,7 @@ p <- ggplot(df_usmap %>% filter(year %in% c(2005, 2010, 2015, 2019))) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-18-1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" width="100%" />
+<img src="../figures/mapping_7-1.png" title="plot of chunk mapping_7" alt="plot of chunk mapping_7" width="100%" />
 
 This last figure makes cross-sectional and diachronic changes much
 clearer. We could add further titles and a caption, but the figure
@@ -701,7 +701,7 @@ p <- ggplot(df_zon) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="100%" />
+<img src="../figures/mapping_8-1.png" title="plot of chunk mapping_8" alt="plot of chunk mapping_8" width="100%" />
 
 Now that we've seen the attendance zones, let's plot the zip code
 areas.
@@ -718,7 +718,7 @@ p <- ggplot(df_zip) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="100%" />
+<img src="../figures/mapping_9-1.png" title="plot of chunk mapping_9" alt="plot of chunk mapping_9" width="100%" />
 
 Since zip codes are really about postal routes --- meaning they are
 lines that have been converted into loose "areas" --- the overall
@@ -866,7 +866,7 @@ p <- ggplot(df_zon %>% filter(facility == "Lake Forest Elementary")) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" width="100%" />
+<img src="../figures/mapping_10-1.png" title="plot of chunk mapping_10" alt="plot of chunk mapping_10" width="100%" />
 
 Knowing that zip codes and schools aren't perfectly aligned, that is,
 a single school zone can be made up of multiple zip code areas and
@@ -903,7 +903,7 @@ p <- ggplot(df_zon_zip %>% filter(facility == "Lake Forest Elementary")) +
 p
 ```
 
-<img src="../figures/unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="100%" />
+<img src="../figures/mapping_11-1.png" title="plot of chunk mapping_11" alt="plot of chunk mapping_11" width="100%" />
 
 Now we can see that the Lake Forest Elementary attendance zone is made
 up of three zip codes: mostly 32609 and 32641 with a little bit of

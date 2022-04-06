@@ -210,7 +210,7 @@ map. Because we're making a map and don't really care about axes or
 all that (at least in this instance), we'll also add `theme_void()` at
 the end of the call to remove everything but the map we plot.
 
-```{r}
+```{r mapping_1}
 ## ---------------------------
 ## initial plot
 ## ---------------------------
@@ -236,7 +236,7 @@ reduce our data to only include states. We'll also start by removing
 Alaska and Hawaii so that we can first practice with the lower 48 or
 contiguous states.
 
-```{r}
+```{r mapping_2}
 ## ---------------------------
 ## lower 48 only plot
 ## ---------------------------
@@ -311,7 +311,7 @@ correct
 [EPSG](https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset)
 numeric code for the projection we want: 5070.
 
-```{r}
+```{r mapping_3}
 ## ---------------------------
 ## transform CRS (re-project)
 ## ---------------------------
@@ -376,7 +376,7 @@ df_usmap <- st_as_sf(df_usmap, coords = c("x", "y"), crs = 5070) %>%
 Now that the data are set up correctly, we can run the same plotting
 code as before, only changing the data. 
 
-```{r}
+```{r mapping_4}
 ## Alaska and Hawaii now included, but moved for tighter plot
 p <- ggplot(df_usmap) +
   geom_sf() +
@@ -430,7 +430,7 @@ For our first map, we'll filter to the latest year, 2019. So that the
 color changes by BA percentage, we'll add `aes(fille = bpct)` in
 `geom_sf()`. Everything else is the same as before.
 
-```{r}
+```{r mapping_5}
 ## plot with one year of BA attainment
 p <- ggplot(df_usmap %>% filter(year == 2019)) +
   geom_sf(aes(fill = bapct)) +
@@ -445,7 +445,7 @@ To show changes over time, we'll filter in more years --- 2005, 2010,
 plot into four panels, one for each year. Again, this is very similar
 to plotting we've done before with ggplot.
 
-```{r}
+```{r mapping_6}
 ## plot with 4 years of BA attainment
 p <- ggplot(df_usmap %>% filter(year %in% c(2005, 2010, 2015, 2019))) +
   facet_wrap(~ year) +
@@ -474,7 +474,7 @@ This time, we'll use our new variable `bacut` in the fill
 aesthetic. We'll also make our legend nicer with a title using the
 `name` option with `scale_fill_discrete()`.
 
-```{r}
+```{r mapping_7}
 ## plot with 4 years of BA attainment
 p <- ggplot(df_usmap %>% filter(year %in% c(2005, 2010, 2015, 2019))) +
   facet_wrap(~year) +
@@ -539,7 +539,7 @@ variable into a `factor()` so that we can order the plot from
 elementary to middle to high school --- rather than alphabetical
 order.
 
-```{r}
+```{r mapping_8}
 ## plot school zones + schools
 p <- ggplot(df_zon) +
   ## convert school level to a factor so we can order it
@@ -559,7 +559,7 @@ p
 Now that we've seen the attendance zones, let's plot the zip code
 areas.
 
-```{r}
+```{r mapping_9}
 ## plot zip codes zones + schools
 p <- ggplot(df_zip) +
   geom_sf(aes(fill = zip)) +
@@ -631,7 +631,7 @@ There's our answer!
 For this last task, we'll zoom into a single school zone, Lake Forest
 Elementary. We'll plot it first.
 
-```{r}
+```{r mapping_10}
 ## what zip code has the most schools?
 p <- ggplot(df_zon %>% filter(facility == "Lake Forest Elementary")) +
   geom_sf() +
@@ -654,7 +654,7 @@ that fit within (intersect) the first. Therefore, order matters here.
 Once we've done that, we'll plot the intersected data frame and fill
 using `zip` so that we can see the zip code areas clearly.
 
-```{r}
+```{r mapping_11}
 ## join schools to zip codes
 df_zon_zip <- st_intersection(df_zon, df_zip)
 
