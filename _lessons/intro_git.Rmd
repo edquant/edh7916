@@ -3,7 +3,7 @@ layout: lesson
 title: Introduction to Git
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 1.2
+order: 1.1
 category: lesson
 links:
   pdf: intro_git.pdf

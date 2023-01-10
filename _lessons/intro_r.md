@@ -3,7 +3,7 @@ layout: lesson
 title: Introduction to R
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 1.1
+order: 1.3
 category: lesson
 links:
   script: intro_r.R
@@ -280,17 +280,11 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-```
-
-```
-## ✔ ggplot2 3.3.5     ✔ purrr   0.3.4
-## ✔ tibble  3.1.6     ✔ dplyr   1.0.7
-## ✔ tidyr   1.1.4     ✔ stringr 1.4.0
-## ✔ readr   2.1.1     ✔ forcats 0.5.1
-```
-
-```
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.4.0      ✔ purrr   1.0.0 
+## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+## ✔ tidyr   1.2.1      ✔ stringr 1.5.0 
+## ✔ readr   2.1.3      ✔ forcats 0.5.2 
 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
@@ -360,7 +354,7 @@ see in the bottom right facet):
 ## 
 ##      If there are no values or if 'na.rm = FALSE' and there are 'NA'
 ##      values the result is 'NA' of the same type as 'x' (or more
-##      generally the result of 'x[FALSE][NA]').
+##      generally the result of 'x[NA_integer_]').
 ## 
 ## References:
 ## 
@@ -388,50 +382,47 @@ Two question marks will search for the command name in CRAN packages
 
 
 
-|Package         |Topic                       |Title                                                                                   |
-|:---------------|:---------------------------|:---------------------------------------------------------------------------------------|
-|bit64           |qtile                       |(Q)uan(Tile)s                                                                           |
-|broom           |tidy.mediate                |Tidy a(n) mediate object                                                                |
-|distributional  |median.distribution         |Median of a probability distribution                                                    |
-|ellipsis        |safe_median                 |Safe version of median                                                                  |
-|future          |readImmediateConditions     |Read All 'immediateCondition' RDS Files                                                 |
-|future          |sticky_globals              |Place a sticky-globals environment immediately after the global environment             |
-|ggplot2         |hmisc                       |A selection of summary functions from Hmisc                                             |
-|googledrive     |drive_put                   |PUT new media into a Drive file                                                         |
-|Hmisc           |smean.cl.normal             |Compute Summary Statistics on a Vector                                                  |
-|httr            |guess_media                 |Guess the media type of a path from its extension.                                      |
-|httr            |parse_media                 |Parse a media type.                                                                     |
-|igraph          |time_bins.sir               |SIR model on graphs                                                                     |
-|matrixStats     |rowMedians                  |Calculates the median for each row (column) in a matrix                                 |
-|matrixStats     |rowWeightedMedians          |Calculates the weighted medians for each row (column) in a matrix                       |
-|matrixStats     |weightedMad                 |Weighted Median Absolute Deviation (MAD)                                                |
-|matrixStats     |weightedMedian              |Weighted Median Value                                                                   |
-|miscTools       |colMedians                  |Medians of Columns                                                                      |
-|miscTools       |rowMedians                  |Medians of Rows                                                                         |
-|posterior       |ess_quantile                |Effective sample sizes for quantiles                                                    |
-|posterior       |mcse_quantile               |Monte Carlo standard error for quantiles                                                |
-|posterior       |rvar-summaries-over-draws   |Summaries of random variables within array elements, over draws                         |
-|posterior       |rvar-summaries-within-draws |Summaries of random variables over array elements, within draws                         |
-|PowerUpR        |cra2                        |Two-level Cluster-randomized Trials to Detect Main, Moderation and Mediation Effects    |
-|PowerUpR        |cra3                        |Three-level Cluster-randomized Trials to Detect Main, Moderation, and Mediation Effects |
-|PowerUpR        |med_pn                      |Partially Nested Designs Probing Multilevel Mediation                                   |
-|purrr           |accumulate                  |Accumulate intermediate results of a vector reduction                                   |
-|raster          |Summary-methods             |Summary methods                                                                         |
-|recipes         |step_impute_median          |Impute numeric data using the median                                                    |
-|recipes         |tidy.step_BoxCox            |Tidy the Result of a Recipe                                                             |
-|spatstat.geom   |mean.im                     |Mean and Median of Pixel Values in an Image                                             |
-|spatstat.geom   |weighted.median             |Weighted Median, Quantiles or Variance                                                  |
-|spatstat.linnet |mean.linim                  |Mean, Median, Quantiles of Pixel Values on a Linear Network                             |
-|survival        |Math.Surv                   |Methods for Surv objects                                                                |
-|terra           |Summary-methods             |Summarize                                                                               |
-|zoo             |rollmean                    |Rolling Means/Maximums/Medians/Sums                                                     |
-|zoo             |zoo                         |Z's Ordered Observations                                                                |
-|stats           |mad                         |Median Absolute Deviation                                                               |
-|stats           |median                      |Median Value                                                                            |
-|stats           |medpolish                   |Median Polish (Robust Twoway Decomposition) of a Matrix                                 |
-|stats           |runmed                      |Running Medians - Robust Scatter Plot Smoothing                                         |
-|stats           |smooth                      |Tukey's (Running Median) Smoothing                                                      |
-|stats           |smoothEnds                  |End Points Smoothing (for Running Medians)                                              |
+|Package        |Topic                       |Title                                                                         |
+|:--------------|:---------------------------|:-----------------------------------------------------------------------------|
+|bit64          |qtile                       |(Q)uan(Tile)s                                                                 |
+|broom          |tidy.mediate                |Tidy a(n) mediate object                                                      |
+|distributional |median.distribution         |Median of a probability distribution                                          |
+|ellipsis       |safe_median                 |Safe version of median                                                        |
+|future         |readImmediateConditions     |Read All 'immediateCondition' RDS Files                                       |
+|future         |sticky_globals              |Place a sticky-globals environment immediately after the global environment   |
+|ggdist         |point_interval              |Point and interval summaries for tidy data frames of draws from distributions |
+|ggplot2        |hmisc                       |A selection of summary functions from Hmisc                                   |
+|googledrive    |drive_put                   |PUT new media into a Drive file                                               |
+|httr           |guess_media                 |Guess the media type of a path from its extension.                            |
+|httr           |parse_media                 |Parse a media type.                                                           |
+|igraph         |time_bins.sir               |SIR model on graphs                                                           |
+|matrixStats    |rowMedians                  |Calculates the median for each row (column) in a matrix                       |
+|matrixStats    |rowWeightedMedians          |Calculates the weighted medians for each row (column) in a matrix             |
+|matrixStats    |weightedMad                 |Weighted Median Absolute Deviation (MAD)                                      |
+|matrixStats    |weightedMedian              |Weighted Median Value                                                         |
+|officer        |media_extract               |Extract media from a document object                                          |
+|officer        |sanitize_images             |Remove unused media from a document                                           |
+|posterior      |ess_quantile                |Effective sample sizes for quantiles                                          |
+|posterior      |mcse_quantile               |Monte Carlo standard error for quantiles                                      |
+|posterior      |rvar-summaries-over-draws   |Summaries of random variables within array elements, over draws               |
+|posterior      |rvar-summaries-within-draws |Summaries of random variables over array elements, within draws               |
+|purrr          |accumulate                  |Accumulate intermediate results of a vector reduction                         |
+|R.rsp          |Non-documented objects      |Non-documented objects                                                        |
+|recipes        |case-weight-helpers         |Helpers for steps with case weights                                           |
+|recipes        |step_impute_median          |Impute numeric data using the median                                          |
+|recipes        |tidy.step_BoxCox            |Tidy the Result of a Recipe                                                   |
+|tidybayes      |reexports                   |Objects exported from other packages                                          |
+|tidybayes      |tidybayes-deprecated        |Deprecated functions, arguments, and column names in tidybayes                |
+|zoo            |rollmean                    |Rolling Means/Maximums/Medians/Sums                                           |
+|zoo            |zoo                         |Z's Ordered Observations                                                      |
+|stats          |mad                         |Median Absolute Deviation                                                     |
+|stats          |median                      |Median Value                                                                  |
+|stats          |medpolish                   |Median Polish (Robust Twoway Decomposition) of a Matrix                       |
+|stats          |runmed                      |Running Medians - Robust Scatter Plot Smoothing                               |
+|stats          |smooth                      |Tukey's (Running Median) Smoothing                                            |
+|stats          |smoothEnds                  |End Points Smoothing (for Running Medians)                                    |
+|survival       |Math.Surv                   |Methods for Surv objects                                                      |
+|survival       |quantile.survfit            |Quantiles from a survfit object                                               |
 
 
 At first, using help files may feel like trying to use a dictionary to

@@ -3,7 +3,7 @@ layout: lesson
 title: Introduction to Markdown
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 1.3
+order: 1.2
 category: lesson
 links:
   pdf: intro_markdown.pdf

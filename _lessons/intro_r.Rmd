@@ -3,7 +3,7 @@ layout: lesson
 title: Introduction to R
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 1.1
+order: 1.3
 category: lesson
 links:
   script: intro_r.R
