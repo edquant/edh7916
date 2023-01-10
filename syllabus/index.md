@@ -12,8 +12,8 @@ links:
 |Office|2705G Norman Hall|  
 |Email|btskinner \<at\> coe.ufl.edu|  
 |Phone|352.273.4296|  
-|Class Meeting Time|Wednesday (5:10p - 8:10p|  
-|Class Location|NRN 2033|  
+|Class Meeting Time|Tuesday (5:10p - 8:10p)|  
+|Class Location|NRN 1019|  
 |Office Hours|_TBD_|  
 
 ## Required tools, software, and registrations
@@ -133,7 +133,6 @@ discipline under UF Regulation 4.040 Student Honor Code and Student
 Conduct Code.  
 
 ## A note about taking class during the COVID-19 pandemic
-
 
 The ongoing COVID-19 pandemic continues to disrupt the ways we live
 each day. We are each trying to keep to "normal" routines all while

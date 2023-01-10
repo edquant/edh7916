@@ -11,3 +11,5 @@ below.
 {:.past_list}
 * [Summer 2020 (EdD)](https://edquant.github.io/past/edh7916/2020/summer)
 {:.past_list}
+* [Spring 2022 (PhD)](https://edquant.github.io/past/edh7916/2022/spring)
+{:.past_list}

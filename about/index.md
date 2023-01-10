@@ -3,7 +3,7 @@ layout: default
 title: About
 ---
 
-![]({{ site.baseurl }}/assets/img/btskinner.jpg){:.centerpic} 
+![]({{ site.baseurl }}/assets/img/bs.jpg){:.centerpic} 
 
 I am an [Assistant Professor of Higher Education and Policy at
 the University of Florida](https://education.ufl.edu/faculty/skinner-benjamin-t/).
