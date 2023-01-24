@@ -17,7 +17,7 @@ img: assets/img
 # for github metadata (releases)
 repository: edquant/edh7916
 # don't show releases prior to this date (keep classes separated)
-releasecutoff: 2023-01-01
+releasecutoff: 2022-12-01
 
 info:
   term: Spring 2023
