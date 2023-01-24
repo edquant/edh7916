@@ -374,12 +374,12 @@ sections in which you perform specific analytic tasks.
 Here's a template for an R script with clearly defined sections that
 you can use:
 
-```{r, purl = FALSE, eval = FALSE, code = readLines("./scripts/template.R")}
+```{r, purl = FALSE, eval = FALSE, code = readLines("../scripts/template.R")}
 ```
 
 And here's the template with a very simple project outline:
 
-```{r, purl = FALSE, eval = FALSE, code = readLines("./scripts/organizing.R")}
+```{r, purl = FALSE, eval = FALSE, code = readLines("../scripts/organizing.R")}
 ```
 
 ### Header
