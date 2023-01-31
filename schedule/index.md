@@ -18,20 +18,20 @@ topics we'll cover together (and their corresponding assignment number):
 | > Computer file structure <br/> > Organizing a script and project directory | 2                                            |
 | > Data wrangling I: Enter the Tidyverse                                     | 3                                            |
 | > Data wrangling II: Appending, joining, and reshaping data                 | 4                                            |
-| > Data visualization with ggplot2                                           | 5                                            |
-| > Creating research reports with RMarkdown                                  | 6                                            |
-| > Data wrangling III: Working with strings and dates                        | 7                                            |
-| > Functional programming                                                    | 8                                            |
-| > Data wrangling with base R                                                | 9                                            |
-| > Data wrangling IV: A philosophy of data wrangling                         | 10                                           |
-
+| > Data visualization with ggplot2: Part I                                   | 5                                            |
+| > Data visualization with ggplot2: Part II                                  | 6                                            |
+| > Creating research reports with RMarkdown                                  | 7                                            |
+| > Data wrangling III: Working with strings and dates                        | 8                                            |
+| > Functional programming                                                    | 9                                            |
+| > Data wrangling with base R                                                | 10                                           |
+| > Data wrangling IV: A philosophy of data wrangling                         | 11                                           |
 
 **Assignments are due before class in the week after we finish a
 lesson**
 
-In addition, we'll have a number of self-directed lessons that each
-student will select among to work on during class time based on their
-research interests. These include:
+In addition, we'll may have a number of self-directed lessons that
+each student can select among to work on during class time based on
+their research interests. These include:
 
 - Inferential I: Correlations, _t_-tests, and weights
 - Inferential II: Regression and prediction
