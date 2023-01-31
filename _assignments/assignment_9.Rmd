@@ -1,12 +1,12 @@
 ---
 layout: lesson
-title: Assignment 8
+title: Assignment 9
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 8
+order: 9
 category: problemset
 links:
-  pdf: assignment_8.pdf
+  pdf: assignment_9.pdf
 output:
   md_document:
     variant: gfm
@@ -79,7 +79,7 @@ best of your ability by dropping them.
 
 #### Submission details
 
-- Save your script (`<lastname>_assignment_8.R`) in your `scripts`
+- Save your script (`<lastname>_assignment_9.R`) in your `scripts`
   directory.
 - Push changes to your repo (the new script and new folder) to GitHub
   prior to the next class session.

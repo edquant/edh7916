@@ -1,12 +1,12 @@
 ---
 layout: lesson
-title: "Assignment: Data Visualization with ggplot II"
+title: Assignment 6
 subtitle: EDH7916
 author: Benjamin Skinner
 order: 6
-category: extra
+category: problemset
 links:
-  pdf: assignment_plotting_ii.pdf
+  pdf: assignment_6.pdf
 output:
   md_document:
     variant: gfm
@@ -29,7 +29,7 @@ figure.
 
 #### Submission details
 
-- Save your script (`<lastname>_assignment_plotting_ii.R`) in your `scripts`
+- Save your script (`<lastname>_assignment_6.R`) in your `scripts`
   directory.
 - Push changes to your repo (the new script and new folder) to GitHub
   prior to the next class session.

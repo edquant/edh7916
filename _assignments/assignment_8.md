@@ -1,12 +1,12 @@
 ---
 layout: lesson
-title: Assignment 7
+title: Assignment 8
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 7
+order: 8
 category: problemset
 links:
-  pdf: assignment_7.pdf
+  pdf: assignment_8.pdf
 output:
   md_document:
     variant: gfm
@@ -19,7 +19,7 @@ data dictionaries for each file. Click the "continue" button on [this
 page](https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx?goToReportId=7)
 to see the data and accompanying dictionary files. [You can also use
 the supplementary lesson on getting higher education data for
-help.](/edh7916/lessons/getting_data.html)
+help.](../lessons/getting_data.html)
 
 You **do not** need to save the final output as a data file: just
 having the final result print to the console is fine. For each
@@ -70,7 +70,7 @@ other ways to join `by` different variable names.
 
 #### Submission details
 
-- Save your script (`<lastname>_assignment_7.R`) in your `scripts`
+- Save your script (`<lastname>_assignment_8.R`) in your `scripts`
   directory.
 - Push changes to your repo (the new script and new folder) to GitHub
   prior to the next class session.

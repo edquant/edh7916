@@ -1,12 +1,12 @@
 ---
 layout: lesson
-title: Assignment 10
+title: Assignment 11
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 10
+order: 11
 category: problemset
 links:
-  pdf: assignment_10.pdf
+  pdf: assignment_11.pdf
 output:
   md_document:
     variant: gfm
@@ -30,8 +30,8 @@ about half of a page to each answer:
 
 #### Submission details
 
-- Save your script (`<lastname>_assignment_10.md` or
-  `<lastname>_assignment_10.Rmd`) in your `scripts` directory.
+- Save your script (`<lastname>_assignment_11.md` or
+  `<lastname>_assignment_11.Rmd`) in your `scripts` directory.
 - Push changes to your repo (the new script and new folder) to GitHub
   prior to the next class session.
 

@@ -1,12 +1,12 @@
 ---
 layout: lesson
-title: Assignment 6
+title: Assignment 7
 subtitle: EDH7916
 author: Benjamin Skinner
-order: 6
+order: 7
 category: problemset
 links:
-  pdf: assignment_6.pdf
+  pdf: assignment_7.pdf
 output:
   md_document:
     variant: gfm
@@ -44,8 +44,8 @@ sure you answer the question to the best of your ability.
 
 #### Submission details
 
-- Save both your code file (`<lastname>_assignment_6.Rmd`) and
-  compiled document (`<lastname>_assignment_6.pdf`) in your scripts
+- Save both your code file (`<lastname>_assignment_7.Rmd`) and
+  compiled document (`<lastname>_assignment_7.pdf`) in your scripts
   directory.
 - Push changes to your repo (the new script and new folder) to GitHub
   prior to the next class session.
