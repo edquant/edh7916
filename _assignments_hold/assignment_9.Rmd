@@ -4,7 +4,7 @@ title: Assignment 9
 subtitle: EDH7916
 author: Benjamin Skinner
 order: 9
-category: problemset
+category: supplemental
 links:
   pdf: assignment_9.pdf
 output:
@@ -13,29 +13,41 @@ output:
     preserve_yaml: true
 ---
 
-I have been opinionated throughout this course (and in lesson 10 in
-particular) about the best ways to organize a quantitative data
-workflow. Considering all of that, please answer the following two
-questions in a Markdown (`*.md`) or RMarkdown (`*.Rmd`) file, giving
-about half of a page to each answer:
+Using the `hsls_small.csv` data set and the online code book, answer
+the following questions. You **do not** need to save the final output
+as a data file: just having the final result print to the console is
+fine. For each question, **you must answer using base R commands (no
+tidyverse)**.  You can account for missing values by dropping them.
 
-1. What organizational/work flow practice that I _have_ discussed do
-   you think is unnecessary or impractical for daily data analytic
-   tasks? Why? Keep in mind that practice doesn't have to include
-   using R, but could instead mean using SPSS, Excel, _etc_. Also,
-   it's not a trick or gotcha question! I want your (well considered)
-   thoughts.
-1. What organizational/work flow practice have I _not_ included that
-   you think would help reduce error or improve reproducibility? Why?
+For each question, show your data work and then answer the question in
+a short (1-2 sentence(s)) comment. (**NOTE:** If you also completed
+assignment 3, your written answers can be similar to what you wrote before.) 
 
+## Questions
+
+1. What is the average standardized math test score?
+1. What is the average standardized math test score by gender?
+1. In what year and month were the oldest students in the data set
+   born? The youngest?
+1. Among those students who are under 185% of the federal poverty line
+   in the base year of the survey, what is the median household income
+   (give the category and what that category reprents).
+1. Of the students who earned a high school credential (diploma or
+   GED), what percentage earned a GED or equivalency? How does this
+   differ by region?
+1. What percentage of students ever attended a postsecondary
+   institution by February 2016? Give the cross tabulations for:  
+     - family incomes less than or equal to $35,000 and greater than
+       $35,000   
+	 - region  
+	 
+   This means you should have percentages for 8 groups: above/below
+   $35k within each region.   
+  
 #### Submission details
 
-- Save your script (`<lastname>_assignment_10.md` or
-  `<lastname>_assignment_10.Rmd`) in your `scripts` directory.
+- Save your script (`<lastname>_assignment_9.R`) in your `scripts`
+  directory.
 - Push changes to your repo (the new script and new folder) to GitHub
   prior to the next class session.
-
-
-
-
 
