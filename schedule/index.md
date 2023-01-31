@@ -6,29 +6,50 @@ title: Schedule
 Prior to first meeting, please follow the [software]({{ site.baseurl }}/software) link to download and install
 all relevant software.
 
-In the schedule below, items are marked as follows: 
-- &gt; Required for you to do ([lesson]({{ site.baseurl }}/lessons))
-- &lt; Required for you to submit ([assignment]({{ site.baseurl }}/assignments))
-- &#43; Optional
+This semester, we will take lessons in order, but not necessarily
+complete them in the same week we start them. Instead, we'll go
+through them at them pace that best fits the course. Here are the
+topics we'll cover together (and their corresponding assignment number):
 
-**Assignments are by start of class in the week noted**.
+| [Lesson]({{ site.baseurl }}/lessons)                                        | [Assignment]({{ site.baseurl }}/assignments) |
+|:----------------------------------------------------------------------------|:--------------------------------------------:|
+| > Getting and installing required software                                  |                                              |
+| > Introduction to RStudio (R, RMarkdown, git)                               | 1                                            |
+| > Computer file structure <br/> > Organizing a script and project directory | 2                                            |
+| > Data wrangling I: Enter the Tidyverse                                     | 3                                            |
+| > Data wrangling II: Appending, joining, and reshaping data                 | 4                                            |
+| > Data visualization with ggplot2                                           | 5                                            |
+| > Creating research reports with RMarkdown                                  | 6                                            |
+| > Data wrangling III: Working with strings and dates                        | 7                                            |
+| > Functional programming                                                    | 8                                            |
+| > Data wrangling with base R                                                | 9                                            |
+| > Data wrangling IV: A philosophy of data wrangling                         | 10                                           |
 
-|Week|Topic|  
-|:---|:----|  
-|**Week 1** <br/> (1/10)| > Course welcome <br/> > Getting and installing required software <br/> > Introduction to RStudio (R, RMarkdown, git)|  
-|**Week 2** <br/> (1/17)|> Computer file structure <br/> > Organizing a script and project directory <br/> + _Supplemental:_ Getting higher education data from common sources <br/> < Assignment 1|  
-|**Week 3** <br/> (1/24)|> Data wrangling I: Enter the Tidyverse <br/> + _Supplemental:_ Data wrangling with base R <br/> < Assignment 2 <br/> < Final project: proposal|  
-|**Week 4** <br/> (1/31)|> Data wrangling II: Appending, joining, and reshaping data <br/> < Assignment 3|  
-|**Week 5** <br/> (2/7)|> Data visualization with ggplot2 <br/> < Assignment 4|  
-|**Week 6** <br/> (2/14)|> Creating research reports with RMarkdown <br/> < Assignment 5|  
-|**Week 7** <br/> (2/21)|> Data wrangling III: Working with strings and dates <br/> < Assignment 6|  
-|**Week 8** <br/> (2/28)|> Functional programming <br/> < Assignment 7|  
-|**Week 9** <br/> (3/7)|> Data wrangling IV: A philosophy of data wrangling <br/> < Assignment 8|  
-|**Week 10** | **NO CLASS** **SPRING BREAK (3/14)**|  
-|**Week 11** <br/> (3/14)|> _Choose your own module based on interests_ <br/> < Assignment 9 <br/> < Final project: initial set of analyses|  
-|**Week 12** <br/> (3/21)|> _Choose your own module based on interests_ <br/> < Assignment 10|  
-|**Week 13** <br/> (3/28)|> _Choose your own module based on interests_ <br/> < Assignment 11|  
-|**Week 14** <br/> (4/4)|> _Choose your own module based on interests_ <br/> < Assignment 12 |  
-|**Week 15** <br/> (4/11)|> _Choose your own module based on interests_ <br/> < Assignment 13 <br/> < Final project: draft of final report|  
-|**Week 16** <br/> (4/18)|> Presentations |  
-|**FINALS** <br/> (4/25)| < Final project: final report <br/> < Supplemental problem sets from after break (if any)|  
+
+**Assignments are due before class in the week after we finish a
+lesson**
+
+In addition, we'll have a number of self-directed lessons that each
+student will select among to work on during class time based on their
+research interests. These include:
+
+- Inferential I: Correlations, _t_-tests, and weights
+- Inferential II: Regression and prediction
+- Data visualization with ggplot2 II
+- Interactive graphics
+- Functional programming II
+- High performance R with Rcpp
+- Web scraping in R
+- Introduction to mapping in R
+
+Along the way, you'll have parts of your final project due. These are
+due on the following weeks/dates:
+
+| Week                     | Final project component due              |
+|:-------------------------|:-----------------------------------------|
+| **Week 4** <br/> (1/31)  | < Final project: proposal                |
+| **Week 10** <br/> (3/14) | **SPRING BREAK**            |
+| **Week 11** <br/> (3/21) | < Final project: initial set of analyses |
+| **Week 15** <br/> (4/11) | < Final project: draft of final report   |
+| **Week 16** <br/> (4/25) | > Presentations                          |
+| **FINALS** <br/> (5/2)   | < Final project: final report            |
