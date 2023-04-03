@@ -113,7 +113,22 @@ library(survey)
 ```
 
 ```
-## Error in library(survey): there is no package called 'survey'
+## Loading required package: grid
+## Loading required package: Matrix
+## 
+## Attaching package: 'Matrix'
+## 
+## The following objects are masked from 'package:tidyr':
+## 
+##     expand, pack, unpack
+## 
+## Loading required package: survival
+## 
+## Attaching package: 'survey'
+## 
+## The following object is masked from 'package:graphics':
+## 
+##     dotchart
 ```
 
 
@@ -335,10 +350,6 @@ svy_df <- svydesign(ids = ~psu,
                     nest = TRUE)
 ```
 
-```
-## Error in svydesign(ids = ~psu, strata = ~strat_id, weight = ~bystuwt, : could not find function "svydesign"
-```
-
 Now that we've set the survey design, let's compare the unweighted
 mean with one that accounts for the survey design.
 
@@ -360,7 +371,8 @@ svymean(~bynels2m, design = svy_df, na.rm = TRUE)
 ```
 
 ```
-## Error in svymean(~bynels2m, design = svy_df, na.rm = TRUE): could not find function "svymean"
+##            mean    SE
+## bynels2m 44.424 0.262
 ```
 
 It's a little different!
@@ -376,7 +388,9 @@ svyby(~bynels2m, by = ~par_ba, design = svy_df, FUN = svymean, na.rm = TRUE)
 ```
 
 ```
-## Error in svyby(~bynels2m, by = ~par_ba, design = svy_df, FUN = svymean, : could not find function "svyby"
+##   par_ba bynels2m        se
+## 0      0 41.43669 0.2481650
+## 1      1 49.35088 0.3370024
 ```
 
 ```r
@@ -385,7 +399,17 @@ svyttest(bynels2m ~ par_ba, design = svy_df)
 ```
 
 ```
-## Error in svyttest(bynels2m ~ par_ba, design = svy_df): could not find function "svyttest"
+## 
+## 	Design-based t-test
+## 
+## data:  bynels2m ~ par_ba
+## t = 22.988, df = 389, p-value < 2.2e-16
+## alternative hypothesis: true difference in mean is not equal to 0
+## 95 percent confidence interval:
+##  7.237325 8.591066
+## sample estimates:
+## difference in mean 
+##           7.914195
 ```
 
 Notice that unlike the base R `t.test()` function, `svyttest()` gives

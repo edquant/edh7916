@@ -92,7 +92,22 @@ library(survey)
 ```
 
 ```
-## Error in library(survey): there is no package called 'survey'
+## Loading required package: grid
+## Loading required package: Matrix
+## 
+## Attaching package: 'Matrix'
+## 
+## The following objects are masked from 'package:tidyr':
+## 
+##     expand, pack, unpack
+## 
+## Loading required package: survival
+## 
+## Attaching package: 'survey'
+## 
+## The following object is masked from 'package:graphics':
+## 
+##     dotchart
 ```
 
 
@@ -870,10 +885,6 @@ svy_df <- svydesign(ids = ~psu,
                     nest = TRUE)
 ```
 
-```
-## Error in svydesign(ids = ~psu, strata = ~strat_id, weight = ~bystuwt, : could not find function "svydesign"
-```
-
 Now that we've done that, here's how we run a weighted
 regression. Notice that it's `svyglm()`, even though we used `lm()`
 before (the default `"link"` function in `glm()` is `gaussian` or
@@ -885,18 +896,33 @@ we could include `family = binomial()` as we did before).
 ## fit the svyglm regression and show output
 svyfit <- svyglm(bynels2m ~ byses1 + female + moth_ba + fath_ba + lowinc,
                  design = svy_df)
-```
-
-```
-## Error in svyglm(bynels2m ~ byses1 + female + moth_ba + fath_ba + lowinc, : could not find function "svyglm"
-```
-
-```r
 summary(svyfit)
 ```
 
 ```
-## Error in summary(svyfit): object 'svyfit' not found
+## 
+## Call:
+## svyglm(formula = bynels2m ~ byses1 + female + moth_ba + fath_ba + 
+##     lowinc, design = svy_df)
+## 
+## Survey design:
+## svydesign(ids = ~psu, strata = ~strat_id, weight = ~bystuwt, 
+##     data = svy_df, nest = TRUE)
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  45.2221     0.2710 166.867  < 2e-16 ***
+## byses1        6.9470     0.2913  23.849  < 2e-16 ***
+## female       -1.0715     0.2441  -4.389 1.47e-05 ***
+## moth_ba       0.6633     0.3668   1.809   0.0713 .  
+## fath_ba       0.5670     0.3798   1.493   0.1363    
+## lowinc       -2.4860     0.3644  -6.822 3.49e-11 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 150.5809)
+## 
+## Number of Fisher Scoring iterations: 2
 ```
 
 As when compared t.test results when using unweighted and weighted
