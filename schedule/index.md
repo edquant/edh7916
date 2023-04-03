@@ -49,7 +49,7 @@ due on the following weeks/dates:
 |:-------------------------|:-----------------------------------------|
 | **Week 4** <br/> (1/31)  | < Final project: proposal                |
 | **Week 10** <br/> (3/14) | **SPRING BREAK**            |
-| **Week 11** <br/> (3/21) | < Final project: initial set of analyses |
+| **Week 12** <br/> (3/28) | < Final project: initial set of analyses |
 | **Week 15** <br/> (4/11) | < Final project: draft of final report   |
 | **Week 16** <br/> (4/25) | > Presentations                          |
 | **FINALS** <br/> (5/2)   | < Final project: final report            |
