@@ -257,7 +257,22 @@ using <code class="language-plaintext highlighter-rouge">install.packages("surve
 </span><span class="n">library</span><span class="p">(</span><span class="n">survey</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in library(survey): there is no package called 'survey'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Loading required package: grid
+## Loading required package: Matrix
+## 
+## Attaching package: 'Matrix'
+## 
+## The following objects are masked from 'package:tidyr':
+## 
+##     expand, pack, unpack
+## 
+## Loading required package: survival
+## 
+## Attaching package: 'survey'
+## 
+## The following object is masked from 'package:graphics':
+## 
+##     dotchart
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
@@ -466,9 +481,6 @@ this function.</p>
                     </span><span class="n">nest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in svydesign(ids = ~psu, strata = ~strat_id, weight = ~bystuwt, : could not find function "svydesign"
-</code></pre></div></div>
-
 <p>Now that we’ve set the survey design, let’s compare the unweighted
 mean with one that accounts for the survey design.</p>
 
@@ -485,7 +497,8 @@ mean with one that accounts for the survey design.</p>
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">svymean</span><span class="p">(</span><span class="o">~</span><span class="n">bynels2m</span><span class="p">,</span><span class="w"> </span><span class="n">design</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">svy_df</span><span class="p">,</span><span class="w"> </span><span class="n">na.rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in svymean(~bynels2m, design = svy_df, na.rm = TRUE): could not find function "svymean"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##            mean    SE
+## bynels2m 44.424 0.262
 </code></pre></div></div>
 
 <p>It’s a little different!</p>
@@ -498,14 +511,26 @@ the <code class="language-plaintext highlighter-rouge">design</code> argument in
 </span><span class="n">svyby</span><span class="p">(</span><span class="o">~</span><span class="n">bynels2m</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">par_ba</span><span class="p">,</span><span class="w"> </span><span class="n">design</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">svy_df</span><span class="p">,</span><span class="w"> </span><span class="n">FUN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">svymean</span><span class="p">,</span><span class="w"> </span><span class="n">na.rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in svyby(~bynels2m, by = ~par_ba, design = svy_df, FUN = svymean, : could not find function "svyby"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##   par_ba bynels2m        se
+## 0      0 41.43669 0.2481650
+## 1      1 49.35088 0.3370024
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## t-test using survey design / weights</span><span class="w">
 </span><span class="n">svyttest</span><span class="p">(</span><span class="n">bynels2m</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">par_ba</span><span class="p">,</span><span class="w"> </span><span class="n">design</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">svy_df</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in svyttest(bynels2m ~ par_ba, design = svy_df): could not find function "svyttest"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## 	Design-based t-test
+## 
+## data:  bynels2m ~ par_ba
+## t = 22.988, df = 389, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in mean is not equal to 0
+## 95 percent confidence interval:
+##  7.237325 8.591066
+## sample estimates:
+## difference in mean 
+##           7.914195
 </code></pre></div></div>
 
 <p>Notice that unlike the base R <code class="language-plaintext highlighter-rouge">t.test()</code> function, <code class="language-plaintext highlighter-rouge">svyttest()</code> gives
