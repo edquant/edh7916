@@ -3,7 +3,7 @@ layout: lesson
 title: "Introduction to Mapping in R"
 subtitle: EDH7916
 author: Matt Capaldi
-order: 1
+order: 6
 category: extra
 links:
   script: mapping_api.R
