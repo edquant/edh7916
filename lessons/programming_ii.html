@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/edh7916/assets/css/style.css">
+<link rel="stylesheet" href="/edh7916/assets/css/syntax_default.css">
+<link rel="shortcut icon" type="image/png" href="/edh7916/assets/img/favicon.ico">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
+<script defer src="/edh7916/assets/js/all.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<title>edquant | EDH 7916: Contemporary Research in Higher Education</title>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/edquant/edh7916" class="iconlink">
+	      <i class="fab fa-github fa-sm"></i></a></h1>
+	<h2 class="thin">Spring 2023</h2>
+	<p>A course in quantitative research workflow for students in
+the higher education administration program at the University of Florida
+</p>
+	<!-- side / top bar menu -->
+	<h2 class="thin">
+	  <a href="/edh7916/">Overview</a></br>
+	  <a href="/edh7916/syllabus/">Course information</a></br>
+	  <a href="/edh7916/location/">Meeting location</a></br>
+	  <a href="/edh7916/software/">Software</a></br>
+	  <a href="/edh7916/schedule/">Schedule</a></br>
+	  <a href="/edh7916/lessons/">Lessons</a></br>
+	  <a href="/edh7916/assignments/">Assignments</a></br>
+	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/past/">Past courses</a></br>
+	  <a href="/edh7916/about/">About</a></br>	  
+	</h2>
+      </header>
+
+      <section>
+	<h1>Functional programming II</h1>
+	
+
+	
+<p>
+  
+  &nbsp;&nbsp;
+  
+  <a href="/edh7916/scripts/programming_two.R"
+     class="iconlink" download title="Get script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+  
+  
+  
+  <a href="/edh7916/data/programming_two.RDS"
+     class="iconlink" download title="Get data">
+    <i class="fas fa-database fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+</p>
+
+
+<p>In this lesson, we’ll continue to practice functional programming in
+R. To give us something to work on, we’ll code up our own version of a
+<a href="https://en.wikipedia.org/wiki/K-means_clustering">k-means clustering</a>
+algorithm. R already has a function to do this, appropriately titled
+<code class="language-plaintext highlighter-rouge">kmeans()</code>, but we’ll pretend it doesn’t.</p>
+
+<p>Being able to code up an algorithm based on mathematical notation or
+<a href="https://en.wikipedia.org/wiki/Pseudocode">pseudocode</a> is a really
+valuable skill to possess. As algorithms become even moderately
+complex, however, leaning on quick and dirty <a href="https://en.wikipedia.org/wiki/Spaghetti_code">spaghetti
+code</a> to “just get the
+job done” quickly becomes a mess. When you’ve worked hard to get an
+algorithm to work, it’s important to work a little harder to write it
+in a functional way that</p>
+
+<ol>
+  <li>Makes it clear what you have done (self-documenting);</li>
+  <li>Is easily ported to another project.</li>
+</ol>
+
+<p>With these goals in mind, we’ll write our own k-means clustering
+function. Because this lesson isn’t about learning the ins and outs
+of machine learning, we won’t dive into the various robustness checks
+we might otherwise perform were this a real project. That said, we
+should be able to write a well-performing function.</p>
+
+<h1 id="load-libraries-and-set-paths">Load libraries and set paths</h1>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## libraries</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.1     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.1     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">plotly</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Attaching package: 'plotly'
+## 
+## The following object is masked from 'package:ggplot2':
+## 
+##     last_plot
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following object is masked from 'package:graphics':
+## 
+##     layout
+</code></pre></div></div>
+
+<p>As always, we are working in the <code class="language-plaintext highlighter-rouge">./scripts</code> subdirectory.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## directory paths</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## assume we're running this script from the ./scripts subdirectory</span><span class="w">
+</span><span class="n">dat_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span><span class="w"> </span><span class="s2">"data"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h1 id="read-in-and-inspect-data">Read in and inspect data</h1>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------------------------------------</span><span class="w">
+</span><span class="c1">## read in data</span><span class="w">
+</span><span class="c1">## ---------------------------------------------------------</span><span class="w">
+
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">readRDS</span><span class="p">(</span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"kmeans.RDS"</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">df</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 1,500 × 3
+##        x     y     z
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 33.1  11.6  -16.0
+##  2 -8.55  6.01  11.8
+##  3 50.7  56.3   97.8
+##  4  2.83 27.5   34.4
+##  5 -4.66 20.0   25.1
+##  6 -3.04 16.2   22.8
+##  7 30.5  12.1  -14.3
+##  8  7.08 25.3   25.6
+##  9  1.33 20.1   17.6
+## 10 -3.11 13.4   11.5
+## # ℹ 1,490 more rows
+</code></pre></div></div>
+
+<p>The data set is an 1,500 by 3 matrix, with three covariates (or
+features in machine learning parlance), <code class="language-plaintext highlighter-rouge">x</code>, <code class="language-plaintext highlighter-rouge">y</code>, and <code class="language-plaintext highlighter-rouge">z</code>. Since these
+columns names don’t tell us much, let’s plot the first two features
+against each other in a scatter plot.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot first two dimensions</span><span class="w">
+</span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">()</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">g</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="../figures/programming_two_data-1.png" alt="plot of chunk programming_two_data" width="100%" /></p>
+
+<p>While there appears to be an overall positive correlation between <code class="language-plaintext highlighter-rouge">x</code>
+and <code class="language-plaintext highlighter-rouge">y</code>, the data seem to cluster into three groups. One group
+(furthest left on the <code class="language-plaintext highlighter-rouge">x</code> axis) seems more distinct from the other
+two, which look to be on the same trend line, but clumped in lower and
+higher positions.</p>
+
+<p>Our task will be to assign each point to an as yet unspecified group
+with the goal that each group will be contiguous (<em>e.g.</em>, will cluster
+together).</p>
+
+<h1 id="k-means-clustering">K-means clustering</h1>
+
+<p>Formally, the objective function for a k-means clustering algorithm is as
+follows (from <a href="https://en.wikipedia.org/wiki/K-means_clustering">Wikipedia</a>):</p>
+
+<p>\[ \underset{S}{arg\,min} \sum_{i=1}^k\sum_{x\in S_i}
+  \vert\vert x - \mu_i \vert\vert^2\]</p>
+
+<p>where</p>
+
+<ul>
+  <li>\(k\) is the number of clusters</li>
+  <li>\(S_i\) is one cluster set of points</li>
+  <li>\(\vert\vert x - \mu_i \vert\vert^2\) is the squared
+<a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean
+distance</a></li>
+</ul>
+
+<p>In English, the objective is that for a fixed number of clusters,
+assign each point to a cluster such the variance within each cluster
+(within-cluster sum of squares or WCSS) is minimized. If you think
+that this sounds like the objective of ordinary least squares (OLS),
+you are right. The difference here is that instead of creating a line
+of best fit (or using parametric assumptions to make inferences), we
+are simply assigning each point to its “cluster of best fit.”</p>
+
+<h2 id="algorithm">Algorithm</h2>
+
+<p>There are number of algorithms to compute k-means. We’ll use <a href="https://en.wikipedia.org/wiki/Lloyd%27s_algorithm">Lloyd’s
+algorithm</a>, which
+isn’t the best, but is the simplest and works well enough for our
+purposes.</p>
+
+<ol>
+  <li>Choose number of clusters, \(k\).</li>
+  <li>Randomly choose \(k\) points from data to serve as initial
+cluster means.</li>
+  <li>Repeat following steps until assignments no longer change:
+    <ol>
+      <li>Assign each point to the cluster with the closest mean (see <strong>Step
+3.1</strong>, below, for formal definition).</li>
+      <li>Update means to reflect points assigned to the cluster (see
+<strong>Step 3.2</strong>, below, for formal definition).</li>
+    </ol>
+  </li>
+</ol>
+
+<h3 id="step-31-assign-each-point-to-the-closest-mean">Step 3.1: Assign each point to the closest mean</h3>
+
+<p>\[ S_i^{(t)} = \{ x_p : \vert\vert x_p - m_i^{(t)} \vert\vert^2 
+\leq \vert\vert x_p - m_j^{(t)} \vert\vert^2 \,\forall\, j, 1 \lt j
+\lt k \}\]</p>
+
+<p><em>At time \(t\), each set, \(S_i\), contains all the points,
+\(x_p\) for which its mean, \(m_i^{(t)}\), is the nearest of
+possible cluster means.</em></p>
+
+<h3 id="step-32-update-means-to-reflect-points-in-the-cluster">Step 3.2: Update means to reflect points in the cluster</h3>
+
+<p>\[ m_i^{(t+1)} = \frac{1}{\vert S_i^{(t)} \vert} \sum_{x_j\in
+S_i^{(t)}} x_j \]</p>
+
+<p><em>At time \(t+1\), each cluster mean \(m_i^{(t+1)}\) is the
+centroid of the points, \(x_j\) assigned to the cluster at time \(t\).</em></p>
+
+<h1 id="lets-just-get-it-to-run">Let’s just get it to run!</h1>
+
+<p>For our first step, let’s see if we can “just get the job done.” With
+that in mind, we’ll limit the number of features to two, <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">y</code>.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## convert data to matrix to make our lives easier (x and y, only, for now)</span><span class="w">
+</span><span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">as.matrix</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p>As the first step, we need to pick some means. We’ll do this by
+sampling 3 numbers between 1 and the number of rows in the data frame
+(1,500). Next we’ll use these to pull out three rows that will be our
+starting means.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## get initial means to start</span><span class="w">
+</span><span class="n">index</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sample</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="n">nrow</span><span class="p">(</span><span class="n">dat</span><span class="p">),</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w">           </span><span class="c1"># give k random indexes</span><span class="w">
+</span><span class="n">means</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dat</span><span class="p">[</span><span class="n">index</span><span class="p">,]</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">means</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##              x        y
+## [1,]  3.938770 30.48006
+## [2,] -5.016768 31.87641
+## [3,] 46.690482 50.85235
+</code></pre></div></div>
+
+<p>Next, we need to keep track of how we assign each point. To that end,
+we will first initialize an empty numeric vector with a spot for each
+point, <code class="language-plaintext highlighter-rouge">assign_vec</code>. After that, we’ll loop through each point,
+compute the distance between that point and each mean, and put the
+index of the closest mean (effectively the label) in the point’s spot
+in <code class="language-plaintext highlighter-rouge">assign_vec</code>. For example, if the first point is closest to the
+first mean, <code class="language-plaintext highlighter-rouge">assign_vec[1] == 1</code>; if the 10th point is closest to the
+third mean, <code class="language-plaintext highlighter-rouge">assign_vec[10] == 3</code>, and so on.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## init assignment vector</span><span class="w">
+</span><span class="n">assign_vec</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">numeric</span><span class="p">(</span><span class="n">nrow</span><span class="p">(</span><span class="n">dat</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## assign each point to one of the clusters</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nrow</span><span class="p">(</span><span class="n">dat</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="c1">## init a temporary distance object to hold k distance values</span><span class="w">
+  </span><span class="n">distance</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">numeric</span><span class="p">(</span><span class="m">3</span><span class="p">)</span><span class="w">
+  </span><span class="c1">## compare to each mean</span><span class="w">
+  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">distance</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">dat</span><span class="p">[</span><span class="n">i</span><span class="p">,]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">means</span><span class="p">[</span><span class="n">j</span><span class="p">,])</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="c1">## assign the index of smallest value,</span><span class="w">
+  </span><span class="c1">## which is effectively cluster ID</span><span class="w">
+  </span><span class="n">assign_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">which.min</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1">## show first few</span><span class="w">
+</span><span class="n">assign_vec</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] 1 2 3 1 2 2 1 1 1 1 1 3 3 3 1 3 2 1 1 3
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise">Quick exercise</h4>
+  <p>Merge the assignments back to the data (everything should be in
+order for a quick <code class="language-plaintext highlighter-rouge">cbind()</code> or <code class="language-plaintext highlighter-rouge">bind_cols()</code>) and then plot,
+assigning a unique color to each group. How did we do the first iteration?</p>
+</blockquote>
+
+<p>Okay, we’ve started, but our means were arbitrary and probably weren’t
+the best. Now we need to pick new means and repeat the code above. We
+need to keep doing this until the assignments don’t change.</p>
+
+<p>A <code class="language-plaintext highlighter-rouge">while()</code> loop is perfect for this task. We’ll create a variable
+called <code class="language-plaintext highlighter-rouge">identical</code>, which will take the Boolean <code class="language-plaintext highlighter-rouge">FALSE</code>. While
+<code class="language-plaintext highlighter-rouge">identical</code> is not <code class="language-plaintext highlighter-rouge">FALSE</code> (<em>i.e.</em>, <code class="language-plaintext highlighter-rouge">TRUE</code>), the loop will continue.</p>
+
+<p>Inside, we’ll compute new means, store the assignments in another
+object so that we can compare later, run the same code as above again,
+then compare the old and the new. If the old and new assignments are
+different, then <code class="language-plaintext highlighter-rouge">identical</code> remains <code class="language-plaintext highlighter-rouge">FALSE</code> and the loop runs
+again. If the old and new assignments are the same, however,
+<code class="language-plaintext highlighter-rouge">identical</code> becomes <code class="language-plaintext highlighter-rouge">TRUE</code> and the loop stops because <code class="language-plaintext highlighter-rouge">!TRUE ==
+FALSE</code>.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## repeat above in loop until assignments don't change</span><span class="w">
+</span><span class="n">identical</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">FALSE</span><span class="w">
+</span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">identical</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="c1">## update means by subsetting each column</span><span class="w">
+  </span><span class="c1">## by assignment group, taking mean</span><span class="w">
+  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">colMeans</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="n">assign_vec</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">i</span><span class="p">,])</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="c1">## store old assignments, b/c we need to compare</span><span class="w">
+  </span><span class="n">old_assign_vec</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">assign_vec</span><span class="w">
+  </span><span class="c1">## assign each point to one of the clusters</span><span class="w">
+  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nrow</span><span class="p">(</span><span class="n">dat</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">## init a temporary distance object</span><span class="w">
+    </span><span class="c1">## to hold k distance values</span><span class="w">
+    </span><span class="n">distance</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">numeric</span><span class="p">(</span><span class="m">3</span><span class="p">)</span><span class="w">
+    </span><span class="c1">## compare to each mean</span><span class="w">
+    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">distance</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">dat</span><span class="p">[</span><span class="n">i</span><span class="p">,]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">means</span><span class="p">[</span><span class="n">j</span><span class="p">,])</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="c1">## assign the index of smallest value,</span><span class="w">
+    </span><span class="c1">## which is effectively cluster ID</span><span class="w">
+    </span><span class="n">assign_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">which.min</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="c1">## check if assignments change</span><span class="w">
+  </span><span class="n">identical</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">identical</span><span class="p">(</span><span class="n">old_assign_vec</span><span class="p">,</span><span class="w"> </span><span class="n">assign_vec</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Let’s check to see how we did.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## check assignment with scatter plot</span><span class="w">
+</span><span class="n">plot_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">bind_cols</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">assign_vec</span><span class="p">))</span><span class="w">
+</span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">plot_df</span><span class="p">,</span><span class="w"> </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w">
+                                   </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">assign_vec</span><span class="p">)))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_point</span><span class="p">()</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">g</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="../figures/programming_two_spaghetti-1.png" alt="plot of chunk programming_two_spaghetti" width="100%" /></p>
+
+<p>Looks like we did it! The clusters are, well, clustered and the
+points, for the most part, seem to be labeled correctly.</p>
+
+<blockquote>
+  <h4 id="quick-exercise-1">Quick exercise</h4>
+  <p>The k-means algorithm can be sensitive to the
+starting points since it finds locally optimal solutions (no
+guarantee that the solution is the best of all possible
+solutions). Run the code again a couple of times and see how your
+fit changes. Do some points move between groups?</p>
+</blockquote>
+
+<h3 id="problems">Problems</h3>
+
+<p>Our success not withstanding, we have a number of problems:</p>
+
+<ol>
+  <li>We have exactly repeated code</li>
+  <li>Magic numbers in the code (3)</li>
+  <li>Variable names that depend on working environment</li>
+  <li>Primary purpose of code is obfuscated</li>
+</ol>
+
+<p>Problems 1-3 make it difficult to change things in the code. We have
+to remember and find each repeated instance that we want to
+change. Problem 3 makes it difficult to re-use the code in another
+script (who knows what global variables are currently lurking and,
+once gone, will mess up our program?).</p>
+
+<p>Problem 4 means that it will be difficult to see what we did when
+coming back to the code in the future. With the repeated steps and the
+loop, it will be easy to lose the forest for the trees. What’s the
+point of this section of code again? After reading through multiple
+lines, we’ll see, if we’re lucky, that we were running a k-means
+clustering algorithm. That’s wasted time.</p>
+
+<h1 id="convert-to-functions">Convert to functions</h1>
+
+<p>What we need is to convert our spaghetti code to <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY (don’t repeat
+yourself)</a>
+code. Each unique bit of code should be wrapped in function that does
+one thing and does it well. Since functions can use other functions,
+we can start at the smallest part and build up to something more
+complex.</p>
+
+<p>What do we need? Looking at the code above, it looks like we would
+benefit from having unique functions to:</p>
+
+<ul>
+  <li>compute squared Euclidean distance</li>
+  <li>compute new means based on assignment labels</li>
+  <li>make new cluster assignments for each point</li>
+</ul>
+
+<h3 id="euclidean-distance-function">Euclidean distance function</h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## Euclidean distance^2</span><span class="w">
+</span><span class="n">euclid_dist_sq</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="nf">return</span><span class="p">(</span><span class="nf">sum</span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="compute-means">Compute means</h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compute new means for points in cluster</span><span class="w">
+</span><span class="n">compute_mean</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">assign_vec</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="c1">## init means matrix: # means X # features (data columns)</span><span class="w">
+  </span><span class="n">means</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">ncol</span><span class="p">(</span><span class="n">data</span><span class="p">))</span><span class="w">
+  </span><span class="c1">## for each mean, k...</span><span class="w">
+  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">## ...get column means, restricting to cluster assigned points</span><span class="w">
+    </span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">colMeans</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">assign_vec</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">i</span><span class="p">,])</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="n">means</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="make-new-assignments">Make new assignments</h3>
+
+<p>Notice that we’ve added a bit to our code above. We might find it
+useful to compute the within-cluster sum of squares (WCSS), so we’ve
+added and object, <code class="language-plaintext highlighter-rouge">wcss</code>, that has one spot for each cluster and holds
+a running total of the sum of squares within each cluster.</p>
+
+<p>To return multiple objects from a function, R requires that they be
+stored in a list. This function will return both the assignments for
+each point, like before, as well as the WCSS.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## find nearest mean to each point and assign to cluster</span><span class="w">
+</span><span class="n">assign_to_cluster</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">means</span><span class="p">,</span><span class="w"> </span><span class="n">assign_vec</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="c1">## init within-cluster sum of squares for each cluster</span><span class="w">
+  </span><span class="n">wcss</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">numeric</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w">
+  </span><span class="c1">## for each data point (slow!)...</span><span class="w">
+  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nrow</span><span class="p">(</span><span class="n">data</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">## ...init distance vector, one for each cluster mean</span><span class="w">
+    </span><span class="n">distance</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">numeric</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w">
+    </span><span class="c1">## ...for each mean...</span><span class="w">
+    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="c1">## ...compute distance to point</span><span class="w">
+      </span><span class="n">distance</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">euclid_dist_sq</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,],</span><span class="w"> </span><span class="n">means</span><span class="p">[</span><span class="n">j</span><span class="p">,])</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="c1">## ...assign to cluster with nearest mean</span><span class="w">
+    </span><span class="n">assign_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">which.min</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span><span class="w">
+    </span><span class="c1">## ...add distance to running sum of squares</span><span class="w">
+    </span><span class="c1">## for assigned cluster</span><span class="w">
+    </span><span class="n">wcss</span><span class="p">[</span><span class="n">assign_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">wcss</span><span class="p">[</span><span class="n">assign_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">distance</span><span class="p">[</span><span class="n">assign_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="s2">"assign_vec"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">assign_vec</span><span class="p">,</span><span class="w"> </span><span class="s2">"wcss"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wcss</span><span class="p">))</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="bonus-standardize-data">BONUS: standardize data</h3>
+
+<p>Many machine learning algorithms perform better if the covariates are
+on the same scale. We’ve not really had to worry about this so far
+since our data are scaled roughly the same. That said, we may want to
+use this algorithm in the future with data that aren’t similarly
+scaled (say, on data with age in years and family income in dollars).</p>
+
+<p>This function simply standardizes a matrix of data and returns the
+scaled data along with the mean and standard deviations of each column
+(feature), which are useful for rescaling the data later.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## standardize function that also returns mu and sd</span><span class="w">
+</span><span class="n">standardize_dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="c1">## column means</span><span class="w">
+  </span><span class="n">mu</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">colMeans</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w">
+  </span><span class="c1">## column standard deviations</span><span class="w">
+  </span><span class="n">sd</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">var</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span><span class="w">
+  </span><span class="c1">## scale data (z-score); faster to use pre-computed mu/sd</span><span class="w">
+  </span><span class="n">sdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sd</span><span class="p">)</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="s2">"mu"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="s2">"sd"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sd</span><span class="p">,</span><span class="w"> </span><span class="s2">"scaled_data"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sdata</span><span class="p">))</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="k-means-function">K-means function</h2>
+
+<p>Now that we have the pieces, we can put the pieces together in single
+function. Our function takes the following arguments:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">data</code>: a data frame (converted to matrix inside the function)</li>
+  <li><code class="language-plaintext highlighter-rouge">k</code>: number of clusters we want</li>
+  <li><code class="language-plaintext highlighter-rouge">iterations</code>: a stop valve in case our algorithm doesn’t want to
+converge</li>
+  <li><code class="language-plaintext highlighter-rouge">nstarts</code>: a new feature that says how many times to start the
+algorithm; while not perfect it may help prevent some sub-optimal
+local solutions</li>
+  <li><code class="language-plaintext highlighter-rouge">standardize</code>: an option to standardize the data</li>
+</ul>
+
+<p>Note that only <code class="language-plaintext highlighter-rouge">data</code> and <code class="language-plaintext highlighter-rouge">k</code> have to be supplied by the user. The
+other arguments have default values. If we leave them out of the
+function call, the defaults will be used.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## k-means function</span><span class="w">
+</span><span class="n">my_kmeans</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w">                  </span><span class="c1"># data frame</span><span class="w">
+                      </span><span class="n">k</span><span class="p">,</span><span class="w">                     </span><span class="c1"># number of clusters</span><span class="w">
+                      </span><span class="n">iterations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">,</span><span class="w">      </span><span class="c1"># max iterations</span><span class="w">
+                      </span><span class="n">nstarts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w">           </span><span class="c1"># how many times to run</span><span class="w">
+                      </span><span class="n">standardize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1"># standardize data?</span><span class="w">
+  </span><span class="c1">## convert to matrix</span><span class="w">
+  </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.matrix</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w">
+  </span><span class="c1">## standardize if TRUE</span><span class="w">
+  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">standardize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">sdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">standardize_dat</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w">
+    </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sdata</span><span class="p">[[</span><span class="s2">"scaled_data"</span><span class="p">]]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="c1">## for number of starts</span><span class="w">
+  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nstarts</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">## init identical</span><span class="w">
+    </span><span class="n">identical</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">FALSE</span><span class="w">
+    </span><span class="c1">## select k random points as starting means</span><span class="w">
+    </span><span class="n">means</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="n">sample</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="n">nrow</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">k</span><span class="p">),]</span><span class="w">
+    </span><span class="c1">## init assignment vector</span><span class="w">
+    </span><span class="n">init_assign_vec</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">nrow</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w">
+    </span><span class="c1">## first assignment</span><span class="w">
+    </span><span class="n">assign_wcss</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">assign_to_cluster</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">means</span><span class="p">,</span><span class="w"> </span><span class="n">init_assign_vec</span><span class="p">)</span><span class="w">
+    </span><span class="c1">## iterate until iterations run out</span><span class="w">
+    </span><span class="c1">## or no change in assignment</span><span class="w">
+    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">iterations</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">identical</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="c1">## store old assignment / wcss object</span><span class="w">
+      </span><span class="n">old_assign_wcss</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">assign_wcss</span><span class="w">
+      </span><span class="c1">## get new means</span><span class="w">
+      </span><span class="n">means</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">compute_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">assign_wcss</span><span class="p">[[</span><span class="s2">"assign_vec"</span><span class="p">]])</span><span class="w">
+      </span><span class="c1">## new assignments</span><span class="w">
+      </span><span class="n">assign_wcss</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">assign_to_cluster</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">means</span><span class="p">,</span><span class="w"> </span><span class="n">assign_wcss</span><span class="p">[[</span><span class="s2">"assign_vec"</span><span class="p">]])</span><span class="w">
+      </span><span class="c1">## check if identical (no change in assignment)</span><span class="w">
+      </span><span class="n">identical</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">identical</span><span class="p">(</span><span class="n">old_assign_wcss</span><span class="p">[[</span><span class="s2">"assign_vec"</span><span class="p">]],</span><span class="w">
+                             </span><span class="n">assign_wcss</span><span class="p">[[</span><span class="s2">"assign_vec"</span><span class="p">]])</span><span class="w">
+      </span><span class="c1">## reduce iteration counter</span><span class="w">
+      </span><span class="n">iterations</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">iterations</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="c1">## store best values...</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">best_wcss</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">assign_wcss</span><span class="p">[[</span><span class="s2">"wcss"</span><span class="p">]]</span><span class="w">
+      </span><span class="n">best_centers</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">means</span><span class="w">
+      </span><span class="n">best_assignvec</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">assign_wcss</span><span class="p">[[</span><span class="s2">"assign_vec"</span><span class="p">]]</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="c1">## ...update accordingly if number of starts is &gt; 1</span><span class="w">
+      </span><span class="c1">## &amp; wcss is lower</span><span class="w">
+      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">assign_wcss</span><span class="p">[[</span><span class="s2">"wcss"</span><span class="p">]])</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">best_wcss</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">best_wcss</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">assign_wcss</span><span class="p">[[</span><span class="s2">"wcss"</span><span class="p">]]</span><span class="w">
+        </span><span class="n">best_centers</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">means</span><span class="w">
+        </span><span class="n">best_assignvec</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">assign_wcss</span><span class="p">[[</span><span class="s2">"assign_vec"</span><span class="p">]]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="c1">## convert back to non-standard centers if necessary</span><span class="w">
+  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">standardize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">sd</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sdata</span><span class="p">[[</span><span class="s2">"sd"</span><span class="p">]]</span><span class="w">
+    </span><span class="n">mu</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sdata</span><span class="p">[[</span><span class="s2">"mu"</span><span class="p">]]</span><span class="w">
+    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">best_centers</span><span class="p">[,</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">best_centers</span><span class="p">[,</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sd</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mu</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="c1">## return assignment vector, cluster centers, &amp; wcss</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="s2">"assignments"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">best_assignvec</span><span class="p">,</span><span class="w">
+              </span><span class="s2">"centers"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">best_centers</span><span class="p">,</span><span class="w">
+              </span><span class="s2">"wcss"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">best_wcss</span><span class="p">))</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-2">Quick exercise</h4>
+  <p>Look through the function and talk through how the function will run
+with the following arguments:</p>
+
+  <ul>
+    <li><code class="language-plaintext highlighter-rouge">my_kmeans(data, 3)</code></li>
+    <li><code class="language-plaintext highlighter-rouge">my_kmeans(data, 3, standardize = TRUE)</code></li>
+    <li><code class="language-plaintext highlighter-rouge">my_kmeans(data, 3, nstarts = 10)</code></li>
+  </ul>
+</blockquote>
+
+<h1 id="2-dimensions">2 dimensions</h1>
+
+<p>Now that we have our proper function, let’s run it! Let’s go back to
+where we started, with two dimensions.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## 2 dimensions</span><span class="w">
+</span><span class="n">km_2d</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">my_kmeans</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span><span class="s2">"y"</span><span class="p">)],</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">nstarts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## check assignments, centers, and wcss</span><span class="w">
+</span><span class="n">km_2d</span><span class="o">$</span><span class="n">assignments</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] 1 3 2 3 3 3 1 3 3 3 3 2 2 2 3 1 3 1 1 2
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">km_2d</span><span class="o">$</span><span class="n">centers</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##            [,1]      [,2]
+## [1,] 25.0407539  9.780767
+## [2,] 54.6683528 54.725368
+## [3,]  0.7741392 25.471911
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">km_2d</span><span class="o">$</span><span class="n">wcss</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 88179.39 99748.81 89184.79
+</code></pre></div></div>
+
+<p>Notice how clear and unambiguous our code is now. We are running a
+k-means clustering algorithm with three clusters. We get results that
+tell us the assignments for each point, the centers of the clusters,
+and the WCSS.</p>
+
+<h1 id="3-dimensions">3 dimensions</h1>
+
+<p>The nice thing about our function is that it easily scales to more
+than two dimensions. Instead of subsetting the data, we’ll just
+include it all for 3 dimensions this time.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## 3 dimensions</span><span class="w">
+</span><span class="n">km_3d</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">my_kmeans</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">nstarts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## check centers and wcss</span><span class="w">
+</span><span class="n">km_3d</span><span class="o">$</span><span class="n">assignments</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] 3 2 1 2 2 2 3 2 2 2 2 1 1 1 2 3 2 3 3 1
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">km_3d</span><span class="o">$</span><span class="n">centers</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##            [,1]     [,2]      [,3]
+## [1,] 54.8865406 54.97876 105.13575
+## [2,]  0.8928973 25.51276  25.58783
+## [3,] 25.2858908 10.26503 -24.21246
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">km_3d</span><span class="o">$</span><span class="n">wcss</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 159247.5 153343.3 167007.1
+</code></pre></div></div>
+
+<h1 id="check-out-plots">Check out plots</h1>
+
+<p>Let’s plot our assignments. First, let’s plot the two dimensional
+assignments. We’ll use <a href="https://plot.ly/r/">plotly</a> this time so that
+it’s easier to zoom in on individual points.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## using 2D: looks good 2D...</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">plot_ly</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">km_2d</span><span class="o">$</span><span class="n">assignments</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">add_markers</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">p</span><span class="w">
+</span></code></pre></div></div>
+
+<!--html_preserve-->
+<iframe src="plotly/ptly_2d2d.html"></iframe>
+<!--/html_preserve-->
+
+<p>Looks pretty much like our first plot above. But what happens if we
+include the third feature, <code class="language-plaintext highlighter-rouge">z</code>, that we ignored?</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ...but off in 3D</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">plot_ly</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">km_2d</span><span class="o">$</span><span class="n">assignments</span><span class="p">),</span><span class="w">
+             </span><span class="n">marker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">add_markers</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">p</span><span class="w">
+</span></code></pre></div></div>
+
+<!--html_preserve-->
+<iframe src="plotly/ptly_2d3d.html"></iframe>
+<!--/html_preserve-->
+
+<p>Ah! Not so good! Clearly, some of the points appear to fit in one
+cluster if only <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">y</code> are considered, but no longer do when the
+third dimension is included.</p>
+
+<blockquote>
+  <h4 id="quick-exercise-3">Quick exercise</h4>
+  <p>Manipulate the 3D plotly figure to see if you can recreate the 2D
+plot, that is adjust the viewing angle. Then move it around to see
+how that flattened view was deceptive.</p>
+</blockquote>
+
+<p>Let’s move to our results that used all three features. Again, we’ll
+first look in just two dimensions.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## using 3D: looks off in 2D...</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">plot_ly</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">km_3d</span><span class="o">$</span><span class="n">assignments</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">add_markers</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">p</span><span class="w">
+</span></code></pre></div></div>
+
+<!--html_preserve-->
+<iframe src="plotly/ptly_3d2d.html"></iframe>
+<!--/html_preserve-->
+
+<p>In two dimensions, our clusters look a bit messy since they overlap on
+the edges. But looking in three dimensions…</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ...but clearly better fit in 3D</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">plot_ly</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">km_3d</span><span class="o">$</span><span class="n">assignments</span><span class="p">),</span><span class="w">
+             </span><span class="n">marker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">add_markers</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">p</span><span class="w">
+</span></code></pre></div></div>
+
+<!--html_preserve-->
+<iframe src="plotly/ptly_3d3d.html"></iframe>
+<!--/html_preserve-->
+
+<p>Much better! Not perfect, but better.</p>
+
+<blockquote>
+  <h4 id="quick-exercise-4">Quick exercise</h4>
+  <p>What happens if you assume 4 or 5 groups? Run the <code class="language-plaintext highlighter-rouge">my_kmeans()</code>
+function with those options and make a plotly plot. How does it
+look — better fit? worse fit?</p>
+</blockquote>
+
+
+
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
+      </section>
+      <footer>
+        <p>
+  Benjamin Skinner</br>  
+  Assistant Professor</br>  
+  University of Florida</br>
+  <a href="https://www.btskinner.io" class="iconlink" alt="Personal website">
+    <i class="fas fa-home fa-lg"></i></a> | 
+  <a href="https://github.com/btskinner" class="iconlink" alt="Github
+								profile">
+    <i class="fab fa-github fa-lg"></i></a> |
+  <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
+    <i class="fab fa-twitter fa-lg"></i></a>
+</p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
+
+      </footer>
+    </div>
+
+    <!-- load Javascript if page requires it -->
+    
+    
+    
+
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-63981025-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>

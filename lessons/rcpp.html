@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/edh7916/assets/css/style.css">
+<link rel="stylesheet" href="/edh7916/assets/css/syntax_default.css">
+<link rel="shortcut icon" type="image/png" href="/edh7916/assets/img/favicon.ico">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
+<script defer src="/edh7916/assets/js/all.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<title>edquant | EDH 7916: Contemporary Research in Higher Education</title>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/edquant/edh7916" class="iconlink">
+	      <i class="fab fa-github fa-sm"></i></a></h1>
+	<h2 class="thin">Spring 2023</h2>
+	<p>A course in quantitative research workflow for students in
+the higher education administration program at the University of Florida
+</p>
+	<!-- side / top bar menu -->
+	<h2 class="thin">
+	  <a href="/edh7916/">Overview</a></br>
+	  <a href="/edh7916/syllabus/">Course information</a></br>
+	  <a href="/edh7916/location/">Meeting location</a></br>
+	  <a href="/edh7916/software/">Software</a></br>
+	  <a href="/edh7916/schedule/">Schedule</a></br>
+	  <a href="/edh7916/lessons/">Lessons</a></br>
+	  <a href="/edh7916/assignments/">Assignments</a></br>
+	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/past/">Past courses</a></br>
+	  <a href="/edh7916/about/">About</a></br>	  
+	</h2>
+      </header>
+
+      <section>
+	<h1>High performance R with Rcpp</h1>
+	
+
+	
+<p>
+  
+  &nbsp;&nbsp;
+  
+  <a href="/edh7916/scripts/rcpp.R"
+     class="iconlink" download title="Get script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+  
+  <a href="/edh7916/scripts/dist_func.cpp"
+     class="iconlink" download title="Get extra script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+  
+  
+  
+  <a href="/edh7916/data/rcpp.zip"
+     class="iconlink" download title="Get data">
+    <i class="fas fa-database fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+</p>
+
+
+<p>R is really powerful, but for some tasks can be very slow. As data get
+larger and scripts require more complex algorithms and demanding
+tasks, even small bits of sluggishness become huge in the
+aggregate. Compiled languages such as C and C++ can be much faster
+than R, but require greater programming skill. While learning a
+compiled language is useful for many researchers, the upfront time
+needed to learn is often too steep for any given project.</p>
+
+<p>Fortunately, the <a href="https://CRAN.R-project.org/package=Rcpp">Rcpp</a>
+package bridges the gap between the two worlds. While there is a bit
+of a learning curve for Rcpp, which is based on C++, much R code can
+be, with few modifications, adjusted to become Rcpp code and run much
+faster for complex tasks.</p>
+
+<p>This module will give one example of such a speed up. In my own
+research, I’ve computed the <a href="https://en.wikipedia.org/wiki/Great-circle_distance">Great Circle (“as the crow flies”) 
+distance</a> between
+colleges and various geographic centroids many times using either the
+<a href="https://en.wikipedia.org/wiki/Haversine_formula">Haversine</a> or
+<a href="https://en.wikipedia.org/wiki/Vincenty%27s_formulae">Vincenty</a>
+formula. But with over 7,500 colleges and universities in the United
+States, measuring the distance from each county centroid (around
+3,000) became slow enough. Doing the same for all census tracks
+(around 70,000) and census block groups (over 200,000) was almost
+impossible. With small modifications to base R formula functions,
+however, I was able to convert them to compiled Rcpp function which
+run much, much faster.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## libraries</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.1     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.1     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">Rcpp</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">microbenchmark</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in library(microbenchmark): there is no package called 'microbenchmark'
+</code></pre></div></div>
+
+<p>And as always, we are working in the <code class="language-plaintext highlighter-rouge">./scripts</code> subdirectory.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## directory paths</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## assume we're running this script from the ./scripts subdirectory</span><span class="w">
+</span><span class="n">dat_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span><span class="w"> </span><span class="s2">"data"</span><span class="p">)</span><span class="w">
+</span><span class="n">rcpp_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="n">dat_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"rcpp"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h1 id="read-in-data">Read in data</h1>
+
+<p>This module uses two data frames. The first has the names and locations of
+all colleges with a physical campus in 2015. The second has the
+locations of every census block group in the United States from the
+2010 Census.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## input data</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="c1">## assume we're running this script from the ./scripts subdirectory</span><span class="w">
+</span><span class="n">df_col</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">readRDS</span><span class="p">(</span><span class="n">file.path</span><span class="p">(</span><span class="n">rcpp_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"collegeloc.RDS"</span><span class="p">))</span><span class="w">
+</span><span class="n">df_cbg</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">readRDS</span><span class="p">(</span><span class="n">file.path</span><span class="p">(</span><span class="n">rcpp_dir</span><span class="p">,</span><span class="w"> </span><span class="s2">"cblocks.RDS"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="college-locations">College locations</h2>
+
+<p>Here’s a quick peek at the college location data (around 7,600
+institutions).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## college locations</span><span class="w">
+</span><span class="n">df_col</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 7,647 × 5
+##    unitid instnm                              fips5   lon   lat
+##     &lt;int&gt; &lt;chr&gt;                               &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 100654 Alabama A &amp; M University            01089 -86.6  34.8
+##  2 100663 University of Alabama at Birmingham 01073 -86.8  33.5
+##  3 100690 Amridge University                  01101 -86.2  32.4
+##  4 100706 University of Alabama in Huntsville 01089 -86.6  34.7
+##  5 100724 Alabama State University            01101 -86.3  32.4
+##  6 100733 University of Alabama System Office 01125 -87.5  33.2
+##  7 100751 The University of Alabama           01125 -87.5  33.2
+##  8 100760 Central Alabama Community College   01123 -85.9  32.9
+##  9 100812 Athens State University             01083 -87.0  34.8
+## 10 100830 Auburn University at Montgomery     01101 -86.2  32.4
+## # ℹ 7,637 more rows
+</code></pre></div></div>
+
+<h2 id="census-block-group-locations">Census block group locations</h2>
+
+<p>And here’s the census block group location data (around 217,000 block groups).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## census block group locations</span><span class="w">
+</span><span class="n">df_cbg</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 217,740 × 4
+##    fips11         pop   lon   lat
+##    &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 010010201001   698 -86.5  32.5
+##  2 010010201002  1214 -86.5  32.5
+##  3 010010202001  1003 -86.5  32.5
+##  4 010010202002  1167 -86.5  32.5
+##  5 010010203001  2549 -86.5  32.5
+##  6 010010203002   824 -86.5  32.5
+##  7 010010204001   944 -86.4  32.5
+##  8 010010204002  1937 -86.4  32.5
+##  9 010010204003   935 -86.4  32.5
+## 10 010010204004   570 -86.4  32.5
+## # ℹ 217,730 more rows
+</code></pre></div></div>
+
+<h1 id="compute-great-circle-distance-with-haversine">Compute great circle distance with Haversine</h1>
+
+<p>The <a href="https://en.wikipedia.org/wiki/Haversine_formula#The_haversine_formula">Haversine
+formula</a>
+is a fairly straightforward trigonometric problem. Since the
+coordinates in the data are in latitude and longitude and the formula
+requires radians, a quick helper function <code class="language-plaintext highlighter-rouge">deg_to_rad()</code> is used to
+make the conversion.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## convert degrees to radians</span><span class="w">
+</span><span class="n">deg_to_rad</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">degree</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">m_pi</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3.141592653589793238462643383280</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="n">degree</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m_pi</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">180</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1">## compute Haversine distance between two points</span><span class="w">
+</span><span class="n">dist_haversine</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w"> </span><span class="n">xlat</span><span class="p">,</span><span class="w"> </span><span class="n">ylon</span><span class="p">,</span><span class="w"> </span><span class="n">ylat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+
+  </span><span class="c1">## radius of Earth in meters</span><span class="w">
+  </span><span class="n">e_r</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">6378137</span><span class="w">
+  
+  </span><span class="c1">## return 0 if same point</span><span class="w">
+  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">xlon</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ylon</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">xlat</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">xlon</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nf">return</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w">
+  
+  </span><span class="c1">## convert degrees to radians</span><span class="w">
+  </span><span class="n">xlon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">xlon</span><span class="p">)</span><span class="w">
+  </span><span class="n">xlat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">xlat</span><span class="p">)</span><span class="w">
+  </span><span class="n">ylon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">ylon</span><span class="p">)</span><span class="w">
+  </span><span class="n">ylat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">ylat</span><span class="p">)</span><span class="w">
+  
+  </span><span class="c1">## haversine distance formula</span><span class="w">
+  </span><span class="n">d1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sin</span><span class="p">((</span><span class="n">ylat</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xlat</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w">
+  </span><span class="n">d2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sin</span><span class="p">((</span><span class="n">ylon</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xlon</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w">
+  
+  </span><span class="nf">return</span><span class="p">(</span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">e_r</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">asin</span><span class="p">(</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">d1</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">cos</span><span class="p">(</span><span class="n">xlat</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">cos</span><span class="p">(</span><span class="n">ylat</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">d2</span><span class="o">^</span><span class="m">2</span><span class="p">)))</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>With the formula, we can compute the distance in meters between the
+first census block group and the first college in the data set pretty
+quickly.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## store first census block group point (x) and first college point (y)</span><span class="w">
+</span><span class="n">xlon</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df_cbg</span><span class="p">[[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"lon"</span><span class="p">]]</span><span class="w">
+</span><span class="n">xlat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df_cbg</span><span class="p">[[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"lat"</span><span class="p">]]</span><span class="w">
+</span><span class="n">ylon</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df_col</span><span class="p">[[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"lon"</span><span class="p">]]</span><span class="w">
+</span><span class="n">ylat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df_col</span><span class="p">[[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"lat"</span><span class="p">]]</span><span class="w">
+
+</span><span class="c1">## test single distance function</span><span class="w">
+</span><span class="n">d</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_haversine</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w"> </span><span class="n">xlat</span><span class="p">,</span><span class="w"> </span><span class="n">ylon</span><span class="p">,</span><span class="w"> </span><span class="n">ylat</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">d</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 258212.3
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise">Quick exercise</h4>
+  <p>Find the coordinates of two places you know the distance between
+pretty well (say, your hometown and where you live now or your first
+college or the nearest big city). Compute the distance and compare
+to Google's driving distance. It should be shorter (crows fly very
+straight), but similar. You may want to convert the meters to
+kilometers or miles. As always Google is your friend for all these
+steps.</p>
+</blockquote>
+
+<h2 id="many-to-many-distance-matrix">Many to many distance matrix</h2>
+
+<p>Now that we have a core function, let’s write a larger function that
+can take many input points, many output points, and compute the
+distances between them.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compute many to many distances and return matrix</span><span class="w">
+</span><span class="n">dist_mtom</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w">         </span><span class="c1"># vector of starting longitudes</span><span class="w">
+                      </span><span class="n">xlat</span><span class="p">,</span><span class="w">         </span><span class="c1"># vector of starting latitudes</span><span class="w">
+                      </span><span class="n">ylon</span><span class="p">,</span><span class="w">         </span><span class="c1"># vector of ending longitudes</span><span class="w">
+                      </span><span class="n">ylat</span><span class="p">,</span><span class="w">         </span><span class="c1"># vector of ending latitudes</span><span class="w">
+                      </span><span class="n">x_names</span><span class="p">,</span><span class="w">      </span><span class="c1"># vector of starting point names</span><span class="w">
+                      </span><span class="n">y_names</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">    </span><span class="c1"># vector of ending point names</span><span class="w">
+
+  </span><span class="c1">## init output matrix (n X k)</span><span class="w">
+  </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">xlon</span><span class="p">)</span><span class="w">
+  </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">ylon</span><span class="p">)</span><span class="w">
+  </span><span class="n">mat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w">
+  
+  </span><span class="c1">## double loop through each set of points to get all combinations</span><span class="w">
+  </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="c1">## compute distance using core function</span><span class="w">
+      </span><span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_haversine</span><span class="p">(</span><span class="n">xlon</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">xlat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">ylon</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">ylat</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  
+  </span><span class="c1">## add row and column names</span><span class="w">
+  </span><span class="n">rownames</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">x_names</span><span class="w">
+  </span><span class="n">colnames</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y_names</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Let’s test it with a subset of ten starting points.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## test matrix (limit to only 10 starting points)</span><span class="w">
+</span><span class="n">distmat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_mtom</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w"> </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                     </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w"> </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                     </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w"> </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">distmat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##                100654   100663   100690   100706   100724
+## 010010201001 258212.3 119349.8 31495.73 251754.3 21138.09
+## 010010201002 256255.2 117447.3 32284.61 249798.4 22263.60
+## 010010202001 256775.4 118210.3 31047.25 250348.1 21059.86
+## 010010202002 258084.9 119554.9 30210.67 251665.2 20017.60
+## 010010203001 256958.5 118703.3 29758.10 250567.0 19905.92
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-1">Quick exercise</h4>
+  <p>Can you find the minimum distance for each starting point? What’s
+the name of the nearest end point?</p>
+</blockquote>
+
+<h2 id="nearest-end-point">Nearest end point</h2>
+
+<p>Rather than return a full matrix of distances that we then need to
+evaluate to find the shortest distance, let’s write a new function,
+<code class="language-plaintext highlighter-rouge">dist_min()</code>, that will take two vectors of points again, but only
+return the closest point in the second group, with distance, for each
+point in the first group.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compute and return minimum distance along with name</span><span class="w">
+</span><span class="n">dist_min</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w">         </span><span class="c1"># vector of starting longitudes</span><span class="w">
+                     </span><span class="n">xlat</span><span class="p">,</span><span class="w">         </span><span class="c1"># vector of starting latitudes</span><span class="w">
+                     </span><span class="n">ylon</span><span class="p">,</span><span class="w">         </span><span class="c1"># vector of ending longitudes</span><span class="w">
+                     </span><span class="n">ylat</span><span class="p">,</span><span class="w">         </span><span class="c1"># vector of ending latitudes</span><span class="w">
+                     </span><span class="n">x_names</span><span class="p">,</span><span class="w">      </span><span class="c1"># vector of starting point names</span><span class="w">
+                     </span><span class="n">y_names</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">    </span><span class="c1"># vector of ending point names</span><span class="w">
+    
+    </span><span class="c1">## NB: lengths: x coords == x names &amp;&amp; y coords == y_names</span><span class="w">
+    </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">xlon</span><span class="p">)</span><span class="w">
+    </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">ylon</span><span class="p">)</span><span class="w">
+    </span><span class="n">minvec_name</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">vector</span><span class="p">(</span><span class="s1">'character'</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w">
+    </span><span class="n">minvec_meter</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">vector</span><span class="p">(</span><span class="s1">'numeric'</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w">
+
+    </span><span class="c1">## init temporary vector for distances between one x and all ys</span><span class="w">
+    </span><span class="n">tmp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">vector</span><span class="p">(</span><span class="s1">'numeric'</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w">
+
+    </span><span class="c1">## give tmp names of y vector</span><span class="w">
+    </span><span class="nf">names</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y_names</span><span class="w">
+
+    </span><span class="c1">## loop through each set of starting points</span><span class="w">
+    </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="n">tmp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_haversine</span><span class="p">(</span><span class="n">xlon</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">xlat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">ylon</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">ylat</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+
+        </span><span class="c1">## add to output matrix</span><span class="w">
+        </span><span class="n">minvec_name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">which.min</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span><span class="w">
+        </span><span class="n">minvec_meter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+
+    </span><span class="nf">return</span><span class="p">(</span><span class="n">data.frame</span><span class="p">(</span><span class="s1">'fips11'</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x_names</span><span class="p">,</span><span class="w">
+                      </span><span class="s1">'unitid'</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">minvec_name</span><span class="p">,</span><span class="w">
+                      </span><span class="s1">'meters'</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">minvec_meter</span><span class="p">,</span><span class="w">
+                      </span><span class="n">stringsAsFactors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">))</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Let’s test it out.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## test matrix (limit to only 10 starting points)</span><span class="w">
+</span><span class="n">mindf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_min</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w"> </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                  </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w"> </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                  </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w"> </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">)</span><span class="w">
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">mindf</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##          fips11 unitid   meters
+## 1  010010201001 101471 15785.88
+## 2  010010201002 101471 14228.69
+## 3  010010202001 101471 13949.21
+## 4  010010202002 101471 14870.35
+## 5  010010203001 101471 13362.81
+## 6  010010203002 101471 14389.79
+## 7  010010204001 101471 12704.73
+## 8  010010204002 101471 13270.80
+## 9  010010204003 101471 14102.44
+## 10 010010204004 101471 14756.51
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-2">Quick exercise</h4>
+  <p>How long will it take to find the closest college to each census
+block group? Use <code class="language-plaintext highlighter-rouge">system.time()</code> and extrapolate to make a best guess.</p>
+</blockquote>
+
+<h1 id="rcpp">Rcpp</h1>
+
+<p>These worked well, but we only did 10 starting points. We need to find
+it for over 200,000 starting points. What we need is to convert the
+base R functions into Rcpp functions.</p>
+
+<p>Below, the full script, <code class="language-plaintext highlighter-rouge">dist_func.cpp</code>, is discussed in pieces.</p>
+
+<h2 id="front-matter">Front matter</h2>
+
+<p>The head of an Rcpp script is like an R script in that this is place
+to <code class="language-plaintext highlighter-rouge">#include</code> other header files. This is akin to having
+<code class="language-plaintext highlighter-rouge">library(...)</code> in an R script. At the very least, an Rcpp script needs
+to include it’s own header files, <code class="language-plaintext highlighter-rouge">Rcpp.h</code>.</p>
+
+<p>Next, we define preprocessor replacements. In the process of compiling
+the script, that is, turning the Rcpp code that’s human readable into
+machine-readable byte code, the preprocessor first runs through the
+script. One job is to replace any <code class="language-plaintext highlighter-rouge">#define</code> directive with the value
+it has been given. In our code, that means that anywhere in the script
+that <code class="language-plaintext highlighter-rouge">e_r</code> is found, <code class="language-plaintext highlighter-rouge">6378137.0</code> literally replaces it.</p>
+
+<p>Finally, we load the <code class="language-plaintext highlighter-rouge">Rcpp</code> namespace with <code class="language-plaintext highlighter-rouge">using namespace
+Rcpp;</code>. This means that we don’t have to keep repeating <code class="language-plaintext highlighter-rouge">Rcpp::&lt;...&gt;</code>
+before every function we want. Sometimes, it’s better to do it the
+long way, especially if you are using functions from multiple
+libraries that may overlap, but we’re okay doing it this way this
+time.</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// header files to include</span>
+<span class="cp">#include &lt;Rcpp.h&gt;
+</span>
+<span class="c1">// preprocessor replacements</span>
+<span class="cp">#define e_r 6378137.0		
+#define m_pi 3.141592653589793238462643383280
+</span>
+<span class="c1">// use Rcpp namespace to avoid Rcpp::&lt;...&gt; repetition</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">Rcpp</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="utility-functions">Utility functions</h2>
+
+<p>First, we have the two utility functions to convert degrees to radians
+and to compute the Haversine distance between two points. A few things
+to note right away:</p>
+
+<ul>
+  <li>Rcpp comments use <code class="language-plaintext highlighter-rouge">//</code> or <code class="language-plaintext highlighter-rouge">/* ... */</code></li>
+  <li>Lines must end in a semi-colon, <code class="language-plaintext highlighter-rouge">;</code></li>
+  <li>Variables are <a href="https://en.wikipedia.org/wiki/Strong_and_weak_typing">strongly
+typed</a></li>
+</ul>
+
+<p>When a language is strongly typed, the user must tell the compiler
+the variable type, like <code class="language-plaintext highlighter-rouge">double</code>, <code class="language-plaintext highlighter-rouge">int</code>, etc. R will guess what you
+want and change on fly. This is a nice interactive feature, but is
+part of what makes R slow sometimes. By strongly typing a variable,
+the computer knows right away what you want and doesn’t waste time or
+memory making adjustments.</p>
+
+<p>A few other things to notice:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">doubles</code> should end in a <code class="language-plaintext highlighter-rouge">.</code> or <code class="language-plaintext highlighter-rouge">.0</code>, otherwise they are assumed to
+be integers; dividing by integers can have weird outcomes so unless
+you are REALLY sure you want an integer, a floating point number
+like a <code class="language-plaintext highlighter-rouge">double</code> is probably what you want (see <code class="language-plaintext highlighter-rouge">degree * m_pi /
+180.0</code>)</li>
+  <li>The variable type before the function name tells the compiler what
+form the function output will take</li>
+  <li>Function arguments must also be typed</li>
+</ul>
+
+<p>Finally, for the function to be available to you as a user, you must
+put <code class="language-plaintext highlighter-rouge">// [[Rcpp::export]]</code> just before it.</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// convert degrees to radians</span>
+<span class="c1">// [[Rcpp::export]]</span>
+<span class="kt">double</span> <span class="nf">deg_to_rad_rcpp</span><span class="p">(</span><span class="kt">double</span> <span class="n">degree</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span><span class="p">(</span><span class="n">degree</span> <span class="o">*</span> <span class="n">m_pi</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// compute Haversine distance between two points</span>
+<span class="c1">// [[Rcpp::export]]</span>
+<span class="kt">double</span> <span class="nf">dist_haversine_rcpp</span><span class="p">(</span><span class="kt">double</span> <span class="n">xlon</span><span class="p">,</span>
+			   <span class="kt">double</span> <span class="n">xlat</span><span class="p">,</span>
+			   <span class="kt">double</span> <span class="n">ylon</span><span class="p">,</span>
+			   <span class="kt">double</span> <span class="n">ylat</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">// return 0 if same point</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">xlon</span> <span class="o">==</span> <span class="n">ylon</span> <span class="o">&amp;&amp;</span> <span class="n">xlat</span> <span class="o">==</span> <span class="n">xlon</span><span class="p">)</span> <span class="k">return</span> <span class="mf">0.0</span><span class="p">;</span>
+
+  <span class="c1">// convert degrees to radians</span>
+  <span class="n">xlon</span> <span class="o">=</span> <span class="n">deg_to_rad_rcpp</span><span class="p">(</span><span class="n">xlon</span><span class="p">);</span>
+  <span class="n">xlat</span> <span class="o">=</span> <span class="n">deg_to_rad_rcpp</span><span class="p">(</span><span class="n">xlat</span><span class="p">);</span>
+  <span class="n">ylon</span> <span class="o">=</span> <span class="n">deg_to_rad_rcpp</span><span class="p">(</span><span class="n">ylon</span><span class="p">);</span>
+  <span class="n">ylat</span> <span class="o">=</span> <span class="n">deg_to_rad_rcpp</span><span class="p">(</span><span class="n">ylat</span><span class="p">);</span>
+
+  <span class="c1">// haversine distance formula</span>
+  <span class="kt">double</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">sin</span><span class="p">((</span><span class="n">ylat</span> <span class="o">-</span> <span class="n">xlat</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">);</span>
+  <span class="kt">double</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">sin</span><span class="p">((</span><span class="n">ylon</span> <span class="o">-</span> <span class="n">xlon</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">e_r</span> <span class="o">*</span> <span class="n">asin</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d1</span><span class="o">*</span><span class="n">d1</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="n">xlat</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">ylat</span><span class="p">)</span> <span class="o">*</span> <span class="n">d2</span><span class="o">*</span><span class="n">d2</span><span class="p">));</span>	 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="many-to-many-distance-matrix-1">Many to many distance matrix</h2>
+
+<p>Moving to the main functions, notice that base R function has been
+changed only slightly. For the most part, the difference is that
+variables, argument, and function return must be typed.</p>
+
+<p>A few other differences to note:</p>
+
+<ul>
+  <li>the length of a vector is measured with <code class="language-plaintext highlighter-rouge">.size()</code></li>
+  <li>loops in C++ take the form (<init>; <test>; <increment>), which
+works as "start `i` as 0, check if `i` is less than the number of
+starting points, `n`, add 1 to `i`, then run the loop; if the check
+fails, skip the loop.</increment></test></init></li>
+</ul>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// compute many to many distances and return matrix</span>
+<span class="c1">// [[Rcpp::export]]</span>
+<span class="n">NumericMatrix</span> <span class="nf">dist_mtom_rcpp</span><span class="p">(</span><span class="n">NumericVector</span> <span class="n">xlon</span><span class="p">,</span>
+			     <span class="n">NumericVector</span> <span class="n">xlat</span><span class="p">,</span>
+			     <span class="n">NumericVector</span> <span class="n">ylon</span><span class="p">,</span>
+			     <span class="n">NumericVector</span> <span class="n">ylat</span><span class="p">,</span>
+			     <span class="n">CharacterVector</span> <span class="n">x_names</span><span class="p">,</span>
+			     <span class="n">CharacterVector</span> <span class="n">y_names</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">// init output matrix (x X y)</span>
+  <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">xlon</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+  <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">ylon</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+  <span class="n">NumericMatrix</span> <span class="n">distmat</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">k</span><span class="p">);</span>
+
+  <span class="c1">// double loop through each set of points to get all combinations</span>
+  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">distmat</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">dist_haversine_rcpp</span><span class="p">(</span><span class="n">xlon</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">xlat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">ylon</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">ylat</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="c1">// add row and column names</span>
+  <span class="n">rownames</span><span class="p">(</span><span class="n">distmat</span><span class="p">)</span> <span class="o">=</span> <span class="n">x_names</span><span class="p">;</span>
+  <span class="n">colnames</span><span class="p">(</span><span class="n">distmat</span><span class="p">)</span> <span class="o">=</span> <span class="n">y_names</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">distmat</span><span class="p">;</span>
+<span class="p">}</span>	
+</code></pre></div></div>
+
+<h2 id="nearest-end-point-1">Nearest end point</h2>
+
+<p>Again the Rcpp version of this script is almost identical to the base
+R version, just with variable typing added. Since we’re returning a
+data frame (Rcpp version: <code class="language-plaintext highlighter-rouge">DataFrame</code>), we have to create it with
+<code class="language-plaintext highlighter-rouge">DataFrame::create()</code> as we return it.</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// compute and return minimum distance along with name</span>
+<span class="c1">// [[Rcpp::export]]</span>
+<span class="n">DataFrame</span> <span class="nf">dist_min_rcpp</span><span class="p">(</span><span class="n">NumericVector</span> <span class="n">xlon</span><span class="p">,</span>
+						<span class="n">NumericVector</span> <span class="n">xlat</span><span class="p">,</span>
+						<span class="n">NumericVector</span> <span class="n">ylon</span><span class="p">,</span>
+						<span class="n">NumericVector</span> <span class="n">ylat</span><span class="p">,</span>
+						<span class="n">CharacterVector</span> <span class="n">x_names</span><span class="p">,</span>
+						<span class="n">CharacterVector</span> <span class="n">y_names</span><span class="p">)</span> <span class="p">{</span>
+  
+  <span class="c1">// init output matrix (x X 3)</span>
+  <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">xlon</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+  <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">ylon</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+  <span class="n">CharacterVector</span> <span class="n">minvec_name</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+  <span class="n">NumericVector</span> <span class="n">minvec_meter</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+  <span class="n">NumericVector</span> <span class="n">tmp</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+  
+  <span class="c1">// loop through each set of starting points</span>
+  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">tmp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist_haversine_rcpp</span><span class="p">(</span><span class="n">xlon</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">xlat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">ylon</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">ylat</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="c1">// add to output matrix</span>
+    <span class="n">minvec_name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_names</span><span class="p">[</span><span class="n">which_min</span><span class="p">(</span><span class="n">tmp</span><span class="p">)];</span>
+    <span class="n">minvec_meter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="c1">// return created data frame</span>
+  <span class="k">return</span> <span class="n">DataFrame</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">Named</span><span class="p">(</span><span class="s">"fips11"</span><span class="p">)</span> <span class="o">=</span> <span class="n">x_names</span><span class="p">,</span>
+						   <span class="n">Named</span><span class="p">(</span><span class="s">"unitid"</span><span class="p">)</span> <span class="o">=</span> <span class="n">minvec_name</span><span class="p">,</span>
+						   <span class="n">Named</span><span class="p">(</span><span class="s">"meters"</span><span class="p">)</span> <span class="o">=</span> <span class="n">minvec_meter</span><span class="p">,</span>
+						   <span class="n">_</span><span class="p">[</span><span class="s">"stringsAsFactors"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="source-the-rcpp-file">Source the Rcpp file</h2>
+
+<p>To compile the Rcpp scripts and have the functions available to us in
+our R script or session, we need to read in the script with
+<code class="language-plaintext highlighter-rouge">sourceCpp()</code>. This works much like regular <code class="language-plaintext highlighter-rouge">source()</code> works, except
+for Rcpp files. We’ll add the argument <code class="language-plaintext highlighter-rouge">rebuild = TRUE</code> so that if
+need to go back and adjust the source code during a session, it will
+be rebuilt when we call <code class="language-plaintext highlighter-rouge">sourceCpp()</code> again.</p>
+
+<p>Compiling code can take a while. In essence, we’re trading some time
+now for faster speed down the road. This is why compiled code isn’t
+great for interactive coding sessions or for small tasks. But our code
+isn’t complex and compiles rather quickly.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## source Rcpp code</span><span class="w">
+</span><span class="n">sourceCpp</span><span class="p">(</span><span class="s1">'../scripts/dist_func.cpp'</span><span class="p">,</span><span class="w"> </span><span class="n">rebuild</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Warning in normalizePath(file, winslash = "/"):
+## path[1]="../scripts/dist_func.cpp": No such file or directory
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): file not found: '../scripts/dist_func.cpp'
+</code></pre></div></div>
+
+<h1 id="quick-comparisons">Quick comparisons</h1>
+
+<p>Now that we have both versions of our distance measuring functions, we
+should compare the time it takes both to run. But first, let’s make
+sure that they give the same results.</p>
+
+<h2 id="single-distance">Single distance</h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">d_Rcpp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_haversine_rcpp</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w"> </span><span class="n">xlat</span><span class="p">,</span><span class="w"> </span><span class="n">ylon</span><span class="p">,</span><span class="w"> </span><span class="n">ylat</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_haversine_rcpp(xlon, xlat, ylon, ylat): could not find function "dist_haversine_rcpp"
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">d_Rcpp</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'd_Rcpp' not found
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare</span><span class="w">
+</span><span class="n">identical</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">d_Rcpp</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in identical(d, d_Rcpp): object 'd_Rcpp' not found
+</code></pre></div></div>
+
+<p>For one point, our <code class="language-plaintext highlighter-rouge">dist_haversine()</code> and <code class="language-plaintext highlighter-rouge">dist_haversine_rcpp()</code> give
+the same result.</p>
+
+<h2 id="many-to-many">Many to many</h2>
+
+<p>Next, we’ll compare our many to many matrix, making sure we get the
+same values.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distmat_Rcpp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_mtom_rcpp</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                               </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                               </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                               </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                               </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                               </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_mtom_rcpp(df_cbg$lon[1:10], df_cbg$lat[1:10], df_col$lon, : could not find function "dist_mtom_rcpp"
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">distmat_Rcpp</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'distmat_Rcpp' not found
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare</span><span class="w">
+</span><span class="n">all.equal</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span><span class="w"> </span><span class="n">distmat_Rcpp</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in mode(current): object 'distmat_Rcpp' not found
+</code></pre></div></div>
+
+<p>Again, we get the same values (within some very very small floating
+point rounding error).</p>
+
+<h2 id="minimum-distances">Minimum distances</h2>
+
+<p>Finally, we’ll compare the minimum distance function.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mindf_Rcpp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_min_rcpp</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                            </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                            </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                            </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                            </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                            </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_min_rcpp(df_cbg$lon[1:10], df_cbg$lat[1:10], df_col$lon, : could not find function "dist_min_rcpp"
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">mindf_Rcpp</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'mindf_Rcpp' not found
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare</span><span class="w">
+</span><span class="n">all.equal</span><span class="p">(</span><span class="n">mindf</span><span class="p">,</span><span class="w"> </span><span class="n">mindf_Rcpp</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in all.equal.default(mindf, mindf_Rcpp): object 'mindf_Rcpp' not found
+</code></pre></div></div>
+
+<p>And once more, the same results. We’re now ready to compare speeds!</p>
+
+<h1 id="benchmarks">Benchmarks</h1>
+
+<p>To compare really small differences in time, we’ll use the
+<a href="https://CRAN.R-project.org/package=microbenchmark">microbenchmark</a>
+package. Aside from being accurate at small time scales, it makes
+comparisons based on multiple runs and can plot the differences using
+the <code class="language-plaintext highlighter-rouge">autoplot()</code> function.</p>
+
+<p>First, we’ll compare the core <code class="language-plaintext highlighter-rouge">dist_haversine*()</code> functions.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## use microbenchmark to compare </span><span class="w">
+</span><span class="n">tm_single</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">microbenchmark</span><span class="p">(</span><span class="n">base_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist_haversine</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w"> </span><span class="n">xlat</span><span class="p">,</span><span class="w"> </span><span class="n">ylon</span><span class="p">,</span><span class="w"> </span><span class="n">ylat</span><span class="p">),</span><span class="w">
+                            </span><span class="n">Rcpp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist_haversine_rcpp</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w"> </span><span class="n">xlat</span><span class="p">,</span><span class="w"> </span><span class="n">ylon</span><span class="p">,</span><span class="w"> </span><span class="n">ylat</span><span class="p">),</span><span class="w">
+                            </span><span class="n">times</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000L</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in microbenchmark(base_R = dist_haversine(xlon, xlat, ylon, ylat), : could not find function "microbenchmark"
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## results</span><span class="w">
+</span><span class="n">tm_single</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'tm_single' not found
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot</span><span class="w">
+</span><span class="n">autoplot</span><span class="p">(</span><span class="n">tm_single</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in autoplot(tm_single): object 'tm_single' not found
+</code></pre></div></div>
+
+<p>Comparing <code class="language-plaintext highlighter-rouge">dist_haversine()</code> with <code class="language-plaintext highlighter-rouge">dist_haversine_rcpp()</code>, the
+compiled version isn’t that much faster. Considering we’re on the
+scale of microseconds, it <em>really</em> isn’t that much faster.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## time for base R to do many to many with 100 starting points</span><span class="w">
+</span><span class="n">system.time</span><span class="p">(</span><span class="n">dist_mtom</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                      </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                      </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                      </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                      </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                      </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
+##   2.986   0.007   2.993
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ...and now Rcpp version</span><span class="w">
+</span><span class="n">system.time</span><span class="p">(</span><span class="n">dist_mtom_rcpp</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                           </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                           </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                           </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                           </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                           </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_mtom_rcpp(df_cbg$lon[1:100], df_cbg$lat[1:100], df_col$lon, : could not find function "dist_mtom_rcpp"
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Timing stopped at: 0 0 0.001
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare just 10 many to many</span><span class="w">
+</span><span class="n">tm_mtom</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">microbenchmark</span><span class="p">(</span><span class="n">base_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist_mtom</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                             </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                             </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                                             </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                                             </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                             </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">),</span><span class="w">
+                          </span><span class="n">Rcpp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist_mtom_rcpp</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                                </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                                </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                                                </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                                                </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                                </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">),</span><span class="w">
+                          </span><span class="n">times</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100L</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in microbenchmark(base_R = dist_mtom(df_cbg$lon[1:10], df_cbg$lat[1:10], : could not find function "microbenchmark"
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## results</span><span class="w">
+</span><span class="n">tm_mtom</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'tm_mtom' not found
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot</span><span class="w">
+</span><span class="n">autoplot</span><span class="p">(</span><span class="n">tm_mtom</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in autoplot(tm_mtom): object 'tm_mtom' not found
+</code></pre></div></div>
+
+<p>Where we start to see speed improvements in the main function. The
+compiled version of the many to many function is nearly two orders of
+magnitude faster!</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## time for base R to do many to many with 100 starting points</span><span class="w">
+</span><span class="n">system.time</span><span class="p">(</span><span class="n">dist_min</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                     </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                     </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                     </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                     </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                     </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
+##   3.082   0.015   3.099
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ...and now Rcpp version</span><span class="w">
+</span><span class="n">system.time</span><span class="p">(</span><span class="n">dist_min_rcpp</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                          </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                          </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                          </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                          </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">],</span><span class="w">
+                          </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_min_rcpp(df_cbg$lon[1:100], df_cbg$lat[1:100], df_col$lon, : could not find function "dist_min_rcpp"
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Timing stopped at: 0 0 0
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare just 10 min</span><span class="w">
+</span><span class="n">tm_min</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">microbenchmark</span><span class="p">(</span><span class="n">base_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist_min</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                           </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                           </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                                           </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                                           </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                           </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">),</span><span class="w">
+                         </span><span class="n">Rcpp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist_min_rcpp</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                              </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                              </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                                              </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                                              </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
+                                              </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">),</span><span class="w">
+                         </span><span class="n">times</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in microbenchmark(base_R = dist_min(df_cbg$lon[1:10], df_cbg$lat[1:10], : could not find function "microbenchmark"
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## results</span><span class="w">
+</span><span class="n">tm_min</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'tm_min' not found
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot</span><span class="w">
+</span><span class="n">autoplot</span><span class="p">(</span><span class="n">tm_min</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in autoplot(tm_min): object 'tm_min' not found
+</code></pre></div></div>
+
+<p>Similarly, the compiled minimum distance function is much faster than the
+base R function.</p>
+
+<p>In this case as well as the former, we should note that we aren’t
+comparing fully optimized versions of either function. That said,
+while it’s possible that the base R functions could be sped up,
+neither is likely to come close to matching the speed of the
+compiled Rcpp versions.</p>
+
+<h1 id="full-run-for-rcpp-version">Full run for Rcpp version</h1>
+
+<p>Throughout, we’ve been running the functions on a reduced starting
+data set. But how long does it take to find the nearest college to
+each census block? Let’s find out!</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## find minimum</span><span class="w">
+</span><span class="n">system.time</span><span class="p">(</span><span class="n">full_min</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_min_rcpp</span><span class="p">(</span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                                      </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                                      </span><span class="n">df_col</span><span class="o">$</span><span class="n">lon</span><span class="p">,</span><span class="w">
+                                      </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
+                                      </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">,</span><span class="w">
+                                      </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_min_rcpp(df_cbg$lon, df_cbg$lat, df_col$lon, df_col$lat, : could not find function "dist_min_rcpp"
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Timing stopped at: 0 0 0
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">full_min</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">tibble</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval_tidy(xs[[j]], mask): object 'full_min' not found
+</code></pre></div></div>
+
+<p>Just a little over a minute (on my laptop) to compute 217,000 by 7,700
+distances, finding and storing the minimally distance college along
+with its distance!</p>
+
+<blockquote>
+  <h4 id="not-so-quick-exercise">Not-so quick exercise</h4>
+  <p>Below is a function that computes the
+great circle distance using <a href="https://en.wikipedia.org/wiki/Vincenty%27s_formulae">Vincenty’s
+formula</a>. It’s
+more accurate than the haversine version, but can be much more
+computationally intensive. Try to convert the base R function into an
+Rcpp function. You’ll need to start a new script and then use
+<code class="language-plaintext highlighter-rouge">sourceCpp()</code> to read it in and test. Once you’ve got, substitute
+the respective Vincenty formula functions into the <code class="language-plaintext highlighter-rouge">dist_min_*()</code>
+functions and compare times.</p>
+
+  <p>A few things to keep in mind:</p>
+  <ol>
+    <li>You’ll need to declare your variables and types (lot’s of
+<code class="language-plaintext highlighter-rouge">double</code>); don’t forget that double numbers need a decimal,
+otherwise C++ thinks they are integers.</li>
+    <li>Don’t forget your semi-colon line endings!</li>
+    <li><code class="language-plaintext highlighter-rouge">abs()</code> in C++ is <code class="language-plaintext highlighter-rouge">fabs()</code></li>
+    <li>Remember: <code class="language-plaintext highlighter-rouge">a^2 = a * a</code></li>
+  </ol>
+</blockquote>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## base R distance function using Vincenty formula</span><span class="w">
+</span><span class="n">dist_vincenty</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w">
+                          </span><span class="n">xlat</span><span class="p">,</span><span class="w">
+                          </span><span class="n">ylon</span><span class="p">,</span><span class="w">
+                          </span><span class="n">ylat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+
+  </span><span class="c1">## return 0 if same point</span><span class="w">
+  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">xlon</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ylon</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">xlat</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ylat</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nf">return</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w">
+  </span><span class="c1">## convert degrees to radians</span><span class="w">
+  </span><span class="n">xlon</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">xlon</span><span class="p">)</span><span class="w">
+  </span><span class="n">xlat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">xlat</span><span class="p">)</span><span class="w">
+  </span><span class="n">ylon</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">ylon</span><span class="p">)</span><span class="w">
+  </span><span class="n">ylat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">ylat</span><span class="p">)</span><span class="w">  
+  </span><span class="c1">## ---------------------------------------------------</span><span class="w">
+  </span><span class="c1">## https:##en.wikipedia.org/wiki/Vincenty%27s_formulae</span><span class="w">
+  </span><span class="c1">## ---------------------------------------------------  </span><span class="w">
+  </span><span class="c1">## some constants</span><span class="w">
+  </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">6378137</span><span class="w">
+  </span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">298.257223563</span><span class="w">
+  </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="w">
+  </span><span class="n">U1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">atan</span><span class="p">((</span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">tan</span><span class="p">(</span><span class="n">xlat</span><span class="p">))</span><span class="w">
+  </span><span class="n">U2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">atan</span><span class="p">((</span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">tan</span><span class="p">(</span><span class="n">ylat</span><span class="p">))</span><span class="w">
+  </span><span class="n">sinU1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sin</span><span class="p">(</span><span class="n">U1</span><span class="p">)</span><span class="w">
+  </span><span class="n">sinU2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sin</span><span class="p">(</span><span class="n">U2</span><span class="p">)</span><span class="w">
+  </span><span class="n">cosU1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cos</span><span class="p">(</span><span class="n">U1</span><span class="p">)</span><span class="w">
+  </span><span class="n">cosU2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cos</span><span class="p">(</span><span class="n">U2</span><span class="p">)</span><span class="w">
+  </span><span class="n">L</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ylon</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xlon</span><span class="w">
+  </span><span class="n">lambda</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">L</span><span class="w">                         </span><span class="c1"># initial value</span><span class="w">
+  </span><span class="c1">## set up loop</span><span class="w">
+  </span><span class="n">iters</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100</span><span class="w">                        </span><span class="c1"># no more than 100 loops</span><span class="w">
+  </span><span class="n">tol</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1.0e-12</span><span class="w">                      </span><span class="c1"># tolerance level</span><span class="w">
+  </span><span class="n">again</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">TRUE</span><span class="w">
+  </span><span class="c1">## while loop...</span><span class="w">
+  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">again</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">## sin sigma</span><span class="w">
+    </span><span class="n">sinLambda</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sin</span><span class="p">(</span><span class="n">lambda</span><span class="p">)</span><span class="w">
+    </span><span class="n">cosLambda</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cos</span><span class="p">(</span><span class="n">lambda</span><span class="p">)</span><span class="w">
+    </span><span class="n">p1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cosU2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sinLambda</span><span class="w">
+    </span><span class="n">p2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cosU1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sinU2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sinU1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cosU2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cosLambda</span><span class="w">
+    </span><span class="n">sinsig</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">p1</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p2</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w">
+    </span><span class="c1">## cos sigma</span><span class="w">
+    </span><span class="n">cossig</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sinU1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sinU2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cosU1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cosU2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cosLambda</span><span class="w">
+    </span><span class="c1">## plain ol' sigma</span><span class="w">
+    </span><span class="n">sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">atan2</span><span class="p">(</span><span class="n">sinsig</span><span class="p">,</span><span class="w"> </span><span class="n">cossig</span><span class="p">)</span><span class="w">
+    </span><span class="c1">## sin alpha</span><span class="w">
+    </span><span class="n">sina</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cosU1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cosU2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sinLambda</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">sinsig</span><span class="w">
+    </span><span class="c1">## cos^2 alpha</span><span class="w">
+    </span><span class="n">cos2a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">sina</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sina</span><span class="p">)</span><span class="w">
+    </span><span class="c1">## cos 2*sig_m</span><span class="w">
+    </span><span class="n">cos2sigm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cossig</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sinU1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sinU2</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">cos2a</span><span class="w">
+    </span><span class="c1">## C</span><span class="w">
+    </span><span class="n">C</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos2a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">4</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">4</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos2a</span><span class="p">))</span><span class="w">
+    </span><span class="c1">## store old lambda</span><span class="w">
+    </span><span class="n">lambdaOld</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lambda</span><span class="w">
+    </span><span class="c1">## update lambda</span><span class="w">
+    </span><span class="n">lambda</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">C</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sina</span><span class="w"> </span><span class="o">*</span><span class="w">
+      </span><span class="p">(</span><span class="n">sigma</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sinsig</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">cos2sigm</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cossig</span><span class="w"> </span><span class="o">*</span><span class="w">
+                               </span><span class="p">(</span><span class="m">-1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos2sigm</span><span class="o">^</span><span class="m">2</span><span class="p">)))</span><span class="w">
+    </span><span class="c1">## subtract from iteration total</span><span class="w">
+    </span><span class="n">iters</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">iters</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="w">
+    </span><span class="c1">## go again if lambda diff is &gt; tolerance and still have iterations</span><span class="w">
+    </span><span class="n">again</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">lambda</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lambdaOld</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">tol</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">iters</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="c1">## if iteration count runs out, stop and send message</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">iters</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">stop</span><span class="p">(</span><span class="s2">"Failed to converge!"</span><span class="p">,</span><span class="w"> </span><span class="n">call.</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="c1">## u^2</span><span class="w">
+      </span><span class="n">Usq</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cos2a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w">
+      </span><span class="c1">## A</span><span class="w">
+      </span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Usq</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">16384</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">4096</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Usq</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">-768</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Usq</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">320</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">175</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Usq</span><span class="p">)))</span><span class="w">
+      </span><span class="c1">## B</span><span class="w">
+      </span><span class="n">B</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Usq</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">256</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Usq</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">-128</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Usq</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">74</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">47</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Usq</span><span class="p">)))</span><span class="w">
+      </span><span class="c1">## delta sigma</span><span class="w">
+      </span><span class="n">dsigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sinsig</span><span class="w"> </span><span class="o">*</span><span class="w">
+        </span><span class="p">(</span><span class="n">cos2sigm</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="o">*</span><span class="w">
+           </span><span class="p">(</span><span class="n">cossig</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">-1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos2sigm</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w">
+             </span><span class="o">-</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos2sigm</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">-3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sinsig</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w">
+             </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">-3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos2sigm</span><span class="o">^</span><span class="m">2</span><span class="p">)))</span><span class="w">
+      </span><span class="c1">## return the distance</span><span class="w">
+      </span><span class="nf">return</span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">sigma</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dsigma</span><span class="p">))</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+
+
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
+      </section>
+      <footer>
+        <p>
+  Benjamin Skinner</br>  
+  Assistant Professor</br>  
+  University of Florida</br>
+  <a href="https://www.btskinner.io" class="iconlink" alt="Personal website">
+    <i class="fas fa-home fa-lg"></i></a> | 
+  <a href="https://github.com/btskinner" class="iconlink" alt="Github
+								profile">
+    <i class="fab fa-github fa-lg"></i></a> |
+  <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
+    <i class="fab fa-twitter fa-lg"></i></a>
+</p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
+
+      </footer>
+    </div>
+
+    <!-- load Javascript if page requires it -->
+    
+    
+    
+
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-63981025-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>

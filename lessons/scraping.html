@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/edh7916/assets/css/style.css">
+<link rel="stylesheet" href="/edh7916/assets/css/syntax_default.css">
+<link rel="shortcut icon" type="image/png" href="/edh7916/assets/img/favicon.ico">
+<link crossorigin="anonymous" media="all" integrity="sha512-uhAd27cNiLn0VE2GVEVUN8D5zW0o7s0QTnCGMnJZkL2HqN9/LwHDi4ndTPJH0upUQHYl/8QF6cwbOYp/KIzlJQ==" rel="stylesheet" href="https://github.githubassets.com/assets/github-be4e45349cf088df7a6636f437c0a167.css" />
+<script defer src="/edh7916/assets/js/all.min.js"></script>
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<title>edquant | EDH 7916: Contemporary Research in Higher Education</title>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>EDH 7916: Contemporary Research in Higher Education<a href="https://github.com/edquant/edh7916" class="iconlink">
+	      <i class="fab fa-github fa-sm"></i></a></h1>
+	<h2 class="thin">Spring 2023</h2>
+	<p>A course in quantitative research workflow for students in
+the higher education administration program at the University of Florida
+</p>
+	<!-- side / top bar menu -->
+	<h2 class="thin">
+	  <a href="/edh7916/">Overview</a></br>
+	  <a href="/edh7916/syllabus/">Course information</a></br>
+	  <a href="/edh7916/location/">Meeting location</a></br>
+	  <a href="/edh7916/software/">Software</a></br>
+	  <a href="/edh7916/schedule/">Schedule</a></br>
+	  <a href="/edh7916/lessons/">Lessons</a></br>
+	  <a href="/edh7916/assignments/">Assignments</a></br>
+	  <a href="/edh7916/questions/">Questions</a></br>
+	  <a href="/edh7916/past/">Past courses</a></br>
+	  <a href="/edh7916/about/">About</a></br>	  
+	</h2>
+      </header>
+
+      <section>
+	<h1>Web scraping in R</h1>
+	
+
+	
+<p>
+  
+  <a href="/edh7916/assets/pdf/scraping.pdf"
+     class="iconlink" download title="Get PDF of lesson">
+  <i class="far fa-file-pdf fa-2x"></i>
+  </a>
+  
+  &nbsp;&nbsp;
+  
+  <a href="/edh7916/scripts/scraping.R"
+     class="iconlink" download title="Get script">
+    <i class="fas fa-code fa-2x"></i>
+  </a>
+  &nbsp;&nbsp;
+  
+  
+  
+  
+</p>
+
+
+<p>This lesson introduces the basic steps to scrape data from a website
+using the <a href="https://CRAN.R-project.org/package=rvest">rvest</a>. Because
+there are about as many ways to scrape a website as there are types of
+web data that you want to gather, web scraping is both art and
+science, with varying degrees of data cleaning required. If you are
+lucky, data will be regularly and unambiguously formatted, meaning
+that it is easy to grab the data you want in the format that you
+want. If you are less lucky, regular expressions to clean strings will
+quickly become your friend.</p>
+
+<p>Knowing a bit about web design, specifically
+<a href="https://www.w3schools.com/html/default.asp">HTML</a>,
+<a href="https://www.w3schools.com/xml/default.asp">XML</a>, and
+<a href="https://www.w3schools.com/css/default.asp">CSS</a> is helpful when web
+scraping. This lesson focuses on static sites, but sites that require
+user interaction (<em>e.g.</em>, clicking a button or inputting data into a
+form in order to show data) can also be scraped. These sites require
+special packages such as
+<a href="https://docs.ropensci.org/RSelenium/">RSelenium</a> and some knowledge
+of <a href="https://www.w3schools.com/js/default.asp">Javascript</a> is helpful.</p>
+
+<p>For this lesson, however, we’ll read static web tables from <a href="https://nces.ed.gov/programs/digest/2017menu_tables.asp">NCES
+Digest of Education
+Statistics</a>. NCES
+helpfully makes these tables available in downloadable Excel
+worksheets, but we’ll pretend they don’t exist for the
+moment. Specifically, we’ll focus on <a href="https://nces.ed.gov/programs/digest/d17/tables/dt17_302.10.asp">Table
+302.10</a>,
+which shows numbers of high school graduates and percentage of college
+enrollment, broken out by gender and college level, for the years 1960
+through 2016.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
+</span><span class="c1">## libraries</span><span class="w">
+</span><span class="c1">## ---------------------------</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.1     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.1     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">rvest</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+## Attaching package: 'rvest'
+## 
+## The following object is masked from 'package:readr':
+## 
+##     guess_encoding
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">lubridate</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h1 id="inspect-the-web-site">Inspect the web site</h1>
+
+<p>First, let’s check out the <a href="https://nces.ed.gov/programs/digest/d17/tables/dt17_302.10.asp">table we want to
+scrape</a>. The
+table we see looks like a regularly formatted table, much like we
+would see in a paper document. But unlike a printed document, a web
+page relies on hidden-from-the-user code to generate what we see. By
+doing it this way instead of serving a static image, websites can
+adjust to the wide array of user screen sizes, devices, and operating
+systems. Instructions that tell the user device how to generate the
+page are also smaller than sending a preformatted image, so bandwidth
+and time to load are also reduced.</p>
+
+<p>But as web scrapers, we don’t need this. We need the underlying
+HTML/CSS/XML code used to generate the page. To see it, you’ll need to
+use a web site inspector. With
+<a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector">Firefox</a>
+and
+<a href="https://developers.google.com/web/tools/chrome-devtools/">Chrome</a>,
+you should be able to right-click the page and see the underlying code
+(you may need to turn on developer tools first). With Safari, you will
+have to <a href="https://developers.google.com/web/tools/chrome-devtools/">enable the developer tools
+first</a>.</p>
+
+<p>The top code of the page should look something like this:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</span>
+<span class="c">&lt;!-- Current year pub navigation function --&gt;</span>
+
+</code></pre></div></div>
+
+<p>Moving further down, we find the table data, but in a very different
+format (first row):</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+<span class="nt">&lt;tr&gt;</span>
+  <span class="nt">&lt;th</span> <span class="na">class=</span><span class="s">"TblCls009"</span> <span class="na">scope=</span><span class="s">"row"</span> <span class="na">nowrap=</span><span class="s">"nowrap"</span><span class="nt">&gt;</span>1960 <span class="nt">&lt;/th&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span>1,679<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(44.5)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span>756<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(32.3)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span>923<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(30.1)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span>45.1<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(2.16)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span><span class="ni">&amp;mdash;</span><span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(<span class="ni">&amp;dagger;</span>)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span><span class="ni">&amp;mdash;</span><span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(<span class="ni">&amp;dagger;</span>)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span>54.0<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(3.23)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span><span class="ni">&amp;mdash;</span><span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(<span class="ni">&amp;dagger;</span>)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span><span class="ni">&amp;mdash;</span><span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(<span class="ni">&amp;dagger;</span>)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span>37.9<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(2.85)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span><span class="ni">&amp;mdash;</span><span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(<span class="ni">&amp;dagger;</span>)<span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls010"</span><span class="nt">&gt;</span><span class="ni">&amp;mdash;</span><span class="nt">&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">class=</span><span class="s">"TblCls011"</span><span class="nt">&gt;</span>(<span class="ni">&amp;dagger;</span>)<span class="nt">&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+...
+</code></pre></div></div>
+<p>The task is to convert these data into a data frame that we can then
+store or use in tables and figures. This is what the
+<a href="https://CRAN.R-project.org/package=rvest">rvest</a> helps us do.</p>
+
+<h1 id="read-web-site">Read web site</h1>
+
+<p>The first step is to read the web page code into an object using the
+<code class="language-plaintext highlighter-rouge">read_html()</code> function.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## set site</span><span class="w">
+</span><span class="n">url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"https://nces.ed.gov/programs/digest/d17/tables/dt17_302.10.asp"</span><span class="w">
+
+</span><span class="c1">## get site</span><span class="w">
+</span><span class="n">site</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_html</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Showing our object, we can see that the basic structure of the web
+page is stored.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">site</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## {html_document}
+## &lt;html&gt;
+## [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+## [2] &lt;body bgcolor="#ffffff" text="#000000"&gt;\r\n\t\r\n\t&lt;!-- Main NCES Header  ...
+</code></pre></div></div>
+
+<h1 id="select-nodes">Select nodes</h1>
+
+<p>Right now, we have a structured, but not particularly useful object
+holding our web page data. To pull out specific data, we use the
+<code class="language-plaintext highlighter-rouge">html_nodes()</code> function. Selecting a node is somewhat akin to using
+dplyr’s <code class="language-plaintext highlighter-rouge">filter()</code> on a data frame.</p>
+
+<p>Great…but what’s a node and how do I know which ones to use? First,
+a node is a particular element that is comprised of some information
+stored between, for example, HTML tags like <code class="language-plaintext highlighter-rouge">&lt;p&gt;...&lt;/p&gt;</code> or
+<code class="language-plaintext highlighter-rouge">&lt;h1&gt;...&lt;/h2&gt;</code>. Good web design says that information on page should
+be organized by its purpose and similarity to other data. For example,
+major headers should be wrapped in <code class="language-plaintext highlighter-rouge">&lt;h1&gt;</code> tags and similar page
+sections should be given the same CSS class. We can use CSS ids and
+classes with the <code class="language-plaintext highlighter-rouge">html_nodes()</code> function to pull the exact data we
+need.</p>
+
+<p>Great!…but what are the classes that we need? Well, we could just
+inspect the web page manually and guess. For some pages, that works
+great. But it certainly looks like a chore for this page. Luckily,
+there’s a great tool that will help us.</p>
+
+<h2 id="selectorgadget">SelectorGadget</h2>
+
+<p><a href="http://selectorgadget.com">SelectorGadget</a> is a (now very old) plugin
+that allows you to click on a web page and, through process of
+elimination, get the exact combination of HTML tags and CSS ids and
+classes you need to pull only the data you need.</p>
+
+<p>You can get it from the link above or by <a href="https://rvest.tidyverse.org/articles/selectorgadget.html">following the instructions
+here</a>.</p>
+
+<p>The SelectorGadget page has instructions, but briefly, this is the
+process:</p>
+
+<ol>
+  <li>On the first click, SelectorGadget will make its best guess about
+what you want based on the item you clicked (<em>e.g.</em>, table
+column). The particular element you clicked will be green. The
+other elements it assumed you want will turn yellow. Sometimes it’s
+right and you’re finished!</li>
+  <li>Often, it will select something you don’t want. In that case, click
+on the yellow item you don’t want. Again, SelectorGadget will make
+and informed guess. Sometimes it will drop all extraneous elements
+and sometimes you will need to click multiple times. These elements
+will be red.</li>
+  <li>On the other hand, SelectorGadget may not have given you everything
+you want. Keep clicking on new elements (and dropping the extra)
+until only what you want is highlighted in either green or yellow.</li>
+</ol>
+
+<p>As you’re clicking, you’ll see a box with a string of element ids and
+classes changing. When you’re finished, copy this string. This is your
+node you’ll use in the <code class="language-plaintext highlighter-rouge">html_nodes()</code> function!</p>
+
+<blockquote>
+  <h4 id="quick-exercise">Quick exercise</h4>
+  <p>Get the SelectorGadget plugin and play with it
+for a few minutes. See if you can select only a specific column then
+only a specific row.</p>
+</blockquote>
+
+<h1 id="first-column-of-data">First column of data</h1>
+
+<p>As a first step, let’s get the first column of data in Table 302.10:
+the total number of recent high school graduates. Using
+SelectorGadget, I see that the node string I should use is
+<code class="language-plaintext highlighter-rouge">'.tableBracketRow td:nth-child(2)'</code>. After selecting the node, we use
+<code class="language-plaintext highlighter-rouge">html_text()</code> to convert the data into a vector like we’re used to
+seeing.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## subset to just first column</span><span class="w">
+</span><span class="n">tot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">site</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">html_nodes</span><span class="p">(</span><span class="s2">".tableBracketRow td:nth-child(2)"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">html_text</span><span class="p">()</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">tot</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "1,679" "1,763" "1,838" "1,741" "2,145" " "     "2,659" "2,612" "2,525"
+## [10] "2,606" "2,842" " "     "2,758" "2,875" "2,964" "3,058" "3,101" " "    
+## [19] "3,185" "2,986" "3,141" "3,163" "3,160" " "     "3,088" "3,056" "3,100"
+## [28] "2,963" "3,012" " "     "2,668" "2,786" "2,647" "2,673" "2,450" " "    
+## [37] "2,362" "2,276" "2,397" "2,342" "2,517" " "     "2,599" "2,660" "2,769"
+## [46] "2,810" "2,897" " "     "2,756" "2,549" "2,796" "2,677" "2,752" " "    
+## [55] "2,675" "2,692" "2,955" "3,151" "2,937" " "     "3,160" "3,079" "3,203"
+## [64] "2,977" "2,868" " "     "2,965" "3,137"
+</code></pre></div></div>
+
+<p>So far so good, but we can see a few problems. First, the blank rows
+in the table show up in our data. While those blank table spaces are good
+for the eyes, they aren’t good in our data set. Let’s try to remove
+them using the <code class="language-plaintext highlighter-rouge">trim = TRUE</code> option.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ...this time trim blank spaces</span><span class="w">
+</span><span class="n">tot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">site</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">html_nodes</span><span class="p">(</span><span class="s2">".tableBracketRow td:nth-child(2)"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">html_text</span><span class="p">(</span><span class="n">trim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">tot</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "1,679" "1,763" "1,838" "1,741" "2,145" ""      "2,659" "2,612" "2,525"
+## [10] "2,606" "2,842" ""      "2,758" "2,875" "2,964" "3,058" "3,101" ""     
+## [19] "3,185" "2,986" "3,141" "3,163" "3,160" ""      "3,088" "3,056" "3,100"
+## [28] "2,963" "3,012" ""      "2,668" "2,786" "2,647" "2,673" "2,450" ""     
+## [37] "2,362" "2,276" "2,397" "2,342" "2,517" ""      "2,599" "2,660" "2,769"
+## [46] "2,810" "2,897" ""      "2,756" "2,549" "2,796" "2,677" "2,752" ""     
+## [55] "2,675" "2,692" "2,955" "3,151" "2,937" ""      "3,160" "3,079" "3,203"
+## [64] "2,977" "2,868" ""      "2,965" "3,137"
+</code></pre></div></div>
+
+<p>Better, but the empty elements are still there. We can use
+<code class="language-plaintext highlighter-rouge">str_subset()</code> from the stringr library (loaded with tidyverse) to
+remove them.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## remove blank values; str_subset removes pattern ("")</span><span class="w">
+</span><span class="n">tot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tot</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">str_subset</span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in `str_subset()`:
+## ! `pattern` can't be the empty string (`""`).
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">tot</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "1,679" "1,763" "1,838" "1,741" "2,145" ""      "2,659" "2,612" "2,525"
+## [10] "2,606" "2,842" ""      "2,758" "2,875" "2,964" "3,058" "3,101" ""     
+## [19] "3,185" "2,986" "3,141" "3,163" "3,160" ""      "3,088" "3,056" "3,100"
+## [28] "2,963" "3,012" ""      "2,668" "2,786" "2,647" "2,673" "2,450" ""     
+## [37] "2,362" "2,276" "2,397" "2,342" "2,517" ""      "2,599" "2,660" "2,769"
+## [46] "2,810" "2,897" ""      "2,756" "2,549" "2,796" "2,677" "2,752" ""     
+## [55] "2,675" "2,692" "2,955" "3,151" "2,937" ""      "3,160" "3,079" "3,203"
+## [64] "2,977" "2,868" ""      "2,965" "3,137"
+</code></pre></div></div>
+
+<p>Getting closer. Next, let’s convert our numbers to actual numbers,
+which R thinks are strings at the moment. To do this, we need to get
+rid of the commas. The <code class="language-plaintext highlighter-rouge">str_replace()</code> function is perfect for this.
+Regular expressions can become complicated, but our use
+here is simple:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## remove commas, replacing with empty string</span><span class="w">
+</span><span class="n">tot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tot</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">str_replace</span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">","</span><span class="p">,</span><span class="w"> </span><span class="n">replacement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">tot</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "1679" "1763" "1838" "1741" "2145" ""     "2659" "2612" "2525" "2606"
+## [11] "2842" ""     "2758" "2875" "2964" "3058" "3101" ""     "3185" "2986"
+## [21] "3141" "3163" "3160" ""     "3088" "3056" "3100" "2963" "3012" ""    
+## [31] "2668" "2786" "2647" "2673" "2450" ""     "2362" "2276" "2397" "2342"
+## [41] "2517" ""     "2599" "2660" "2769" "2810" "2897" ""     "2756" "2549"
+## [51] "2796" "2677" "2752" ""     "2675" "2692" "2955" "3151" "2937" ""    
+## [61] "3160" "3079" "3203" "2977" "2868" ""     "2965" "3137"
+</code></pre></div></div>
+
+<p>Now we’re ready to convert to a number.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## convert to numeric</span><span class="w">
+</span><span class="n">tot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tot</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="nf">as.integer</span><span class="p">()</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">tot</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] 1679 1763 1838 1741 2145   NA 2659 2612 2525 2606 2842   NA 2758 2875 2964
+## [16] 3058 3101   NA 3185 2986 3141 3163 3160   NA 3088 3056 3100 2963 3012   NA
+## [31] 2668 2786 2647 2673 2450   NA 2362 2276 2397 2342 2517   NA 2599 2660 2769
+## [46] 2810 2897   NA 2756 2549 2796 2677 2752   NA 2675 2692 2955 3151 2937   NA
+## [61] 3160 3079 3203 2977 2868   NA 2965 3137
+</code></pre></div></div>
+
+<p>Finished!</p>
+
+<h1 id="add-year">Add year</h1>
+
+<p>So that these numbers make sense, let’s grab the years column and
+create and data frame so that we can make a figure of long term high
+school completer totals. Again, the first step is to use
+SelectorGadget to get the node string. This time, it’s <code class="language-plaintext highlighter-rouge">"tbody th"</code>.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## get years column</span><span class="w">
+</span><span class="n">years</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">site</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">html_nodes</span><span class="p">(</span><span class="s2">"tbody th"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">html_text</span><span class="p">(</span><span class="n">trim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## remove blank spaces like before</span><span class="w">
+</span><span class="n">years</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">years</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">str_subset</span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in `str_subset()`:
+## ! `pattern` can't be the empty string (`""`).
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="n">years</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "1960"  "1961"  "1962"  "1963"  "1964"  ""      "1965"  "1966"  "1967" 
+## [10] "1968"  "1969"  ""      "1970"  "1971"  "1972"  "1973"  "1974"  ""     
+## [19] "1975"  "1976"  "1977"  "1978"  "1979"  ""      "1980"  "1981"  "1982" 
+## [28] "1983"  "1984"  ""      "1985"  "1986"  "1987"  "1988"  "1989"  ""     
+## [37] "1990"  "1991"  "1992"  "1993"  "1994"  ""      "1995"  "1996"  "1997" 
+## [46] "1998"  "1999"  ""      "2000"  "2001"  "2002"  "2003"  "2004"  ""     
+## [55] "2005"  "2006"  "2007"  "2008"  "2009"  ""      "20103" "20113" "20123"
+## [64] "20133" "20143" ""      "20153" "20163"
+</code></pre></div></div>
+
+<p>We’ve gotten rid of the blank items, but now we have a new problem:
+the footnotes in the last few years has just be added to the
+year. Instead of 2010, we have 20103, and so on through 2016. Since
+the problem is small (it’s easy to see all the bad items) and regular
+(always extra 3 as the 5th digit), we can fix it using <code class="language-plaintext highlighter-rouge">str_sub()</code>.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## trim footnote that's become extra digit</span><span class="w">
+</span><span class="n">years</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">years</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">str_sub</span><span class="p">(</span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">years</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "1960" "1961" "1962" "1963" "1964" ""     "1965" "1966" "1967" "1968"
+## [11] "1969" ""     "1970" "1971" "1972" "1973" "1974" ""     "1975" "1976"
+## [21] "1977" "1978" "1979" ""     "1980" "1981" "1982" "1983" "1984" ""    
+## [31] "1985" "1986" "1987" "1988" "1989" ""     "1990" "1991" "1992" "1993"
+## [41] "1994" ""     "1995" "1996" "1997" "1998" "1999" ""     "2000" "2001"
+## [51] "2002" "2003" "2004" ""     "2005" "2006" "2007" "2008" "2009" ""    
+## [61] "2010" "2011" "2012" "2013" "2014" ""     "2015" "2016"
+</code></pre></div></div>
+
+<p>Fixed! Now we bind together with our high school completers
+total. Because we want to make a time period line graph, we’ll also
+convert the years to a date format. We’ll use <code class="language-plaintext highlighter-rouge">ymd</code> from the lubridate
+library. Since we only have years, we’ll include the argument
+<code class="language-plaintext highlighter-rouge">truncated = 2L</code>, which means that we have an incomplete date (no
+month or day).</p>
+
+<p><strong>NB</strong> Since we dropped blank elements in each vector separately, it’s
+important to check that all the data line up properly now that we’ve
+bound them together. If we wanted to be safer, we could have bound the
+data first, then dropped the rows with double missing values.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## put in data frame</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">bind_cols</span><span class="p">(</span><span class="n">years</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">years</span><span class="p">,</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tot</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">years</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ymd</span><span class="p">(</span><span class="n">years</span><span class="p">,</span><span class="w"> </span><span class="n">truncated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2L</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">df</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 68 × 2
+##    years      total
+##    &lt;date&gt;     &lt;int&gt;
+##  1 1960-01-01  1679
+##  2 1961-01-01  1763
+##  3 1962-01-01  1838
+##  4 1963-01-01  1741
+##  5 1964-01-01  2145
+##  6 NA            NA
+##  7 1965-01-01  2659
+##  8 1966-01-01  2612
+##  9 1967-01-01  2525
+## 10 1968-01-01  2606
+## # ℹ 58 more rows
+</code></pre></div></div>
+
+<p>You can see that the date format adds a month and day (January 1st by
+default). While these particular dates probably aren’t right, we won’t
+use them later when graphing so they can stay.</p>
+
+<p>Let’s plot our trends.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot</span><span class="w">
+</span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">years</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">total</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## line for the main estimate</span><span class="w">
+  </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## make x-axis look nice</span><span class="w">
+  </span><span class="c1">## major breaks: every 5 years, from min year to max year</span><span class="w">
+  </span><span class="c1">## minor breaks: every 1 year, from min year to max year</span><span class="w">
+  </span><span class="c1">## labels: formate to only show year ("%Y")</span><span class="w">
+  </span><span class="n">scale_x_date</span><span class="p">(</span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">years</span><span class="p">),</span><span class="w">
+                            </span><span class="nf">max</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">years</span><span class="p">),</span><span class="w">
+                            </span><span class="s2">"5 years"</span><span class="p">),</span><span class="w">
+               </span><span class="n">minor_breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">years</span><span class="p">),</span><span class="w">
+                                  </span><span class="nf">max</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">years</span><span class="p">),</span><span class="w">
+                                  </span><span class="s2">"1 years"</span><span class="p">),</span><span class="w">
+               </span><span class="n">date_labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"%Y"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## nice labels and titles</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Year"</span><span class="p">,</span><span class="w">
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"High school completers (1000s)"</span><span class="p">,</span><span class="w">
+       </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Total number of high school completers: 1960 to 2016"</span><span class="p">,</span><span class="w">
+       </span><span class="n">caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Source: NCES Digest of Education Statistics, 2017, Table 302.10"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in seq.int(r1$year, to0$year, by): 'from' must be a finite number
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">g</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'g' not found
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-1">Quick exercise</h4>
+  <p>Pull in total percentage of enrollment (column 5), add to data
+frame, and plot against year.</p>
+</blockquote>
+
+<h1 id="scrape-entire-table">Scrape entire table</h1>
+
+<p>Now that we’ve pulled two columns, let’s try to grab the entire
+table. Once again, we’ll use SelectorGadget to get our node string.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## save node</span><span class="w">
+</span><span class="n">node</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">paste0</span><span class="p">(</span><span class="s2">".TblCls002 , td.TblCls005 , tbody .TblCls008 , "</span><span class="p">,</span><span class="w">
+               </span><span class="s2">".TblCls009 , .TblCls011 , .TblCls010"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## save more dataframe-friendly column names that we</span><span class="w">
+</span><span class="c1">## get from looking at the table online</span><span class="w">
+</span><span class="n">nms</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"year"</span><span class="p">,</span><span class="s2">"hs_comp_tot"</span><span class="p">,</span><span class="w"> </span><span class="s2">"hs_comp_tot_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"hs_comp_m"</span><span class="p">,</span><span class="w"> </span><span class="s2">"hs_comp_m_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"hs_comp_f"</span><span class="p">,</span><span class="w"> </span><span class="s2">"hs_comp_f_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"enr_pct"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"enr_pct_2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_2_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"enr_pct_4"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_4_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"enr_pct_m"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_m_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"enr_pct_2_m"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_2_m_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"enr_pct_4_m"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_4_m_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"enr_pct_f"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_f_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"enr_pct_2_f"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_2_f_se"</span><span class="p">,</span><span class="w">
+         </span><span class="s2">"enr_pct_4_f"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_4_f_se"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## whole table</span><span class="w">
+</span><span class="n">tab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">site</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## use nodes</span><span class="w">
+  </span><span class="n">html_nodes</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## to text with trim</span><span class="w">
+  </span><span class="n">html_text</span><span class="p">(</span><span class="n">trim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show first few elements</span><span class="w">
+</span><span class="n">tab</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">30</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "1960"   "1,679"  "(44.5)" "756"    "(32.3)" "923"    "(30.1)" "45.1"  
+##  [9] "(2.16)" "—"      "(†)"    "—"      "(†)"    "54.0"   "(3.23)" "—"     
+## [17] "(†)"    "—"      "(†)"    "37.9"   "(2.85)" "—"      "(†)"    "—"     
+## [25] "(†)"    "1961"   "1,763"  "(46.7)" "790"    "(33.7)"
+</code></pre></div></div>
+
+<p>Okay. It looks like we have it, but it’s all in single dimension
+vector. Since we eventually want a data frame, let’s convert to a matrix.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## convert to matrix</span><span class="w">
+</span><span class="n">tab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## we know the size by looking at the table online</span><span class="w">
+  </span><span class="n">matrix</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">ncol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## dimensions</span><span class="w">
+</span><span class="nf">dim</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 68 25
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show first few columns using base R [&lt;rows&gt;,&lt;cols&gt;] notation</span><span class="w">
+</span><span class="n">tab</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##       [,1]   [,2]    [,3]     [,4]    [,5]    
+##  [1,] "1960" "1,679" "(44.5)" "756"   "(32.3)"
+##  [2,] "1961" "1,763" "(46.7)" "790"   "(33.7)"
+##  [3,] "1962" "1,838" "(44.3)" "872"   "(32.0)"
+##  [4,] "1963" "1,741" "(44.9)" "794"   "(32.6)"
+##  [5,] "1964" "2,145" "(43.6)" "997"   "(32.3)"
+##  [6,] ""     ""      ""       ""      ""      
+##  [7,] "1965" "2,659" "(48.5)" "1,254" "(35.7)"
+##  [8,] "1966" "2,612" "(45.7)" "1,207" "(34.4)"
+##  [9,] "1967" "2,525" "(38.5)" "1,142" "(28.9)"
+## [10,] "1968" "2,606" "(38.0)" "1,184" "(28.7)"
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="quick-exercise-2">Quick exercise</h4>
+  <p>What happens if you don’t use <code class="language-plaintext highlighter-rouge">byrow = TRUE</code> in the matrix command?</p>
+</blockquote>
+
+<p>It’s getting better, but now we have a lot of special characters that
+we need to clean out. This section relies more heavily on regular
+expressions, but the idea is the same as above.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## clean up table</span><span class="w">
+</span><span class="n">tab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## convert to tibble, leaving name repair as minimal for now</span><span class="w">
+  </span><span class="n">as_tibble</span><span class="p">(</span><span class="n">.name_repair</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"minimal"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## rename using names above</span><span class="w">
+  </span><span class="n">set_names</span><span class="p">(</span><span class="n">nms</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## remove commas</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">across</span><span class="p">(</span><span class="n">everything</span><span class="p">(),</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">str_replace</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="s2">","</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">)))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## remove dagger and parentheses</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">across</span><span class="p">(</span><span class="n">everything</span><span class="p">(),</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">str_replace_na</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="s2">"\\(\U2020\\)"</span><span class="p">)))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## remove hyphens</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">across</span><span class="p">(</span><span class="n">everything</span><span class="p">(),</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">str_replace_na</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="s2">"\U2014"</span><span class="p">)))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## remove parentheses, but keep any content that was inside</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">across</span><span class="p">(</span><span class="n">everything</span><span class="p">(),</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">str_replace</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="s2">"\\((.*)\\)"</span><span class="p">,</span><span class="w"> </span><span class="s2">"\\1"</span><span class="p">)))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## remove blank strings (^ = start, $ = end, so ^$ = start to end w/ nothing)</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">across</span><span class="p">(</span><span class="n">everything</span><span class="p">(),</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">str_replace_na</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="s2">"^$"</span><span class="p">)))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## fix years like above</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">str_sub</span><span class="p">(</span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## convert to numbers, suppressing warnings about NAs b/c we know</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">across</span><span class="p">(</span><span class="n">everything</span><span class="p">(),</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">suppressWarnings</span><span class="p">(</span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">.</span><span class="p">))))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## drop rows with missing year (blank online)</span><span class="w">
+  </span><span class="n">drop_na</span><span class="p">(</span><span class="n">year</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">tab</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 57 × 25
+##     year hs_comp_tot hs_comp_tot_se hs_comp_m hs_comp_m_se hs_comp_f
+##    &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;
+##  1  1960        1679           44.5       756         32.3       923
+##  2  1961        1763           46.7       790         33.7       973
+##  3  1962        1838           44.3       872         32         966
+##  4  1963        1741           44.9       794         32.6       947
+##  5  1964        2145           43.6       997         32.3      1148
+##  6  1965        2659           48.5      1254         35.7      1405
+##  7  1966        2612           45.7      1207         34.4      1405
+##  8  1967        2525           38.5      1142         28.9      1383
+##  9  1968        2606           38        1184         28.7      1422
+## 10  1969        2842           36.6      1352         27.3      1490
+## # ℹ 47 more rows
+## # ℹ 19 more variables: hs_comp_f_se &lt;dbl&gt;, enr_pct &lt;dbl&gt;, enr_pct_se &lt;dbl&gt;,
+## #   enr_pct_2 &lt;dbl&gt;, enr_pct_2_se &lt;dbl&gt;, enr_pct_4 &lt;dbl&gt;, enr_pct_4_se &lt;dbl&gt;,
+## #   enr_pct_m &lt;dbl&gt;, enr_pct_m_se &lt;dbl&gt;, enr_pct_2_m &lt;dbl&gt;,
+## #   enr_pct_2_m_se &lt;dbl&gt;, enr_pct_4_m &lt;dbl&gt;, enr_pct_4_m_se &lt;dbl&gt;,
+## #   enr_pct_f &lt;dbl&gt;, enr_pct_f_se &lt;dbl&gt;, enr_pct_2_f &lt;dbl&gt;,
+## #   enr_pct_2_f_se &lt;dbl&gt;, enr_pct_4_f &lt;dbl&gt;, enr_pct_4_f_se &lt;dbl&gt;
+</code></pre></div></div>
+
+<p>Got it!</p>
+
+<h1 id="reshape-data">Reshape data</h1>
+
+<p>We could stop where we are, but to make the data more usable in
+the future, let’s convert to a long data frame. This takes a couple of
+steps, but the idea is to have each row represent a year by estimate,
+with a column for the estimate value and a column for the standard
+error on that estimate. It may help to run the code below one line at
+a time, checking the progress at each step.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## gather for long data</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tab</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## pivot_longer estimates, leaving standard errors wide for the moment</span><span class="w">
+  </span><span class="n">pivot_longer</span><span class="p">(</span><span class="n">cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">ends_with</span><span class="p">(</span><span class="s2">"se"</span><span class="p">)),</span><span class="w">
+               </span><span class="n">names_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"group"</span><span class="p">,</span><span class="w">
+               </span><span class="n">values_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"estimate"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## pivot_longer standard errors</span><span class="w">
+  </span><span class="n">pivot_longer</span><span class="p">(</span><span class="n">cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">estimate</span><span class="p">),</span><span class="w">
+               </span><span class="n">names_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"group_se"</span><span class="p">,</span><span class="w">
+               </span><span class="n">values_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"se"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="c1">## drop "_se" from standard error estimates</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">group_se</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">str_replace</span><span class="p">(</span><span class="n">group_se</span><span class="p">,</span><span class="w"> </span><span class="s2">"_se"</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## filter where group == group_se</span><span class="w">
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">group_se</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## drop extra column</span><span class="w">
+  </span><span class="n">select</span><span class="p">(</span><span class="o">-</span><span class="n">group_se</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## arrange</span><span class="w">
+  </span><span class="n">arrange</span><span class="p">(</span><span class="n">year</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="c1">## drop if missing year after reshaping</span><span class="w">
+  </span><span class="n">drop_na</span><span class="p">(</span><span class="n">year</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">df</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 684 × 4
+##     year group       estimate    se
+##    &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt;
+##  1  1960 hs_comp_tot   1679   44.5 
+##  2  1960 hs_comp_m      756   32.3 
+##  3  1960 hs_comp_f      923   30.1 
+##  4  1960 enr_pct         45.1  2.16
+##  5  1960 enr_pct_2       NA   NA   
+##  6  1960 enr_pct_4       NA   NA   
+##  7  1960 enr_pct_m       54    3.23
+##  8  1960 enr_pct_2_m     NA   NA   
+##  9  1960 enr_pct_4_m     NA   NA   
+## 10  1960 enr_pct_f       37.9  2.85
+## # ℹ 674 more rows
+</code></pre></div></div>
+
+<h1 id="plot-trends">Plot trends</h1>
+
+<p>Let’s look at overall college enrollment percentages for recent
+graduates over time. Because our data are nicely formatted, it’s easy
+to subset the full table to data to only those estimates we need as
+well as generate 95% confidence intervals.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## adjust data for specific plot</span><span class="w">
+</span><span class="n">plot_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"enr_pct"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_m"</span><span class="p">,</span><span class="w"> </span><span class="s2">"enr_pct_f"</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">hi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">estimate</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">se</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">qnorm</span><span class="p">(</span><span class="m">.975</span><span class="p">),</span><span class="w">
+         </span><span class="n">lo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">estimate</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">se</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">qnorm</span><span class="p">(</span><span class="m">.975</span><span class="p">),</span><span class="w">
+         </span><span class="n">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ymd</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="n">year</span><span class="p">),</span><span class="w"> </span><span class="n">truncated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2L</span><span class="p">),</span><span class="w">
+         </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"enr_pct_f"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Women"</span><span class="p">,</span><span class="w">
+                        </span><span class="n">ifelse</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"enr_pct_m"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Men"</span><span class="p">,</span><span class="w"> </span><span class="s2">"All"</span><span class="p">)))</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">plot_df</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 171 × 6
+##    year       group estimate    se    hi    lo
+##    &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 1960-01-01 All       45.1  2.16  49.3  40.9
+##  2 1960-01-01 Men       54    3.23  60.3  47.7
+##  3 1960-01-01 Women     37.9  2.85  43.5  32.3
+##  4 1961-01-01 All       48    2.12  52.2  43.8
+##  5 1961-01-01 Men       56.3  3.14  62.5  50.1
+##  6 1961-01-01 Women     41.3  2.81  46.8  35.8
+##  7 1962-01-01 All       49    2.08  53.1  44.9
+##  8 1962-01-01 Men       55    3     60.9  49.1
+##  9 1962-01-01 Women     43.5  2.84  49.1  37.9
+## 10 1963-01-01 All       45    2.12  49.2  40.8
+## # ℹ 161 more rows
+</code></pre></div></div>
+
+<p>First, let’s plot the overall average. Notice that we use the
+<code class="language-plaintext highlighter-rouge">filter()</code> function in the <code class="language-plaintext highlighter-rouge">ggplot()</code> function to remove the subgroup
+estimates for men and women.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot overall average</span><span class="w">
+</span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">plot_df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"All"</span><span class="p">),</span><span class="w">
+            </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">estimate</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## create shaded ribbon for 95% CI</span><span class="w">
+  </span><span class="n">geom_ribbon</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">ymin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lo</span><span class="p">,</span><span class="w"> </span><span class="n">ymax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hi</span><span class="p">),</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"grey70"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## line for main estimate</span><span class="w">
+  </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## make x-axis look nice</span><span class="w">
+  </span><span class="c1">## major breaks: every 5 years, from min year to max year</span><span class="w">
+  </span><span class="c1">## minor breaks: every 1 year, from min year to max year</span><span class="w">
+  </span><span class="c1">## labels: formate to only show year ("%Y")</span><span class="w">
+  </span><span class="n">scale_x_date</span><span class="p">(</span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">plot_df</span><span class="o">$</span><span class="n">year</span><span class="p">),</span><span class="w">
+                            </span><span class="nf">max</span><span class="p">(</span><span class="n">plot_df</span><span class="o">$</span><span class="n">year</span><span class="p">),</span><span class="w">
+                            </span><span class="s2">"5 years"</span><span class="p">),</span><span class="w">
+               </span><span class="n">minor_breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">plot_df</span><span class="o">$</span><span class="n">year</span><span class="p">),</span><span class="w">
+                                  </span><span class="nf">max</span><span class="p">(</span><span class="n">plot_df</span><span class="o">$</span><span class="n">year</span><span class="p">),</span><span class="w">
+                                  </span><span class="s2">"1 years"</span><span class="p">),</span><span class="w">
+               </span><span class="n">date_labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"%Y"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## good labels and titles</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Year"</span><span class="p">,</span><span class="w">
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Percent"</span><span class="p">,</span><span class="w">
+       </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Percent of recent high school completers in college: 1960 to 2016"</span><span class="p">,</span><span class="w">
+       </span><span class="n">caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Source: NCES Digest of Education Statistics, 2017, Table 302.10"</span><span class="p">)</span><span class="w">    
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">g</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="../figures/scrape_trends_pct-1.png" alt="plot of chunk scrape_trends_pct" width="100%" /></p>
+
+<p>After a small dip in the early 1970s enrollment trends have steadily
+risen over time.</p>
+
+<p>Now let’s compare enrollments over time between men and women
+(dropping the overall average so our plot is clearer).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot comparison between men and women</span><span class="w">
+</span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">plot_df</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">group</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Men"</span><span class="p">,</span><span class="s2">"Women"</span><span class="p">)),</span><span class="w">
+            </span><span class="c1">## add colour == group to separate between men and women</span><span class="w">
+            </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">estimate</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">group</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## ribbon for 95% CI, but lower alpha so more transparent</span><span class="w">
+  </span><span class="n">geom_ribbon</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">ymin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lo</span><span class="p">,</span><span class="w"> </span><span class="n">ymax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hi</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">group</span><span class="p">),</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## primary estimate line</span><span class="w">
+  </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## neat x-axis breaks as before</span><span class="w">
+  </span><span class="n">scale_x_date</span><span class="p">(</span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">plot_df</span><span class="o">$</span><span class="n">year</span><span class="p">),</span><span class="w">
+                            </span><span class="nf">max</span><span class="p">(</span><span class="n">plot_df</span><span class="o">$</span><span class="n">year</span><span class="p">),</span><span class="w">
+                            </span><span class="s2">"5 years"</span><span class="p">),</span><span class="w">
+               </span><span class="n">minor_breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">plot_df</span><span class="o">$</span><span class="n">year</span><span class="p">),</span><span class="w">
+                                  </span><span class="nf">max</span><span class="p">(</span><span class="n">plot_df</span><span class="o">$</span><span class="n">year</span><span class="p">),</span><span class="w">
+                                  </span><span class="s2">"1 years"</span><span class="p">),</span><span class="w">
+               </span><span class="n">date_labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"%Y"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## good labels and titles</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Year"</span><span class="p">,</span><span class="w">
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Percent"</span><span class="p">,</span><span class="w">
+       </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Percent of recent high school completers in college: 1960 to 2016"</span><span class="p">,</span><span class="w">
+       </span><span class="n">caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Source: NCES Digest of Education Statistics, 2017, Table 302.10"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## set legend title, drop legend for colour since it's redundant with fill</span><span class="w">
+  </span><span class="n">guides</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">guide_legend</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Group"</span><span class="p">),</span><span class="w">
+         </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"none"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="c1">## position legend so that it sits on plot face, in lower right-hand corner</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">legend.justification</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## show</span><span class="w">
+</span><span class="n">g</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="../figures/scrape_trends_gender-1.png" alt="plot of chunk scrape_trends_gender" width="100%" /></p>
+
+<p>Though a greater proportion of men enrolled in college in the 1960s
+and early 1970s, women have been increasing their enrollment
+percentages faster than men since the 1980s and now have comparatively
+higher rates of college participation.</p>
+
+<h4 id="not-so-quick-exercise">Not-so-quick exercise</h4>
+<blockquote>
+  <p>Find the unemployment rate for 25 to 34 year-olds by degree type for
+the years 2014 through 2016. Make a long data frame and use it to
+make a figure of trends over time by educational
+attainment.</p>
+
+  <p>See Table 501.10 of the NCES Digest of Education Statistics, which
+can can be found
+<a href="https://nces.ed.gov/programs/digest/2017menu_tables.asp">here</a>).</p>
+</blockquote>
+
+
+
+
+	<!-- <p> -->
+	<!--   Updated:  -->
+	<!-- </p> -->
+      </section>
+      <footer>
+        <p>
+  Benjamin Skinner</br>  
+  Assistant Professor</br>  
+  University of Florida</br>
+  <a href="https://www.btskinner.io" class="iconlink" alt="Personal website">
+    <i class="fas fa-home fa-lg"></i></a> | 
+  <a href="https://github.com/btskinner" class="iconlink" alt="Github
+								profile">
+    <i class="fab fa-github fa-lg"></i></a> |
+  <a href="https://twitter.com/btskinner" class="iconlink" alt="Twitter profile">
+    <i class="fab fa-twitter fa-lg"></i></a>
+</p>
+<p>
+  <small>
+    <a href="https://pages.github.com">GitHub Pages</a> |
+    <a href="https://github.com/orderedlist/minimal">Theme</a> |
+    <a href="/edh7916/releases/">Releases</a>
+  </small>
+</p>
+
+      </footer>
+    </div>
+
+    <!-- load Javascript if page requires it -->
+    
+    
+    
+
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-63981025-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>
