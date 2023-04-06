@@ -449,6 +449,9 @@ distances? Or maybe straight lines of bearing (particularly important
 if you are [sailing and don't want those trips to take any longer than
 necessary](https://en.wikipedia.org/wiki/Mercator_projection)).
 
+Here's a (somewhat old) [pop culture look at this
+issue](https://www.youtube.com/watch?v=vVX-PrBRtTY).
+
 This is a relatively complicated process we are not going to go into
 here. If you're interested here's a [nice introduction to
 CRS](https://docs.qgis.org/2.8/en/docs/gentle_gis_introduction/coordinate_reference_systems.html)
@@ -842,11 +845,13 @@ a new object `point_map`:
 
 
 ```r
-## layer our points onto the base map
 point_map <- base_map +
   geom_sf(data = df_ipeds %>% filter(FIPS == 12), # Only want to plot colleges in FL
           aes(size = LPBOOKS),
-          alpha = 0.5) +
+          alpha = 0.8,
+          shape = 23, # Get the diamond shape which stands out nicely on the map
+          fill = "white", # This shape has a fill and color for the outline
+          color = "black") + # FYI 21 is a circle with both fill and color
   labs(size = "Number of Books in Library")
 ```
 
@@ -1023,8 +1028,9 @@ you've done this to, it will be severely off**), if you're looking to
 plot the 50 states in an easy-to-read manner, this can be a really
 useful tool.
 
-Lastly, to re-illustrate what a CRS does, let's plot this one more
-time after putting it back on our flat ESPG 4326 CRS.
+Lastly, to re-illustrate what a CRS does, let's plot this two more
+times, putting it onto our simple ESPG 4326 CRS, and then using the
+Peters Projection referenced in the video clip at the start of class.
 
 
 ```r
@@ -1044,3 +1050,32 @@ ggplot() +
 See how the line are now a perfect grid, but the shapes of states
 (look at Montana) are a little different? That's the power of a CRS!
 
+Finally, let's please the [Organization of Cartographers for Social
+Equality](https://www.youtube.com/watch?v=vVX-PrBRtTY) and look at the
+Peters projection. **Note**: while this projection is great for
+showing comparably accurate area across the globe, it does that by
+other trade offs not acknowledged by Dr. Fallow from CSE, so it's not
+universally better, it's better for the **task it was designed
+for**. That's the key with CRS, find the best one for the task you're
+doing.
+
+
+```r
+## change CRS to requirements for Peters projection
+## h/t https://gis.stackexchange.com/questions/194295/getting-borders-as-svg-using-peters-projection
+pp_crs <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+df_st <- df_st %>%
+  st_transform(crs = pp_crs)
+
+## make mape
+ggplot() +
+  geom_sf(data = df_st,
+          aes(),
+          size = 0.1)
+```
+
+<img src="../figures/unnamed-chunk-24-1.png" alt="plot of chunk unnamed-chunk-24" width="100%" />
+
+See how to the gap between 45 and 50 degrees north is much smaller
+than between 20 and 25 degrees north? That's the projection at work
+(think about how this reflects how the globe is shaped).
