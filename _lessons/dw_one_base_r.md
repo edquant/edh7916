@@ -726,7 +726,7 @@ As our final step, we'll arrange our data frame from highest to lowest
 ## -----------------
 
 ## arrange from highest expectations (first row) to lowest
-df_tmp$high_expct <- sort(df_tmp$high_expct, decreasing = TRUE)
+df_tmp <- df_tmp[order(df_tmp$high_expct, decreasing = TRUE),]
 
 ## show
 df_tmp
@@ -735,8 +735,8 @@ df_tmp
 ```
 ##   region high_expct
 ## 1      1   7.389066
-## 2      2   7.357833
-## 3      3   7.168110
+## 3      3   7.357833
+## 2      2   7.168110
 ## 4      4   7.125329
 ```
 
