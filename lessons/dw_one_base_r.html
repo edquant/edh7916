@@ -727,7 +727,7 @@ same by region.</p>
 </span><span class="c1">## -----------------</span><span class="w">
 
 </span><span class="c1">## arrange from highest expectations (first row) to lowest</span><span class="w">
-</span><span class="n">df_tmp</span><span class="o">$</span><span class="n">high_expct</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sort</span><span class="p">(</span><span class="n">df_tmp</span><span class="o">$</span><span class="n">high_expct</span><span class="p">,</span><span class="w"> </span><span class="n">decreasing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span><span class="n">df_tmp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df_tmp</span><span class="p">[</span><span class="n">order</span><span class="p">(</span><span class="n">df_tmp</span><span class="o">$</span><span class="n">high_expct</span><span class="p">,</span><span class="w"> </span><span class="n">decreasing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">),]</span><span class="w">
 
 </span><span class="c1">## show</span><span class="w">
 </span><span class="n">df_tmp</span><span class="w">
@@ -735,8 +735,8 @@ same by region.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##   region high_expct
 ## 1      1   7.389066
-## 2      2   7.357833
-## 3      3   7.168110
+## 3      3   7.357833
+## 2      2   7.168110
 ## 4      4   7.125329
 </code></pre></div></div>
 

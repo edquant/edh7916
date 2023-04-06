@@ -166,7 +166,7 @@ df_tmp
 ## -----------------
 
 ## arrange from highest expectations (first row) to lowest
-df_tmp$high_expct <- sort(df_tmp$high_expct, decreasing = TRUE)
+df_tmp <- df_tmp[order(df_tmp$high_expct, decreasing = TRUE),]
 
 ## show
 df_tmp

@@ -117,11 +117,13 @@ df_ipeds <- df_ipeds %>%
 ## check CRS of IPEDS data again
 st_crs(df_ipeds)
 
-## layer our points onto the base map
 point_map <- base_map +
   geom_sf(data = df_ipeds %>% filter(FIPS == 12), # Only want to plot colleges in FL
           aes(size = LPBOOKS),
-          alpha = 0.5) +
+          alpha = 0.8,
+          shape = 23, # Get the diamond shape which stands out nicely on the map
+          fill = "white", # This shape has a fill and color for the outline
+          color = "black") + # FYI 21 is a circle with both fill and color
   labs(size = "Number of Books in Library")
 
 ## show new map
@@ -160,6 +162,18 @@ df_st <- df_st %>%
   st_transform(crs = 4326)
 
 ## make make
+ggplot() +
+  geom_sf(data = df_st,
+          aes(),
+          size = 0.1)
+
+## change CRS to requirements for Peters projection
+## h/t https://gis.stackexchange.com/questions/194295/getting-borders-as-svg-using-peters-projection
+pp_crs <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+df_st <- df_st %>%
+  st_transform(crs = pp_crs)
+
+## make mape
 ggplot() +
   geom_sf(data = df_st,
           aes(),

@@ -499,6 +499,9 @@ distances? Or maybe straight lines of bearing (particularly important
 if you are <a href="https://en.wikipedia.org/wiki/Mercator_projection">sailing and don’t want those trips to take any longer than
 necessary</a>).</p>
 
+<p>Here’s a (somewhat old) <a href="https://www.youtube.com/watch?v=vVX-PrBRtTY">pop culture look at this
+issue</a>.</p>
+
 <p>This is a relatively complicated process we are not going to go into
 here. If you’re interested here’s a <a href="https://docs.qgis.org/2.8/en/docs/gentle_gis_introduction/coordinate_reference_systems.html">nice introduction to
 CRS</a>
@@ -865,11 +868,13 @@ earlier map.</p>
 add a layer representing the colleges as points, and store it into
 a new object <code class="language-plaintext highlighter-rouge">point_map</code>:</p>
 
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## layer our points onto the base map</span><span class="w">
-</span><span class="n">point_map</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">base_map</span><span class="w"> </span><span class="o">+</span><span class="w">
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">point_map</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">base_map</span><span class="w"> </span><span class="o">+</span><span class="w">
   </span><span class="n">geom_sf</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df_ipeds</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">FIPS</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">12</span><span class="p">),</span><span class="w"> </span><span class="c1"># Only want to plot colleges in FL</span><span class="w">
           </span><span class="n">aes</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LPBOOKS</span><span class="p">),</span><span class="w">
-          </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+          </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.8</span><span class="p">,</span><span class="w">
+          </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">23</span><span class="p">,</span><span class="w"> </span><span class="c1"># Get the diamond shape which stands out nicely on the map</span><span class="w">
+          </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="c1"># This shape has a fill and color for the outline</span><span class="w">
+          </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"black"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1"># FYI 21 is a circle with both fill and color</span><span class="w">
   </span><span class="n">labs</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Number of Books in Library"</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
@@ -1035,8 +1040,9 @@ you’ve done this to, it will be severely off</strong>), if you’re looking to
 plot the 50 states in an easy-to-read manner, this can be a really
 useful tool.</p>
 
-<p>Lastly, to re-illustrate what a CRS does, let’s plot this one more
-time after putting it back on our flat ESPG 4326 CRS.</p>
+<p>Lastly, to re-illustrate what a CRS does, let’s plot this two more
+times, putting it onto our simple ESPG 4326 CRS, and then using the
+Peters Projection referenced in the video clip at the start of class.</p>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## change CRS to what we used for earlier map</span><span class="w">
 </span><span class="n">df_st</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df_st</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
@@ -1054,6 +1060,33 @@ time after putting it back on our flat ESPG 4326 CRS.</p>
 <p>See how the line are now a perfect grid, but the shapes of states
 (look at Montana) are a little different? That’s the power of a CRS!</p>
 
+<p>Finally, let’s please the <a href="https://www.youtube.com/watch?v=vVX-PrBRtTY">Organization of Cartographers for Social
+Equality</a> and look at the
+Peters projection. <strong>Note</strong>: while this projection is great for
+showing comparably accurate area across the globe, it does that by
+other trade offs not acknowledged by Dr. Fallow from CSE, so it’s not
+universally better, it’s better for the <strong>task it was designed
+for</strong>. That’s the key with CRS, find the best one for the task you’re
+doing.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## change CRS to requirements for Peters projection</span><span class="w">
+</span><span class="c1">## h/t https://gis.stackexchange.com/questions/194295/getting-borders-as-svg-using-peters-projection</span><span class="w">
+</span><span class="n">pp_crs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"</span><span class="w">
+</span><span class="n">df_st</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">df_st</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">st_transform</span><span class="p">(</span><span class="n">crs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pp_crs</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">## make mape</span><span class="w">
+</span><span class="n">ggplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_sf</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df_st</span><span class="p">,</span><span class="w">
+          </span><span class="n">aes</span><span class="p">(),</span><span class="w">
+          </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="../figures/unnamed-chunk-24-1.png" alt="plot of chunk unnamed-chunk-24" width="100%" /></p>
+
+<p>See how to the gap between 45 and 50 degrees north is much smaller
+than between 20 and 25 degrees north? That’s the projection at work
+(think about how this reflects how the globe is shaped).</p>
 
 
 
