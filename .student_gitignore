@@ -132,3 +132,4 @@ $RECYCLE.BIN/
 !data/rcpp
 !data/kmeans.RDS
 !data/geo
+!data/mapping_api_data.csv

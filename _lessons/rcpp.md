@@ -72,10 +72,6 @@ library(Rcpp)
 library(microbenchmark)
 ```
 
-```
-## Error in library(microbenchmark): there is no package called 'microbenchmark'
-```
-
 And as always, we are working in the `./scripts` subdirectory.
 
 
@@ -589,15 +585,6 @@ isn't complex and compiles rather quickly.
 sourceCpp('../scripts/dist_func.cpp', rebuild = TRUE)
 ```
 
-```
-## Warning in normalizePath(file, winslash = "/"):
-## path[1]="../scripts/dist_func.cpp": No such file or directory
-```
-
-```
-## Error in eval(expr, envir, enclos): file not found: '../scripts/dist_func.cpp'
-```
-
 # Quick comparisons 
 
 Now that we have both versions of our distance measuring functions, we
@@ -609,19 +596,13 @@ sure that they give the same results.
 
 ```r
 d_Rcpp <- dist_haversine_rcpp(xlon, xlat, ylon, ylat)
-```
 
-```
-## Error in dist_haversine_rcpp(xlon, xlat, ylon, ylat): could not find function "dist_haversine_rcpp"
-```
-
-```r
 ## show
 d_Rcpp
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'd_Rcpp' not found
+## [1] 258212.3
 ```
 
 ```r
@@ -630,7 +611,7 @@ identical(d, d_Rcpp)
 ```
 
 ```
-## Error in identical(d, d_Rcpp): object 'd_Rcpp' not found
+## [1] TRUE
 ```
 
 For one point, our `dist_haversine()` and `dist_haversine_rcpp()` give
@@ -650,19 +631,18 @@ distmat_Rcpp <- dist_mtom_rcpp(df_cbg$lon[1:10],
                                df_col$lat,
                                df_cbg$fips11[1:10],
                                df_col$unitid)
-```
 
-```
-## Error in dist_mtom_rcpp(df_cbg$lon[1:10], df_cbg$lat[1:10], df_col$lon, : could not find function "dist_mtom_rcpp"
-```
-
-```r
 ## show
 distmat_Rcpp[1:5,1:5]
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'distmat_Rcpp' not found
+##                100654   100663   100690   100706   100724
+## 010010201001 258212.3 119349.8 31495.73 251754.3 21138.09
+## 010010201002 256255.2 117447.3 32284.61 249798.4 22263.60
+## 010010202001 256775.4 118210.3 31047.25 250348.1 21059.86
+## 010010202002 258084.9 119554.9 30210.67 251665.2 20017.60
+## 010010203001 256958.5 118703.3 29758.10 250567.0 19905.92
 ```
 
 ```r
@@ -671,7 +651,7 @@ all.equal(distmat, distmat_Rcpp)
 ```
 
 ```
-## Error in mode(current): object 'distmat_Rcpp' not found
+## [1] TRUE
 ```
 
 Again, we get the same values (within some very very small floating
@@ -690,19 +670,23 @@ mindf_Rcpp <- dist_min_rcpp(df_cbg$lon[1:10],
                             df_col$lat,
                             df_cbg$fips11[1:10],
                             df_col$unitid)
-```
 
-```
-## Error in dist_min_rcpp(df_cbg$lon[1:10], df_cbg$lat[1:10], df_col$lon, : could not find function "dist_min_rcpp"
-```
-
-```r
 ## show
 mindf_Rcpp
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'mindf_Rcpp' not found
+##          fips11 unitid   meters
+## 1  010010201001 101471 15785.88
+## 2  010010201002 101471 14228.69
+## 3  010010202001 101471 13949.21
+## 4  010010202002 101471 14870.35
+## 5  010010203001 101471 13362.81
+## 6  010010203002 101471 14389.79
+## 7  010010204001 101471 12704.73
+## 8  010010204002 101471 13270.80
+## 9  010010204003 101471 14102.44
+## 10 010010204004 101471 14756.51
 ```
 
 ```r
@@ -711,7 +695,7 @@ all.equal(mindf, mindf_Rcpp)
 ```
 
 ```
-## Error in all.equal.default(mindf, mindf_Rcpp): object 'mindf_Rcpp' not found
+## [1] TRUE
 ```
 
 And once more, the same results. We're now ready to compare speeds!
@@ -733,19 +717,15 @@ First, we'll compare the core `dist_haversine*()` functions.
 tm_single <- microbenchmark(base_R = dist_haversine(xlon, xlat, ylon, ylat),
                             Rcpp = dist_haversine_rcpp(xlon, xlat, ylon, ylat),
                             times = 1000L)
-```
-
-```
-## Error in microbenchmark(base_R = dist_haversine(xlon, xlat, ylon, ylat), : could not find function "microbenchmark"
-```
-
-```r
 ## results
 tm_single
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'tm_single' not found
+## Unit: microseconds
+##    expr   min    lq     mean median     uq      max neval
+##  base_R 3.678 3.787 3.937163 3.8490 3.9775   26.979  1000
+##    Rcpp 2.607 2.696 4.654221 2.7825 4.5905 1241.173  1000
 ```
 
 ```r
@@ -754,8 +734,11 @@ autoplot(tm_single)
 ```
 
 ```
-## Error in autoplot(tm_single): object 'tm_single' not found
+## Coordinate system already present. Adding new coordinate system, which will
+## replace the existing one.
 ```
+
+<img src="../figures/hp_single-1.png" alt="plot of chunk hp_single" width="100%" />
 
 Comparing `dist_haversine()` with `dist_haversine_rcpp()`, the
 compiled version isn't that much faster. Considering we're on the
@@ -775,7 +758,7 @@ system.time(dist_mtom(df_cbg$lon[1:100],
 
 ```
 ##    user  system elapsed 
-##   2.986   0.007   2.993
+##   2.977   0.017   3.002
 ```
 
 ```r
@@ -789,11 +772,8 @@ system.time(dist_mtom_rcpp(df_cbg$lon[1:100],
 ```
 
 ```
-## Error in dist_mtom_rcpp(df_cbg$lon[1:100], df_cbg$lat[1:100], df_col$lon, : could not find function "dist_mtom_rcpp"
-```
-
-```
-## Timing stopped at: 0 0 0.001
+##    user  system elapsed 
+##   0.035   0.002   0.037
 ```
 
 ```r
@@ -811,19 +791,16 @@ tm_mtom <- microbenchmark(base_R = dist_mtom(df_cbg$lon[1:10],
                                                 df_cbg$fips11[1:10],
                                                 df_col$unitid),
                           times = 100L)
-```
 
-```
-## Error in microbenchmark(base_R = dist_mtom(df_cbg$lon[1:10], df_cbg$lat[1:10], : could not find function "microbenchmark"
-```
-
-```r
 ## results
 tm_mtom
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'tm_mtom' not found
+## Unit: milliseconds
+##    expr        min         lq       mean     median         uq        max neval
+##  base_R 271.840838 280.694073 290.993505 285.145693 297.379112 386.380034   100
+##    Rcpp   1.923203   2.207464   2.337965   2.324291   2.467006   3.319067   100
 ```
 
 ```r
@@ -832,8 +809,11 @@ autoplot(tm_mtom)
 ```
 
 ```
-## Error in autoplot(tm_mtom): object 'tm_mtom' not found
+## Coordinate system already present. Adding new coordinate system, which will
+## replace the existing one.
 ```
+
+<img src="../figures/hp_mtom-1.png" alt="plot of chunk hp_mtom" width="100%" />
 
 Where we start to see speed improvements in the main function. The
 compiled version of the many to many function is nearly two orders of
@@ -854,7 +834,7 @@ system.time(dist_min(df_cbg$lon[1:100],
 
 ```
 ##    user  system elapsed 
-##   3.082   0.015   3.099
+##   3.005   0.009   3.014
 ```
 
 ```r
@@ -868,11 +848,8 @@ system.time(dist_min_rcpp(df_cbg$lon[1:100],
 ```
 
 ```
-## Error in dist_min_rcpp(df_cbg$lon[1:100], df_cbg$lat[1:100], df_col$lon, : could not find function "dist_min_rcpp"
-```
-
-```
-## Timing stopped at: 0 0 0
+##    user  system elapsed 
+##   0.039   0.000   0.039
 ```
 
 ```r
@@ -890,19 +867,15 @@ tm_min <- microbenchmark(base_R = dist_min(df_cbg$lon[1:10],
                                               df_cbg$fips11[1:10],
                                               df_col$unitid),
                          times = 100)
-```
-
-```
-## Error in microbenchmark(base_R = dist_min(df_cbg$lon[1:10], df_cbg$lat[1:10], : could not find function "microbenchmark"
-```
-
-```r
 ## results
 tm_min
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'tm_min' not found
+## Unit: milliseconds
+##    expr        min         lq       mean     median         uq        max neval
+##  base_R 266.294373 282.158909 290.444487 288.425582 294.667267 355.757759   100
+##    Rcpp   2.361661   2.571244   2.877729   2.923326   3.095282   3.751844   100
 ```
 
 ```r
@@ -911,8 +884,11 @@ autoplot(tm_min)
 ```
 
 ```
-## Error in autoplot(tm_min): object 'tm_min' not found
+## Coordinate system already present. Adding new coordinate system, which will
+## replace the existing one.
 ```
+
+<img src="../figures/hp_min-1.png" alt="plot of chunk hp_min" width="100%" />
 
 Similarly, the compiled minimum distance function is much faster than the
 base R function. 
@@ -942,11 +918,8 @@ system.time(full_min <- dist_min_rcpp(df_cbg$lon,
 ```
 
 ```
-## Error in dist_min_rcpp(df_cbg$lon, df_cbg$lat, df_col$lon, df_col$lat, : could not find function "dist_min_rcpp"
-```
-
-```
-## Timing stopped at: 0 0 0
+##    user  system elapsed 
+##  51.232   0.016  51.251
 ```
 
 ```r
@@ -955,7 +928,20 @@ full_min %>% tibble()
 ```
 
 ```
-## Error in eval_tidy(xs[[j]], mask): object 'full_min' not found
+## # A tibble: 217,740 × 3
+##    fips11       unitid meters
+##    <chr>        <chr>   <dbl>
+##  1 010010201001 101471 15786.
+##  2 010010201002 101471 14229.
+##  3 010010202001 101471 13949.
+##  4 010010202002 101471 14870.
+##  5 010010203001 101471 13363.
+##  6 010010203002 101471 14390.
+##  7 010010204001 101471 12705.
+##  8 010010204002 101471 13271.
+##  9 010010204003 101471 14102.
+## 10 010010204004 101471 14757.
+## # ℹ 217,730 more rows
 ```
 
 Just a little over a minute (on my laptop) to compute 217,000 by 7,700
