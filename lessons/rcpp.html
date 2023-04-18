@@ -131,9 +131,6 @@ run much, much faster.</p>
 </span><span class="n">library</span><span class="p">(</span><span class="n">microbenchmark</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in library(microbenchmark): there is no package called 'microbenchmark'
-</code></pre></div></div>
-
 <p>And as always, we are working in the <code class="language-plaintext highlighter-rouge">./scripts</code> subdirectory.</p>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ---------------------------</span><span class="w">
@@ -620,13 +617,6 @@ isn’t complex and compiles rather quickly.</p>
 </span><span class="n">sourceCpp</span><span class="p">(</span><span class="s1">'../scripts/dist_func.cpp'</span><span class="p">,</span><span class="w"> </span><span class="n">rebuild</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Warning in normalizePath(file, winslash = "/"):
-## path[1]="../scripts/dist_func.cpp": No such file or directory
-</code></pre></div></div>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): file not found: '../scripts/dist_func.cpp'
-</code></pre></div></div>
-
 <h1 id="quick-comparisons">Quick comparisons</h1>
 
 <p>Now that we have both versions of our distance measuring functions, we
@@ -636,23 +626,19 @@ sure that they give the same results.</p>
 <h2 id="single-distance">Single distance</h2>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">d_Rcpp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dist_haversine_rcpp</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w"> </span><span class="n">xlat</span><span class="p">,</span><span class="w"> </span><span class="n">ylon</span><span class="p">,</span><span class="w"> </span><span class="n">ylat</span><span class="p">)</span><span class="w">
-</span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_haversine_rcpp(xlon, xlat, ylon, ylat): could not find function "dist_haversine_rcpp"
-</code></pre></div></div>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="c1">## show</span><span class="w">
 </span><span class="n">d_Rcpp</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'd_Rcpp' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 258212.3
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare</span><span class="w">
 </span><span class="n">identical</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">d_Rcpp</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in identical(d, d_Rcpp): object 'd_Rcpp' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] TRUE
 </code></pre></div></div>
 
 <p>For one point, our <code class="language-plaintext highlighter-rouge">dist_haversine()</code> and <code class="language-plaintext highlighter-rouge">dist_haversine_rcpp()</code> give
@@ -669,23 +655,24 @@ same values.</p>
                                </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
                                </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
                                </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">)</span><span class="w">
-</span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_mtom_rcpp(df_cbg$lon[1:10], df_cbg$lat[1:10], df_col$lon, : could not find function "dist_mtom_rcpp"
-</code></pre></div></div>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="c1">## show</span><span class="w">
 </span><span class="n">distmat_Rcpp</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">,</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">]</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'distmat_Rcpp' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##                100654   100663   100690   100706   100724
+## 010010201001 258212.3 119349.8 31495.73 251754.3 21138.09
+## 010010201002 256255.2 117447.3 32284.61 249798.4 22263.60
+## 010010202001 256775.4 118210.3 31047.25 250348.1 21059.86
+## 010010202002 258084.9 119554.9 30210.67 251665.2 20017.60
+## 010010203001 256958.5 118703.3 29758.10 250567.0 19905.92
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare</span><span class="w">
 </span><span class="n">all.equal</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span><span class="w"> </span><span class="n">distmat_Rcpp</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in mode(current): object 'distmat_Rcpp' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] TRUE
 </code></pre></div></div>
 
 <p>Again, we get the same values (within some very very small floating
@@ -701,23 +688,29 @@ point rounding error).</p>
                             </span><span class="n">df_col</span><span class="o">$</span><span class="n">lat</span><span class="p">,</span><span class="w">
                             </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
                             </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">)</span><span class="w">
-</span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_min_rcpp(df_cbg$lon[1:10], df_cbg$lat[1:10], df_col$lon, : could not find function "dist_min_rcpp"
-</code></pre></div></div>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
+</span><span class="c1">## show</span><span class="w">
 </span><span class="n">mindf_Rcpp</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'mindf_Rcpp' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##          fips11 unitid   meters
+## 1  010010201001 101471 15785.88
+## 2  010010201002 101471 14228.69
+## 3  010010202001 101471 13949.21
+## 4  010010202002 101471 14870.35
+## 5  010010203001 101471 13362.81
+## 6  010010203002 101471 14389.79
+## 7  010010204001 101471 12704.73
+## 8  010010204002 101471 13270.80
+## 9  010010204003 101471 14102.44
+## 10 010010204004 101471 14756.51
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare</span><span class="w">
 </span><span class="n">all.equal</span><span class="p">(</span><span class="n">mindf</span><span class="p">,</span><span class="w"> </span><span class="n">mindf_Rcpp</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in all.equal.default(mindf, mindf_Rcpp): object 'mindf_Rcpp' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] TRUE
 </code></pre></div></div>
 
 <p>And once more, the same results. We’re now ready to compare speeds!</p>
@@ -736,24 +729,25 @@ the <code class="language-plaintext highlighter-rouge">autoplot()</code> functio
 </span><span class="n">tm_single</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">microbenchmark</span><span class="p">(</span><span class="n">base_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist_haversine</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w"> </span><span class="n">xlat</span><span class="p">,</span><span class="w"> </span><span class="n">ylon</span><span class="p">,</span><span class="w"> </span><span class="n">ylat</span><span class="p">),</span><span class="w">
                             </span><span class="n">Rcpp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist_haversine_rcpp</span><span class="p">(</span><span class="n">xlon</span><span class="p">,</span><span class="w"> </span><span class="n">xlat</span><span class="p">,</span><span class="w"> </span><span class="n">ylon</span><span class="p">,</span><span class="w"> </span><span class="n">ylat</span><span class="p">),</span><span class="w">
                             </span><span class="n">times</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000L</span><span class="p">)</span><span class="w">
-</span></code></pre></div></div>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in microbenchmark(base_R = dist_haversine(xlon, xlat, ylon, ylat), : could not find function "microbenchmark"
-</code></pre></div></div>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## results</span><span class="w">
+</span><span class="c1">## results</span><span class="w">
 </span><span class="n">tm_single</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'tm_single' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Unit: microseconds
+##    expr   min    lq     mean median     uq      max neval
+##  base_R 3.678 3.787 3.937163 3.8490 3.9775   26.979  1000
+##    Rcpp 2.607 2.696 4.654221 2.7825 4.5905 1241.173  1000
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot</span><span class="w">
 </span><span class="n">autoplot</span><span class="p">(</span><span class="n">tm_single</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in autoplot(tm_single): object 'tm_single' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Coordinate system already present. Adding new coordinate system, which will
+## replace the existing one.
 </code></pre></div></div>
+
+<p><img src="../figures/hp_single-1.png" alt="plot of chunk hp_single" width="100%" /></p>
 
 <p>Comparing <code class="language-plaintext highlighter-rouge">dist_haversine()</code> with <code class="language-plaintext highlighter-rouge">dist_haversine_rcpp()</code>, the
 compiled version isn’t that much faster. Considering we’re on the
@@ -769,7 +763,7 @@ scale of microseconds, it <em>really</em> isn’t that much faster.</p>
 </span></code></pre></div></div>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
-##   2.986   0.007   2.993
+##   2.977   0.017   3.002
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ...and now Rcpp version</span><span class="w">
@@ -781,10 +775,8 @@ scale of microseconds, it <em>really</em> isn’t that much faster.</p>
                            </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">))</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_mtom_rcpp(df_cbg$lon[1:100], df_cbg$lat[1:100], df_col$lon, : could not find function "dist_mtom_rcpp"
-</code></pre></div></div>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Timing stopped at: 0 0 0.001
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
+##   0.035   0.002   0.037
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare just 10 many to many</span><span class="w">
@@ -801,24 +793,26 @@ scale of microseconds, it <em>really</em> isn’t that much faster.</p>
                                                 </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
                                                 </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">),</span><span class="w">
                           </span><span class="n">times</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100L</span><span class="p">)</span><span class="w">
-</span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in microbenchmark(base_R = dist_mtom(df_cbg$lon[1:10], df_cbg$lat[1:10], : could not find function "microbenchmark"
-</code></pre></div></div>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## results</span><span class="w">
+</span><span class="c1">## results</span><span class="w">
 </span><span class="n">tm_mtom</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'tm_mtom' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Unit: milliseconds
+##    expr        min         lq       mean     median         uq        max neval
+##  base_R 271.840838 280.694073 290.993505 285.145693 297.379112 386.380034   100
+##    Rcpp   1.923203   2.207464   2.337965   2.324291   2.467006   3.319067   100
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot</span><span class="w">
 </span><span class="n">autoplot</span><span class="p">(</span><span class="n">tm_mtom</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in autoplot(tm_mtom): object 'tm_mtom' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Coordinate system already present. Adding new coordinate system, which will
+## replace the existing one.
 </code></pre></div></div>
+
+<p><img src="../figures/hp_mtom-1.png" alt="plot of chunk hp_mtom" width="100%" /></p>
 
 <p>Where we start to see speed improvements in the main function. The
 compiled version of the many to many function is nearly two orders of
@@ -834,7 +828,7 @@ magnitude faster!</p>
 </span></code></pre></div></div>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
-##   3.082   0.015   3.099
+##   3.005   0.009   3.014
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## ...and now Rcpp version</span><span class="w">
@@ -846,10 +840,8 @@ magnitude faster!</p>
                           </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">))</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_min_rcpp(df_cbg$lon[1:100], df_cbg$lat[1:100], df_col$lon, : could not find function "dist_min_rcpp"
-</code></pre></div></div>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Timing stopped at: 0 0 0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
+##   0.039   0.000   0.039
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## compare just 10 min</span><span class="w">
@@ -866,24 +858,25 @@ magnitude faster!</p>
                                               </span><span class="n">df_cbg</span><span class="o">$</span><span class="n">fips11</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">],</span><span class="w">
                                               </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">),</span><span class="w">
                          </span><span class="n">times</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">)</span><span class="w">
-</span></code></pre></div></div>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in microbenchmark(base_R = dist_min(df_cbg$lon[1:10], df_cbg$lat[1:10], : could not find function "microbenchmark"
-</code></pre></div></div>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## results</span><span class="w">
+</span><span class="c1">## results</span><span class="w">
 </span><span class="n">tm_min</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval(expr, envir, enclos): object 'tm_min' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Unit: milliseconds
+##    expr        min         lq       mean     median         uq        max neval
+##  base_R 266.294373 282.158909 290.444487 288.425582 294.667267 355.757759   100
+##    Rcpp   2.361661   2.571244   2.877729   2.923326   3.095282   3.751844   100
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## plot</span><span class="w">
 </span><span class="n">autoplot</span><span class="p">(</span><span class="n">tm_min</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in autoplot(tm_min): object 'tm_min' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Coordinate system already present. Adding new coordinate system, which will
+## replace the existing one.
 </code></pre></div></div>
+
+<p><img src="../figures/hp_min-1.png" alt="plot of chunk hp_min" width="100%" /></p>
 
 <p>Similarly, the compiled minimum distance function is much faster than the
 base R function.</p>
@@ -909,17 +902,28 @@ each census block? Let’s find out!</p>
                                       </span><span class="n">df_col</span><span class="o">$</span><span class="n">unitid</span><span class="p">))</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in dist_min_rcpp(df_cbg$lon, df_cbg$lat, df_col$lon, df_col$lat, : could not find function "dist_min_rcpp"
-</code></pre></div></div>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Timing stopped at: 0 0 0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
+##  51.232   0.016  51.251
 </code></pre></div></div>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## show</span><span class="w">
 </span><span class="n">full_min</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">tibble</span><span class="p">()</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Error in eval_tidy(xs[[j]], mask): object 'full_min' not found
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 217,740 × 3
+##    fips11       unitid meters
+##    &lt;chr&gt;        &lt;chr&gt;   &lt;dbl&gt;
+##  1 010010201001 101471 15786.
+##  2 010010201002 101471 14229.
+##  3 010010202001 101471 13949.
+##  4 010010202002 101471 14870.
+##  5 010010203001 101471 13363.
+##  6 010010203002 101471 14390.
+##  7 010010204001 101471 12705.
+##  8 010010204002 101471 13271.
+##  9 010010204003 101471 14102.
+## 10 010010204004 101471 14757.
+## # ℹ 217,730 more rows
 </code></pre></div></div>
 
 <p>Just a little over a minute (on my laptop) to compute 217,000 by 7,700
